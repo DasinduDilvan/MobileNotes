@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Lecture 02 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../operating-systems.html">← Back to Notes</a>
+
+<h1>📘 Operating Systems Concepts & Application</h1>
+<p class="subtitle">Lecture 02 — Operating-System Structures</p>
+
+<div class="card">
+<h2 class="section-title">Operating System Services - Overview</h2>
+<div class="important">
+<strong>Two Major Tasks of an Operating System:</strong>
+</div>
+<div class="grid">
+<div class="box">
+<strong>1. User-Centric Services</strong>
+• Provide convenient environment for users/applications<br>
+• Provide set of services for user applications<br>
+• Prevent errors by controlling user programs<br>
+• Visible to users
+</div>
+<div class="box">
+<strong>2. System Management</strong>
+• Resource allocation and management<br>
+• Efficient operation of the system<br>
+• Not much visible to users<br>
+• Behind-the-scenes operations
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">User-Helpful Operating System Services</h2>
+<ul>
+<li><strong>User Interface (UI):</strong> Almost all operating systems have a user interface
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>CLI</strong> - Command-Line Interface</li>
+<li><strong>GUI</strong> - Graphics User Interface</li>
+<li><strong>Batch</strong> - Batch processing interface</li>
+</ul>
+</li>
+<li><strong>Program Execution:</strong> The system must be able to:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Load a program into memory</li>
+<li>Run that program</li>
+<li>End execution, either normally or abnormally (indicating error)</li>
+</ul>
+</li>
+<li><strong>I/O Operations:</strong> A running program may require I/O, which may involve a file or an I/O device</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Operating System Services (Continued)</h2>
+<ul>
+<li><strong>File-System Manipulation:</strong> Programs need to:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Read and write files and directories</li>
+<li>Create and delete them</li>
+<li>Search files and directories</li>
+<li>List file information</li>
+<li>Permission management</li>
+</ul>
+</li>
+<li><strong>Communications:</strong> Processes may exchange information
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>On the same computer or between computers over a network</li>
+<li><strong>Shared memory:</strong> Processes read/write into common memory section</li>
+<li><strong>Message passing:</strong> Packets moved between processes by the OS</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Error Detection and Handling</h2>
+<ul>
+<li>OS needs to be <strong>constantly aware</strong> of possible errors</li>
+<li><strong>Error sources may occur in:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>CPU and memory hardware</li>
+<li>I/O devices</li>
+<li>User programs</li>
+</ul>
+</li>
+<li><strong>OS Actions for each type of error:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>✓ Halt the system</li>
+<li>✓ Terminate the error process</li>
+<li>✓ Return an error code to correct it</li>
+</ul>
+</li>
+<li>Goal: Ensure correct and consistent computing</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">System Efficiency Services</h2>
+<div class="note">
+These services exist for ensuring the efficient operation of the system itself via resource sharing, not for helping the user directly.
+</div>
+<ul>
+<li><strong>Resource Allocation:</strong> When multiple users or multiple jobs running concurrently
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Resources must be allocated to all processes</li>
+<li>Types: CPU cycles, main memory, file storage, I/O devices</li>
+</ul>
+</li>
+<li><strong>Logging:</strong> Keep track of which users use how much and what kinds of computer resources</li>
+<li><strong>Protection and Security:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Owners of information should control use of that information</li>
+<li>Concurrent processes should not interfere with each other</li>
+<li><strong>Protection:</strong> Access to system resources is controlled</li>
+<li><strong>Security:</strong> Defense from outsiders, requires user authentication (passwords)</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">User Operating System Interface - CLI</h2>
+<div class="highlight">
+<strong>CLI (Command Line Interpreter)</strong> allows direct command entry
+</div>
+<ul>
+<li>Sometimes implemented in <strong>kernel</strong>, sometimes as <strong>special program</strong> (Windows and UNIX)</li>
+<li>Sometimes multiple interpreters to choose from – called <strong>shells</strong></li>
+<li><strong>UNIX/LINUX shells:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Bourne shell</li>
+<li>C shell</li>
+<li>Bourne-Again Shell (BASH)</li>
+<li>Korn Shell</li>
+</ul>
+</li>
+<li>Primarily <strong>fetches a command</strong> from user and <strong>executes it</strong></li>
+<li><strong>File manipulation commands:</strong> create, delete, list, print, copy, execute, etc.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">CLI Commands - Two Approaches</h2>
+<div class="two-column">
+<div class="box">
+<strong>Built-in Commands</strong>
+Commands are built inside the command interpreter itself
+</div>
+<div class="box">
+<strong>Program Files</strong>
+Commands are just names of system program files<br>
+Example: <code>rm filename.txt</code>
+</div>
+</div>
+<div class="important" style="margin-top: 15px;">
+<strong>Advantage:</strong> Programmers can add new commands easily by creating new files without doing shell modifications
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">User Operating System Interface - GUI</h2>
+<ul>
+<li><strong>No entering commands directly</strong> in command-line interface</li>
+<li>User-friendly <strong>mouse-based window-and-menu system</strong></li>
+<li>Characterized by a <strong>desktop interface</strong></li>
+<li><strong>Mouse interactions:</strong> Various mouse buttons over objects cause different actions
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Provide information</li>
+<li>Show options</li>
+<li>Execute functions</li>
+<li>Open directories</li>
+</ul>
+</li>
+<li><strong>Modern systems include both CLI and GUI:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Microsoft Windows:</strong> GUI with CLI "command" shell</li>
+<li><strong>Apple Mac OS X:</strong> "Aqua" GUI interface with UNIX/LINUX like terminal</li>
+<li><strong>Unix and Linux:</strong> CLI with optional GUI interfaces (CDE, KDE, GNOME)</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Touchscreen Interfaces</h2>
+<div class="grid">
+<div class="box">
+<strong>New Requirements</strong>
+• Touchscreen devices require new interfaces<br>
+• Mouse not possible or not desired
+</div>
+<div class="box">
+<strong>Interaction Methods</strong>
+• Actions and selection based on gestures<br>
+• Virtual keyboard for text entry<br>
+• Voice commands
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">System Calls</h2>
+<div class="important">
+<strong>Definition:</strong> Programming interface to the services provided by the OS
+</div>
+<ul>
+<li>Interface provided to applications</li>
+<li>Typically written in a <strong>high-level language</strong> (C or C++)</li>
+<li>Mostly accessed via <strong>Application Programming Interface (API)</strong> rather than direct system call use</li>
+<li><strong>Three most common APIs:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Win32 API</strong> for Windows</li>
+<li><strong>POSIX API</strong> for POSIX-based systems (UNIX, Linux, Mac OS X)</li>
+<li><strong>Java API</strong> for the Java virtual machine (JVM)</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Application Programming Interface (API)</h2>
+<ul>
+<li>The API <strong>specifies a set of functions</strong> available to application programmers</li>
+<li>Includes:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Parameters passed to each function</li>
+<li>Return values the programmer can expect</li>
+</ul>
+</li>
+<li>A programmer accesses an API via a <strong>library of code</strong> provided by the OS</li>
+<li><strong>Behind the scenes:</strong> API functions invoke actual system calls
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Example: Windows function <code>CreateProcess()</code> invokes <code>NTCreateProcess()</code> system call</li>
+</ul>
+</li>
+</ul>
+<div class="highlight">
+<strong>Why do programmers prefer APIs over direct system calls?</strong><br>
+• Portability across systems<br>
+• Easier to use and understand<br>
+• OS details are hidden<br>
+• Better abstraction
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">System Call Implementation</h2>
+<ul>
+<li>The <strong>system-call interface</strong> intercepts function calls in the API</li>
+<li>Invokes the necessary system calls within the operating system</li>
+<li>A <strong>number is associated</strong> with each system call</li>
+<li><strong>System-call interface maintains a table</strong> indexed according to these numbers
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Table contains: (number, address of system call function)</li>
+</ul>
+</li>
+<li><strong>The caller needs to know nothing</strong> about how the system call is implemented</li>
+<li>Just needs to:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Obey API specifications</li>
+<li>Understand what OS will do as a result of the call</li>
+</ul>
+</li>
+<li>Most details of OS interface are <strong>hidden from programmer</strong> by API</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Standard C Library Example</h2>
+<div class="note">
+<strong>Example:</strong> C program invoking <code>printf()</code> library call, which calls <code>write()</code> system call
+</div>
+<ul>
+<li><strong>Application level:</strong> Program calls <code>printf()</code></li>
+<li><strong>Library level:</strong> Standard C library processes the call</li>
+<li><strong>System call level:</strong> Library invokes <code>write()</code> system call</li>
+<li><strong>Kernel level:</strong> OS kernel executes the actual operation</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of System Calls - Process Control</h2>
+<ul>
+<li><strong>Create process, terminate process</strong></li>
+<li><strong>End, abort</strong> execution</li>
+<li><strong>Load, execute</strong> programs</li>
+<li><strong>Get process attributes, set process attributes</strong></li>
+<li><strong>Wait for time</strong></li>
+<li><strong>Wait event, signal event</strong></li>
+<li><strong>Allocate and free memory</strong></li>
+<li><strong>Dump memory</strong> if error occurs</li>
+<li><strong>Debugger</strong> for determining bugs, single step execution</li>
+<li><strong>Locks</strong> for managing access to shared data between processes</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of System Calls - File & Device Management</h2>
+<div class="two-column">
+<div class="box">
+<strong>File Management</strong>
+• Create file, delete file<br>
+• Open, close file<br>
+• Read, write, reposition<br>
+• Get and set file attributes
+</div>
+<div class="box">
+<strong>Device Management</strong>
+• Request device, release device<br>
+• Read, write, reposition<br>
+• Get/set device attributes<br>
+• Logically attach or detach devices
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of System Calls - Information Maintenance</h2>
+<ul>
+<li><strong>Get time or date, set time or date</strong></li>
+<li><strong>Get system data, set system data</strong></li>
+<li><strong>Get and set process, file, or device attributes</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of System Calls - Communications</h2>
+<ul>
+<li><strong>Create, delete communication connection</strong></li>
+<li><strong>Send, receive messages</strong> if message passing model
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>To host name or process name</li>
+<li>From client to server</li>
+</ul>
+</li>
+<li><strong>Shared-memory model:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Create and gain access to memory regions</li>
+<li>Transfer status information</li>
+</ul>
+</li>
+<li><strong>Attach and detach remote devices</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of System Calls - Protection</h2>
+<ul>
+<li><strong>Control access to resources</strong></li>
+<li><strong>Get and set permissions</strong></li>
+<li><strong>Allow and deny user access</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">System Services (System Programs)</h2>
+<div class="note">
+Users do not always need to create programs to use system calls. System programs provide a convenient environment for program development and execution.
+</div>
+<ul>
+<li><strong>File manipulation:</strong> Create, delete, copy, print, etc.</li>
+<li><strong>Status information:</strong> Date & time, CPU use, disk space, etc.</li>
+<li><strong>File modification:</strong> Text editors, grep, etc.</li>
+<li><strong>Programming language support:</strong> Compilers, debuggers, etc.</li>
+<li><strong>Program loading and execution:</strong> Loaders, linkers, etc.</li>
+<li><strong>Communications:</strong> Log in remotely, transfer files, send e-mail messages</li>
+<li><strong>Background services:</strong> Network connection listeners, system error monitoring, print servers</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Application Programs</h2>
+<ul>
+<li>Most operating systems are supplied with programs useful for solving common problems</li>
+<li><strong>Examples:</strong> Web Browsers, Word Processors, Compilers, Games, etc.</li>
+<li><strong>Characteristics:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Don't pertain to the system itself</li>
+<li>Run by users</li>
+<li>Not typically considered part of the OS</li>
+<li>Launched by command line, mouse click, or finger poke</li>
+</ul>
+</li>
+</ul>
+<div class="important">
+The view of the operating system seen by most users is defined by application and system programs, rather than by the actual system calls.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Operating System Layers</h2>
+<div class="highlight">
+<strong>Hierarchical Structure:</strong>
+</div>
+<div style="text-align: center; padding: 20px; background: #f9f9f9; border-radius: 8px; margin-top: 15px;">
+<strong>User</strong><br>
+↓<br>
+<strong>User Interface (GUI/CLI)</strong><br>
+↓<br>
+<strong>System Programs | Application Programs</strong><br>
+↓<br>
+<strong>System Calls</strong><br>
+↓<br>
+<strong>Kernel</strong>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Operating System Structure - Approaches</h2>
+<div class="note">
+Common approach is to partition the task into small components or modules rather than have one monolithic system.
+</div>
+<div class="grid">
+<div class="box">
+<strong>Simple Structure</strong>
+MS-DOS - Monolithic System
+</div>
+<div class="box">
+<strong>More Complex</strong>
+UNIX - Traditional structure
+</div>
+<div class="box">
+<strong>Layered</strong>
+Hierarchical organization
+</div>
+<div class="box">
+<strong>Microkernel</strong>
+Mach - Minimal kernel
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Simple Structure - MS-DOS</h2>
+<ul>
+<li>Written to provide the <strong>most functionality in the least space</strong></li>
+<li><strong>Not divided into modules</strong></li>
+<li>Although MS-DOS has some structure, its <strong>interfaces and levels of functionality are not well separated</strong></li>
+<li><strong>Problem:</strong> Application programs can access I/O routines directly
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>This causes entire system crashes when user programs fail</li>
+</ul>
+</li>
+</ul>
+<div class="highlight">
+<strong>Characteristic:</strong> Lack of modularity and protection leads to system instability
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Layered Approach</h2>
+<ul>
+<li>The operating system is <strong>divided into a number of layers (levels)</strong></li>
+<li>Each layer is built on top of lower layers</li>
+<li><strong>Bottom layer (layer 0):</strong> Hardware</li>
+<li><strong>Highest layer (layer N):</strong> User interface</li>
+<li>With modularity, layers are selected such that each uses <strong>functions and services of only lower-level layers</strong></li>
+</ul>
+<div class="two-column" style="margin-top: 15px;">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Advantages</strong>
+• Simplifies debugging<br>
+• System verification easier<br>
+• Clear modularity
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Disadvantages</strong>
+• Less efficiency<br>
+• Difficulty of defining the level functionality
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Traditional UNIX System Structure</h2>
+<div class="note">
+Beyond simple but not fully layered
+</div>
+<div class="important">
+The UNIX OS consists of two separable parts:
+</div>
+<ul>
+<li><strong>System programs</strong></li>
+<li><strong>The kernel:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Everything below the system-call interface and above the physical hardware</li>
+<li>Provides the file system, CPU scheduling, memory management, and other OS functions</li>
+<li>Contains a <strong>large number of functions for one level</strong></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Microkernel System Structure</h2>
+<ul>
+<li>With new functionalities, <strong>kernel has become larger and difficult to manage</strong></li>
+<li>This approach <strong>removes nonessential components from the kernel</strong></li>
+<li>Implements them as <strong>system and user programs</strong></li>
+<li>Results in a <strong>smaller kernel</strong></li>
+<li>Communication takes place between user modules using <strong>message passing</strong></li>
+</ul>
+
+<div class="two-column" style="margin-top: 15px;">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Benefits</strong>
+• Easier to extend a microkernel<br>
+• Easier to port to new architectures<br>
+• More reliable (less code in kernel mode)<br>
+• More secure
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Problems</strong>
+• Performance overhead of user space to kernel space communication
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Microkernel Components:</strong><br>
+<strong>Kernel mode:</strong> Interprocess Communication, Memory Management, CPU Scheduling<br>
+<strong>User mode:</strong> Application Programs, File System, Device Drivers
+</div>
+</div>
+
+<div class="footer">
+🌱 Lecture 02 - Operating-System Structures • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

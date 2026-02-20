@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Lecture 04 - Threads Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+ul ul {
+    margin-left: 25px;
+    list-style-type: circle;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #000;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .type    { color: #4ec9b0; }
+pre .num     { color: #b5cea8; }
+
+.model-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-size: 0.95em;
+}
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.in-class h3 {
+    color: #7b1fa2;
+    margin-bottom: 10px;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../operating-systems.html">← Back to Notes</a>
+
+<h1>📘 Operating Systems Concepts & Application</h1>
+<p class="subtitle">Lecture 04 — Threads</p>
+
+<!-- ─── THREAD OVERVIEW ─── -->
+<div class="card">
+    <h2 class="section-title">What is a Thread?</h2>
+    <div class="important">
+        <strong>A thread is a basic unit of CPU utilization.</strong>
+    </div>
+    <ul>
+        <li>A <strong>traditional (single-threaded) process</strong> has a single thread of control.</li>
+        <li>A process can now have <strong>multiple threads of control</strong> — this is a <strong>multithreaded process</strong>.</li>
+        <li>If a process has multiple threads, it can <strong>perform more than one task at a time</strong> — threads run concurrently as part of the same process.</li>
+    </ul>
+
+    <div class="two-column" style="margin-top: 15px;">
+        <div class="box">
+            <strong>Each Thread Has (Private)</strong>
+            • Thread ID<br>
+            • Program Counter<br>
+            • Register Set<br>
+            • Stack
+        </div>
+        <div class="box">
+            <strong>Threads in Same Process Share</strong>
+            • Code section<br>
+            • Data section<br>
+            • Other OS resources (e.g., open files and signals)
+        </div>
+    </div>
+</div>
+
+<!-- ─── MOTIVATION ─── -->
+<div class="card">
+    <h2 class="section-title">Motivation</h2>
+    <ul>
+        <li>Most <strong>modern software applications are multithreaded</strong>.</li>
+        <li>Threads run <strong>within the application</strong>.</li>
+        <li>Multiple tasks within the application can be implemented by separate threads.</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>Example — Word Processing Application uses separate threads for:</strong><br>
+        • Displaying graphics<br>
+        • Fetching data from keyboard<br>
+        • Spell checking in the background<br>
+        • Answering a network request
+    </div>
+
+    <ul>
+        <li>Can <strong>simplify code</strong> and <strong>increase efficiency</strong>.</li>
+        <li>Kernels are generally multithreaded and used for:
+            <ul>
+                <li>Managing devices</li>
+                <li>Managing memory</li>
+                <li>Interrupt handling</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- ─── MULTITHREADED SERVER ─── -->
+<div class="card">
+    <h2 class="section-title">Multithreaded Server Example</h2>
+    <ul>
+        <li>Web servers get requests from clients to access web pages, images, etc.</li>
+        <li>There are <strong>several requests at a time</strong>.</li>
+        <li>A traditional web server will serve <strong>one client at a time</strong> — time-consuming.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Two Solutions:</strong><br>
+        1. Single process to accept requests and create a <strong>separate process</strong> to serve that request.<br>
+        2. The same process has <strong>several threads</strong> for listening to requests and making services.
+    </div>
+
+    <div class="highlight">
+        <strong>Key Insight:</strong> Process creation is <strong>heavy-weight</strong> (time consuming and resource intensive), while thread creation is <strong>light-weight</strong>.
+    </div>
+
+    <div class="model-diagram">
+        <strong>Flow:</strong><br><br>
+        <code>client</code> →(1) request→ <code>server</code> →(2) create new thread to service the request→ <code>thread</code><br><br>
+        ↑ (3) server resumes listening for additional client requests
+    </div>
+</div>
+
+<!-- ─── BENEFITS ─── -->
+<div class="card">
+    <h2 class="section-title">Benefits of Multithreading</h2>
+    <div class="grid">
+        <div class="box">
+            <strong>Responsiveness</strong>
+            May allow continued execution if part of the process is blocked. Especially important for user interfaces — clicking a button for a time-consuming operation won't freeze the whole UI.
+        </div>
+        <div class="box">
+            <strong>Resource Sharing</strong>
+            Threads share resources of a process — easier than shared memory or message passing between separate processes.
+        </div>
+        <div class="box">
+            <strong>Economy</strong>
+            Allocating memory and resources for process creation is costly. Thread creation is cheaper; thread switching has lower overhead than context switching.
+        </div>
+        <div class="box">
+            <strong>Scalability</strong>
+            The process can take advantage of <strong>multiprocessor architectures</strong> by running threads in parallel on multiple cores.
+        </div>
+    </div>
+</div>
+
+<!-- ─── MULTICORE PROGRAMMING ─── -->
+<div class="card">
+    <h2 class="section-title">Multicore Programming</h2>
+    <div class="two-column">
+        <div class="box">
+            <strong>Multicore Architecture</strong>
+            Places <strong>multiple processor cores</strong> and bundles them as a single physical processor (single CPU with multiple cores).
+        </div>
+        <div class="box">
+            <strong>Multiprocessor System</strong>
+            A computer that actually has <strong>more than one physical CPU</strong>.
+        </div>
+    </div>
+
+    <div class="note" style="margin-top:15px;">
+        <strong>Parallelism vs. Concurrency:</strong><br>
+        • <strong>Parallelism</strong> — can perform more than one task <em>simultaneously</em>.<br>
+        • <strong>Concurrency</strong> — supports more than one task by allowing all tasks to <em>make progress</em>.<br>
+        In a single-core system, the CPU scheduler provides the <em>illusion</em> of parallelism by rapidly switching between processes → processes run <strong>concurrently, not in parallel</strong>.
+    </div>
+
+    <div class="highlight">
+        <strong>Concurrency on Single-Core:</strong> Only one thread executes at a time; the CPU rapidly switches between T₁, T₂, T₃, T₄ …<br><br>
+        <strong>Parallelism on Multi-Core:</strong> Each core executes a different thread simultaneously (e.g., Core 1 runs T₁/T₃; Core 2 runs T₂/T₄).
+    </div>
+</div>
+
+<!-- ─── MULTICORE CHALLENGES ─── -->
+<div class="card">
+    <h2 class="section-title">Challenges of Multicore Programming</h2>
+    <ul>
+        <li><strong>Dividing activities</strong> — applications are divided into separate tasks that can run in parallel.</li>
+        <li><strong>Balance</strong> — all tasks should perform equal work of equal value.</li>
+        <li><strong>Data splitting</strong> — data accessed by the application must be divided appropriately.</li>
+        <li><strong>Data dependency</strong> — data accessed by tasks must account for dependencies and require synchronization.</li>
+        <li><strong>Testing and debugging</strong> — testing and debugging tasks that run in parallel is significantly more difficult.</li>
+    </ul>
+
+    <div class="two-column" style="margin-top:15px;">
+        <div class="box">
+            <strong>Data Parallelism</strong>
+            Distributes <em>subsets of the same data</em> across multiple cores, performing the same operation on each.<br>
+            <em>Example: summing the contents of an array of size n.</em>
+        </div>
+        <div class="box">
+            <strong>Task Parallelism</strong>
+            Distributes <em>threads across cores</em>, with each thread performing a <strong>unique operation</strong>.
+        </div>
+    </div>
+</div>
+
+<!-- ─── USER vs KERNEL THREADS ─── -->
+<div class="card">
+    <h2 class="section-title">User Threads and Kernel Threads</h2>
+    <div class="two-column">
+        <div class="box">
+            <strong>User Threads</strong>
+            Thread management done by a <strong>user-level threads library</strong>.<br><br>
+            Three primary thread libraries:<br>
+            • POSIX Pthreads<br>
+            • Windows threads<br>
+            • Java threads
+        </div>
+        <div class="box">
+            <strong>Kernel Threads</strong>
+            Supported directly by the <strong>kernel</strong>.<br><br>
+            Examples (virtually all general-purpose OSes):<br>
+            • Windows<br>
+            • Solaris<br>
+            • Linux<br>
+            • Tru64 UNIX<br>
+            • Mac OS X
+        </div>
+    </div>
+</div>
+
+<!-- ─── MULTITHREADING MODELS ─── -->
+<div class="card">
+    <h2 class="section-title">Multithreading Models</h2>
+    <div class="note">
+        Three common ways of establishing a relationship between user and kernel threads.
+    </div>
+
+    <!-- Many-to-One -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">1. Many-to-One</h3>
+    <ul>
+        <li>Many user-level threads mapped to a <strong>single kernel thread</strong>.</li>
+        <li><strong>Disadvantage:</strong> One thread blocking causes the <strong>entire process to block</strong>.</li>
+        <li>Multiple threads may not run in parallel on a multicore system because only one thread can access the kernel at a time.</li>
+        <li>Few systems currently use this model.</li>
+        <li><strong>Examples:</strong> Solaris Green Threads, GNU Portable Threads.</li>
+    </ul>
+
+    <!-- One-to-One -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">2. One-to-One</h3>
+    <ul>
+        <li>Each user-level thread maps to a <strong>kernel thread</strong>.</li>
+        <li><strong>Advantage:</strong> More concurrency than many-to-one — another thread can run when one makes a blocking system call.</li>
+        <li>Multiple threads run in parallel on a multiprocessor.</li>
+        <li>Number of threads per process is sometimes restricted due to overhead.</li>
+        <li><strong>Disadvantage:</strong> Creating a user-level thread creates a kernel thread (overhead).</li>
+        <li><strong>Examples:</strong> Windows, Linux, Solaris 9 and later.</li>
+    </ul>
+
+    <!-- Many-to-Many -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">3. Many-to-Many</h3>
+    <ul>
+        <li>Allows many user-level threads to be mapped to <strong>many kernel threads</strong>.</li>
+        <li>OS creates a sufficient number of kernel threads (≤ number of user threads).</li>
+        <li><strong>Examples:</strong> Solaris prior to version 9, Windows with the ThreadFiber package.</li>
+    </ul>
+
+    <!-- Two-level -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">4. Two-Level Model (Variation of Many-to-Many)</h3>
+    <ul>
+        <li>Multiplexes many user-level threads to a smaller or equal number of kernel threads, but <strong>also allows a user-level thread to be bound to a kernel thread</strong>.</li>
+        <li><strong>Examples:</strong> IRIX, HP-UX, Tru64 UNIX, Solaris 8 and earlier.</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>Real-World Practice:</strong> Although many-to-many appears most flexible, it is difficult to implement. With increasing cores on modern systems, limiting kernel threads has become less important. As a result, <strong>most operating systems now use the one-to-one model</strong>.
+    </div>
+</div>
+
+<!-- ─── THREAD LIBRARIES ─── -->
+<div class="card">
+    <h2 class="section-title">Thread Libraries</h2>
+    <div class="note">
+        A thread library provides programmers with an API for creating and managing threads.
+    </div>
+    <div class="two-column">
+        <div class="box">
+            <strong>User-Space Library</strong>
+            • No kernel support<br>
+            • Code and data structures exist in user space<br>
+            • Invoking a library function results in a <strong>local function call</strong> (not a system call)
+        </div>
+        <div class="box">
+            <strong>Kernel-Level Library</strong>
+            • Supported by the OS<br>
+            • Code and data structures exist in <strong>kernel space</strong><br>
+            • Invoking a library API function typically results in a <strong>system call to the kernel</strong>
+        </div>
+    </div>
+</div>
+
+<!-- ─── PTHREADS ─── -->
+<div class="card">
+    <h2 class="section-title">Pthreads</h2>
+    <ul>
+        <li>May be provided as a <strong>user-level or kernel-level</strong> library.</li>
+        <li>A <strong>POSIX standard (IEEE 1003.1c)</strong> API for thread creation and synchronization.</li>
+        <li>Common in UNIX-based systems: <strong>Solaris, Linux, Mac OS X</strong>.</li>
+    </ul>
+
+    <h3 style="color:#2c6e6b; margin:15px 0 8px;">Creating and Terminating Threads</h3>
+    <pre><code><span class="comment">/* Function signature for pthread_create */</span>
+<span class="type">int</span> <span class="fn">pthread_create</span>(
+    <span class="type">pthread_t</span> * thread,              <span class="comment">// returns the thread ID</span>
+    <span class="keyword">const</span> <span class="type">pthread_attr_t</span> * attr,    <span class="comment">// thread attributes (NULL = default)</span>
+    <span class="type">void</span> * (*start_routine)(<span class="type">void</span> *), <span class="comment">// function the thread will execute</span>
+    <span class="type">void</span> *arg                        <span class="comment">// argument passed to start_routine</span>
+);</code></pre>
+
+    <div class="note">
+        <strong>Termination:</strong> Threads terminate by explicitly calling <code>pthread_exit()</code>, by letting the function return, or by a call to <code>exit()</code> — which terminates the entire process including all threads.
+    </div>
+
+    <h3 style="color:#2c6e6b; margin:15px 0 8px;">Example: Create and Terminate</h3>
+    <pre><code>#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+
+<span class="type">void</span> *<span class="fn">print_message_function</span>(<span class="type">void</span> *ptr);
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">pthread_t</span> thread1, thread2;
+    <span class="type">char</span> *message1 = <span class="string">"Thread 1"</span>;
+    <span class="type">char</span> *message2 = <span class="string">"Thread 2"</span>;
+
+    <span class="comment">/* Create two independent threads */</span>
+    <span class="fn">pthread_create</span>(&amp;thread1, NULL, print_message_function, (<span class="type">void</span>*) message1);
+    <span class="fn">pthread_create</span>(&amp;thread2, NULL, print_message_function, (<span class="type">void</span>*) message2);
+
+    <span class="comment">/* Wait for threads to complete before main exits */</span>
+    <span class="fn">pthread_join</span>(thread1, NULL);
+    <span class="fn">pthread_join</span>(thread2, NULL);
+    <span class="fn">exit</span>(<span class="num">0</span>);
+}
+
+<span class="type">void</span> *<span class="fn">print_message_function</span>(<span class="type">void</span> *ptr) {
+    <span class="type">char</span> *message = (<span class="type">char</span> *) ptr;
+    <span class="fn">printf</span>(<span class="string">"%s\n"</span>, message);
+}</code></pre>
+</div>
+
+<!-- ─── MUTEXES & RACE CONDITIONS ─── -->
+<div class="card">
+    <h2 class="section-title">Mutexes &amp; Race Conditions</h2>
+
+    <div class="warning">
+        <strong>Race Condition:</strong> An undesirable situation that occurs when two or more threads attempt to access and modify the same shared resource at the same time, and the result depends on the <strong>order of execution</strong>.
+    </div>
+
+    <ul>
+        <li>Race conditions are a <strong>common issue</strong> for multithreaded applications.</li>
+        <li><strong>Prevention strategies:</strong>
+            <ul>
+                <li><strong>Avoid shared states</strong> — use atomic operations and locking for critical sections; use immutable objects.</li>
+                <li><strong>Thread synchronization</strong> — only one thread executes a critical section at a time.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3 style="color:#2c6e6b; margin:15px 0 8px;">Mutex (Mutual Exclusion Lock)</h3>
+    <ul>
+        <li>Blocks access to variables by other threads — enforces <strong>exclusive access</strong>.</li>
+        <li>Used to prevent data inconsistencies due to race conditions.</li>
+        <li>Mutexes are used for <strong>serializing shared resources</strong>.</li>
+        <li>Any global resource accessed by more than one thread should have a mutex associated with it.</li>
+        <li>A mutex protects a segment of memory called the <strong>critical region</strong>.</li>
+        <li>Mutexes can only be applied to threads in a <strong>single process</strong> (unlike semaphores which work between processes).</li>
+    </ul>
+
+    <div class="two-column">
+        <div class="box" style="background:#fff5f5; border-left-color:#e53935;">
+            <strong>Without Mutex (Unsafe)</strong>
+            <pre style="background:#f8f8f8; color:#333; padding:10px; font-size:0.8em; margin-top:8px;">int counter = 0;
+
+void functionC() {
+    counter++;
+}</pre>
+            <em style="font-size:0.85em; color:#c62828;">Both threads may read the same value of counter and both write 1 → final value: 1 instead of 2</em>
+        </div>
+        <div class="box" style="background:#f1f8e9; border-left-color:#43a047;">
+            <strong>With Mutex (Safe)</strong>
+            <pre style="background:#f8f8f8; color:#333; padding:10px; font-size:0.8em; margin-top:8px;">pthread_mutex_t mutex1
+  = PTHREAD_MUTEX_INITIALIZER;
+int counter = 0;
+
+void functionC() {
+  pthread_mutex_lock(&mutex1);
+  counter++;
+  pthread_mutex_unlock(&mutex1);
+}</pre>
+            <em style="font-size:0.85em; color:#2e7d32;">Thread 2 is locked out while Thread 1 has exclusive use of counter → final value: 2 ✓</em>
+        </div>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin:15px 0 8px;">Pthreads: Synchronization Example</h3>
+    <pre><code>#include &lt;pthread.h&gt;
+
+<span class="type">pthread_mutex_t</span> mutex1 = PTHREAD_MUTEX_INITIALIZER;
+<span class="type">int</span>  counter = <span class="num">0</span>;
+
+<span class="type">void</span> *<span class="fn">functionC</span>() {
+    <span class="fn">pthread_mutex_lock</span>( &amp;mutex1 );
+    counter++;
+    <span class="fn">printf</span>(<span class="string">"Counter value: %d\n"</span>, counter);
+    <span class="fn">pthread_mutex_unlock</span>( &amp;mutex1 );
+}</code></pre>
+</div>
+
+<!-- ─── PTHREADS JOIN ─── -->
+<div class="card">
+    <h2 class="section-title">Pthreads: Join</h2>
+    <div class="note">
+        <code>pthread_join()</code> causes the calling thread to wait until the specified thread terminates. Without join, the main thread might exit before worker threads finish.
+    </div>
+
+    <pre><code>#define NTHREADS 10
+<span class="type">pthread_mutex_t</span> mutex1 = PTHREAD_MUTEX_INITIALIZER;
+<span class="type">int</span>  counter = <span class="num">0</span>;
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">pthread_t</span> thread_id[NTHREADS];
+    <span class="type">int</span> i, j;
+
+    <span class="keyword">for</span>(i=<span class="num">0</span>; i &lt; NTHREADS; i++)
+        <span class="fn">pthread_create</span>( &amp;thread_id[i], NULL, thread_function, NULL );
+
+    <span class="keyword">for</span>(j=<span class="num">0</span>; j &lt; NTHREADS; j++)
+        <span class="fn">pthread_join</span>( thread_id[j], NULL );
+
+    <span class="comment">/* All threads complete — safe to print final result */</span>
+    <span class="fn">printf</span>(<span class="string">"Final counter value: %d\n"</span>, counter);
+}
+
+<span class="type">void</span> *<span class="fn">thread_function</span>(<span class="type">void</span> *dummyPtr) {
+    <span class="fn">pthread_mutex_lock</span>( &amp;mutex1 );
+    counter++;
+    <span class="fn">pthread_mutex_unlock</span>( &amp;mutex1 );
+}</code></pre>
+</div>
+
+<!-- ─── JAVA THREADS ─── -->
+<div class="card">
+    <h2 class="section-title">Java Threads</h2>
+    <ul>
+        <li>Java threads are <strong>managed by the JVM</strong>.</li>
+        <li>All Java programs comprise at least a single thread of control — even a simple Java program with only a <code>main()</code> method runs as a single thread in the JVM.</li>
+    </ul>
+
+    <div class="two-column">
+        <div class="box">
+            <strong>Method 1: Extend Thread Class</strong>
+            Create a new class derived from the <code>Thread</code> class and override its <code>run()</code> method.
+        </div>
+        <div class="box">
+            <strong>Method 2: Implement Runnable Interface</strong>
+            Define a class that implements the <code>Runnable</code> interface with a <code>run()</code> method.
+            <pre style="background:#f8f8f8; color:#333; padding:8px; margin-top:8px; font-size:0.8em; border-radius:4px;">public interface Runnable {
+    public abstract void run();
+}</pre>
+        </div>
+    </div>
+</div>
+
+<!-- ─── THREAD POOLS ─── -->
+<div class="card">
+    <h2 class="section-title">Thread Pools</h2>
+    <div class="note">
+        Create a number of threads in a pool where they await work, rather than creating a new thread for each request.
+    </div>
+    <ul>
+        <li><strong>Advantage 1:</strong> Usually slightly <strong>faster</strong> to service a request with an existing thread than to create a new one.</li>
+        <li><strong>Advantage 2:</strong> Allows the <strong>number of threads</strong> in the application to be <strong>bounded</strong> to the size of the pool (prevents resource exhaustion).</li>
+        <li>The <strong>Windows API</strong> supports thread pools.</li>
+    </ul>
+</div>
+
+<!-- ─── FORK-JOIN PARALLELISM ─── -->
+<div class="card">
+    <h2 class="section-title">Fork-Join Parallelism</h2>
+    <div class="note">
+        Multiple threads (tasks) are <strong>forked</strong> (spawned) from a main thread, complete their work, and then are <strong>joined</strong> (results collected) back into the main thread.
+    </div>
+
+    <div class="model-diagram">
+        <strong>main thread</strong> ──fork──▶ [task 1] ──join──▶ <strong>main thread</strong><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──fork──▶ [task 2] ──join──┘
+    </div>
+
+    <h3 style="color:#2c6e6b; margin:15px 0 8px;">General Fork-Join Algorithm</h3>
+    <pre><code>Task(problem)
+    if problem is small enough
+        solve the problem directly
+    else
+        subtask1 = fork(new Task(subset of problem))
+        subtask2 = fork(new Task(subset of problem))
+
+        result1 = join(subtask1)
+        result2 = join(subtask2)
+
+        return combined results</code></pre>
+
+    <div class="highlight">
+        <strong>Key Idea:</strong> Large problems are recursively broken into smaller subtasks that run in parallel. Once all subtasks complete, results are combined. This enables efficient use of multiple CPU cores.
+    </div>
+</div>
+
+<!-- ─── THREADING ISSUES ─── -->
+<div class="card">
+    <h2 class="section-title">Threading Issues</h2>
+    <ul>
+        <li>Semantics of <code>fork()</code> and <code>exec()</code> system calls</li>
+        <li>Signal handling</li>
+        <li>Thread cancellation</li>
+        <li>Thread-local storage (TLS)</li>
+        <li>Scheduler Activations</li>
+    </ul>
+
+    <!-- fork/exec -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">Semantics of fork() and exec()</h3>
+    <ul>
+        <li><code>fork()</code> — does the new process duplicate <strong>only the calling thread</strong>, or <strong>all threads</strong>?
+            <ul>
+                <li>Does the new process duplicate all threads, or is it a single-threaded process?</li>
+            </ul>
+        </li>
+        <li><code>exec()</code> — usually works as normal: replaces the entire running process, <strong>including all threads</strong>.</li>
+    </ul>
+
+    <!-- Signal Handling -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">Signal Handling</h3>
+    <div class="note">
+        Signals are used in UNIX systems to notify a process that a particular event has occurred. A <strong>signal handler</strong> is used to process signals.
+    </div>
+    <ul>
+        <li>Signal is generated by the occurrence of a particular event.</li>
+        <li>Signal is delivered to a process.</li>
+        <li>Once delivered, the signal must be handled.</li>
+    </ul>
+    <div class="highlight">
+        <strong>Where should a signal be delivered in a multithreaded process? Options:</strong><br>
+        • Deliver the signal to the thread to which the signal applies.<br>
+        • Deliver the signal to every thread in the process.<br>
+        • Deliver the signal to certain threads in the process.<br>
+        • Assign a specific thread to receive all signals for the process.
+    </div>
+
+    <!-- Thread Cancellation -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">Thread Cancellation</h3>
+    <ul>
+        <li>Terminating a thread <strong>before it has finished</strong>.</li>
+        <li>Thread to be canceled is called the <strong>target thread</strong>.</li>
+    </ul>
+    <div class="two-column">
+        <div class="box">
+            <strong>Asynchronous Cancellation</strong>
+            One thread terminates the target thread <strong>immediately</strong>.
+        </div>
+        <div class="box">
+            <strong>Deferred Cancellation</strong>
+            Allows the target thread to periodically <strong>check if it should be cancelled</strong>. Cancellation only occurs when the thread reaches the <em>cancellation point</em>.
+        </div>
+    </div>
+    <pre style="margin-top:15px;"><code><span class="type">pthread_t</span> tid;
+
+<span class="comment">/* create the thread */</span>
+<span class="fn">pthread_create</span>(&amp;tid, <span class="num">0</span>, worker, NULL);
+
+<span class="comment">/* ... */</span>
+
+<span class="comment">/* cancel the thread */</span>
+<span class="fn">pthread_cancel</span>(tid);</code></pre>
+
+    <!-- TLS -->
+    <h3 style="color:#2c6e6b; margin:20px 0 8px;">Thread-Local Storage (TLS)</h3>
+    <ul>
+        <li>Allows each thread to have its <strong>own copy of data</strong>.</li>
+        <li>Different from local variables: local variables are visible only during a single function invocation; <strong>TLS is visible across function invocations</strong>.</li>
+        <li>Similar to static data, but <strong>TLS is unique to each thread</strong>.</li>
+    </ul>
+</div>
+
+<!-- ─── THREAD SCHEDULING ─── -->
+<div class="card">
+    <h2 class="section-title">Thread Scheduling &amp; Priority</h2>
+    <ul>
+        <li>An OS's <strong>thread scheduler</strong> determines which thread runs next.</li>
+        <li>Most operating systems use <strong>timeslicing</strong> for threads of equal priority.</li>
+        <li><strong>Preemptive scheduling:</strong> when a thread of higher priority enters the running state, it <strong>preempts</strong> the current thread.</li>
+        <li><strong>Starvation:</strong> higher-priority threads can postpone (possibly forever) the execution of lower-priority threads.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Dynamic Priority Adjustment:</strong><br>
+        • The more CPU a thread receives → its priority <strong>decreases</strong>.<br>
+        • The more a thread waits for the CPU → its priority <strong>increases</strong>.<br>
+        • Most modern OSes have <strong>thread aging</strong> — gradually increasing priority based on waiting time in the ready queue.
+    </div>
+</div>
+
+<!-- ─── LINUX THREADS ─── -->
+<div class="card">
+    <h2 class="section-title">Linux Threads</h2>
+    <ul>
+        <li>Linux refers to threads as <strong>tasks</strong> rather than threads.</li>
+        <li>Thread creation is done through the <code>clone()</code> system call.</li>
+        <li><code>clone()</code> allows a child task to <strong>share the address space</strong> of the parent task (process).</li>
+    </ul>
+</div>
+
+<!-- ─── IN-CLASS EXERCISE ─── -->
+<div class="card">
+    <h2 class="section-title">In-Class Exercise Questions</h2>
+    <div class="in-class">
+        <h3>📝 Review Questions</h3>
+        <ol style="margin-left: 20px; line-height: 2.2;">
+            <li>What are the main components of a thread, and how do they differ from those of a traditional process?</li>
+            <li>How does multithreading improve the performance and efficiency of modern software applications? Provide examples.</li>
+            <li>What are the three common models for establishing relationships between user and kernel threads, and what are the advantages and disadvantages of each?</li>
+            <li>What are some key issues and challenges associated with multithreading, such as signal handling and thread cancellation?</li>
+            <li>Explain the concept of fork-join parallelism and its significance in the context of multithreaded programming.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ─── QUICK REFERENCE SUMMARY ─── -->
+<div class="card">
+    <h2 class="section-title">Quick Reference Summary</h2>
+    <div class="grid">
+        <div class="box">
+            <strong>Thread Components</strong>
+            Thread ID, Program Counter, Register Set, Stack
+        </div>
+        <div class="box">
+            <strong>Shared by Threads</strong>
+            Code, Data, OS Resources (files, signals)
+        </div>
+        <div class="box">
+            <strong>Threading Models</strong>
+            Many-to-One, One-to-One, Many-to-Many, Two-Level
+        </div>
+        <div class="box">
+            <strong>Most Common Today</strong>
+            One-to-One (Windows, Linux)
+        </div>
+        <div class="box">
+            <strong>Thread Libraries</strong>
+            POSIX Pthreads, Windows Threads, Java Threads
+        </div>
+        <div class="box">
+            <strong>Mutex Purpose</strong>
+            Prevent race conditions via mutual exclusion on critical sections
+        </div>
+        <div class="box">
+            <strong>Cancellation Types</strong>
+            Asynchronous (immediate) vs. Deferred (at cancellation point)
+        </div>
+        <div class="box">
+            <strong>Linux Term</strong>
+            Tasks (not threads); created with <code>clone()</code>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    🌱 Lecture 04 — Threads &nbsp;•&nbsp; BY_#D1
+</div>
+
+</div>
+</body>
+</html>

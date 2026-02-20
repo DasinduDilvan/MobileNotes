@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Lecture 01 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../operating-systems.html">← Back to Notes</a>
+
+<h1>📘 Operating Systems Concepts & Application</h1>
+<p class="subtitle">Lecture 01 — Introduction</p>
+
+<div class="card">
+<h2 class="section-title">What is an Operating System?</h2>
+<ul>
+<li><strong>Intermediary</strong> between user and hardware</li>
+<li><strong>Executes</strong> user programs and makes solving user problems easier</li>
+<li>Makes the computer system <strong>convenient to use</strong></li>
+<li>Uses computer hardware in an <strong>efficient manner</strong></li>
+<li>Improves system <strong>reliability</strong></li>
+<li>Provides <strong>security and isolation</strong> between processes</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Computer System Components</h2>
+<div class="grid">
+<div class="box">
+<strong>Hardware</strong>
+CPU, Memory, I/O devices - provides basic computing resources
+</div>
+<div class="box">
+<strong>Operating System</strong>
+Controls and coordinates hardware use among applications
+</div>
+<div class="box">
+<strong>Application Programs</strong>
+Word processors, compilers, web browsers, games
+</div>
+<div class="box">
+<strong>Users</strong>
+People, machines, other computers
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">What Operating System Does</h2>
+<ul>
+<li><strong>Resource Allocator:</strong> Manages all resources (CPU time, memory space, file storage, I/O devices)</li>
+<li><strong>Control Program:</strong> Controls execution of programs to prevent errors and improper use</li>
+<li>Manages CPU, memory, storage, and I/O devices</li>
+<li>Optimized differently for:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Personal computers (PCs)</li>
+<li>Servers</li>
+<li>Mobile devices</li>
+<li>Embedded systems</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Operating System Definition</h2>
+<div class="highlight">
+<strong>No universally accepted definition</strong>
+</div>
+<ul>
+<li><strong>Kernel:</strong> The one program running at all times on the computer</li>
+<li><strong>System Programs:</strong> Ship with the operating system but are not part of the kernel</li>
+<li><strong>Application Programs:</strong> All programs not associated with the operating system</li>
+<li>Without an operating system, a computer is just useless hardware</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Examples of Operating Systems</h2>
+<div class="grid">
+<div class="box">
+<strong>Windows</strong>
+Microsoft's desktop OS
+</div>
+<div class="box">
+<strong>Mac OS</strong>
+Apple's desktop OS
+</div>
+<div class="box">
+<strong>Ubuntu Linux</strong>
+Open-source OS
+</div>
+<div class="box">
+<strong>Android</strong>
+Mobile OS by Google
+</div>
+<div class="box">
+<strong>iOS</strong>
+Apple's mobile OS
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Computer Startup Process</h2>
+<ul>
+<li><strong>Bootstrap Program</strong> is loaded at power-up or reboot</li>
+<li>Stored in <strong>ROM or EPROM</strong>, generally known as <strong>firmware</strong></li>
+<li>Initializes all aspects of the system</li>
+<li>Loads the <strong>operating system kernel</strong> into memory</li>
+<li>Kernel loads and starts the <strong>initial process</strong></li>
+<li>System is then running and ready to accept user input</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Interrupts</h2>
+<ul>
+<li>Interrupts are signals from <strong>hardware or software</strong></li>
+<li><strong>Hardware interrupt:</strong> Triggered by hardware devices via system bus</li>
+<li><strong>Software interrupt (trap):</strong> Triggered by software via system call</li>
+<li>CPU stops current execution and transfers to interrupt service routine</li>
+<li>CPU saves its current <strong>state</strong> before handling interrupt</li>
+<li><strong>Interrupt vector:</strong> Contains addresses of interrupt service routines</li>
+<li>Operating system is <strong>interrupt driven</strong> - waits for interrupts to occur</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Direct Memory Access (DMA)</h2>
+<ul>
+<li>Used for high-speed I/O devices</li>
+<li>Device controller transfers data <strong>directly to/from memory</strong></li>
+<li><strong>No CPU intervention</strong> required for data transfer</li>
+<li>CPU is free to perform other tasks during transfer</li>
+<li>Only one interrupt is generated per block of data</li>
+<li>Improves system performance significantly</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Storage Concepts</h2>
+<div class="grid">
+<div class="box">
+<strong>Storage Units</strong>
+Bit → Byte → Word<br>
+KB → MB → GB → TB
+</div>
+<div class="box">
+<strong>Main Memory</strong>
+RAM - Volatile storage<br>
+Fast access, temporary
+</div>
+<div class="box">
+<strong>Secondary Storage</strong>
+Hard disk, SSD - Non-volatile<br>
+Permanent data storage
+</div>
+</div>
+<ul style="margin-top: 15px;">
+<li><strong>Volatile Memory:</strong> Loses contents when power is removed (RAM)</li>
+<li><strong>Non-volatile Memory:</strong> Retains contents without power (ROM, hard disk, SSD)</li>
+<li>Storage hierarchy: Registers → Cache → Main Memory → Secondary Storage</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Caching</h2>
+<ul>
+<li>Copying information into <strong>faster storage system</strong></li>
+<li>Improves access speed for frequently used data</li>
+<li><strong>Cache memory</strong> is located inside or very close to CPU</li>
+<li>CPU first checks cache before accessing main memory</li>
+<li>Significantly reduces average access time</li>
+<li>Based on principle of <strong>locality of reference</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Computer System Architecture</h2>
+<ul>
+<li><strong>Single Processor Systems:</strong> One main CPU executing instructions</li>
+<li><strong>Multiprocessor Systems:</strong> Two or more processors sharing memory</li>
+<li><strong>SMP (Symmetric Multiprocessing):</strong> All processors are peers, no master-slave relationship</li>
+<li><strong>AMP (Asymmetric Multiprocessing):</strong> Master-slave relationship among processors</li>
+<li><strong>Advantages of multiprocessing:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Increased throughput</li>
+<li>Economy of scale</li>
+<li>Increased reliability and fault tolerance</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Multiprogramming & Timesharing</h2>
+<div class="grid">
+<div class="box">
+<strong>Multiprogramming</strong>
+• Multiple jobs in memory<br>
+• CPU switches between jobs<br>
+• Increases CPU utilization
+</div>
+<div class="box">
+<strong>Timesharing (Multitasking)</strong>
+• CPU switches rapidly<br>
+• Response time < 1 second <br>
+• Interactive computing
+</div>
+</div>
+<ul style="margin-top: 15px;">
+<li>Organizes jobs so CPU always has one to execute</li>
+<li><strong>Job scheduling:</strong> Selects which job to run next</li>
+<li><strong>Virtual memory:</strong> Allows execution of processes not completely in memory</li>
+<li>Enables multiple users to share computer simultaneously</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Dual Mode Operation</h2>
+<ul>
+<li><strong>User Mode:</strong> Mode in which user applications execute</li>
+<li><strong>Kernel Mode (Supervisor/System Mode):</strong> Mode for OS kernel execution</li>
+<li><strong>Mode bit:</strong> Hardware feature that indicates current mode (0 = kernel, 1 = user)</li>
+<li><strong>Privileged instructions:</strong> Can only be executed in kernel mode</li>
+<li>System calls cause mode switch from user to kernel mode</li>
+<li>Protects OS and critical system resources from user programs</li>
+<li>After system call completion, returns to user mode</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process Management</h2>
+<ul>
+<li><strong>Creating and deleting</strong> processes</li>
+<li><strong>Suspending and resuming</strong> processes</li>
+<li>Process <strong>synchronization</strong> mechanisms</li>
+<li>Process <strong>communication</strong> mechanisms</li>
+<li><strong>Deadlock handling</strong> - prevention, avoidance, detection, recovery</li>
+<li>CPU scheduling to maximize efficiency</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Memory Management</h2>
+<ul>
+<li><strong>Tracking</strong> which parts of memory are being used and by whom</li>
+<li><strong>Allocating and deallocating</strong> memory space as needed</li>
+<li><strong>Moving data</strong> between main memory and secondary storage</li>
+<li>Deciding which processes to load into memory</li>
+<li>Managing virtual memory systems</li>
+<li>Optimizing memory usage for performance</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">File Management</h2>
+<ul>
+<li><strong>Creating and deleting</strong> files</li>
+<li><strong>Creating and deleting</strong> directories</li>
+<li>Supporting primitives for manipulating files and directories</li>
+<li><strong>Mapping files</strong> onto secondary storage</li>
+<li><strong>Backup</strong> of files on stable (non-volatile) storage media</li>
+<li>Access control and permissions</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Mass Storage Management</h2>
+<ul>
+<li><strong>Disk scheduling:</strong> Ordering disk I/O requests for efficiency</li>
+<li><strong>Partitioning:</strong> Dividing storage into logical units</li>
+<li><strong>Protection:</strong> Ensuring data integrity and security</li>
+<li><strong>Free-space management:</strong> Tracking available storage space</li>
+<li>Storage allocation and deallocation</li>
+<li>Disk formatting and bad-block management</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">I/O Subsystem</h2>
+<ul>
+<li><strong>Device drivers:</strong> Software interface for hardware devices</li>
+<li><strong>Buffering:</strong> Temporary storage while transferring data</li>
+<li><strong>Caching:</strong> Storing frequently accessed data</li>
+<li><strong>Spooling:</strong> Overlapping output of one job with input of other jobs</li>
+<li>Managing I/O queues and scheduling</li>
+<li>Handling device interrupts</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Protection & Security</h2>
+<ul>
+<li><strong>User IDs:</strong> Unique identifier for each user</li>
+<li><strong>Group IDs:</strong> Set of users sharing access rights</li>
+<li><strong>Access control:</strong> Managing permissions for files and resources</li>
+<li><strong>Defense against attacks:</strong> External (unauthorized access) and internal (malicious users)</li>
+<li><strong>Privilege escalation:</strong> Gaining higher access rights when needed</li>
+<li>Authentication and authorization mechanisms</li>
+<li>Encryption and secure communication</li>
+</ul>
+</div>
+
+<div class="footer">
+🌱 Lecture 01 - Operating Systems Introduction • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

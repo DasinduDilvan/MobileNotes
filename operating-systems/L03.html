@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Lecture 03 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    border-bottom: 1px solid #aaac;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.code-block {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.memory-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px auto;
+    max-width: 400px;
+}
+
+.memory-section {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0;
+    border: 2px solid #2c6e6b;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../operating-systems.html">← Back to Notes</a>
+
+<h1>📘 Operating Systems Concepts & Application</h1>
+<p class="subtitle">Lecture 03 — Processes</p>
+
+<div class="card">
+<h2 class="section-title">Process Concept</h2>
+
+<div class="definition">
+<strong>Program vs Process:</strong>
+</div>
+
+<div class="two-column">
+<div class="box">
+<strong>Program</strong>
+• Passive entity stored on disk<br>
+• Executable file<br>
+• Static code
+</div>
+<div class="box">
+<strong>Process</strong>
+• Active entity<br>
+• Program loaded into memory<br>
+• Executing program
+</div>
+</div>
+
+<ul style="margin-top: 15px;">
+<li>Program becomes <strong>process</strong> when executable file is loaded into memory</li>
+<li>Process execution must progress in <strong>sequential fashion</strong></li>
+<li><strong>No parallel execution</strong> of instructions of a single process</li>
+<li>Execution of program started via <strong>GUI mouse double-clicking, entering its name on command line</strong>, etc.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process in a System</h2>
+
+<div class="important">
+<strong>A process is the unit of work in a system</strong>
+</div>
+
+<ul>
+<li>A system consists of a collection of <strong>concurrently executing processes</strong></li>
+<li><strong>Operating-system processes:</strong> Execute system code</li>
+<li><strong>User processes:</strong> Execute user code</li>
+<li>An operating system executes a variety of programs – user interactive or non-interactive</li>
+<li>We will use the terms <strong>job</strong> and <strong>process</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process in Memory</h2>
+
+<div class="memory-diagram">
+<div style="text-align: left; width: 100%; margin-bottom: 10px;"><strong>max</strong></div>
+<div class="memory-section" style="background: #e8f5e9;">Stack</div>
+<div style="margin: 10px 0;">↓ ↑</div>
+<div class="memory-section" style="background: #e3f2fd;">Heap</div>
+<div class="memory-section" style="background: #fff9e6;">Data</div>
+<div class="memory-section" style="background: #ffebee;">Text</div>
+<div style="text-align: left; width: 100%; margin-top: 10px;"><strong>0</strong></div>
+</div>
+
+<div class="important">
+<strong>A process includes:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Text Section</strong>
+The executable program code
+</div>
+<div class="box">
+<strong>Program Counter</strong>
+Value specifying next instruction to execute
+</div>
+<div class="box">
+<strong>Processor's Registers</strong>
+Contents representing current activity
+</div>
+<div class="box">
+<strong>Stack</strong>
+Temporary data: function parameters, return addresses, local variables
+</div>
+<div class="box">
+<strong>Data Section</strong>
+Global variables
+</div>
+<div class="box">
+<strong>Heap</strong>
+Memory dynamically allocated during runtime
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Multiple Processes from Same Program</h2>
+
+<div class="highlight">
+<strong>Key Concept:</strong> A process is an active entity, with a program counter specifying the next instruction to execute and a set of associated resources.
+</div>
+
+<ul>
+<li><strong>Several processes can be associated with the same program</strong></li>
+<li>Text in the program are <strong>same</strong>, but they are <strong>separate execution sequences</strong></li>
+</ul>
+
+<div class="note">
+<strong>Examples:</strong>
+</div>
+
+<ul>
+<li>Consider multiple users executing the same program:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Several users may run different copies of <strong>mail program</strong></li>
+<li>Same user run many copies of <strong>web browser program</strong></li>
+</ul>
+</li>
+<li>These are <strong>separate processes</strong>; but the <strong>text sections are equivalent</strong></li>
+<li>The <strong>data, heap, and stack sections vary</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process State</h2>
+
+<div class="important">
+As a process executes, it changes state:
+</div>
+
+<div class="grid">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>new</strong>
+The process is being created
+</div>
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>running</strong>
+Instructions are being executed
+</div>
+<div class="box" style="background: #fff9e6; border-left-color: #f0ad4e;">
+<strong>waiting</strong>
+The process is waiting for some event to occur
+</div>
+<div class="box" style="background: #f3e5f5; border-left-color: #9c27b0;">
+<strong>ready</strong>
+The process is waiting to be assigned to a processor
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>terminated</strong>
+The process has finished execution
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Important:</strong> In a single-CPU system, only <strong>one process</strong> may be in running state, many processes may be in <strong>ready and waiting</strong> states.
+</div>
+
+<div class="centered-diagram" style="margin-top: 20px;">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Process State Transitions</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.5;">
+<strong>new</strong> --admitted--> <strong>ready</strong><br>
+<strong>ready</strong> --scheduler dispatch--> <strong>running</strong><br>
+<strong>running</strong> --interrupt--> <strong>ready</strong><br>
+<strong>running</strong> --I/O or event wait--> <strong>waiting</strong><br>
+<strong>waiting</strong> --I/O or event completion--> <strong>ready</strong><br>
+<strong>running</strong> --exit--> <strong>terminated</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process Control Block (PCB)</h2>
+
+<div class="definition">
+<strong>Process Control Block (PCB)</strong> - also called <strong>task control block</strong><br>
+Information associated with each process
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Process State</strong>
+Running, waiting, etc.
+</div>
+<div class="box">
+<strong>Program Counter</strong>
+Location of instruction to next execute
+</div>
+<div class="box">
+<strong>CPU Registers</strong>
+Contents of all process-centric registers
+</div>
+<div class="box">
+<strong>CPU Scheduling Information</strong>
+Priorities, scheduling queue pointers
+</div>
+<div class="box">
+<strong>Memory-Management Information</strong>
+Memory allocated to the process
+</div>
+<div class="box">
+<strong>Accounting Information</strong>
+CPU used, clock time passed since start, job or process numbers
+</div>
+<div class="box">
+<strong>I/O Status Information</strong>
+I/O devices allocated to process, list of open files
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Threads</h2>
+
+<ul>
+<li>So far, process has a <strong>single thread of execution</strong></li>
+<li>It allows the process to execute <strong>only one task at a time</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Example: User cannot simultaneously type characters and run spell checker</li>
+</ul>
+</li>
+<li>In <strong>modern computers</strong> one process has <strong>more than one thread</strong></li>
+<li>Must then have storage for thread details, <strong>multiple program counters</strong> in PCB</li>
+</ul>
+
+<div class="important">
+Having multiple program counters per process:
+</div>
+
+<ul>
+<li><strong>Multiple locations</strong> can execute at once</li>
+<li><strong>Multiple threads of control</strong> → threads</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process Scheduling</h2>
+
+<div class="important">
+<strong>Goal:</strong> To maximize CPU use, quickly switch processes into CPU by time sharing
+</div>
+
+<ul>
+<li>Users interact with each program <strong>without any delay</strong></li>
+<li><strong>Process scheduler</strong> selects among available processes for next execution on CPU</li>
+</ul>
+
+<div class="highlight">
+<strong>Maintains scheduling queues of processes:</strong>
+</div>
+
+<div class="two-column">
+<div class="box">
+<strong>Ready Queue</strong>
+Set of all processes residing in main memory, ready and waiting to execute
+</div>
+<div class="box">
+<strong>Wait Queues</strong>
+Set of processes waiting for an event (e.g., I/O)
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Processes migrate</strong> among the various queues
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Schedulers</h2>
+
+<div class="box">
+<strong>Short-term Scheduler (CPU Scheduler)</strong>
+• Selects which process should be <strong>executed next</strong> and allocates CPU<br>
+• Sometimes the <strong>only scheduler</strong> in a system<br>
+• Invoked <strong>frequently (milliseconds)</strong> → must be fast
+</div>
+
+<div class="box">
+<strong>Long-term Scheduler (Job Scheduler)</strong>
+• Selects which processes should be brought into the <strong>ready queue</strong>
+• Invoked <strong>infrequently (seconds, minutes)</strong> → may be slow<br>
+• Controls the <strong>degree of multiprogramming</strong> (number of processes in memory)
+</div>
+
+<div class="highlight" style="margin-top: 15px;">
+<strong>Process Classifications:</strong>
+</div>
+
+<div class="two-column">
+<div class="box">
+<strong>I/O-bound Process</strong>
+Spends more time doing I/O than computations, many short CPU bursts
+</div>
+<div class="box">
+<strong>CPU-bound Process</strong>
+Spends more time doing computations; generates I/O requests infrequently
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Intermediate Scheduling - Swapping</h2>
+
+<div class="definition">
+Some operating systems have an intermediate form of scheduling, known as <strong>swapping</strong>
+</div>
+
+<ul>
+<li><strong>Purpose:</strong> Reduce the degree of multiple programming</li>
+<li><strong>Swapped-out:</strong> Remove process from memory and store on disk, where its current status is saved</li>
+<li><strong>Swapped-in:</strong> Bring back into memory from disk to continue execution, where its status is restored</li>
+</ul>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Swapping Process</strong><br><br>
+Partially Executed Swapped-out Processes<br>
+↓ swap in<br>
+<strong>Ready Queue → CPU</strong><br>
+↑ swap out
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Context Switch</h2>
+
+<div class="definition">
+A <strong>context switch</strong> occurs when the CPU switches from one process to another.
+</div>
+
+<ul>
+<li>When CPU switches to another process, the system must <strong>save the state of the old process</strong> and <strong>load the saved state for the new process</strong></li>
+<li><strong>Context of a process</strong> represented in the PCB</li>
+<li><strong>Context-switch time is overhead</strong>; the system does no useful work while switching</li>
+<li>The more complex the OS and the PCB → the <strong>longer the context switch</strong></li>
+<li>Time dependent on <strong>hardware support</strong></li>
+</ul>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Context Switch Steps</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2;">
+1. Process P₀ executing<br>
+2. Interrupt or system call<br>
+3. <strong>Save state into PCB₀</strong> (Process P₀ idle)<br>
+4. <strong>Reload state from PCB₁</strong><br>
+5. Process P₁ executing<br>
+6. Interrupt or system call<br>
+7. <strong>Save state into PCB₁</strong> (Process P₁ idle)<br>
+8. <strong>Reload state from PCB₀</strong><br>
+9. Process P₀ executing
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Operations on Processes</h2>
+
+<div class="important">
+System must provide mechanisms for:
+</div>
+
+<div class="two-column">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Process Creation</strong>
+Creating new processes
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Process Termination</strong>
+Ending processes
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process Creation</h2>
+
+<ul>
+<li><strong>Parent process</strong> create <strong>children processes</strong>, which in turn create other processes, forming a <strong>tree of processes</strong></li>
+<li>Generally, process identified and managed via a <strong>process identifier (pid)</strong></li>
+</ul>
+
+<div class="highlight">
+<strong>Resource Sharing Options:</strong>
+</div>
+
+<ul>
+<li>Parent and children <strong>share all resources</strong></li>
+<li>Children share <strong>subset of parent's resources</strong></li>
+<li>Parent and child share <strong>no resources</strong></li>
+</ul>
+
+<div class="highlight">
+<strong>Execution Options:</strong>
+</div>
+
+<ol>
+<li>The parent continues to execute <strong>concurrently</strong> with its children</li>
+<li>The parent <strong>waits</strong> until some or all of its children have terminated</li>
+</ol>
+</div>
+
+<div class="card">
+<h2 class="section-title">Address-Space Possibilities</h2>
+
+<div class="two-column">
+<div class="box">
+<strong>Option 1: Duplicate</strong>
+The child process is a duplicate of the parent process (it has the same program and data as the parent)
+</div>
+<div class="box">
+<strong>Option 2: New Program</strong>
+The child process has a new program loaded into it
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>UNIX Examples:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>fork()</strong>
+System call creates new process (duplicate)
+</div>
+<div class="box">
+<strong>exec()</strong>
+System call used after fork() to replace the process's memory space with a new program
+</div>
+<div class="box">
+<strong>wait()</strong>
+Parent process calls wait() waiting for the child to terminate
+</div>
+</div>
+
+<div class="centered-diagram" style="margin-top: 15px;">
+<strong style="font-size: 1.1em; color: #2c6e6b;">UNIX Process Creation Flow</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2;">
+<strong>Parent:</strong> pid = fork()<br>
+↓<br>
+<strong>Parent (pid > 0):</strong> wait() → parent resumes<br>
+<strong>Child (pid = 0):</strong> exec() → exit()
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Process Termination</h2>
+
+<div class="important">
+<strong>Normal Termination:</strong>
+</div>
+
+<ul>
+<li>Process executes last statement and asks the operating system to delete it using the <strong>exit()</strong> system call</li>
+<li>Returns <strong>status data from child to parent</strong> (via wait())</li>
+<li>Process's resources are <strong>deallocated by operating system</strong></li>
+</ul>
+
+<div class="highlight">
+<strong>Parent-Initiated Termination:</strong>
+</div>
+
+<ul>
+<li>Parent may terminate execution of children processes using the <strong>abort()</strong> system call</li>
+<li><strong>Reasons for doing so:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Child has <strong>exceeded allocated resources</strong></li>
+<li>Task assigned to child is <strong>no longer required</strong></li>
+<li>The parent is exiting and the OS <strong>does not allow a child to continue</strong> if its parent terminates</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Cascading Termination and Special Cases</h2>
+
+<div class="box">
+<strong>Cascading Termination</strong><br>
+Some operating systems do not allow child to exist if its parent has terminated. If a process terminates, then all its children must also be terminated. All children, grandchildren, etc. are terminated. The termination is initiated by the operating system.
+</div>
+
+<div class="highlight">
+<strong>Parent Process Waiting:</strong>
+</div>
+
+<div class="code-block">
+pid = wait(&status);
+</div>
+
+<ul>
+<li>The parent process may wait for termination of a child process by using the <strong>wait()</strong> system call</li>
+<li>The call returns <strong>status information</strong> and the <strong>pid of the terminated process</strong></li>
+</ul>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Special Process States:</strong>
+</div>
+
+<div class="two-column">
+<div class="box" style="background: #fff9e6; border-left-color: #f0ad4e;">
+<strong>Zombie Process</strong>
+If no parent waiting (did not invoke wait()), process is a zombie
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Orphan Process</strong>
+If parent terminated without invoking wait(), process is an orphan
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Interprocess Communication (IPC)</h2>
+
+<ul>
+<li>Processes within a system may be <strong>independent</strong> or <strong>cooperating</strong></li>
+<li><strong>Cooperating process</strong> can affect or be affected by other processes, including sharing data</li>
+</ul>
+
+<div class="highlight">
+<strong>Reasons for Cooperating Processes:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Information Sharing</strong>
+When all need same data
+</div>
+<div class="box">
+<strong>Computation Speedup</strong>
+Divide task into subtasks and execute in parallel (with multiple cores)
+</div>
+<div class="box">
+<strong>Modularity</strong>
+Application is divided into sub-tasks
+</div>
+<div class="box">
+<strong>Convenience</strong>
+May be better to work with multiple processes
+</div>
+</div>
+
+<div class="important" style="margin-top: 15px;">
+Cooperating processes need <strong>interprocess communication (IPC)</strong>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Two Models of IPC</h2>
+
+<div class="two-column">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Shared Memory</strong>
+• An area of memory shared among processes<br>
+• Communication under control of user processes<br>
+• Not the operating system<br>
+• Major issue: synchronize actions when accessing shared memory
+</div>
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>Message Passing</strong>
+• Processes communicate without shared variables<br>
+• send(message)<br>
+• receive(message)<br>
+• Message size: fixed or variable
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Producer-Consumer Problem</h2>
+
+<div class="definition">
+<strong>Paradigm for cooperating processes:</strong> Producer process produces information that is consumed by a consumer process
+</div>
+
+<div class="highlight">
+<strong>Two Variations:</strong>
+</div>
+
+<div class="two-column">
+<div class="box">
+<strong>Unbounded-Buffer</strong>
+• Places no practical limit on buffer size<br>
+• Producer <strong>never waits</strong>
+• Consumer waits if there is no buffer to consume
+</div>
+<div class="box">
+<strong>Bounded-Buffer</strong>
+• Assumes fixed buffer size<br>
+• Producer must wait if all buffers are <strong>full</strong>
+• Consumer waits if there is no buffer to consume
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Bounded-Buffer Solution</h2>
+
+<div class="note">
+<strong>Shared Data Structure:</strong>
+</div>
+
+<div class="code-block">
+#define BUFFER_SIZE 10
+
+typedef struct {
+    . . .
+} item;
+
+item buffer[BUFFER_SIZE];
+int in = 0;
+int out = 0;
+</div>
+
+<div class="highlight">
+<strong>Producer Code:</strong>
+</div>
+
+<div class="code-block">
+item next_produced;
+
+while (true) {
+    /* produce an item in next_produced */
+    
+    while (((in + 1) % BUFFER_SIZE) == out)
+        ; /* do nothing - buffer is full */
+    
+    buffer[in] = next_produced;
+    in = (in + 1) % BUFFER_SIZE;
+}
+</div>
+
+<div class="highlight">
+<strong>Consumer Code:</strong>
+</div>
+
+<div class="code-block">
+item next_consumed;
+
+while (true) {
+    while (in == out)
+        ; /* do nothing - buffer is empty */
+    
+    next_consumed = buffer[out];
+    out = (out + 1) % BUFFER_SIZE;
+    
+    /* consume the item in next_consumed */
+}
+</div>
+
+<div class="important">
+<strong>Notes:</strong>
+</div>
+
+<ul>
+<li>Solution is correct, but can only use <strong>BUFFER_SIZE-1 elements</strong></li>
+<li>Problem when both try to access buffer <strong>concurrently</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Message Passing - Direct Communication</h2>
+
+<div class="definition">
+Processes must name each other explicitly
+</div>
+
+<div class="code-block">
+send(P, message)    // send a message to process P
+receive(Q, message) // receive a message from process Q
+</div>
+
+<div class="highlight">
+<strong>Properties of Communication Link:</strong>
+</div>
+
+<ul>
+<li>Links are established <strong>automatically</strong></li>
+<li>A link is associated with <strong>exactly one pair</strong> of communicating processes</li>
+<li>Between each pair there exists <strong>exactly one link</strong></li>
+<li>The link may be <strong>unidirectional</strong>, but is usually <strong>bidirectional</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Message Passing - Indirect Communication</h2>
+
+<div class="definition">
+Messages are directed and received from <strong>mailboxes (also referred to as ports)</strong>
+</div>
+
+<ul>
+<li>Each mailbox has a <strong>unique id</strong></li>
+<li>Processes can communicate only if they <strong>share a mailbox</strong></li>
+</ul>
+
+<div class="highlight">
+<strong>Properties of Communication Link:</strong>
+</div>
+
+<ul>
+<li>Link established only if processes <strong>share a common mailbox</strong></li>
+<li>A link may be associated with <strong>many processes</strong></li>
+<li>Each pair of processes may share <strong>several communication links</strong></li>
+<li>Link may be <strong>unidirectional or bi-directional</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Activity - Producer-Consumer Dynamics</h2>
+
+<div class="highlight">
+<strong>Discussion Questions:</strong>
+</div>
+
+<ol style="line-height: 2;">
+<li>Define the terms <strong>"unbounded buffer"</strong> and <strong>"bounded buffer"</strong> in the context of the producer-consumer problem.</li>
+<li>What are the key characteristics that differentiate an unbounded buffer from a bounded buffer?</li>
+<li>Discuss the potential <strong>performance trade-offs</strong> between using an unbounded buffer versus a bounded buffer in a multi-threaded application.</li>
+</ol>
+</div>
+
+<div class="card">
+<h2 class="section-title">Key Takeaways</h2>
+
+<div class="important">
+<strong>Remember:</strong>
+</div>
+
+<ul>
+<li>A <strong>process</strong> is an active entity with program counter and resources; a <strong>program</strong> is passive</li>
+<li>Process memory has <strong>5 sections</strong>: text, data, heap, stack, and registers</li>
+<li><strong>Process states</strong>: new, ready, running, waiting, terminated</li>
+<li><strong>PCB</strong> stores all information about a process</li>
+<li><strong>Context switch</strong> is overhead but necessary for multitasking</li>
+<li><strong>Three schedulers</strong>: short-term (CPU), long-term (job), and intermediate (swapping)</li>
+<li><strong>Process creation</strong>: fork() creates, exec() loads new program, wait() waits for child</li>
+<li><strong>IPC models</strong>: Shared memory and message passing</li>
+<li><strong>Producer-Consumer</strong> is a classic synchronization problem with bounded/unbounded buffers</li>
+</ul>
+</div>
+
+<div class="footer">
+🌱 Lecture 03 - Processes • BY_#D1
+</div>
+
+</div>
+</body>
+</html>
