@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Notes — BY_#D1</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.site-header {
+    text-align: center;
+    padding: 40px 20px 10px;
+    margin-bottom: 10px;
+}
+
+.site-header h1 {
+    color: #2c6e6b;
+    font-size: 2.2em;
+    margin-bottom: 8px;
+}
+
+.site-header p {
+    color: #5a9d99;
+    font-size: 1.05em;
+    margin-bottom: 30px;
+}
+
+.section-label {
+    color: #777;
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 30px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #cfe9e7;
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 10px;
+}
+
+/* Active course card */
+.course-card {
+    display: block;
+    background: white;
+    border-radius: 12px;
+    padding: 24px 22px;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border-left: 5px solid #2c6e6b;
+    transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+}
+
+.course-card:hover {
+    background: #f0faf9;
+    box-shadow: 0 6px 18px rgba(44,110,107,0.18);
+    transform: translateY(-3px);
+}
+
+.course-card .course-icon {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.course-card .course-num {
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #5a9d99;
+    margin-bottom: 4px;
+}
+
+.course-card .course-name {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+}
+
+.course-card .badge-active {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #388e3c;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 2px 9px;
+    border: 1px solid #a5d6a7;
+}
+
+/* Coming soon course card */
+.course-card-soon {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 22px;
+    color: #aaa;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-left: 5px solid #ddd;
+    cursor: default;
+}
+
+.course-card-soon .course-icon {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    display: block;
+    filter: grayscale(1);
+    opacity: 0.4;
+}
+
+.course-card-soon .course-num {
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ccc;
+    margin-bottom: 4px;
+}
+
+.course-card-soon .course-name {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: #bbb;
+    margin-bottom: 10px;
+}
+
+.badge-soon {
+    display: inline-block;
+    background: #f5f5f5;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 2px 9px;
+    border: 1px solid #e0e0e0;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .site-header h1 { font-size: 1.6em; }
+    .courses-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <div class="site-header">
+        <h1>📚 Study Notes</h1>
+        <p>Select a course to view lecture notes</p>
+    </div>
+
+    <div class="section-label">My Courses</div>
+
+    <div class="courses-grid">
+
+        <!-- Course 1 — Active -->
+        <a class="course-card" href="fundamentals-of-management.html">
+            <span class="course-icon">🏢</span>
+            <div class="course-num">Course 01</div>
+            <div class="course-name">Fundamentals of Management</div>
+            <span class="badge-active">Notes Available</span>
+        </a>
+
+        <!-- Course 2 — Active -->
+        <a class="course-card" href="operating-systems.html">
+            <span class="course-icon">💻</span>
+            <div class="course-num">Course 02</div>
+            <div class="course-name">Operating Systems Concepts &amp; Application</div>
+            <span class="badge-active">Notes Available</span>
+        </a>
+
+        <!-- Course 3 — Coming Soon -->
+        <div class="course-card-soon">
+            <span class="course-icon">📖</span>
+            <div class="course-num">Course 03</div>
+            <div class="course-name">Course Name</div>
+            <span class="badge-soon">Coming Soon</span>
+        </div>
+
+        <!-- Course 4 — Coming Soon -->
+        <div class="course-card-soon">
+            <span class="course-icon">📖</span>
+            <div class="course-num">Course 04</div>
+            <div class="course-name">Course Name</div>
+            <span class="badge-soon">Coming Soon</span>
+        </div>
+
+        <!-- Course 5 — Coming Soon -->
+        <div class="course-card-soon">
+            <span class="course-icon">📖</span>
+            <div class="course-num">Course 05</div>
+            <div class="course-name">Course Name</div>
+            <span class="badge-soon">Coming Soon</span>
+        </div>
+
+        <!-- Course 6 — Coming Soon -->
+        <div class="course-card-soon">
+            <span class="course-icon">📖</span>
+            <div class="course-num">Course 06</div>
+            <div class="course-name">Course Name</div>
+            <span class="badge-soon">Coming Soon</span>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        🌱 Study Notes &nbsp;•&nbsp; BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

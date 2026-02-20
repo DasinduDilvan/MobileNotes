@@ -1,0 +1,741 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Lesson 01 - Study Notes</title>
+
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #eef6f5;
+        padding: 20px;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #2c6e6b;
+        text-decoration: none;
+        font-size: 0.9em;
+        font-weight: 600;
+        margin-bottom: 24px;
+        transition: opacity 0.15s;
+    }
+    .back-link:hover { opacity: 0.7; }
+
+    h1 {
+        text-align: center;
+        color: #2c6e6b;
+        margin-bottom: 10px;
+        font-size: 2.2em;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #5a9d99;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+
+    .instructor {
+        text-align: center;
+        color: #777;
+        margin-bottom: 30px;
+        font-size: 0.95em;
+    }
+
+    .card {
+        background: white;
+        padding: 25px;
+        margin: 20px 0;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+        color: #2c6e6b;
+        border-bottom: 2px solid #cfe9e7;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+        font-size: 1.4em;
+    }
+
+    ul {
+        list-style-position: inside;
+        line-height: 1.8;
+        margin-left: 10px;
+    }
+
+    ul li {
+        margin: 8px 0;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .box {
+        background: #f3fbfa;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 3px solid #2c6e6b;
+    }
+
+    .box strong {
+        color: #2c6e6b;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .highlight {
+        background: #fff9e6;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #f0ad4e;
+        margin: 15px 0;
+    }
+
+    .important {
+        background: #e8f5e9;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #4caf50;
+        margin: 15px 0;
+    }
+
+    .note {
+        background: #e3f2fd;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #2196f3;
+        margin: 15px 0;
+    }
+
+    .definition {
+        background: #f3e5f5;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #9c27b0;
+        margin: 15px 0;
+        font-style: italic;
+    }
+
+    .two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .three-column {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .centered-diagram {
+        text-align: center;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+
+    .footer {
+        text-align: center;
+        color: #666;
+        margin-top: 50px;
+        padding: 20px;
+        font-size: 0.95em;
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .card {
+            box-shadow: none;
+            border: 1px solid #ddd;
+            page-break-inside: avoid;
+        }
+
+        .footer {
+            page-break-before: avoid;
+        }
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 10px;
+        }
+
+        .card {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 1.6em;
+        }
+
+        .two-column, .three-column {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+    </head>
+
+    <body>
+    <div class="container">
+
+        <a class="back-link" href="../fundamentals-of-management.html">← Back to Notes</a>
+
+    <h1>📘 Introduction to Management</h1>
+    <p class="subtitle">Lesson 01 — Introduction to Management</p>
+
+    <div class="card">
+    <h2 class="section-title">Learning Outcomes</h2>
+    <ul>
+    <li>Understand the <strong>nature of management</strong> and basic elements of management</li>
+    <li><strong>Define key components</strong> in management</li>
+    <li>Identify <strong>basic management functions</strong> and the importance of those functions</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">What is an Organization?</h2>
+    <div class="centered-diagram">
+    <strong style="font-size: 1.2em; color: #2c6e6b;">Key Elements of an Organization</strong><br><br>
+    <strong>GROUP OF PEOPLE</strong><br>
+    +<br>
+    <strong>NUMBER OF ACTIVITIES</strong><br>
+    +<br>
+    <strong>A GOAL/GOALS</strong>
+    </div>
+
+    <div class="definition">
+    <strong>Definition 1:</strong> An organization is a <strong>group of people working together in a structured and coordinated fashion</strong> to achieve a set of goals.
+    </div>
+
+    <div class="definition">
+    <strong>Definition 2:</strong> A legal entity that involves several people attempting to accomplish specific objectives. It is additionally viewed as a thought of organizing things practically that will help accomplish pre-defined goals.
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Resources of an Organization</h2>
+    <div class="grid">
+    <div class="box">
+    <strong>Human Resources</strong>
+    People, skills, talents, knowledge, abilities of employees
+    </div>
+    <div class="box">
+    <strong>Financial Resources</strong>
+    Money, capital, investments, budgets, funding sources
+    </div>
+    <div class="box">
+    <strong>Physical Resources</strong>
+    Buildings, equipment, machinery, technology, raw materials
+    </div>
+    <div class="box">
+    <strong>Information Resources</strong>
+    Data, knowledge, market intelligence, research findings
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">What is Management?</h2>
+
+    <div class="centered-diagram">
+    <strong style="font-size: 1.2em; color: #2c6e6b;">Management Formula</strong><br><br>
+    <strong>Using Resources</strong> → <strong>Set of Activities</strong> → <strong>Achieving Goals</strong>
+    </div>
+
+    <div class="definition">
+    <strong>Resource-based Perspective:</strong> Describes how managers combine and coordinate the various kinds of resources.
+    </div>
+
+    <div class="important">
+    <strong>Ricky W. Griffin Definition:</strong><br>
+    "A set of activities (including planning and decision making, organizing, leading, and controlling) directed at an organization's resources (human, financial, physical, and information), with the aim of achieving organizational goals in an efficient and effective manner."
+    </div>
+
+    <div class="highlight">
+    <strong>Key Definitions:</strong>
+    </div>
+
+    <ul>
+    <li><strong>General Definition:</strong> Management in all business and organizational activities is the act of getting people together to accomplish desired goals and objectives using available resources efficiently and effectively</li>
+    <li><strong>Mary Parker Follett:</strong> "Management is the art of getting things done through others"</li>
+    <li><strong>F W Taylor:</strong> "Management is knowing exactly what you want to do and then seeing that they do it the best and cheapest way"</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Components of Management</h2>
+    <div class="grid">
+    <div class="box">
+    <strong>1. Organizational Activity</strong>
+    Coordinated actions and operations
+    </div>
+    <div class="box">
+    <strong>2. Goal Formation</strong>
+    Setting objectives and targets
+    </div>
+    <div class="box">
+    <strong>3. Implementation</strong>
+    Executing plans and strategies
+    </div>
+    <div class="box">
+    <strong>4. Goal Accomplishment & Evolution</strong>
+    Achieving and refining goals
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Who is a Manager?</h2>
+
+    <div class="centered-diagram">
+    <strong style="font-size: 1.2em; color: #2c6e6b;">Manager's Role</strong><br><br>
+    <strong>A Person</strong> → <strong>Activities</strong> → <strong>Resources</strong> → <strong>Goals</strong>
+    </div>
+
+    <div class="definition">
+    <strong>Definition 1:</strong> A manager is someone whose primary responsibility is to carry out the management process.
+    </div>
+
+    <div class="definition">
+    <strong>Definition 2:</strong> A manager is a person who plans and makes decisions, organizes, leads, and controls human, financial, physical, and information resources.
+    </div>
+
+    <div class="definition">
+    <strong>Definition 3:</strong> Someone who coordinates and oversees the work of other people so that organizational goals can be accomplished.
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Efficiency and Effectiveness</h2>
+
+    <div class="two-column">
+    <div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+    <strong>Efficiency</strong><br>
+    • Getting the most output for the least input<br>
+    <strong>• "Doing things right"</strong>
+    • Focus on resources and processes<br>
+    • Minimizing waste
+    </div>
+    <div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+    <strong>Effectiveness</strong><br>
+    • Attaining organizational goals<br>
+    <strong>• "Doing the right thing"</strong>
+    • Focus on outcomes and results<br>
+    • Achieving objectives
+    </div>
+    </div>
+
+    <div class="important" style="margin-top: 15px;">
+    <strong>Key Insight:</strong> Good management requires both efficiency and effectiveness. Managers must do the right things (effectiveness) in the right way (efficiency).
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Why Management?</h2>
+    <ul>
+    <li><strong>Goal Achievement:</strong> Ensures organizational objectives are met systematically</li>
+    <li><strong>Efficient Use of Resources:</strong> Optimizes utilization of available resources</li>
+    <li><strong>Adaptability to Change:</strong> Enables organizations to respond to dynamic environments</li>
+    <li><strong>Innovation and Growth:</strong> Fosters creativity and continuous improvement</li>
+    <li><strong>Building an Effective Team:</strong> Develops and coordinates human resources</li>
+    <li><strong>Organizational Survival and Stability:</strong> Ensures long-term sustainability</li>
+    <li><strong>Add Value:</strong> Creates value for stakeholders and society</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Nature and Characteristics of Management</h2>
+
+    <div class="grid">
+    <div class="box">
+    <strong>Universal Process</strong>
+    • Applied in all types of institutions – social, religious, political, military, commercial, bureaucratic<br>
+    • Every organization needs planning, coordination, direction, and control
+    </div>
+    <div class="box">
+    <strong>Goal-Oriented</strong>
+    • Directed toward achieving effectiveness and efficiency<br>
+    • Effectiveness: Actual achievement of specific organizational goals<br>
+    • Efficiency: Attainment with optimal use of resources
+    </div>
+    <div class="box">
+    <strong>Social Process</strong>
+    • Deals with managing human beings and their emotions, talents, attitudes, culture<br>
+    • Includes retaining, developing, and motivating people<br>
+    • Takes care of employee satisfaction
+    </div>
+    <div class="box">
+    <strong>Coordinating Force</strong>
+    • Orderly arrangement of activities to avoid duplication and overlapping<br>
+    • Integrates human and physical resources
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">More Characteristics of Management</h2>
+
+    <div class="grid">
+    <div class="box">
+    <strong>Intangible</strong>
+    • Cannot be touched and felt<br>
+    • Does not have a physical presence<br>
+    • It is an unseen force
+    </div>
+    <div class="box">
+    <strong>Multidisciplinary</strong>
+    • Received contributions from psychology, sociology, anthropology, etc.<br>
+    • Creates synergy: "the whole is greater than the sum of its parts"
+    </div>
+    <div class="box">
+    <strong>Dynamic</strong>
+    • An ongoing process<br>
+    • Continues to operate as long as there is organized action for achievement of group goals
+    </div>
+    <div class="box">
+    <strong>Creative Activity</strong>
+    • Provides creative ideas and new imagination<br>
+    • Encourages innovation
+    </div>
+    <div class="box">
+    <strong>Decision-Making</strong>
+    • Continuously makes decisions that decide the fate of the organization<br>
+    • Critical thinking and problem-solving
+    </div>
+    <div class="box">
+    <strong>Profession</strong>
+    • Individuals can be trained and turned into management professionals<br>
+    • Requires specialized knowledge and skills
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Management Process - The Five Functions</h2>
+
+    <div class="centered-diagram">
+    <strong style="font-size: 1.2em; color: #2c6e6b;">Management Functions Flow</strong><br><br>
+    <strong>Planning → Organizing → Staffing → Directing → Controlling</strong>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">1. Planning</h2>
+    <div class="important">
+    <strong>First function performed by every Manager</strong>
+    </div>
+    <ul>
+    <li>Planning refers to <strong>"deciding in advance what to do, how to do, when to do, and who is going to do it"</strong></li>
+    <li>Planning <strong>bridges the gap</strong> between where we stand today and where we want to reach</li>
+    <li>Every manager starts with deciding in advance the objectives of an enterprise and how to accomplish these objectives</li>
+    <li>Planning is the <strong>base of all other functions</strong> of management</li>
+    <li><strong>"Thinking before action"</strong></li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">2. Organizing</h2>
+    <ul>
+    <li>After setting up plans, next function is to <strong>organize the activities</strong> and establish an organizational structure to execute the plan</li>
+    <li><strong>Setting up organizational structure</strong> means:
+    <ul style="margin-left: 30px; margin-top: 5px;">
+    <li>Deciding the framework of working</li>
+    <li>How many units, sub-units, or departments are needed</li>
+    <li>How many posts or designations are needed in each department</li>
+    <li>How to distribute authority and responsibility among different people</li>
+    </ul>
+    </li>
+    <li>Once these decisions are taken, an organizational structure gets set up</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">3. Staffing</h2>
+    <div class="highlight">
+    <strong>Placement of the right man on the right job at the right time</strong>
+    </div>
+    <ul>
+    <li><strong>Recruiting, selecting, appointing</strong> the employees</li>
+    <li><strong>Assigning them duties</strong> and responsibilities</li>
+    <li><strong>Maintaining fair relations</strong> and taking care of grievances of employees</li>
+    <li><strong>Training and developing</strong> the employees</li>
+    <li><strong>Deciding their remuneration, promotion, increment</strong>, etc.</li>
+    <li><strong>Evaluating the performance</strong></li>
+    <li><strong>Maintaining personal records</strong> of employees</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">4. Directing</h2>
+    <div class="highlight">
+    <strong>Guiding the subordinates towards best attainment of common objectives</strong>
+    </div>
+    <ul>
+    <li>Once employees are appointed, there is need to <strong>instruct them and get the work done</strong></li>
+    <li>Directing refers to <strong>giving instructions to employees</strong> by:
+    <ul style="margin-left: 30px; margin-top: 5px;">
+    <li>Motivating them</li>
+    <li>Supervising their activities</li>
+    <li>Communicating with them</li>
+    </ul>
+    </li>
+    <li>Managers act as <strong>leaders and guide</strong> them to right direction</li>
+    <li>Directing function includes: <strong>supervising, motivating, communicating, and leadership</strong></li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">5. Controlling</h2>
+    <div class="important">
+    <strong>Last function of managers</strong>
+    </div>
+    <ul>
+    <li>Managers try to <strong>match actual performance with planned performance</strong></li>
+    <li>If there is no match, managers:
+    <ul style="margin-left: 30px; margin-top: 5px;">
+    <li>Find out the reasons of deviation</li>
+    <li>Suggest corrective measures to come on path of plan</li>
+    </ul>
+    </li>
+    <li>Controlling refers to all <strong>performance measurements and follow-up actions</strong> that keep actual performance on the path of plan</li>
+    <li>Ensures actions of people working throughout the enterprise are according to plan</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Kinds of Managers</h2>
+
+    <div class="two-column">
+    <div class="box">
+    <strong>By Organizational Level</strong>
+    • Top Managers<br>
+    • Middle Managers<br>
+    • First-line Managers
+    </div>
+    <div class="box">
+    <strong>By Functional Area</strong>
+    • Marketing Managers<br>
+    • Finance Managers<br>
+    • Operations Managers<br>
+    • Human Resources Managers<br>
+    • Administration Managers<br>
+    • Other Managers
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Top Managers</h2>
+    <ul>
+    <li>A <strong>small group of executives</strong></li>
+    <li><strong>Manage the overall organization</strong></li>
+    <li>Establish the organization's goals, overall strategy, and operating policies</li>
+    <li>Officially represent the organization to the external environment</li>
+    <li>Make key decisions on investments, marketing, research and development</li>
+    <li>Work long hours</li>
+    <li>Spend more time in meetings and discussions</li>
+    </ul>
+
+    <div class="note">
+    <strong>Examples:</strong> President, Vice President, Chief Executive Officer (CEO), Chief Financial Officer (CFO), Chief Operating Officer (COO)
+    </div>
+
+    <div class="highlight">
+    <strong>Main Functions of Top Managers:</strong>
+    </div>
+    <ul>
+    <li>Determining the objectives of enterprise</li>
+    <li>Framing of plans and policies</li>
+    <li>Organizing activities to be performed by persons working at middle level</li>
+    <li>Assembling all the resources such as finance, fixed assets</li>
+    <li>Responsible for welfare and survival of the organization</li>
+    <li>Affair with outside world such as meeting government officials</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Middle Managers</h2>
+    <ul>
+    <li>A <strong>large group of managers</strong></li>
+    <li>Responsible for <strong>implementing the policies and plans</strong> developed by top managers</li>
+    <li><strong>Supervise and coordinate</strong> the activities of lower-level managers</li>
+    </ul>
+
+    <div class="note">
+    <strong>Examples:</strong> Plant manager, operations manager, division head, department heads (purchase, sales, finance, marketing), executive officer, plant superintendent
+    </div>
+
+    <div class="highlight">
+    <strong>Main Functions of Middle Managers:</strong>
+    </div>
+    <ul>
+    <li>Interpretation of policies made by top level management</li>
+    <li>Organizing the activities of their department</li>
+    <li>Finding out, recruiting, selecting and appointing the required employees</li>
+    <li>Motivating the persons to perform their best ability</li>
+    <li>Controlling and instructing the employees</li>
+    <li>Cooperating with other departments for smooth functioning</li>
+    <li>Implementing the plans formed by top level</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">First-Line (Lower) Managers</h2>
+    <ul>
+    <li><strong>Supervise and coordinate</strong> the activities of operating employees</li>
+    <li>Spend <strong>more time for supervising subordinates</strong></li>
+    </ul>
+
+    <div class="note">
+    <strong>Examples:</strong> Supervisor, Coordinator, Office Manager, Superintendent, Foreman, Sub-department Executives, Clerk
+    </div>
+
+    <div class="highlight">
+    <strong>Main Functions of Lower Managers:</strong>
+    </div>
+    <ul>
+    <li>Representing problems of workers</li>
+    <li>Maintaining good working conditions and developing healthy relations between superior and subordinate</li>
+    <li>Looking after safety of workers</li>
+    <li>Helping the middle level management in recruiting, selecting and appointing the workers</li>
+    <li>Communicating with workers and welcoming their suggestions</li>
+    <li>Maintaining precise standard of quality</li>
+    <li>Responsible for boosting the morale of the workers</li>
+    </ul>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Kinds of Managers by Area</h2>
+
+    <div class="grid">
+    <div class="box">
+    <strong>Marketing Managers</strong>
+    Work in areas related to the marketing function<br><br>
+    Examples: Product development and promotion, sales and distribution
+    </div>
+    <div class="box">
+    <strong>Financial Managers</strong>
+    Deal with organization's financial resources<br><br>
+    Examples: Accounting, cash management, investments
+    </div>
+    <div class="box">
+    <strong>Operations Managers</strong>
+    Create and manage systems that create an organization's products and services<br><br>
+    Examples: Production control, quality control, inventory control
+    </div>
+    </div>
+
+    <div class="grid" style="margin-top: 15px;">
+    <div class="box">
+    <strong>Human Resources Managers</strong>
+    Responsible for hiring and developing employees<br><br>
+    Examples: HR planning, selection and recruiting, training, HR development
+    </div>
+    <div class="box">
+    <strong>Administrative Managers</strong>
+    Responsible for all managerial activities of an organization<br><br>
+    Have basic familiarity with all functional areas
+    </div>
+    <div class="box">
+    <strong>Other Kinds of Managers</strong>
+    Appointed according to organizational requirements<br><br>
+    Examples: Client Relations Manager, R&D Manager, Credit Manager
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Managerial Roles</h2>
+    <div class="important">
+    <strong>Definition:</strong> Specific actions or behaviors expected of and exhibited by a manager
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Managerial Skills Types</h2>
+
+    <div class="three-column">
+    <div class="box">
+    <strong>Conceptual Skills</strong><br><br>
+    • Ability to think in the abstract<br>
+    • Ability to analyze forces working in a situation<br>
+    • Creative and innovative ability
+    </div>
+    <div class="box">
+    <strong>Technical Skills</strong><br><br>
+    • Managers' understanding of the nature of the job<br>
+    • Knowledge of tasks people under them have to perform
+    </div>
+    <div class="box">
+    <strong>Human Relations Skills</strong><br><br>
+    • Ability to interact effectively with people at all levels<br>
+    • Interpersonal communication and teamwork
+    </div>
+    </div>
+
+    <div class="note" style="margin-top: 15px;">
+    <strong>Skills Distribution by Level:</strong><br>
+    • <strong>Top Managers:</strong> High conceptual skills, moderate human relations skills, low technical skills<br>
+    • <strong>Middle Managers:</strong> Balanced mix of all three skills<br>
+    • <strong>First-Line Managers:</strong> High technical skills, moderate human relations skills, low conceptual skills
+    </div>
+    </div>
+
+    <div class="card">
+    <h2 class="section-title">Importance of Management</h2>
+
+    <ul>
+    <li><strong>Accomplishment of Goals:</strong> Systematic achievement of organizational objectives</li>
+    <li><strong>Effective Utilization of Resources & Development of Resources:</strong> Optimal use and enhancement of all resources</li>
+    <li><strong>Providing Visions and Foresights:</strong> Strategic direction and future planning</li>
+    <li><strong>Ensures Continuity in the Organization:</strong> Sustainability and ongoing operations</li>
+    <li><strong>Integrating Various Interest Groups:</strong> Harmonizing stakeholder interests</li>
+    <li><strong>Stability in the Society:</strong> Contributing to social and economic stability</li>
+    <li><strong>Overall Growth:</strong> Organizational and societal development</li>
+    </ul>
+    </div>
+
+    <div class="footer">
+    🌱 Lesson 01 - Introduction to Management • BY_#D1
+    </div>
+
+    </div>
+    </body>
+    </html><!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <title>Title</title>
+        </head>
+        <body></body>
+    </html>

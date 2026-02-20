@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Management Lesson 02 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.instructor {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    border-bottom: 1px solid #ccc7;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+    font-style: italic;
+}
+
+.quote {
+    background: #fff3e0;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ff9800;
+    margin: 15px 0;
+    font-style: italic;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.person-card {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #cfe9e7;
+    margin: 15px 0;
+}
+
+.person-card .name {
+    color: #2c6e6b;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.person-card .years {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column, .three-column {
+        grid-template-columns: 1fr;
+    }
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../fundamentals-of-management.html">← Back to Notes</a>
+
+<h1>📘 Evolution in Management</h1>
+<p class="subtitle">Lesson 02 — Evolution in Management</p>
+
+<div class="card">
+<h2 class="section-title">Learning Outcomes</h2>
+<p>At the end of the lesson, you will be able to define:</p>
+<ul>
+<li><strong>Early Management Ideas</strong></li>
+<li><strong>Classical Theorists</strong></li>
+<li><strong>Behavioural Theorists</strong></li>
+<li><strong>Quantitative Approach</strong></li>
+<li><strong>Contemporary Ideas</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Why History and Theory?</h2>
+<div class="important">
+Understanding the evolution of management helps us:
+</div>
+<ul>
+<li>Learn from past successes and failures</li>
+<li>Understand current management practices in context</li>
+<li>Apply proven principles to modern challenges</li>
+<li>Recognize patterns and trends in organizational behavior</li>
+<li>Develop more effective management strategies</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Evolution of Management</h2>
+<ul>
+<li>Management practice is as <strong>old as human civilization</strong>, when people started living together in groups</li>
+<li>Every human group requires management</li>
+<li>The history of human beings is full of <strong>organizational and behavioral activities</strong> because human beings are the 'social animal'</li>
+<li>However, the study of human managers is predominantly a <strong>twentieth-century phenomenon</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Early Management Ideas</h2>
+<p style="text-align: center; color: #5a9d99; font-size: 1.1em; margin-bottom: 20px;"><em>The History of Management</em></p>
+
+<div class="person-card">
+<div class="name">Robert Owen</div>
+<div class="years">(1771–1858)</div>
+<p>Identified the importance of <strong>working and social conditions</strong> for employees.</p>
+</div>
+
+<div class="person-card">
+<div class="name">Charles Babbage</div>
+<div class="years">(1792–1871)</div>
+<p>Ideas on <strong>work specialization, production efficiency, incentive, and profit-sharing plans</strong>.</p>
+</div>
+
+<div class="person-card">
+<div class="name">Henry R. Towne</div>
+<div class="years">(1844–1924)</div>
+<p>Called for a <strong>'management science'</strong> that would establish <strong>'principles'</strong> of management.</p>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Assessing the Early Contributions</h2>
+<div class="highlight">
+<strong>Characteristics of Early Management Ideas:</strong>
+</div>
+<ul>
+<li><strong>Uncoordinated efforts</strong> - lacking systematic approach</li>
+<li>Contributions tended to relate to <strong>specific problems</strong></li>
+<li>Did not see <strong>'management' as a separate field or skill</strong> (until Towne)</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Famous Management Definitions</h2>
+
+<div class="quote">
+<strong>F.W. Taylor:</strong><br>
+"Management is the art of knowing what you want to do and then seeing that they do it in the best and the cheapest manner."
+</div>
+
+<div class="quote">
+<strong>Peter Drucker:</strong><br>
+"Management is a multipurpose organ that manages a business and manages managers and manages workers and work."
+</div>
+
+<div class="quote">
+<strong>Henry Fayol:</strong><br>
+"Management is to forecast, to plan, to organize, to command, to coordinate and control activities of others."
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Classical Theorists</h2>
+<div class="important">
+This viewpoint emphasizes <strong>efficiently managing work and organizations</strong>.
+</div>
+
+<div class="note">
+<strong>Three Different Management Approaches:</strong>
+</div>
+
+<div class="three-column">
+<div class="box">
+<strong>1. Scientific Approach</strong>
+• F. W. Taylor<br>
+• F. & L. Gilbreth<br>
+• H. Gantt
+</div>
+<div class="box">
+<strong>2. Administrative Approach</strong>
+• H. Fayol<br>
+• C. Barnard
+</div>
+<div class="box">
+<strong>3. Bureaucratic Approach</strong>
+• M. Weber
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">1. Scientific Approach</h2>
+
+<div class="definition">
+<strong>Frederick W. Taylor:</strong><br>
+"Scientific management is an approach in classical management theory focusing on the scientific study of work methods to improve worker efficiency."
+</div>
+
+<div class="note">
+<strong>Context:</strong>
+</div>
+<ul>
+<li>Concerned with improving the <strong>performance of individual workers</strong></li>
+<li>Practiced in the <strong>early 20th Century</strong></li>
+<li>Business was expanding and capital was readily available</li>
+<li><strong>Labour was in short supply</strong></li>
+</ul>
+
+<div class="highlight" style="margin-top: 15px;">
+<strong>Four Principles of Scientific Management:</strong>
+</div>
+<ul>
+<li><strong>1. Select and train the best</strong> - proper selection and training of workers</li>
+<li><strong>2. Determine the most efficient work methods</strong> - scientific study of tasks</li>
+<li><strong>3. Cooperate with workers</strong> to ensure the best method is used</li>
+<li><strong>4. Divide work/responsibility</strong> between workers and managers</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Other Contributors to Scientific Approach</h2>
+
+<div class="person-card">
+<div class="name">Frank & Lillian Gilbreth</div>
+<ul style="margin-top: 10px;">
+<li><strong>Time and motion studies</strong></li>
+<li><strong>Human implications</strong> of Scientific Management</li>
+</ul>
+</div>
+
+<div class="person-card">
+<div class="name">Henry Gantt</div>
+<ul style="margin-top: 10px;">
+<li><strong>Pay incentives</strong></li>
+<li><strong>Gantt chart</strong> - scheduling tool still used today</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Objectives of the Scientific Approach</h2>
+<div class="grid">
+<div class="box">
+<strong>1. Quality Control</strong>
+Maintain high standards of output
+</div>
+<div class="box">
+<strong>2. Incentive Wages</strong>
+Reward based on performance
+</div>
+<div class="box">
+<strong>3. Higher Productivity</strong>
+Increase output efficiency
+</div>
+<div class="box">
+<strong>4. Cost Reduction</strong>
+Minimize waste and expenses
+</div>
+<div class="box">
+<strong>5. Right Men for Right Job</strong>
+Proper job placement
+</div>
+<div class="box">
+<strong>6. Elimination of Wastage</strong>
+Remove inefficiencies
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">2. Administrative Approach</h2>
+
+<div class="definition">
+"The approach focused on principles for managers to coordinate organizations' internal activities."
+</div>
+
+<div class="important">
+<strong>Key Characteristics:</strong>
+</div>
+<ul>
+<li>Focus on <strong>managing the total organization</strong></li>
+<li>Contributed more to later development in <strong>Management Theory</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Henry Fayol's Principles of Management</h2>
+<div class="grid">
+<div class="box">
+<strong>Division of Work</strong>
+Specialization for efficiency
+</div>
+<div class="box">
+<strong>Authority</strong>
+Right to give orders
+</div>
+<div class="box">
+<strong>Discipline</strong>
+Obedience and respect
+</div>
+<div class="box">
+<strong>Unity of Command</strong>
+One boss per employee
+</div>
+<div class="box">
+<strong>Unity of Direction</strong>
+One plan for similar activities
+</div>
+<div class="box">
+<strong>Primacy of General Interest</strong>
+Organization over individual
+</div>
+<div class="box">
+<strong>Remuneration</strong>
+Fair compensation
+</div>
+<div class="box">
+<strong>Esprit de Corps</strong>
+Team spirit and loyalty
+</div>
+<div class="box">
+<strong>Centralization</strong>
+Decision-making authority
+</div>
+<div class="box">
+<strong>Scalar Chain</strong>
+Clear chain of command
+</div>
+<div class="box">
+<strong>Order</strong>
+Right place for everything
+</div>
+<div class="box">
+<strong>Equity</strong>
+Fairness and justice
+</div>
+<div class="box">
+<strong>Low Turnover</strong>
+Employee retention
+</div>
+<div class="box">
+<strong>Initiative</strong>
+Encourage new ideas
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Henri Fayol's Five Management Functions</h2>
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">The Five Functions</strong><br><br>
+<div style="display: inline-block; text-align: left;">
+1. <strong>Planning</strong> - Setting objectives and determining courses of action<br>
+2. <strong>Organizing</strong> - Arranging resources to implement the plan<br>
+3. <strong>Commanding</strong> - Directing and leading employees<br>
+4. <strong>Coordinating</strong> - Harmonizing activities and efforts<br>
+5. <strong>Controlling</strong> - Monitoring and correcting activities
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Objectives of the Administrative Approach</h2>
+<div class="three-column">
+<div class="box">
+<strong>1. Enhance Efficiency</strong>
+Improve organizational performance
+</div>
+<div class="box">
+<strong>2. Promote Effective HRM</strong>
+Better human resource management
+</div>
+<div class="box">
+<strong>3. Clearly Define</strong>
+Rules, responsibilities, and functions
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">3. Bureaucratic Approach</h2>
+
+<div class="definition">
+<strong>Max Weber:</strong><br>
+"An approach which saw an organization's need to operate rationally rather than relying on the arbitrary whims of owners and managers."
+</div>
+
+<div class="highlight">
+<strong>Weber's Ideal Bureaucracy:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Specialization of Labour</strong>
+Division of work into specific jobs
+</div>
+<div class="box">
+<strong>Formal Rules & Procedures</strong>
+Written regulations and guidelines
+</div>
+<div class="box">
+<strong>Impersonality</strong>
+Objective and fair treatment
+</div>
+<div class="box">
+<strong>Well-Defined Hierarchy</strong>
+Clear authority structure
+</div>
+<div class="box">
+<strong>Advancement on Merit</strong>
+Promotion based on competence
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">The Classical Approaches to Management - Summary</h2>
+
+<div class="three-column">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Scientific Management</strong><br><br>
+Focuses on the <strong>individual worker's productivity</strong>
+</div>
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>Administrative Management</strong><br><br>
+Focuses on the <strong>functions of management</strong>
+</div>
+<div class="box" style="background: #fff9e6; border-left-color: #f0ad4e;">
+<strong>Bureaucratic Management</strong><br><br>
+Focuses on the <strong>overall organizational system</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Classical Approaches - Contributions</h2>
+<ul>
+<li>Laid the <strong>foundation for later developments</strong> in management theory</li>
+<li>Identified important management <strong>processes, functions, and skills</strong> that are still recognized</li>
+<li>Focused attention on management as a <strong>valid subject of scientific inquiry</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Classical Approaches - Limitations</h2>
+<ul>
+<li>More appropriate for <strong>stable and simple organizations</strong></li>
+<li>Many viewed employees as <strong>tools rather than resources</strong></li>
+<li>Prescribed <strong>universal procedures</strong> that are not appropriate in some settings</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Behavioural Theorists</h2>
+
+<div class="important">
+Perspective on management emphasizes <strong>"the need to understand the effect of different factors on human behaviour in organizations."</strong>
+</div>
+
+<div class="highlight">
+<strong>Key Focus Areas:</strong>
+</div>
+<ul>
+<li>Emphasizes <strong>individual attitudes and behaviors</strong></li>
+<li>Emphasizes <strong>group processes</strong></li>
+<li>The necessity of understanding the <strong>role of behavior</strong> in organizations</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Early Behavioural Theorists</h2>
+
+<div class="person-card">
+<div class="name">Hugo Munsterberg</div>
+<p><strong>"Psychology and Industrial Efficiency"</strong></p>
+<ul style="margin-top: 10px;">
+<li>Creating optimal psychological conditions</li>
+<li>Behaviour shaping</li>
+</ul>
+</div>
+
+<div class="person-card">
+<div class="name">Mary Parker Follett</div>
+<ul style="margin-top: 10px;">
+<li>Importance of <strong>group functioning</strong></li>
+</ul>
+</div>
+
+<div class="person-card">
+<div class="name">Hawthorne Studies</div>
+<ul style="margin-top: 10px;">
+<li>Importance of <strong>supervisory style</strong></li>
+<li>Focused on <strong>behavior in the workplace</strong></li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Human Relations Movement</h2>
+
+<div class="two-column">
+<div class="box">
+<strong>Abraham Maslow</strong><br><br>
+Hierarchy of Needs
+</div>
+<div class="box">
+<strong>Douglas McGregor</strong><br><br>
+Theory X & Theory Y
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Maslow's Hierarchy of Needs</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">Five Levels of Human Needs</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2;">
+▲ <strong style="color: #9c27b0;">5. Self-Actualization Needs</strong> - Finding oneself, achieving potential<br>
+▲ <strong style="color: #2196f3;">4. Esteem Needs</strong> - Self-confidence, status, reputation, fame, glory<br>
+▲ <strong style="color: #4caf50;">3. Belonging and Love Needs</strong> - Meaningful relationships, acceptance<br>
+▲ <strong style="color: #ff9800;">2. Safety Needs</strong> - Security, stability, protection, freedom from fear<br>
+▲ <strong style="color: #f44336;">1. Physiological Needs</strong> - Food, drink, basic human well-being
+</div>
+</div>
+
+<div class="note" style="margin-top: 20px;">
+<strong>General & Organizational Examples:</strong>
+</div>
+
+<div class="box">
+<strong>1. Physiological Needs</strong><br>
+Maslow grouped all physical needs necessary for maintaining basic human well-being, such as food and drink, into this category. After the need is satisfied, however, it is no longer a motivator.
+</div>
+
+<div class="box">
+<strong>2. Safety Needs</strong><br>
+These needs include the need for basic security, stability, protection, and freedom from fear. A normal state exists for an individual to have all these needs generally satisfied. Otherwise, they become primary motivators.
+</div>
+
+<div class="box">
+<strong>3. Belonging and Love Needs</strong><br>
+After the physical and safety needs are satisfied and are no longer motivators, the need for belonging and love emerges as a primary motivator. The individual strives to establish meaningful relationships with significant others.
+</div>
+
+<div class="box">
+<strong>4. Esteem Needs</strong><br>
+An individual must develop self-confidence and want to achieve status, reputation, fame, and glory.
+</div>
+
+<div class="box">
+<strong>5. Self-Actualization Needs</strong><br>
+Assuming that all the previous needs in the hierarchy are satisfied, an individual feels a need to find himself.
+</div>
+
+<div class="important" style="margin-top: 15px;">
+<strong>Impact:</strong> Maslow's hierarchy of needs theory helped managers visualize employee motivation.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">McGregor's Theory X & Theory Y</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">Two Contrasting Views of Human Nature</strong><br><br>
+<strong>Scientific Approach ⟷ Behavioral Approach</strong>
+</div>
+
+<div class="two-column" style="margin-top: 20px;">
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Theory X</strong><br><br>
+<strong>Assumptions:</strong><br>
+• The average worker is lazy<br>
+• Dislikes work<br>
+• Will do as little as possible<br><br>
+<strong>Management Style:</strong><br>
+• Managers must closely supervise and control<br>
+• Use reward and punishment
+</div>
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Theory Y</strong><br><br>
+<strong>Assumptions:</strong><br>
+• Workers are not lazy<br>
+• Want to do a good job<br>
+• The job itself determines if worker likes the work<br><br>
+<strong>Management Style:</strong><br>
+• Managers should allow worker great latitude<br>
+• Create an organization to stimulate the worker
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Behavioural Approach - Contributions</h2>
+<ul>
+<li>Provided important insights into <strong>motivation, group dynamics, and other interpersonal processes</strong> in organizations</li>
+<li>Focused managerial attention on these processes</li>
+<li>Challenged the view that employees are tools and furthered the belief that <strong>employees are valuable resources</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Behavioural Approach - Limitations</h2>
+<ul>
+<li>The <strong>complexity of individual behavior</strong> makes prediction of that behavior difficult</li>
+<li>Many behavioral concepts have not yet been put to use because some <strong>managers are reluctant to adopt them</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Quantitative Approach</h2>
+
+<div class="important">
+<strong>Focus:</strong> Mathematics, statistics and information aids supporting managerial decision making and organizational effectiveness.
+</div>
+
+<div class="note">
+<strong>Development Period:</strong> Developed during World War II (1940 to present)
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Quantitative Management Viewpoint</h2>
+
+<div class="box">
+<strong>Management Science</strong><br>
+The approach aimed at increasing decision effectiveness through the use of sophisticated mathematical models and statistical methods.
+</div>
+
+<div class="box">
+<strong>Operations Management</strong><br>
+Function or field of expertise primarily responsible for managing production and delivery of an organization's products and services.
+</div>
+
+<div class="box">
+<strong>Management Information Systems</strong><br>
+Field of management focused on designing and implementing computer-based information systems for use by management.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Quantitative Approach - Contributions</h2>
+<ul>
+<li>Developed <strong>quantitative techniques</strong> to assist in decision making</li>
+<li>Increases <strong>awareness and understanding of complex organizational processes</strong> and situations</li>
+<li>Very useful in <strong>planning and controlling</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Quantitative Approach - Limitations</h2>
+<ul>
+<li>Cannot fully explain or predict the <strong>behavior of people</strong> in organizations</li>
+<li><strong>Mathematical sophistication</strong> may come at the expense of other important skills</li>
+<li>Models may require <strong>unrealistic or unfounded assumptions</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Contemporary Ideas</h2>
+
+<div class="box">
+<strong>Systems Theory</strong><br>
+The approach is based on the idea that organizations can be visualized as systems.
+</div>
+
+<div class="box">
+<strong>Contingency Theory</strong><br>
+Viewpoint argues that appropriate managerial action depends on the particular parameters of the situation.
+</div>
+
+<div class="box">
+<strong>Theory Z</strong><br>
+Concept combining positive aspects of American and Japanese management into a modified approach aimed at increasing managerial effectiveness while remaining compatible with the norms and values of American society and culture.
+</div>
+
+<div class="box">
+<strong>Total Quality Management (TQM)</strong><br>
+Approach highlighting collective responsibility for product and service quality and encouraging individuals to work together to improve quality.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Summary - Evolution of Management Thought</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">Timeline of Management Approaches</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2;">
+<strong>Early Ideas (Pre-1900)</strong> → Robert Owen, Babbage, Towne<br>
+↓<br>
+<strong>Classical Theories (1900-1930)</strong> → Scientific, Administrative, Bureaucratic<br>
+↓<br>
+<strong>Behavioural Theories (1930-1960)</strong> → Human Relations, Maslow, McGregor<br>
+↓<br>
+<strong>Quantitative Approach (1940-Present)</strong> → Mathematical models, Operations<br>
+↓<br>
+<strong>Contemporary Ideas (1960-Present)</strong> → Systems, Contingency, Theory Z, TQM
+</div>
+</div>
+</div>
+
+<div class="footer">
+🌱 Lesson 02 - Evolution in Management • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

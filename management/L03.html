@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Management Lesson 03 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.instructor {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+ol {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ol li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.pestle-box {
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border-left: 4px solid;
+}
+
+.political {
+    background: #e8eaf6;
+    border-left-color: #5c6bc0;
+}
+
+.economic {
+    background: #ffebee;
+    border-left-color: #ef5350;
+}
+
+.social {
+    background: #fff3e0;
+    border-left-color: #ff9800;
+}
+
+.technological {
+    background: #fff9c4;
+    border-left-color: #fbc02d;
+}
+
+.legal {
+    background: #e0f2f1;
+    border-left-color: #26a69a;
+}
+
+.environmental {
+    background: #e8f5e9;
+    border-left-color: #66bb6a;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column, .three-column {
+        grid-template-columns: 1fr;
+    }
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../fundamentals-of-management.html">← Back to Notes</a>
+
+<h1>📘 Management Principles</h1>
+<p class="subtitle">Lesson 03 — Business Environment</p>
+
+<div class="card">
+<h2 class="section-title">Learning Outcomes</h2>
+<ul>
+<li>Identify the <strong>nature of the organizational environment</strong></li>
+<li>Understand the <strong>components of the internal and external environment</strong> and their impact on organizations</li>
+<li>Understand <strong>how organizations adapt to their environment</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">What is an Environment?</h2>
+
+<div class="definition">
+<strong>"The term environment is used to describe, in the aggregate, all the external and internal forces, influences, and conditions, which affect the life, nature, behaviour, and the growth, development, and maturity of living organisms."</strong><br>
+— Douglas and Holland
+</div>
+
+<div class="important">
+<strong>Simple Definition:</strong><br>
+The surroundings or conditions in which a person, animal, or plant lives or operates.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Business Environment</h2>
+
+<div class="definition">
+<strong>"The business environment is the aggregate of all the conditions, events, and influences that surround and affect it".</strong><br>
+— Keith Davis
+</div>
+
+<div class="important">
+Business environment refers to those <strong>aspects of the surroundings of a business enterprise</strong> that affect or influence its operations and determine its effectiveness.
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Key Concept:</strong><br>
+The business environment is the <strong>set of forces surrounding an organization</strong>. A key element in effective management is determining the ideal alignment between the organization and its environment, and working to achieve and maintain that alignment.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Why Do We Study the Business Environment?</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Identify Opportunities & Threats</strong>
+Helps recognize potential advantages and risks
+</div>
+<div class="box">
+<strong>Improve Adaptability</strong>
+Enhances ability to respond to change effectively
+</div>
+<div class="box">
+<strong>Support Strategic Planning</strong>
+Provides foundation for long-term decision making
+</div>
+<div class="box">
+<strong>Ensure Compliance</strong>
+Maintains adherence to laws and ethics
+</div>
+<div class="box">
+<strong>Encourage Innovation</strong>
+Fosters creativity and competitiveness
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Organizations Environment</h2>
+
+<div class="two-column">
+<div class="box" style="background: #fff3e0; border-left-color: #f57c00;">
+<strong>External Environment</strong>
+Everything outside the organization that might affect the organization
+</div>
+<div class="box" style="background: #e8f5e9; border-left-color: #388e3c;">
+<strong>Internal Environment</strong>
+The conditions and forces within an organization
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Internal Environment</h2>
+
+<div class="important">
+Conditions and stakeholder forces within an organization
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Owners</strong>
+Stakeholders who own the organization
+</div>
+<div class="box">
+<strong>Board of Directors</strong>
+Governing body providing oversight
+</div>
+<div class="box">
+<strong>Employees</strong>
+Human resources and workforce
+</div>
+<div class="box">
+<strong>Resources</strong>
+Physical, financial, and information assets
+</div>
+<div class="box">
+<strong>Work Environment</strong>
+Physical workspace and culture
+</div>
+<div class="box">
+<strong>Vision, Mission & Objectives</strong>
+Strategic direction and goals
+</div>
+<div class="box">
+<strong>Policies</strong>
+Internal rules and procedures
+</div>
+<div class="box">
+<strong>Research & Development</strong>
+Innovation and product development
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">External Environment</h2>
+
+<div class="definition">
+<strong>"The external environment is everything outside an organization's boundaries that might affect it"</strong><br>
+— Griffin, 2016
+</div>
+
+<div class="important">
+There are <strong>two separate external environments:</strong>
+</div>
+
+<div class="two-column">
+<div class="box" style="background: #ffebee; border-left-color: #e53935;">
+<strong>General Environment</strong>
+The set of broad dimensions and forces in an organization's surroundings that create its overall context.<br><br>
+<em>Includes: Economic, Technological, Sociocultural, Political & Legal, and International dimensions</em>
+</div>
+<div class="box" style="background: #e8f5e9; border-left-color: #43a047;">
+<strong>Task Environment</strong>
+Specific organizations or groups that affect the organization.<br><br>
+<em>Includes: Competitors, Customers, Suppliers, Regulators, and Strategic Allies</em>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">General Environment - Five Dimensions</h2>
+
+<div class="three-column">
+<div class="box">
+<strong>Economic Dimension</strong>
+The overall health of the economic system in which the organization operates<br><br>
+<em>Examples: Inflation, interest rates, unemployment</em>
+</div>
+<div class="box">
+<strong>Technological Dimension</strong>
+Methods available for converting resources into products and services<br><br>
+<em>Examples: Computer-assisted systems, AI, Big data</em>
+</div>
+<div class="box">
+<strong>Sociocultural Dimension</strong>
+Customs, values, and demographic characteristics of the society<br><br>
+<em>Examples: Consumer taste, preferences, behaviour</em>
+</div>
+</div>
+
+<div class="two-column" style="margin-top: 15px;">
+<div class="box">
+<strong>Political & Legal Dimension</strong>
+The government regulation of business and the general relationship between business and government<br><br>
+<em>Examples: Government regulation of business, laws, policies</em>
+</div>
+<div class="box">
+<strong>International Dimension</strong>
+The extent to which an organization is involved in or affected by business in other countries<br><br>
+<em>Examples: An organization is affected by businesses in other countries</em>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">PESTLE Analysis</h2>
+
+<div class="important">
+A comprehensive framework for analyzing the General Environment
+</div>
+
+<div class="pestle-box political">
+<strong>P - Political</strong><br>
+How government actions and policies influence the market and your organisation. Examples: Election results, legislation changes, trade agreements.
+</div>
+
+<div class="pestle-box economic">
+<strong>E - Economic</strong><br>
+Broader economy's health and its impact on your organisation. This includes: Inflation rates, economic growth, exchange rates.
+</div>
+
+<div class="pestle-box social">
+<strong>S - Social</strong><br>
+Cultural and demographic aspects of the external environment. This looks at: Population growth, age distribution, cultural trends, and lifestyle changes.
+</div>
+
+<div class="pestle-box technological">
+<strong>T - Technological</strong><br>
+Incorporates innovation and technological changes that could affect your market position or operations. Examples: Advancements in digital technology.
+</div>
+
+<div class="pestle-box legal">
+<strong>L - Legal</strong><br>
+Involves the regulatory environment in which you operate. Compliance with laws and regulations at local, national, and international levels.
+</div>
+
+<div class="pestle-box environmental">
+<strong>E - Environmental</strong><br>
+Ecological and environmental aspects that could impact your operations or market. This includes: Climate change and sustainable practices.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Task Environment</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Competitors</strong>
+An organization that competes with other organizations for resources
+</div>
+<div class="box">
+<strong>Customers</strong>
+Individuals who pay money to acquire an organization's products and services
+</div>
+<div class="box">
+<strong>Suppliers</strong>
+An organization that provides resources for other organizations
+</div>
+<div class="box">
+<strong>Strategic Allies</strong>
+An organization working together with one or more other organizations in a joint venture or similar arrangements
+</div>
+<div class="box">
+<strong>Regulators</strong>
+A unit that has the potential to control, legislate, or otherwise influence the organization's policies and practices
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Organization-Environment Relationships</h2>
+
+<div class="highlight">
+<strong>How Does the Environment Affect Organizations?</strong>
+</div>
+
+<div class="box">
+<strong>1. Environmental Change and Complexity</strong>
+• Environmental change and the complexity of an organization will affect the <strong>certainty/uncertainty</strong> of an organization<br><br>
+• Example: A simple and stable environment creates the <strong>least uncertainty</strong>, and a complex and dynamic environment creates the <strong>most uncertainty</strong>
+</div>
+
+<div class="box" style="margin-top: 15px;">
+<strong>2. Competitive Forces</strong>
+Management needs to assess the environment in terms of five competitive forces:
+<ul style="margin-top: 10px; margin-left: 20px;">
+<li>New entrants</li>
+<li>Competitive rivalry</li>
+<li>Threat of substitute products</li>
+<li>Power of buyers</li>
+<li>Power of suppliers</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Porter's Five Competitive Forces</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">Five Forces Model</strong><br><br>
+<div style="display: inline-block; text-align: center;">
+<strong>↓ Threat of New Entry ↓</strong><br>
+<br>
+<strong>Supplier Power →</strong> <span style="font-size: 1.3em; color: #2c6e6b;">⬤ Competitive Rivalry ⬤</span> <strong>← Buyer Power</strong><br>
+<br>
+<strong>↑ Threat of Substitution ↑</strong>
+</div>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>New Entrants</strong>
+To what extent can a new competitor enter a market or market segment
+</div>
+<div class="box">
+<strong>Competitive Rivalry</strong>
+Competition between firms within the industry
+</div>
+<div class="box">
+<strong>Substitute Products</strong>
+To what extent a competitive product/service may replace the existing product/service
+</div>
+<div class="box">
+<strong>Power of Buyers</strong>
+The extent to which buyers influence market rivals
+</div>
+<div class="box">
+<strong>Power of Suppliers</strong>
+The extent to which suppliers influence market rivals
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">How Organizations Adapt to Their Environment</h2>
+
+<div class="box">
+<strong>1. Information Management Techniques</strong>
+• Appoint a <strong>boundary spanner</strong> to learn what other organizations are doing<br>
+• <strong>Environmental scanning</strong><br>
+• Establishing <strong>Management Information Systems (MIS)</strong>
+</div>
+
+<div class="box">
+<strong>2. Strategic Response</strong>
+• <strong>Altering</strong> the current strategy<br>
+• <strong>Adopting</strong> a new strategy
+</div>
+
+<div class="box">
+<strong>3. Mergers, Takeovers, Acquisitions, and Alliances</strong>
+• Combine, purchase, new partnerships, or alliances with other firms
+</div>
+
+<div class="box">
+<strong>4. Organization Design and Flexibility</strong>
+• Adapt to environmental conditions by incorporating <strong>flexibility in its structural design</strong>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Nature of Business Environment</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Complex</strong>
+Multiple interrelated factors
+</div>
+<div class="box">
+<strong>Interdependence</strong>
+Elements affect each other
+</div>
+<div class="box">
+<strong>Dynamic</strong>
+Constantly changing
+</div>
+<div class="box">
+<strong>Uncertainty</strong>
+Difficult to predict
+</div>
+<div class="box">
+<strong>Relativity</strong>
+Context-dependent
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Objectives of Business Environment Analysis</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Knowledge of Information</strong>
+Gain awareness of external factors
+</div>
+<div class="box">
+<strong>Basis of Decision</strong>
+Informed decision-making
+</div>
+<div class="box">
+<strong>Helpful in Making Policies</strong>
+Policy formulation guidance
+</div>
+<div class="box">
+<strong>Technological Planning</strong>
+Technology adoption strategies
+</div>
+<div class="box">
+<strong>Survive in Business</strong>
+Long-term sustainability
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Activity - Small Group Discussion</h2>
+
+<div class="highlight">
+<strong>Title:</strong> "Impact of PESTLE Factors on a Local Business"
+</div>
+
+<div class="important">
+<strong>Instructions:</strong>
+</div>
+
+<ol>
+<li>Select a local company or industry</li>
+<li>Analyze each PESTLE factor and note real-world examples for each</li>
+<li>Discuss how these factors create opportunities or threats</li>
+<li>Prepare to present your findings in 2 minutes briefly</li>
+</ol>
+</div>
+
+<div class="card">
+<h2 class="section-title">Key Takeaways</h2>
+
+<div class="important">
+<strong>Remember:</strong>
+</div>
+
+<ul>
+<li><strong>Business environment</strong> includes all external and internal forces affecting an organization</li>
+<li><strong>Two main environments:</strong> Internal (within organization) and External (outside organization)</li>
+<li><strong>External environment has two levels:</strong> General Environment (PESTLE) and Task Environment (specific stakeholders)</li>
+<li><strong>PESTLE Analysis:</strong> Political, Economic, Social, Technological, Legal, Environmental</li>
+<li><strong>Task Environment includes:</strong> Competitors, Customers, Suppliers, Strategic Allies, Regulators</li>
+<li><strong>Porter's Five Forces:</strong> New entrants, Competitive rivalry, Substitutes, Buyer power, Supplier power</li>
+<li><strong>Organizations adapt through:</strong> Information management, Strategic response, Mergers/alliances, Design flexibility</li>
+<li>Business environment is <strong>complex, dynamic, interdependent, uncertain, and relative</strong></li>
+<li>Studying business environment helps identify <strong>opportunities and threats</strong></li>
+</ul>
+</div>
+
+<div class="footer">
+🌱 Lesson 03 - Business Environment • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

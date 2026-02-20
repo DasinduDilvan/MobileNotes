@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Management Lesson 04 - Planning & Decision Making</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.instructor {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+    font-style: italic;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+/* Numbered steps */
+.steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step-counter;
+}
+
+.steps-list li {
+    counter-increment: step-counter;
+    padding: 12px 15px 12px 50px;
+    position: relative;
+    border-bottom: 1px dashed #cfe9e7;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.steps-list li:last-child {
+    border-bottom: none;
+}
+
+.steps-list li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 10px;
+    top: 14px;
+    width: 28px;
+    height: 28px;
+    background: #2c6e6b;
+    color: white;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 28px;
+}
+
+.steps-list li strong {
+    display: block;
+    color: #2c6e6b;
+    font-size: 1em;
+    margin-bottom: 3px;
+    font-style: normal;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+thead tr {
+    background: #2c6e6b;
+    color: white;
+}
+
+thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+}
+
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #ffffff; }
+
+tbody td {
+    padding: 9px 14px;
+    vertical-align: top;
+    border-bottom: 1px solid #cfe9e7;
+    color: #333;
+}
+
+tbody td:first-child {
+    font-weight: 600;
+    color: #2c6e6b;
+}
+
+/* SMART */
+.smart-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.smart-box {
+    background: #f3fbfa;
+    border: 1px solid #cfe9e7;
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+}
+
+.smart-box .letter {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c6e6b;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.smart-box .word {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9c27b0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.smart-box p {
+    font-size: 11.5px;
+    color: #555;
+    text-align: left;
+}
+
+/* Closing quote card */
+.quote-card {
+    text-align: center;
+    background: #2c6e6b;
+    color: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.quote-card p {
+    font-size: 1.2em;
+    font-style: italic;
+}
+
+.quote-card span {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85em;
+    opacity: 0.75;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column, .smart-grid { grid-template-columns: 1fr; }
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="../fundamentals-of-management.html">← Back to Notes</a>
+
+<h1>📘 Planning &amp; Decision Making</h1>
+<p class="subtitle">Lesson 04 - Functions of Management</p>
+
+<!-- Learning Outcomes -->
+<div class="card">
+    <h2 class="section-title">Learning Outcomes</h2>
+    <ul>
+        <li>Understand the <strong>functions of decision-making</strong> and the planning process.</li>
+        <li>Understand <strong>organizational goals and objectives.</strong></li>
+        <li>Identify the <strong>components of organizational planning.</strong></li>
+    </ul>
+</div>
+
+<!-- What is Planning -->
+<div class="card">
+    <h2 class="section-title">What is Planning?</h2>
+
+    <div class="definition">
+        <strong>Definition:</strong> Planning is an <strong>intellectual process</strong> of thinking resorted to deciding a course of action that helps to achieve the pre-determined objectives of the organization in the future.
+    </div>
+
+    <ul>
+        <li>Planning is the <strong>primary function of management.</strong></li>
+        <li>It is the outline of activities to be done in the future toward predetermined goals.</li>
+        <li>It is the process of <strong>setting goals and choosing the means</strong> to achieve those goals.</li>
+        <li>It defines goals and takes the necessary steps to ensure those goals are achieved.</li>
+        <li>It determines the organization's goals and selects a course of action within both the internal and external environment.</li>
+    </ul>
+
+    <div class="important">
+        <strong>Planning decides in advance:</strong>
+        &nbsp; What to do &nbsp;·&nbsp; When to do it &nbsp;·&nbsp; How to do it &nbsp;·&nbsp; Who is to do what
+    </div>
+</div>
+
+<!-- Purpose of Planning -->
+<div class="card">
+    <h2 class="section-title">Purpose of Planning</h2>
+    <div class="grid">
+        <div class="box"><strong>Achieve Objectives</strong>Directs all efforts toward clear, pre-set organizational goals.</div>
+        <div class="box"><strong>Cope with Uncertainty</strong>Prepares the organization for future changes and challenges.</div>
+        <div class="box"><strong>Facilitate Control</strong>Provides a standard to measure actual performance against.</div>
+        <div class="box"><strong>Help in Coordination</strong>Aligns activities across different departments and units.</div>
+        <div class="box"><strong>Guide Decision-Making</strong>Gives a framework for choosing the best course of action.</div>
+        <div class="box"><strong>Increase Effectiveness</strong>Improves overall organizational performance and output.</div>
+    </div>
+</div>
+
+<!-- On Plans -->
+<div class="card">
+    <h2 class="section-title">On Plans and Planning</h2>
+    <ul>
+        <li>A <strong>plan</strong> is a predetermined course of action to achieve stated goals.</li>
+        <li>Plans are based on <strong>forecasts and assumptions</strong> about the future.</li>
+        <li>Plans need to be <strong>flexible</strong> so they can adapt to inevitable changes in the environment.</li>
+        <li>The <strong>simpler the plan, the better.</strong></li>
+    </ul>
+</div>
+
+<!-- Planning Process -->
+<div class="card">
+    <h2 class="section-title">The 7-Step Planning Process</h2>
+
+    <div class="centered-diagram">
+        <strong style="font-size: 1.1em; color: #2c6e6b;">Planning Process Flow</strong><br><br>
+        Need Assessment → Establish Objectives → Develop Premises → Generate Alternatives<br>→ Select Alternatives → Formulate Derivative Plans → Implementation &amp; Control
+    </div>
+
+    <ol class="steps-list">
+        <li>
+            <strong>Need Assessment</strong>
+            Identify the "organizational need." This could result from an opportunity or a problem faced by the organization.
+        </li>
+        <li>
+            <strong>Establish Objectives</strong>
+            Define what the organization hopes to achieve. Answer the question: "What do we want to accomplish?"
+        </li>
+        <li>
+            <strong>Develop Premises</strong>
+            Planning premises are the <em>assumptions about the environment</em> in which plans will be made and implemented.
+        </li>
+        <li>
+            <strong>Generate Alternatives</strong>
+            There are multiple methods to achieve any objective — enlist all possible alternatives.
+            Methods: <em>Brainstorming, Nominal Group Techniques, Delphi Method.</em>
+        </li>
+        <li>
+            <strong>Select Alternatives</strong>
+            Filter alternatives against organizational objectives. Conduct feasibility studies and cost-benefit analysis. Select the <em>optimum alternative(s)</em> for implementation.
+        </li>
+        <li>
+            <strong>Formulate Derivative Plans</strong>
+            Secondary plans addressing finer implementation at department and unit levels. Indicate timelines and schedules clearly.
+        </li>
+        <li>
+            <strong>Implementation and Control</strong>
+            Execute the plan to achieve set goals. Simultaneous <em>monitoring and control</em> are necessary to stay on track.
+        </li>
+    </ol>
+</div>
+
+<!-- Methods of Planning -->
+<div class="card">
+    <h2 class="section-title">Methods of Planning</h2>
+    <p>According to the usage and nature of planning, methods are divided into <strong>3 categories:</strong></p>
+    <div class="three-column">
+        <div class="box">
+            <strong>Objective Plans</strong>
+            Objectives are treated as basic plans. Basic plans are necessary for all types of planning operations.
+        </div>
+        <div class="box">
+            <strong>Standing Plans</strong>
+            Include policies and procedures. Apply to repetitive actions. Provide a ready guideline for recurring problems. Limit managerial freedom to ensure integrated and cooperative actions.
+        </div>
+        <div class="box">
+            <strong>Master Plans</strong>
+            Covers the complete course of action along with consideration of time and strategy. May be concerned with production, sales, purchase, and similar activities.
+        </div>
+    </div>
+</div>
+
+<!-- Decision Making -->
+<div class="card">
+    <h2 class="section-title">What is Decision Making?</h2>
+
+    <div class="highlight">
+        <strong>"It's in your moments of decision that your destiny is shaped."</strong>
+    </div>
+
+    <div class="definition">
+        <strong>Definition:</strong> Decision making is the part of the planning process that involves <strong>selecting a course of action from a set of alternatives.</strong>
+    </div>
+
+    <ul>
+        <li>A <strong>decision</strong> is a choice from available alternatives.</li>
+        <li>It is a <strong>process</strong>, not an event.</li>
+        <li>It is the <strong>core of planning.</strong></li>
+        <li>It is the <strong>cornerstone of planning</strong> — the catalyst that drives the planning process.</li>
+        <li>Decision making <strong>underlies every aspect</strong> of setting goals and formulating plans.</li>
+    </ul>
+</div>
+
+<!-- Types of Decisions -->
+<div class="card">
+    <h2 class="section-title">Types of Decisions</h2>
+    <div class="two-column">
+        <div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+            <strong>Programmed Decisions</strong>
+            • Used in structured and <strong>routine problems</strong><br>
+            • Relies on established criteria<br>
+            • Decision-making by precedent<br>
+            • Lower risk involved
+        </div>
+        <div class="box" style="background: #fff9e6; border-left-color: #f0ad4e;">
+            <strong>Non-Programmed Decisions</strong>
+            • Used in <strong>unstructured, novel, non-recurring</strong> situations<br>
+            • Relies on subjective judgments<br>
+            • Involves <strong>greater risk</strong>
+        </div>
+    </div>
+</div>
+
+<!-- Characteristics of Decision Making -->
+<div class="card">
+    <h2 class="section-title">Characteristics of Decision Making</h2>
+    <div class="grid">
+        <div class="box"><strong>Goal-Oriented</strong>Always directed toward achieving a specific aim.</div>
+        <div class="box"><strong>Involves Alternatives</strong>Requires choosing from two or more options.</div>
+        <div class="box"><strong>Analytical &amp; Intellectual</strong>Requires reasoning and critical thinking.</div>
+        <div class="box"><strong>Continuous Activity</strong>Managers make decisions at all times, without pause.</div>
+        <div class="box"><strong>All-Pervasive Function</strong>Applies at every level and department of the organization.</div>
+        <div class="box"><strong>Situational &amp; Dynamic</strong>Depends on context and changes with circumstances.</div>
+    </div>
+</div>
+
+<!-- Organizational Goals -->
+<div class="card">
+    <h2 class="section-title">Organizational Goals</h2>
+
+    <div class="definition">
+        <strong>Definition:</strong> Organizational goals are <strong>strategic objectives</strong> that a company's management establishes to outline expected outcomes and guide employees' efforts.
+    </div>
+
+    <div class="highlight"><strong>Purpose of Goals:</strong></div>
+    <ul>
+        <li>Provide <strong>guidance and a unified direction</strong> for people in the organization.</li>
+        <li>Affects the quality of other aspects of planning.</li>
+        <li>Source of <strong>motivation</strong> to employees.</li>
+        <li>Provide an effective mechanism for <strong>evaluation and control.</strong></li>
+    </ul>
+</div>
+
+<!-- Kinds of Goals -->
+<div class="card">
+    <h2 class="section-title">Kinds of Goals</h2>
+
+    <div class="highlight"><strong>By Level:</strong></div>
+    <div class="grid">
+        <div class="box"><strong>Mission Statement</strong>Fundamental purpose of the organization. Set by Board of Directors &amp; Top Managers.</div>
+        <div class="box"><strong>Strategic Goals</strong>Set by and for <em>top management.</em> Long-term, comprehensive direction for the whole organization.</div>
+        <div class="box"><strong>Tactical Goals</strong>Set by and for <em>middle management.</em> Medium-term; links between strategic and operational.</div>
+        <div class="box"><strong>Operational Goals</strong>Set by and for <em>lower-level managers.</em> Short-term, specific, day-to-day focus.</div>
+    </div>
+
+    <div class="important">
+        <strong>By Area:</strong> Goals can be set for <em>different functional areas</em> of the organization (marketing, finance, HR, operations, etc.)
+    </div>
+
+    <div class="note">
+        <strong>By Time Frame:</strong> &nbsp;
+        <strong>Long-term</strong> (beyond 3–5 years) &nbsp;·&nbsp;
+        <strong>Intermediate-term</strong> (1–5 years) &nbsp;·&nbsp;
+        <strong>Short-term</strong> (up to 1 year; explicit or open-ended)
+    </div>
+</div>
+
+<!-- Responsibilities for Goal Setting -->
+<div class="card">
+    <h2 class="section-title">Responsibilities for Setting Goals</h2>
+    <p>All managers should be involved in the goal-setting process.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Goal Type</th>
+                <th>Responsible Parties</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Mission &amp; Strategic Goals</td><td>Board of Directors and Top Managers</td></tr>
+            <tr><td>Tactical Goals</td><td>Top and Middle Managers (work together)</td></tr>
+            <tr><td>Operational Goals</td><td>Middle and Lower-level Managers</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Organizational Planning -->
+<div class="card">
+    <h2 class="section-title">Organizational Planning</h2>
+
+    <div class="definition">
+        <strong>Definition:</strong> Setting goals, establishing strategies, and developing plans to coordinate activities.
+    </div>
+
+    <ul>
+        <li>All organizations plan, but <strong>not in the same fashion.</strong></li>
+        <li>All planning occurs within an <strong>environmental context.</strong></li>
+        <li>All goals require plans to guide in their achievement.</li>
+        <li>All goals are tied to <strong>higher goals and plans.</strong></li>
+    </ul>
+</div>
+
+<!-- Kinds of Planning -->
+<div class="card">
+    <h2 class="section-title">Kinds of Planning</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Strategic Planning</th>
+                <th>Tactical Planning</th>
+                <th>Operational Planning</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Time Frame</td><td>3+ years (long-range)</td><td>2–3 years (intermediate)</td><td>1 year or less (short-range)</td></tr>
+            <tr><td>Responsibility</td><td>Top Management</td><td>Middle Management</td><td>Lower-level Management</td></tr>
+            <tr><td>Focus</td><td>Objectives, policies, programmes</td><td>Procedures, projects, strategies</td><td>Schedules and methods</td></tr>
+            <tr><td>Scope</td><td>Overall company progress</td><td>Integrating departments</td><td>Day-to-day operations</td></tr>
+            <tr><td>Emphasis</td><td>Planning &amp; forecasting</td><td>Co-ordination</td><td>Directing &amp; controlling</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note">
+        <strong>Time Frames Explained:</strong><br>
+        • <strong>Long-range Plans:</strong> Cover strategic issues extending beyond five years.<br>
+        • <strong>Intermediate Plans:</strong> Cover 1–5 years; parallel to tactical plans; principal focus of organizational planning efforts.<br>
+        • <strong>Short-range Plans:</strong> Action and contingency (reaction) plans with a time frame of one year or less.
+    </div>
+</div>
+
+<!-- Contingency Planning -->
+<div class="card">
+    <h2 class="section-title">Contingency Planning</h2>
+    <div class="important">
+        <strong>Definition:</strong> The determination of <strong>alternative courses of action</strong> to be taken if an intended plan is unexpectedly disrupted or rendered inappropriate.
+    </div>
+</div>
+
+<!-- Why Planning is Important -->
+<div class="card">
+    <h2 class="section-title">Why Planning is Important</h2>
+    <ul>
+        <li>Focus attention on <strong>appropriate goals.</strong></li>
+        <li>Improve <strong>employee motivation.</strong></li>
+        <li>Helps identify <strong>managerial talents.</strong></li>
+        <li>Evaluate progress and <strong>change approaches</strong> as needed.</li>
+        <li>Facilitates <strong>control</strong> of the organization.</li>
+        <li>Enhances <strong>communication</strong> across all levels.</li>
+    </ul>
+</div>
+
+<!-- Advantages & Limitations -->
+<div class="card">
+    <h2 class="section-title">Advantages &amp; Limitations of Planning</h2>
+    <div class="two-column">
+        <div>
+            <div class="important"><strong>Advantages</strong></div>
+            <ul>
+                <li>Helps in achieving objectives</li>
+                <li>Better utilization of resources</li>
+                <li>Reduces uncertainty and risk</li>
+                <li>Improves competitive strength</li>
+                <li>Effective control and co-ordination</li>
+                <li>Encourages motivation</li>
+                <li>Provides decentralization; improves efficiency</li>
+                <li>Anticipation of crisis</li>
+            </ul>
+        </div>
+        <div>
+            <div class="highlight"><strong>Limitations</strong></div>
+            <ul>
+                <li>Lack of accurate information</li>
+                <li>Time and cost; inflexibility</li>
+                <li>Delay during the emergency period</li>
+                <li>False sense of security</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Barriers and Overcoming -->
+<div class="card">
+    <h2 class="section-title">Barriers to Goal Setting &amp; Planning</h2>
+    <div class="two-column">
+        <div>
+            <div class="highlight"><strong>Barriers</strong></div>
+            <ul>
+                <li>Inappropriate goals</li>
+                <li>Improper reward system</li>
+                <li>Changing environment</li>
+                <li>Reluctance to establish goals</li>
+                <li>Resistance to change</li>
+                <li>Constraints / Limitations</li>
+            </ul>
+        </div>
+        <div>
+            <div class="important"><strong>Overcoming Barriers</strong></div>
+            <ul>
+                <li>Understand the purpose of goals and plans</li>
+                <li>Communication and participation</li>
+                <li>Effective reward systems</li>
+                <li>Regular revision and update</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Objectives -->
+<div class="card">
+    <h2 class="section-title">Objectives</h2>
+
+    <div class="definition">
+        <strong>Definition:</strong> Objectives are the <strong>aims, purposes, or goals</strong> that an organization wants to achieve over varying periods of time.
+    </div>
+
+    <div class="highlight"><strong>Important Characteristics of Objectives:</strong></div>
+    <ul>
+        <li>Objectives have a <strong>hierarchy</strong></li>
+        <li>Objectives form a <strong>network</strong></li>
+        <li><strong>Multiplicity</strong> of objectives</li>
+        <li>Objectives have a <strong>time span</strong></li>
+        <li>Objectives may be <strong>tangible or intangible</strong></li>
+        <li>Objectives must have <strong>social sanction</strong></li>
+    </ul>
+
+    <div class="note">
+        <strong>Significance of Objectives:</strong> Unified planning &nbsp;·&nbsp; Defining an organization &nbsp;·&nbsp; Direction &nbsp;·&nbsp; Individual motivation &nbsp;·&nbsp; Basis for decentralization &nbsp;·&nbsp; Basis for control &nbsp;·&nbsp; Co-ordination
+    </div>
+</div>
+
+<!-- SMART -->
+<div class="card">
+    <h2 class="section-title">SMART Goals Framework</h2>
+    <div class="smart-grid">
+        <div class="smart-box">
+            <div class="letter">S</div>
+            <div class="word">Specific</div>
+            <p>Concrete and tangible — everyone knows what it looks like.</p>
+        </div>
+        <div class="smart-box">
+            <div class="letter">M</div>
+            <div class="word">Measurable</div>
+            <p>Has an objective measure of success everyone understands.</p>
+        </div>
+        <div class="smart-box">
+            <div class="letter">A</div>
+            <div class="word">Attainable</div>
+            <p>Challenging but achievable with available resources.</p>
+        </div>
+        <div class="smart-box">
+            <div class="letter">R</div>
+            <div class="word">Relevant</div>
+            <p>Meaningfully contributes to larger objectives and mission.</p>
+        </div>
+        <div class="smart-box">
+            <div class="letter">T</div>
+            <div class="word">Timely</div>
+            <p>Has a deadline or timeline of progress milestones.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Goals vs Objectives -->
+<div class="card">
+    <h2 class="section-title">Goals vs. Objectives</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Goals</th>
+                <th>Objectives</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Definition</td><td>Broad desired outcome</td><td>Specific measurable target</td></tr>
+            <tr><td>Time Frame</td><td>Long-term</td><td>Short / medium-term</td></tr>
+            <tr><td>Nature</td><td>Abstract, general</td><td>Concrete, precise</td></tr>
+            <tr><td>Measurement</td><td>Not easily measurable</td><td>Measurable (SMART)</td></tr>
+            <tr><td>Example (Apple)</td><td>Be the leader in innovation</td><td>Launch iPhone &amp; achieve $X million in sales</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- MBO -->
+<div class="card">
+    <h2 class="section-title">Management by Objectives (MBO)</h2>
+
+    <div class="definition">
+        <strong>Definition:</strong> The process of <strong>collaborative goal setting</strong> by a manager and subordinate. The extent to which goals are accomplished is a major factor in evaluating and rewarding the subordinate's performance.
+    </div>
+
+    <div class="important"><strong>How MBO Works:</strong></div>
+    <ul>
+        <li>Specific performance goals are <strong>jointly determined</strong> by employees and managers.</li>
+        <li>Progress toward accomplishing goals is <strong>periodically reviewed.</strong></li>
+        <li>Rewards are <strong>allocated based on progress</strong> towards the goals.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Key Elements of MBO:</strong> &nbsp; Goal specificity &nbsp;·&nbsp; Participative decision making &nbsp;·&nbsp; An explicit performance/evaluation period &nbsp;·&nbsp; Feedback
+    </div>
+</div>
+
+<!-- MBO Benefits & Weaknesses -->
+<div class="card">
+    <h2 class="section-title">Benefits &amp; Weaknesses of MBO</h2>
+    <div class="two-column">
+        <div>
+            <div class="important"><strong>Benefits</strong></div>
+            <ul>
+                <li>Improvement of managing</li>
+                <li>Clarification of organization</li>
+                <li>Personal satisfaction</li>
+                <li>Teamwork</li>
+                <li>Development of effective control</li>
+                <li>Fast decision making</li>
+            </ul>
+        </div>
+        <div>
+            <div class="highlight"><strong>Weaknesses</strong></div>
+            <ul>
+                <li>Failure to teach the philosophy of MBO</li>
+                <li>Failure to give guidelines to goal-setters</li>
+                <li>Difficulty in setting goals</li>
+                <li>Emphasis on short-term goals</li>
+                <li>Danger of inflexibility</li>
+                <li>Time-consuming</li>
+                <li>Increased paperwork</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Closing quote -->
+<div class="quote-card">
+    <p>"If you fail to plan, you are planning to fail."</p>
+    <span>— Benjamin Franklin</span>
+</div>
+
+<div class="footer">
+    🌱 Lesson 04 - Planning &amp; Decision Making &nbsp;•&nbsp; BY_#D1
+</div>
+
+</div>
+</body>
+</html>
