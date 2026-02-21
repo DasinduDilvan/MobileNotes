@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 02 - Linux File Organization</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 8px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #569cd6; }
+        pre .string { color: #ce9178; }
+        pre .fn { color: #dcdcaa; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+        th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e0eded;
+        }
+        tr:nth-child(even) td { background: #f3fbfa; }
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+        .tag.orange { background: #e67e22; }
+        .tag.blue { background: #2980b9; }
+        .tag.red { background: #c0392b; }
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+        .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+        .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #2c6e6b;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: opacity 0.15s;
+        }
+        .back-link:hover { opacity: 0.7; }
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="../system-programming-linux.html">← Back to Notes</a>
+
+    <h1>🗂️ Linux File Organization</h1>
+    <div class="subtitle">System Programming Fundamentals & Linux — Lecture 02</div>
+
+    <!-- OBJECTIVES -->
+    <div class="card">
+        <h2 class="section-title">📌 Objectives</h2>
+        <div class="grid">
+            <div class="box"><strong>Virtual Filesystem</strong>Files and Directories, UNIX File Types</div>
+            <div class="box"><strong>Physical Filesystem</strong>Super Block, i-node, File Accessing Methods</div>
+            <div class="box"><strong>Access Permissions</strong>File permission management</div>
+            <div class="box"><strong>Network Filesystems</strong>NFS &amp; Samba Configurations</div>
+        </div>
+    </div>
+
+    <!-- FILE SYSTEM ORGANIZATION -->
+    <div class="card">
+        <h2 class="section-title">🗂️ File System Organization</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Virtual Filesystem</strong>
+                <ul>
+                    <li>Hierarchical representation of files and directories</li>
+                    <li>Unix interface to the physical filesystem</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Physical Filesystem</strong>
+                <ul>
+                    <li>Collection of data represented by the virtual filesystem</li>
+                    <li>Data arranged on one or more actual storage devices (e.g. Hard disks)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILES AND DIRECTORIES -->
+    <div class="card">
+        <h2 class="section-title">📁 Files and Directories (Virtual Filesystem)</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>A File</strong>
+                <ul>
+                    <li>A collection of information</li>
+                    <li>Can be referred to by a filename</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>A Directory</strong>
+                <ul>
+                    <li>A special kind of file</li>
+                    <li>A way of grouping files together</li>
+                    <li>Consists of entries — files or other directories</li>
+                </ul>
+            </div>
+        </div>
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Unix File System Structure:</strong> The Unix File System is a <strong>hierarchical file system</strong> with a tree structure. The topmost directory is the <strong>root directory ( / )</strong>, from which all other directories branch.
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Pathnames</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Absolute Pathname</strong>
+                Starts from the root directory <code>/</code><br><br>
+                <code>$ cat /home/subash/aa.txt</code>
+            </div>
+            <div class="box">
+                <strong>Relative Pathname</strong>
+                Starts from the current working directory<br><br>
+                <code>$ pwd</code> → <code>/home</code><br>
+                <code>$ cat subash/aa.txt</code>
+            </div>
+        </div>
+        <div class="note" style="margin-top:12px;">Directory components are separated by forward slashes <code>/</code></div>
+    </div>
+
+    <!-- UNIX FILE TYPES -->
+    <div class="card">
+        <h2 class="section-title">📄 UNIX File Types</h2>
+        <div class="grid">
+            <div class="box"><strong>Regular Files</strong>Sequence of bytes with arbitrary information</div>
+            <div class="box"><strong>Directory Files</strong>Special files that create the hierarchy</div>
+            <div class="box"><strong>Special Files</strong>I/O device files in <code>/dev</code></div>
+            <div class="box"><strong>Links</strong>Directory entries pointing to existing files</div>
+            <div class="box"><strong>Sockets</strong>Used for inter-process communication</div>
+        </div>
+
+        <!-- Regular Files -->
+        <h3 style="margin-top:20px; color:#2c6e6b;">Regular Files</h3>
+        <ul style="margin-top:8px;">
+            <li>A sequence of bytes with arbitrary information</li>
+            <li>File name length varies with filesystem type; most systems support max <strong>255 characters</strong></li>
+            <li>Extensions describe file contents — e.g., <code>aa.txt</code></li>
+            <li>Can have multiple extensions — e.g., <code>backup.tar.gz</code></li>
+        </ul>
+
+        <h3 style="margin-top:18px; color:#2c6e6b;">Filenames — Rules</h3>
+        <div class="two-column" style="margin-top:8px;">
+            <div class="box">
+                <strong>Not Allowed</strong>
+                <ul><li>Spaces</li></ul>
+                <strong style="display:block;margin-top:8px;">Allowed</strong>
+                <ul>
+                    <li>Lower/upper case letters</li>
+                    <li>Digits</li>
+                    <li>Underscore <code>_</code>, dot <code>.</code>, comma <code>,</code></li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Notes</strong>
+                <ul>
+                    <li>Case-sensitive: <code>File.txt</code> ≠ <code>file.txt</code></li>
+                    <li>Shells have filename completion feature</li>
+                    <li>Invisible files start with dot: e.g., <code>.plan</code>, <code>.profile</code></li>
+                    <li>View invisible files with <code>ls -a</code></li>
+                </ul>
+            </div>
+        </div>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Wildcards:</strong><br>
+            <code>*</code> — matches zero or more of any character → <code>ls *.txt</code><br>
+            <code>?</code> — matches any single character → <code>ls a?a.txt</code>
+        </div>
+
+        <!-- Directory Files -->
+        <h3 style="margin-top:18px; color:#2c6e6b;">Directory Files — Common Linux Directories</h3>
+        <table style="margin-top:8px;">
+            <thead>
+                <tr><th>Directory</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>/bin/</code></td><td>User commands. Also: <code>/usr/bin/</code></td></tr>
+                <tr><td><code>/sbin/</code></td><td>System commands (e.g., shutdown). Also: <code>/usr/sbin/</code></td></tr>
+                <tr><td><code>/root/</code></td><td>Home directory of the superuser (root)</td></tr>
+                <tr><td><code>/media/</code></td><td>Mount points for removable media (CD-ROMs, USB drives)</td></tr>
+                <tr><td><code>/boot/</code></td><td>Kernel and files used during system startup</td></tr>
+                <tr><td><code>/lost+found/</code></td><td>Used by <code>fsck</code> to place orphaned files</td></tr>
+                <tr><td><code>/lib/</code></td><td>Device modules and library files for <code>/bin/</code> and <code>/sbin/</code></td></tr>
+                <tr><td><code>/dev/</code></td><td>Device files</td></tr>
+                <tr><td><code>/etc/</code></td><td>Configuration files and directories</td></tr>
+                <tr><td><code>/var/</code></td><td>Variable/constantly changing files (log files, printer spool)</td></tr>
+                <tr><td><code>/usr/</code></td><td>Files relating to users — programs and library files</td></tr>
+                <tr><td><code>/proc/</code></td><td>Virtual filesystem (not on disk); contains system info used by programs</td></tr>
+                <tr><td><code>/initrd/</code></td><td>Used to mount <code>initrd.img</code> and load device modules during bootup</td></tr>
+            </tbody>
+        </table>
+        <div class="note" style="margin-top:12px;">
+            The <strong>home directory</strong> of a user is where you land upon login. Short form: <code>~/</code>. Check current location with <code>pwd</code> (print working directory).
+        </div>
+
+        <!-- Special Files -->
+        <h3 style="margin-top:18px; color:#2c6e6b;">Special Files</h3>
+        <ul style="margin-top:8px;">
+            <li>I/O devices are integrated into the system as files</li>
+            <li>Each I/O device is assigned a pathname in <code>/dev</code></li>
+            <li>Can be accessed the same way as regular files</li>
+        </ul>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Character Special Files</strong>
+                Used for devices that input/output a character stream.<br>
+                Examples: Keyboards, Printers, Networks
+            </div>
+            <div class="box">
+                <strong>Block Special Files</strong>
+                Used for devices that transfer data in blocks.<br>
+                Examples: Disk drives, Tapes
+            </div>
+        </div>
+
+        <!-- Links and Sockets -->
+        <h3 style="margin-top:18px; color:#2c6e6b;">Links</h3>
+        <p style="margin-top:8px;">A directory entry that points to an existing file. Two types: <strong>Hard Links</strong> and <strong>Soft Links</strong>.</p>
+
+        <h3 style="margin-top:14px; color:#2c6e6b;">Sockets</h3>
+        <p style="margin-top:8px;">Used for inter-process communication — allows processes to talk to each other, even if they are on different machines.</p>
+    </div>
+
+    <!-- PHYSICAL FILESYSTEM -->
+    <div class="card">
+        <h2 class="section-title">💾 Physical Filesystem</h2>
+        <div class="model-diagram" style="text-align:center; padding:20px; background:#f9f9f9; border-radius:10px; margin-bottom:15px;">
+            <table style="margin:0 auto; border-collapse:collapse; width:auto;">
+                <tr>
+                    <td style="background:#2c6e6b; color:white; padding:12px 20px; border:2px solid #cfe9e7; text-align:center; font-weight:bold;">Super Block</td>
+                    <td style="background:#5a9d99; color:white; padding:12px 20px; border:2px solid #cfe9e7; text-align:center; font-weight:bold;">i-node Blocks</td>
+                    <td style="background:#88c9c6; color:white; padding:12px 20px; border:2px solid #cfe9e7; text-align:center; font-weight:bold;">File Storage Blocks (Data)</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px; font-size:0.85em; color:#555; text-align:center;">Info on the filesystem</td>
+                    <td style="padding:8px; font-size:0.85em; color:#555; text-align:center;">Info on files</td>
+                    <td style="padding:8px; font-size:0.85em; color:#555; text-align:center;">File contents</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Super Block -->
+        <div class="box" style="margin-bottom:12px;">
+            <strong>Super Block</strong>
+            Contains critical information about the layout of the file system, including the number of i-node blocks and the number of disk blocks.
+        </div>
+
+        <!-- i-node -->
+        <div class="box">
+            <strong>i-node (Index Node)</strong>
+            A data structure that contains information about a file. A single file may have several file names (links) but has only <strong>one inode</strong>.
+        </div>
+
+        <h3 style="margin-top:18px; color:#2c6e6b;">Information Stored in i-nodes</h3>
+        <div class="grid" style="margin-top:8px;">
+            <div class="box"><strong>Mode</strong>Permissions and file descriptor (file, directory, link, block device, etc.)</div>
+            <div class="box"><strong>Owner Info</strong>File ownership and group information</div>
+            <div class="box"><strong>File Type</strong>Regular, directory, special, etc.</div>
+            <div class="box"><strong>Timestamps</strong>Last modify and last access time; creation &amp; modification</div>
+            <div class="box"><strong>Link Count</strong>Number of hard links pointing to the file</div>
+            <div class="box"><strong>File Size</strong>Length of file in bytes</div>
+            <div class="box"><strong>Data Block Pointers</strong>Addresses of the actual physical data blocks</div>
+        </div>
+
+        <div class="note" style="margin-top:14px;">
+            <strong>Commands:</strong> View inode info: <code>ls -i</code> &nbsp;|&nbsp; View detailed file info: <code>ls -l</code>
+        </div>
+
+        <!-- File Accessing Methods -->
+        <h3 style="margin-top:20px; color:#2c6e6b;">File Accessing Methods</h3>
+        <div class="two-column" style="margin-top:8px;">
+            <div class="box">
+                <strong>Sequential Access</strong>
+                Read all bytes/records in a file in order.<br>
+                Example: Magnetic tape
+            </div>
+            <div class="box">
+                <strong>Random Access</strong>
+                Read bytes/records in a file in any order.<br>
+                Example: Disk drives
+            </div>
+        </div>
+    </div>
+
+    <!-- MANIPULATING FILES -->
+    <div class="card">
+        <h2 class="section-title">🛠️ Manipulating Files</h2>
+
+        <h3 style="color:#2c6e6b; margin-bottom:10px;">Creating Files</h3>
+        <table>
+            <thead><tr><th>Method</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><code>vi</code> editor</td><td>Open vi and write content</td></tr>
+                <tr><td><code>touch</code></td><td><code>touch file1</code></td></tr>
+                <tr><td>I/O redirection</td><td><code>ls -al &gt; file2</code> &nbsp;|&nbsp; <code>cat &gt; file3</code> &nbsp;|&nbsp; <code>echo "text" &gt; file3</code></td></tr>
+                <tr><td><code>ln</code></td><td>Hard link or soft link</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Viewing Files</h3>
+        <table>
+            <thead><tr><th>Command</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>cat filename</code></td><td>Dump a file to the screen in ASCII</td></tr>
+                <tr><td><code>more filename</code></td><td>Progressively dump a file — ENTER = one line, SPACE = page, q = quit</td></tr>
+                <tr><td><code>less filename</code></td><td>Like more, but also supports Page-Up</td></tr>
+                <tr><td><code>head -n filename</code></td><td>Show the first n lines of a file</td></tr>
+                <tr><td><code>tail -n filename</code></td><td>Show the last n lines of a file</td></tr>
+            </tbody>
+        </table>
+        <div class="note" style="margin-top:12px;">UNIX editors available: <code>vi</code>, <code>gedit</code>, <code>emacs</code>, <code>nano</code>, <code>pico</code></div>
+    </div>
+
+    <!-- LINKS -->
+    <div class="card">
+        <h2 class="section-title">🔗 Links — Hard Links vs. Soft Links</h2>
+
+        <div class="two-column">
+            <div>
+                <h3 style="color:#2c6e6b; margin-bottom:10px;">Hard Links</h3>
+                <div class="box">
+                    <strong>Create:</strong> <code>ln existing_file new_link</code><br>
+                    <code>ln file2 /home/nimal/file3</code>
+                </div>
+                <ul style="margin-top:12px;">
+                    <li>Hard links have the <strong>same inode number</strong></li>
+                    <li><code>ls -l</code> shows link count in second column</li>
+                    <li>Links have actual file contents</li>
+                    <li>Removing any link just reduces the link count; others remain unaffected</li>
+                    <li><strong>Cannot</strong> create a hard link for a directory</li>
+                    <li>Even if original file is removed, the link still shows file contents</li>
+                    <li>One file can have many different names (hard links)</li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="color:#2c6e6b; margin-bottom:10px;">Soft (Symbolic) Links</h3>
+                <div class="box">
+                    <strong>Create:</strong> <code>ln -s existing_file new_softlink</code><br>
+                    <code>ln -s ~/tmp/file2 sfile2</code>
+                </div>
+                <ul style="margin-top:12px;">
+                    <li>Soft links have <strong>different inode numbers</strong></li>
+                    <li><code>ls -l</code> shows second column value 1 and link points to original</li>
+                    <li>Contains the <strong>path</strong> of the original file, not the contents</li>
+                    <li>Removing soft link doesn't affect the original</li>
+                    <li>If original file is removed, link becomes a <strong>"dangling" link</strong></li>
+                    <li><strong>Can</strong> link to a directory</li>
+                    <li>Similar to MS Windows shortcuts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Remove links:</strong> Use <code>rm</code>. The file is removed only when the <strong>last hard link</strong> is removed.
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Hard Link Exercise</h3>
+        <pre>
+<span class="comment"># Create a Test directory and a new file inside it</span>
+$ mkdir Test
+$ cd Test
+$ touch sample1
+
+<span class="comment"># Create a hard link to sample1 named sample2</span>
+$ ln sample1 sample2
+
+<span class="comment"># Display inodes — both will share the same inode number</span>
+$ ls -il sample1 sample2
+
+<span class="comment"># Remove original and check content through link</span>
+$ rm sample1
+$ cat sample2   <span class="comment"># Content still accessible!</span>
+        </pre>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Soft Link Exercise</h3>
+        <pre>
+<span class="comment"># Create a soft link for sample2</span>
+$ ln -s sample2 sample3
+
+<span class="comment"># Display inodes — different inode numbers, 'l' before permissions</span>
+$ ls -il sample2 sample3
+
+<span class="comment"># List contents</span>
+$ cat sample2
+$ cat sample3
+
+<span class="comment"># Remove the original and check</span>
+$ rm sample2
+$ ls                   <span class="comment"># sample3 still appears</span>
+$ cat sample3          <span class="comment"># Error: no such file or directory (dangling link)</span>
+        </pre>
+    </div>
+
+    <!-- NETWORK FILE SYSTEMS -->
+    <div class="card">
+        <h2 class="section-title">🌐 Network File Systems</h2>
+
+        <h3 style="color:#2c6e6b; margin-bottom:10px;">Network File System (NFS)</h3>
+        <div class="important">
+            NFS is a <strong>client/server application</strong> that lets a computer user view and optionally store and update files on a remote computer as though they were on the user's own computer.
+        </div>
+        <ul style="margin-top:10px;">
+            <li>NFS is a <strong>protocol</strong> — a way of mounting Linux discs/directories over a network</li>
+            <li>An NFS server can <strong>export</strong> one or more directories that can be mounted on a remote Linux machine</li>
+            <li>Main home use: share data on a central server (e.g., music collection) to all PCs — single copy, central location</li>
+        </ul>
+
+        <h3 style="color:#2c6e6b; margin-top:18px; margin-bottom:10px;">Major Network Filesystem Families</h3>
+        <div class="grid">
+            <div class="box"><strong>HTTP → WebDAV</strong></div>
+            <div class="box"><strong>SMB → CIFS</strong></div>
+            <div class="box"><strong>NCP</strong>Netware Core Protocol</div>
+            <div class="box"><strong>NFSv2 → NFSv3 → WebNFS → NFSv4 → DAFS</strong></div>
+            <div class="box"><strong>AFS → DFS, AFS → Coda → Intermezzo</strong></div>
+            <div class="box"><strong>GFS</strong></div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Mounting Filesystems in Linux</h3>
+        <ul>
+            <li>A filesystem is a hierarchy of directories used to organize files on a computer or storage media</li>
+            <li>On Linux/Unix-like systems, directories start from the <strong>root directory</strong></li>
+            <li>To access files on a storage device, the user must inform the OS where in the directory tree to <strong>mount</strong> the device</li>
+            <li><strong>Mounting</strong> a filesystem means making a particular filesystem accessible at a certain point in the Linux directory tree</li>
+        </ul>
+    </div>
+
+    <!-- SAMBA -->
+    <div class="card">
+        <h2 class="section-title">🤝 Samba</h2>
+        <div class="important">
+            <strong>"Samba is an Open Source/Free Software suite that provides seamless file and print services to SMB/CIFS clients."</strong>
+            <br><em>Source: www.samba.org</em>
+        </div>
+        <ul style="margin-top:12px;">
+            <li>Installed on any platform other than Microsoft Windows</li>
+            <li>Makes use of the <strong>TCP/IP protocol</strong> installed on the host server</li>
+            <li>Allows the host to interact with Windows clients/servers</li>
+            <li>Runs on Unix platforms and "speaks" to Windows clients</li>
+            <li>Allows a Unix system to move into a Windows "Network Neighborhood"</li>
+            <li>Windows users can access <strong>file and print services</strong></li>
+        </ul>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">SMBD — SMB Daemon</h3>
+        <ul>
+            <li>File and print services are provided by <code>smbd</code> (the SMB Daemon)</li>
+            <li>Handles <strong>"share mode"</strong> and <strong>"user mode"</strong> authentication and authorization</li>
+            <li>You can protect shared file and print services by requiring passwords</li>
+            <li>Each user has their own username and password</li>
+            <li>System Administrator can grant or deny access</li>
+        </ul>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">When to Use NFS vs. Samba</h3>
+        <table>
+            <thead>
+                <tr><th>Server OS</th><th>Client OS</th><th>Use</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Linux</td><td>Linux</td><td><span class="tag blue">NFS</span></td></tr>
+                <tr><td>Windows</td><td>Linux</td><td><span class="tag orange">Samba</span></td></tr>
+                <tr><td>Linux</td><td>Windows</td><td><span class="tag orange">Samba</span></td></tr>
+                <tr><td>Windows</td><td>Windows</td><td><span class="tag orange">Samba</span></td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Known Problems &amp; Solutions</h3>
+        <div class="warning">
+            <strong>Problem:</strong> Windows machine recognizes the Samba server but does not allow access.<br>
+            <strong>Solution:</strong> Different encryption/decryption systems for Windows and Unix. Find <code>enableplaintextpassword</code> and disable Windows encryption.
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 02 - Linux File Organization • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

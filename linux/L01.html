@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 01 - Basic Linux Commands</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.subsection {
+    color: #2c6e6b;
+    font-size: 1.1em;
+    margin: 18px 0 8px 0;
+    font-weight: 600;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li { margin: 6px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+pre .comment { color: #6a9955; }
+pre .cmd { color: #9cdcfe; }
+pre .flag { color: #ce9178; }
+pre .desc { color: #888; font-style: italic; }
+
+.cmd-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.95em;
+}
+
+.cmd-table th {
+    background: #2c6e6b;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+}
+
+.cmd-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0f0ef;
+}
+
+.cmd-table tr:nth-child(even) td { background: #f3fbfa; }
+.cmd-table tr:last-child td { border-bottom: none; }
+
+.cmd-table td:first-child {
+    font-family: 'Courier New', monospace;
+    color: #c0392b;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.perm-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.93em;
+}
+
+.perm-table th {
+    background: #2c6e6b;
+    color: white;
+    padding: 9px 14px;
+    text-align: left;
+}
+
+.perm-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid #e0f0ef;
+    font-family: 'Courier New', monospace;
+}
+
+.perm-table tr:nth-child(even) td { background: #f3fbfa; }
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column { grid-template-columns: 1fr; }
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="../system-programming-linux.html">← Back to Notes</a>
+
+    <h1>🐧 Basic Linux Commands</h1>
+    <p class="subtitle">ICT1261 — System Programming Fundamentals and Linux</p>
+
+    <!-- ─── 1. LOGGING IN ─── -->
+    <div class="card">
+        <h2 class="section-title">1. Logging In to a Linux System</h2>
+
+        <p>When you first log in on a Linux system, you are always associated with a directory called the <strong>home directory</strong> (also called the <em>working directory</em> or <em>current directory</em>). Your home directory has the same name as your username and is where your personal files and sub-directories are saved.</p>
+
+        <div class="highlight" style="margin-top:14px;">
+            <strong>Example prompt:</strong>
+            <pre><span class="cmd">/home/rashmi]~$</span></pre>
+            <p>The <code>$</code> symbol is called a <strong>prompt</strong> — it signals that the system is waiting for you to enter a command.</p>
+        </div>
+
+        <h3 class="subsection">Key Facts about the Linux Command Line</h3>
+        <ul>
+            <li>Every Unix command is a sequence of letters, numbers, and characters — <strong>no spaces</strong> within the command name.</li>
+            <li>Linux is <strong>case-sensitive</strong>: <code>cat</code> and <code>Cat</code> are different commands.</li>
+            <li>The prompt is displayed by a special program called the <strong>shell</strong>. Shells accept and run commands, and can also be programmed using <strong>shell scripts</strong>.</li>
+        </ul>
+
+        <h3 class="subsection">Types of Shells</h3>
+        <div class="two-column">
+            <div class="box">
+                <strong>Bourne Shells</strong>
+                The original shell <code>sh</code> was written by Steven Bourne. Most shells since then end in <code>sh</code> to indicate they extend the original idea.
+            </div>
+            <div class="box">
+                <strong>C Shells</strong>
+                A different family of shells with C-like syntax. Less common in modern Linux environments.
+            </div>
+        </div>
+
+        <div class="important" style="margin-top:15px;">
+            <strong>bash — Bourne Again Shell</strong><br>
+            Linux comes with <code>bash</code>, written by the Free Software Foundation. It is the <strong>default shell</strong> in Linux. As long as you are logged in, <code>bash</code> is constantly running and displaying the <code>$</code> prompt.
+        </div>
+
+        <h3 class="subsection">Linux Command Syntax</h3>
+        <pre><span class="cmd">command</span> [<span class="flag">options</span>] [<span class="flag">arguments</span>]</pre>
+        <p>All Linux commands start with the <strong>name of the command</strong> and can be followed by <strong>options</strong> (modify behavior, usually prefixed with <code>-</code>) and <strong>arguments</strong> (targets like filenames or paths).</p>
+    </div>
+
+    <!-- ─── 2. HELP ─── -->
+    <div class="card">
+        <h2 class="section-title">2. Getting Help</h2>
+
+        <div class="box">
+            <strong>man — Manual Pages</strong>
+            <p>The <code>man</code> command displays reference pages for any command. Linux man pages cover every available command.</p>
+            <pre><span class="cmd">man ls</span>        <span class="desc"># shows the manual for 'ls'</span></pre>
+            <p>Press <code>q</code> to exit the man page viewer.</p>
+        </div>
+    </div>
+
+    <!-- ─── 3. GENERAL COMMANDS ─── -->
+    <div class="card">
+        <h2 class="section-title">3. General Commands</h2>
+
+        <table class="cmd-table">
+            <thead>
+                <tr><th>Command</th><th>Description &amp; Usage</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>which</td>
+                    <td>Displays the pathname of a command by searching the PATH environment variable.<br>
+                        <code>$ which sh</code> &nbsp; <code>$ which bash</code></td>
+                </tr>
+                <tr>
+                    <td>chsh</td>
+                    <td>Change Login Shell — changes the shell that interprets commands after login.<br>
+                        <code>$ echo $SHELL</code> — show current shell<br>
+                        <code>$ cat /etc/shells</code> — list all available shells<br>
+                        <code>$ chsh</code> — change to default shell</td>
+                </tr>
+                <tr>
+                    <td>whereis</td>
+                    <td>Displays all locations of a command (binary, man page, or source file). Searches all directories.<br>
+                        <code>$ whereis sh</code> &nbsp; <code>$ whereis perl</code></td>
+                </tr>
+                <tr>
+                    <td>whoami</td>
+                    <td>Prints the username associated with the current effective user ID.<br>
+                        <code>$ whoami</code></td>
+                </tr>
+                <tr>
+                    <td>date</td>
+                    <td>Gives the current system date and time.<br>
+                        <code>$ date</code> — local time &nbsp; <code>$ date -u</code> — GMT time</td>
+                </tr>
+                <tr>
+                    <td>time</td>
+                    <td>Gives the execution time of the last command.<br>
+                        <code>$ time</code></td>
+                </tr>
+                <tr>
+                    <td>cal</td>
+                    <td>Displays a calendar. Single parameter = 4-digit year (1–9999).<br>
+                        <code>$ cal</code> — current month<br>
+                        <code>$ cal 2 2000</code> — Feb 2000 (leap year)<br>
+                        <code>$ cal 9 1752</code> — 11 days were skipped (calendar correction)<br>
+                        <code>$ cal 2017</code> — whole year<br>
+                        <code>$ cal 0</code> — error (no year 0)</td>
+                </tr>
+                <tr>
+                    <td>sleep</td>
+                    <td>"Do nothing" for a specified number of seconds. Commonly used in shell scripts for delays.<br>
+                        <code>$ sleep 2</code> — pause for 2 seconds</td>
+                </tr>
+                <tr>
+                    <td>alias</td>
+                    <td>Define a new name for a command.<br>
+                        <code>$ alias</code> — list all active aliases<br>
+                        <code>$ alias newcommand oldcommand</code><br>
+                        <code>$ alias cl cal 2003</code></td>
+                </tr>
+                <tr>
+                    <td>unalias</td>
+                    <td>Removes an alias (requires an argument).<br>
+                        <code>$ unalias cl</code></td>
+                </tr>
+                <tr>
+                    <td>history</td>
+                    <td>Displays a history of recently used commands.<br>
+                        <code>$ history</code> — all commands<br>
+                        <code>$ history 10</code> — last 10<br>
+                        <code>$ history -r 10</code> — last 10 in reverse<br>
+                        <code>$ !!</code> — repeat last command</td>
+                </tr>
+                <tr>
+                    <td>exit / logout</td>
+                    <td>Exit from your login session.<br>
+                        <code>$ exit</code> &nbsp; <code>$ logout</code></td>
+                </tr>
+                <tr>
+                    <td>shutdown</td>
+                    <td>Causes the system to shutdown or reboot cleanly. May require superuser privileges.<br>
+                        <code>$ shutdown -h now</code> — stop<br>
+                        <code>$ shutdown -r now</code> — reboot</td>
+                </tr>
+                <tr>
+                    <td>clear</td>
+                    <td>Clears the terminal screen. Shortcut: <code>Ctrl+L</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note" style="margin-top:15px;">
+            <strong>Command Grouping with Semicolons</strong><br>
+            Use <code>;</code> to run multiple commands in sequence. Group with <code>( )</code> to redirect combined output:
+            <pre><span class="cmd">$ date;cal</span>
+<span class="cmd">$ (date; cal; date) > out.txt</span></pre>
+        </div>
+    </div>
+
+    <!-- ─── 4. FILE SYSTEM ─── -->
+    <div class="card">
+        <h2 class="section-title">4. The File System</h2>
+
+        <p>Unix provides <strong>files</strong> and <strong>directories</strong>. A directory is like a folder — it contains files and can contain other directories. The collection of all directories and files is called the <strong>file system</strong>.</p>
+
+        <div class="highlight" style="margin-top:14px;">
+            <strong>Root Directory</strong><br>
+            Initially, the file system has one directory called <strong>root</strong> (<code>/</code>). Inside root are more directories, and inside those are files and more directories — creating a hierarchical tree structure.
+        </div>
+
+        <div class="note" style="margin-top:14px;">
+            <strong>Paths</strong><br>
+            A path refers to either a directory or a filename. All items before the final name in a path must be directories.<br>
+            Example: <code>/home/ruhuna/ICT/File1</code>
+        </div>
+
+        <h3 class="subsection">File &amp; Directory Commands</h3>
+        <table class="cmd-table">
+            <thead>
+                <tr><th>Command</th><th>Description &amp; Usage</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ls</td>
+                    <td>List directory contents.<br>
+                        <code>$ ls</code> — all except hidden (<code>.</code> files)<br>
+                        <code>$ ls -a</code> — all including hidden<br>
+                        <code>$ ls -A</code> — all without <code>.</code> and <code>..</code><br>
+                        <code>$ ls -F</code> — append <code>/</code> to dirs, <code>*</code> to executables<br>
+                        <code>$ ls -l</code> — long format (permissions, owner, size, date)<br>
+                        <code>$ ls -al</code> — long format including hidden<br>
+                        <code>$ ls -lt</code> — sort by modification time<br>
+                        <code>$ ls -ltr</code> — reverse sort by modification time</td>
+                </tr>
+                <tr>
+                    <td>cat</td>
+                    <td>Display and concatenate files.<br>
+                        <code>$ cat</code> — reads from STDIN, prints to STDOUT<br>
+                        <code>$ cat file1 [file2]</code> — display and concatenate files<br>
+                        <code>$ cat &gt; filename</code> — type input and save to file<br>
+                        Press <code>Ctrl+D</code> to indicate EOF (End of File) and exit.</td>
+                </tr>
+                <tr>
+                    <td>more / less</td>
+                    <td>Pagers to display large files page by page or scroll line by line. Press <code>q</code> to exit.</td>
+                </tr>
+                <tr>
+                    <td>less</td>
+                    <td>More powerful than <code>more</code>.<br>
+                        <code>$ less filename</code><br>
+                        <code>$ less -N filename</code> — show line numbers<br>
+                        <code>$ less -P"Press 'q' to quit" filename</code> — custom prompt<br>
+                        <code>$ less -NP"Blah-blah" filename</code> — combine options</td>
+                </tr>
+                <tr>
+                    <td>touch</td>
+                    <td>Creates a file if it doesn't exist (with 0 length), or updates its last modification and access times.<br>
+                        <code>$ touch file</code></td>
+                </tr>
+                <tr>
+                    <td>cp</td>
+                    <td>Copy files or directories.<br>
+                        <code>$ cp file1 file2</code><br>
+                        <code>$ cp file1 [file2] … /directory</code><br>
+                        Use <code>-i</code> option to prevent overwriting without confirmation.</td>
+                </tr>
+                <tr>
+                    <td>mv</td>
+                    <td>Move or rename files/directories (source gets removed).<br>
+                        <code>$ mv file1 dir/</code> — move<br>
+                        <code>$ mv file1 file2</code> — rename<br>
+                        <code>$ mv dir1 dir2</code> — move/rename directory</td>
+                </tr>
+                <tr>
+                    <td>rm</td>
+                    <td>Remove files and/or directories.<br>
+                        <code>$ rm file1 [file2]</code><br>
+                        <code>$ rm -r dir1</code> — recursive removal of directory</td>
+                </tr>
+                <tr>
+                    <td>mkdir</td>
+                    <td>Create a new directory.<br>
+                        <code>$ mkdir newdir</code></td>
+                </tr>
+                <tr>
+                    <td>cd</td>
+                    <td>Change current directory.<br>
+                        <code>$ cd /some/other/dir</code> — absolute path<br>
+                        <code>$ cd subdir</code> — relative path<br>
+                        <code>$ cd</code> — return to home directory<br>
+                        <code>$ cd .</code> — stay in current directory<br>
+                        <code>$ cd ..</code> — go to parent directory<br>
+                        <code>$ cd ../..</code> — go to parent's parent<br>
+                        <code>$ cd ~</code> — go to home directory<br>
+                        <code>$ cd /</code> — go to root directory</td>
+                </tr>
+                <tr>
+                    <td>pwd</td>
+                    <td>Print working directory — displays your current directory path.<br>
+                        <code>$ pwd</code></td>
+                </tr>
+                <tr>
+                    <td>rmdir</td>
+                    <td>Remove an empty directory.<br>
+                        <code>$ rmdir dirname</code><br>
+                        Equivalent (recursive): <code>$ rm -r dirname</code></td>
+                </tr>
+                <tr>
+                    <td>find</td>
+                    <td>Search for files in a directory tree.<br>
+                        <code>$ find . -name name</code><br>
+                        <code>$ find . \(-name 'w*' -or -name 'W*' \)</code><br>
+                        <code>$ find /home -name '*.jpg'</code> — find all .jpg files</td>
+                </tr>
+                <tr>
+                    <td>script</td>
+                    <td>Writes a log (typescript) of terminal activity to a file.<br>
+                        <code>$ script</code> — saves to file named <code>typescript</code><br>
+                        <code>$ script file</code> — saves to named file<br>
+                        Type <code>$ exit</code> to stop logging.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="subsection">Useful Filesystem Commands</h3>
+        <div class="grid">
+            <div class="box"><strong>mkfs</strong>Used to build a file system.</div>
+            <div class="box"><strong>fsck</strong>Used to check and repair file systems.</div>
+            <div class="box"><strong>fstab</strong>Contains descriptive info about the various file systems.</div>
+            <div class="box"><strong>du</strong>Disk usage summary — counts disk space used by a directory and all its subdirectories.</div>
+            <div class="box"><strong>df</strong>Disk filling — summarizes disk space in use: total, used, available, and total capacity per file system.</div>
+        </div>
+    </div>
+
+    <!-- ─── 5. READING ls -l OUTPUT ─── -->
+    <div class="card">
+        <h2 class="section-title">5. Reading <code>ls -l</code> Output</h2>
+        <p>The long listing format of <code>ls -l</code> shows detailed information about each file/directory in this order:</p>
+        <pre><span class="cmd">-rwxr-xr-x  1  jwertz  jwertz  4096  Feb  2  15:32  hold</span>
+ │           │  │       │       │     │               │
+ Permissions Links Owner  Group   Size  Date           Name</pre>
+
+        <div class="grid" style="margin-top:14px;">
+            <div class="box"><strong>File Type (1st char)</strong><code>-</code> Regular file<br><code>d</code> Directory<br><code>l</code> Symbolic link<br><code>b</code> Block device<br><code>c</code> Character device<br><code>s</code> Unix socket<br><code>p</code> Named pipe</div>
+            <div class="box"><strong>Permissions (chars 2–10)</strong>9 characters: 3 sets of <code>rwx</code> for owner, group, others. <code>-</code> means denied.</div>
+            <div class="box"><strong>Links</strong>Number of hard links to the file.</div>
+            <div class="box"><strong>Owner / Group / Size / Date / Name</strong>Self-explanatory metadata fields.</div>
+        </div>
+    </div>
+
+    <!-- ─── 6. ACCESS PERMISSIONS ─── -->
+    <div class="card">
+        <h2 class="section-title">6. Access Permissions</h2>
+
+        <p>Each file and directory has permissions that control access. Permissions are defined for three sets of users:</p>
+        <div class="grid">
+            <div class="box"><strong>Owner (u)</strong>The user who created the file.</div>
+            <div class="box"><strong>Group (g)</strong>Users belonging to the file's group.</div>
+            <div class="box"><strong>Others (o)</strong>All other users.</div>
+        </div>
+
+        <h3 class="subsection">Permission Types</h3>
+        <div class="grid">
+            <div class="box"><strong>read (r)</strong>View contents of file or directory.</div>
+            <div class="box"><strong>write (w)</strong>Change contents or create/delete files in a directory.</div>
+            <div class="box"><strong>execute (x)</strong>Run the file, or <code>cd</code> into the directory. Directories <em>must</em> be executable to be accessed.</div>
+        </div>
+
+        <div class="warning" style="margin-top:15px;">
+            <strong>⚠️ Important:</strong> Users with <em>write</em> access to a directory can delete files in that directory even if they don't have write permission on the file itself!
+        </div>
+
+        <h3 class="subsection">Permission Examples — Files</h3>
+        <table class="cmd-table">
+            <thead><tr><th>Permission String</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td>-rw-------</td><td>Only owner can read and write.</td></tr>
+                <tr><td>-rwxrwxrwx</td><td>Everyone can read, write, and execute (and delete). Not common!</td></tr>
+                <tr><td>-rw-r--r--</td><td>Everyone can read, but only owner can write.</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="subsection">Permission Examples — Directories</h3>
+        <table class="cmd-table">
+            <thead><tr><th>Permission String</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td>drwx------</td><td>Only owner can view, cd into, and delete.</td></tr>
+                <tr><td>drwxrwx---</td><td>Owner and group can view, write, etc.</td></tr>
+                <tr><td>drwxr-xr-x</td><td>Everyone can cd into, but only owner can modify.</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="subsection">Octal Representation of Permissions</h3>
+        <p>Permissions can be expressed as octal numbers: <strong>read = 4</strong>, <strong>write = 2</strong>, <strong>execute = 1</strong>. Add values together for each set.</p>
+
+        <table class="perm-table">
+            <thead><tr><th>Permissions</th><th>Symbolic</th><th>Binary</th><th>Octal</th></tr></thead>
+            <tbody>
+                <tr><td>read, write, execute</td><td>rwx</td><td>111</td><td>7</td></tr>
+                <tr><td>read and write</td><td>rw-</td><td>110</td><td>6</td></tr>
+                <tr><td>read and execute</td><td>r-x</td><td>101</td><td>5</td></tr>
+                <tr><td>read only</td><td>r--</td><td>100</td><td>4</td></tr>
+                <tr><td>write and execute</td><td>-wx</td><td>011</td><td>3</td></tr>
+                <tr><td>write only</td><td>-w-</td><td>010</td><td>2</td></tr>
+                <tr><td>execute only</td><td>--x</td><td>001</td><td>1</td></tr>
+                <tr><td>no permissions</td><td>---</td><td>000</td><td>0</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="subsection">chmod — Change File Permissions</h3>
+        <p><code>chmod</code> (change mode) changes the permissions on a file or directory.</p>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Symbolic Mode</strong>
+                <pre><span class="cmd">chmod [ugoa][+/-][rwx] &lt;file&gt;</span></pre>
+                u=user, g=group, o=others, a=all<br>
+                + = add, - = remove<br><br>
+                <code>$ chmod go+rx dir</code> — readable by group &amp; others<br>
+                <code>$ chmod u+x myscript</code> — make executable for owner
+            </div>
+            <div class="box">
+                <strong>Octal Mode</strong>
+                <pre><span class="cmd">chmod ### &lt;file&gt;</span></pre>
+                Each # is the sum for owner, group, others.<br><br>
+                <code>$ chmod 755 dir</code> — rwxr-xr-x<br>
+                <code>$ chmod 600 file</code> — rw-------<br>
+                <code>$ chmod 754 file1</code><br>
+                owner: rwx (4+2+1=7)<br>
+                group: r-x (4+0+1=5)<br>
+                others: r-- (4+0+0=4)
+            </div>
+        </div>
+
+        <h3 class="subsection">chown &amp; chgrp — Change Owner / Group</h3>
+        <div class="two-column">
+            <div class="box">
+                <strong>chown</strong> — Change the owner of a file or directory.<br><br>
+                <code>$ chown ict2 file1 file2</code><br>
+                Changes owner of file1 and file2 to user 'ict2'.
+            </div>
+            <div class="box">
+                <strong>chgrp</strong> — Change the group of a file or directory.<br><br>
+                <code>$ chgrp ent1 file1 file2</code><br>
+                Changes group of file1 and file2 to group 'ent1'.
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── 7. TEXT PROCESSING ─── -->
+    <div class="card">
+        <h2 class="section-title">7. Text Processing Commands</h2>
+
+        <h3 class="subsection">grep — Search for Patterns</h3>
+        <p><code>grep</code> searches its input for a pattern (simple substring or regular expression). It is <strong>case-sensitive</strong> by default.</p>
+        <pre><span class="cmd">$ grep Science science.txt</span>      <span class="desc"># case-sensitive search</span>
+<span class="cmd">$ grep -i science science.txt</span>   <span class="desc"># case-insensitive</span>
+<span class="cmd">$ grep -ivnc science science.txt</span></pre>
+
+        <table class="cmd-table" style="margin-top:10px;">
+            <thead><tr><th>Option</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td>-i</td><td>Ignore upper/lower case distinctions</td></tr>
+                <tr><td>-v</td><td>Display lines that do NOT match</td></tr>
+                <tr><td>-n</td><td>Precede each matching line with its line number</td></tr>
+                <tr><td>-c</td><td>Print only the total count of matched lines</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="subsection">wc — Word Count</h3>
+        <p><code>wc</code> counts the number of words, lines, and characters in files.</p>
+        <pre><span class="cmd">wc [-clw] [file1 file2 ... fileN]</span></pre>
+        <table class="cmd-table" style="margin-top:8px;">
+            <thead><tr><th>Option</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td>wc -l</td><td>Print number of lines</td></tr>
+                <tr><td>wc -w</td><td>Print number of words</td></tr>
+                <tr><td>wc -c</td><td>Display count of bytes</td></tr>
+                <tr><td>wc -m</td><td>Print count of characters</td></tr>
+                <tr><td>wc -L</td><td>Print length of the longest line only</td></tr>
+            </tbody>
+        </table>
+        <div class="note" style="margin-top:10px;">Output format of <code>wc file</code>: &nbsp; <code>[lines] [words] [bytes] filename</code></div>
+
+        <h3 class="subsection">cmp — Compare Two Files</h3>
+        <p><code>cmp</code> compares two files byte by byte. If a difference is found, it reports the <strong>byte and line number</strong> where the first difference occurs. If no differences are found, no output is produced.</p>
+        <pre><span class="cmd">$ cmp file1 file2</span></pre>
+
+        <h3 class="subsection">diff — Show Differences Between Files</h3>
+        <p><code>diff</code> analyzes two files and prints the lines that differ. It outputs instructions for how to change one file to make it identical to the second.</p>
+        <pre><span class="cmd">$ diff file1 file2</span></pre>
+        <div class="note"><strong>Output notation:</strong> <code>2c2</code> means "line 2 in the first file needs to be changed to match line 2 in the second file." Lines prefixed with <code>&lt;</code> are from file1; lines with <code>&gt;</code> are from file2.</div>
+
+        <h3 class="subsection">tr — Translate Characters</h3>
+        <p><code>tr</code> operates on standard input (does not accept a filename). It replaces all occurrences of characters in <em>string1</em> with corresponding characters in <em>string2</em>.</p>
+        <pre><span class="cmd">$ echo "Hello World" | tr eo 34</span>
+<span class="flag">H3ll4 W4rld</span></pre>
+    </div>
+
+    <!-- ─── 8. PIPES ─── -->
+    <div class="card">
+        <h2 class="section-title">8. Pipes</h2>
+
+        <p>A <strong>pipe</strong> (<code>|</code>) is a method of interprocess communication (IPC). It means the <strong>output of one program</strong> on one side of the pipe serves as <strong>input</strong> for the program on the other end. A set of piped commands is called a <strong>pipeline</strong>.</p>
+
+        <div class="important">
+            <strong>Why use pipes?</strong> By combining simple OS utilities, you can easily solve complex tasks without writing a program.
+        </div>
+
+        <pre><span class="cmd">$ ls -l</span>              <span class="desc"># list files</span>
+<span class="cmd">$ ls -l | sort</span>       <span class="desc"># list and sort</span>
+<span class="cmd">$ ls -l | grep "D"</span>   <span class="desc"># list and filter for "D"</span></pre>
+    </div>
+
+    <!-- ─── 9. SYSTEM STATISTICS ─── -->
+    <div class="card">
+        <h2 class="section-title">9. System Statistics Commands</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>du — Disk Usage</strong>
+                Counts the disk space used by a given directory and all its subdirectories.<br><br>
+                <code>$ du</code>
+            </div>
+            <div class="box">
+                <strong>df — Disk Filling</strong>
+                Summarizes disk space in use. Shows total, used, available, and total capacity for each file system.<br><br>
+                <code>$ df</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── 10. PROCESSES ─── -->
+    <div class="card">
+        <h2 class="section-title">10. Linux Processes</h2>
+
+        <p>A <strong>process</strong> is any running program. Under Linux, a process has:</p>
+        <div class="grid">
+            <div class="box"><strong>PID</strong>Process Identity (unique ID)</div>
+            <div class="box"><strong>PPID</strong>Parent Process ID</div>
+            <div class="box"><strong>UID</strong>Owner (User ID)</div>
+        </div>
+
+        <h3 class="subsection">Process Commands</h3>
+        <table class="cmd-table">
+            <thead><tr><th>Command</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>ps</td><td>View active processes.<br><code>$ ps -A</code> — all processes &nbsp; <code>$ ps -l</code> — long list</td></tr>
+                <tr><td>Ctrl+C</td><td>Stop execution of a program launched from the terminal.</td></tr>
+                <tr><td>kill pid</td><td>Stop the execution of any process by its PID.<br><code>$ kill 1258</code><br><code>$ kill 9 1258</code> — signal 9 is the most powerful (force kill)</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="subsection">Launching Jobs on Linux</h3>
+        <p>A <strong>job</strong> is any executable run from the terminal.</p>
+        <ul>
+            <li>Jobs are launched as <strong>foreground</strong> tasks by default — they block the terminal until done.</li>
+            <li>To launch a job in the <strong>background</strong>, append <code>&amp;</code> at the end of the command:</li>
+        </ul>
+        <pre><span class="cmd">$ sleep 50 &amp;</span>    <span class="desc"># run in background</span>
+<span class="cmd">$ fg</span>            <span class="desc"># bring background job to foreground</span></pre>
+    </div>
+
+    <!-- ─── 11. COMPRESSION & ARCHIVING ─── -->
+    <div class="card">
+        <h2 class="section-title">11. Compression &amp; Archiving</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>gzip — Compress Files</strong>
+                Compresses files and saves them in <code>.gz</code> format. The compressed file occupies less space than the original.<br><br>
+                <code>$ gzip example.txt</code>
+            </div>
+            <div class="box">
+                <strong>tar — Archive a File System</strong>
+                Used to archive directories/files. Although <code>tar</code> and <code>gzip</code> are different, they are often used together.
+            </div>
+        </div>
+
+        <h3 class="subsection">tar + gzip Together</h3>
+        <p><strong>Create</strong> a compressed archive:</p>
+        <pre><span class="cmd">$ tar -czvf archive.tar.gz /path/to/directory</span></pre>
+
+        <table class="cmd-table">
+            <thead><tr><th>Flag</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td>-c</td><td>Create an archive.</td></tr>
+                <tr><td>-z</td><td>Compress the archive with gzip.</td></tr>
+                <tr><td>-v</td><td>Verbose mode — display progress in terminal (optional but helpful).</td></tr>
+                <tr><td>-f</td><td>Allows you to specify the filename of the archive.</td></tr>
+                <tr><td>-x</td><td>Extract an archive (replaces <code>-c</code>).</td></tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top:12px;"><strong>Extract</strong> a compressed archive:</p>
+        <pre><span class="cmd">$ tar -xzvf archive.tar.gz</span></pre>
+    </div>
+
+    <!-- ─── 12. TEXT EDITORS ─── -->
+    <div class="card">
+        <h2 class="section-title">12. Text Editors</h2>
+
+        <p>There are many text editors available in Linux. The most notable ones are:</p>
+        <div class="grid">
+            <div class="box"><strong>vi</strong>The most common Unix editor. Available on virtually every Unix/Linux system.</div>
+            <div class="box"><strong>emacs</strong>A powerful editor with artificial intelligence properties. Highly extensible.</div>
+            <div class="box"><strong>pico</strong>Used by the <code>pine</code> mailing facility. Simple and beginner-friendly.</div>
+            <div class="box"><strong>joe</strong>Perhaps the simplest editor. Has flexible features of emacs and pico with the user-friendliness of Turbo-type editors.</div>
+        </div>
+
+        <h3 class="subsection">Pico Editor</h3>
+        <ul>
+            <li>Provides a series of commands at the bottom of the screen.</li>
+            <li>Backspace, Delete, and other keys work as expected.</li>
+            <li>Easy to use — ideal for beginners.</li>
+            <li><strong>Start Pico:</strong> <code>$ pico file_name</code></li>
+            <li><strong>Exit Pico:</strong> <code>Ctrl+X</code></li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 01 - Basic Linux Commands • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

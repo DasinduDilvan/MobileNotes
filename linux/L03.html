@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 03 - Shell Programming</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        h3 { color: #2c6e6b; margin: 18px 0 8px 0; font-size: 1.1em; }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 6px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+        p { margin: 8px 0; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #569cd6; }
+        pre .string { color: #ce9178; }
+        pre .fn { color: #dcdcaa; }
+        pre .num { color: #b5cea8; }
+        pre .op { color: #d4d4d4; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.95em;
+        }
+        th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e0eded;
+        }
+        tr:nth-child(even) td { background: #f3fbfa; }
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+        .tag.orange { background: #e67e22; }
+        .tag.blue { background: #2980b9; }
+        .tag.red { background: #c0392b; }
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+        .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0;
+        }
+        .flow-step .step-num {
+            background: #2c6e6b;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #2c6e6b;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: opacity 0.15s;
+        }
+        .back-link:hover { opacity: 0.7; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="../system-programming-linux.html">← Back to Notes</a>
+
+    <h1>Shell Programming</h1>
+    <div class="subtitle">System Programming Fundamentals & Linux — Lecture 03 (Week 4)</div>
+
+    <!-- TOPICS COVERED -->
+    <div class="card">
+        <h2 class="section-title">📌 Topics Covered</h2>
+        <div class="three-column">
+            <div class="box"><strong>Introduction</strong>What is a shell? Shell types, changing shells</div>
+            <div class="box"><strong>Shell Scripts</strong>What they are, why write them</div>
+            <div class="box"><strong>Shell Features</strong>Command execution, filename substitution</div>
+            <div class="box"><strong>I/O Redirection</strong>stdin, stdout, stderr, file descriptors</div>
+            <div class="box"><strong>Pipes & Subshells</strong>Pipeline mechanism, background processes</div>
+            <div class="box"><strong>Programming</strong>Variables, expressions, scripting steps</div>
+        </div>
+    </div>
+
+    <!-- WHAT IS A SHELL -->
+    <div class="card">
+        <h2 class="section-title">🐚 Introduction to the Shell</h2>
+
+        <div class="important">
+            A <strong>shell</strong> is a program that starts after user authorization and handles the user's interaction with the system.
+        </div>
+
+        <h3>Shell Execution Cycle</h3>
+        <div class="flow-step"><div class="step-num">1</div><span>Accept the Input (from user)</span></div>
+        <div class="flow-step"><div class="step-num">2</div><span>Interpret the Input</span></div>
+        <div class="flow-step"><div class="step-num">3</div><span>Execute the Input (via Kernel)</span></div>
+        <div class="flow-step"><div class="step-num">4</div><span>Interpret the Output</span></div>
+        <div class="flow-step"><div class="step-num">5</div><span>Wait for Next Input</span></div>
+
+        <div class="note" style="margin-top:14px;">
+            <strong>Architecture:</strong> Each user has their own shell. The shell sits between the user and the Kernel. The Kernel communicates directly with the Computer Hardware.
+        </div>
+
+        <h3>Shell Types</h3>
+        <table>
+            <thead>
+                <tr><th>Shell Name</th><th>Prompt</th><th>Origin</th><th>Remarks</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>SH</strong> — Bourne Shell</td>
+                    <td><code>$</code></td>
+                    <td>AT&amp;T Bell Labs</td>
+                    <td>Most common shell</td>
+                </tr>
+                <tr>
+                    <td><strong>CSH</strong> — C Shell</td>
+                    <td><code>%</code></td>
+                    <td>University of California (BSD)</td>
+                    <td>Syntax similar to the C language</td>
+                </tr>
+                <tr>
+                    <td><strong>BASH</strong> — Bourne-Again Shell</td>
+                    <td><code>$</code></td>
+                    <td>Free Software Foundation</td>
+                    <td>Most common shell in Linux. <em>Focus of this course.</em></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="note" style="margin-top:12px;">Each shell has its own programming language. This course focuses on <strong>BASH</strong>.</div>
+
+        <h3>How to Change Shells</h3>
+        <table>
+            <thead><tr><th>Task</th><th>Command</th></tr></thead>
+            <tbody>
+                <tr><td>Find all available shells</td><td><code>cat /etc/shells</code></td></tr>
+                <tr><td>Change default shell</td><td><code>chsh</code></td></tr>
+                <tr><td>See current working shell</td><td><code>echo $SHELL</code></td></tr>
+                <tr><td>Switch to C shell</td><td><code>csh</code></td></tr>
+                <tr><td>Switch to Bourne shell</td><td><code>sh</code></td></tr>
+                <tr><td>Switch to Bash shell</td><td><code>bash</code></td></tr>
+                <tr><td>Return to previous shell</td><td><code>Ctrl + D</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SHELL SCRIPTS -->
+    <div class="card">
+        <h2 class="section-title">📜 Shell Scripts</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>What is a Shell Script?</strong>
+                A program/file composed of shell commands — a sequence of commands that can be read/written by a text editor and developed using programming techniques.
+            </div>
+            <div class="box">
+                <strong>Inputs to Shell</strong>
+                <ul>
+                    <li><strong>A Command</strong> — utility coming with the OS to do a particular task</li>
+                    <li><strong>A Program</strong> — a sequence of commands (shell script)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Why Write Shell Scripts? (Use of Shells)</h3>
+        <ul>
+            <li>Automate administrative tasks</li>
+            <li>Execute complex operations efficiently</li>
+            <li>Perform repetitive tasks</li>
+            <li>Maximize the power of the command line</li>
+            <li>Manage systems processed during startup and shutdown</li>
+            <li>Execute portable shell scripts across different UNIX systems</li>
+            <li>Enable users to modify their environment</li>
+        </ul>
+    </div>
+
+    <!-- IMPORTANT SHELL FEATURES -->
+    <div class="card">
+        <h2 class="section-title">⚙️ Important Shell Features</h2>
+        <div class="grid">
+            <div class="box"><strong>Command Execution</strong>Running utilities and built-in commands</div>
+            <div class="box"><strong>Filename Substitution</strong>Wildcards for matching filenames</div>
+            <div class="box"><strong>I/O Redirection</strong>stdin, stdout, stderr control</div>
+            <div class="box"><strong>Pipes Mechanism</strong>Chaining program output to input</div>
+            <div class="box"><strong>Subshell</strong>Child shells for isolated execution</div>
+            <div class="box"><strong>Variables</strong>Environment and shell variables</div>
+        </div>
+    </div>
+
+    <!-- COMMAND EXECUTION -->
+    <div class="card">
+        <h2 class="section-title">▶️ Command Execution</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Utilities</strong>
+                Programs such as <code>who</code> and <code>date</code> that we can run or execute. UNIX commands invoke utility programs stored in the directory hierarchy (e.g., <code>ls</code> → executable in <code>/bin</code>).
+            </div>
+            <div class="box">
+                <strong>Commands</strong>
+                The name of a program and any arguments specified to change its behavior. Shell also contains <strong>built-in commands</strong> it recognizes and executes internally (e.g., <code>echo</code>, <code>cd</code>).
+            </div>
+        </div>
+
+        <h3>Command Syntax</h3>
+        <pre><span class="comment"># Command with arguments</span>
+$ find / -name bash –print
+
+<span class="comment"># Multiple commands on one line separated by ;</span>
+$ whoami;date;pwd</pre>
+
+        <h3>Command Grouping</h3>
+        <p>Commands can be grouped by placing them between parentheses. A group of commands shares the same stdin, stdout, and stderr.</p>
+        <pre><span class="comment"># Without grouping — only pwd output goes to file.txt</span>
+$ date; ls; pwd > file.txt
+
+<span class="comment"># With grouping — ALL outputs go to file.txt</span>
+$ (date; ls; pwd) > file.txt</pre>
+
+        <h3>Back Quote / Grave Operator ( ` ` )</h3>
+        <div class="highlight">
+            Anything enclosed in back quotes is <strong>executed as a command</strong>. The output replaces the back-quoted expression.
+        </div>
+        <pre><span class="comment"># Embed command output in echo</span>
+$ echo Today is `date`
+Today is Tue Jan 16 09:45:36 LKT 2017
+
+<span class="comment"># Assign command output to a variable</span>
+$ myvariable=`ls -l`
+$ echo $myvariable</pre>
+    </div>
+
+    <!-- FILENAME SUBSTITUTION -->
+    <div class="card">
+        <h2 class="section-title">🔤 Filename Substitution (Wildcards)</h2>
+        <table>
+            <thead><tr><th>Pattern</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><code>*</code></td><td>Match zero or more characters (including null)</td><td><code>ls -l *ab*</code></td></tr>
+                <tr><td><code>?</code></td><td>Match any single character</td><td><code>ls -l fi?e1</code></td></tr>
+                <tr><td><code>[abc]</code></td><td>Match any character between the brackets</td><td><code>ls -l fil[aeg]1</code></td></tr>
+                <tr><td><code>[x–z]</code></td><td>Match any character in the range x to z</td><td><code>ls [a-z]*</code></td></tr>
+                <tr><td><code>[a–ce–g]</code></td><td>Match characters in range a–c or e–g</td><td></td></tr>
+                <tr><td><code>[!abc]</code></td><td>Match any character <strong>not</strong> between the brackets</td><td></td></tr>
+                <tr><td><code>[!x–z]</code></td><td>Match any character <strong>not</strong> in the range x to z</td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- I/O REDIRECTION -->
+    <div class="card">
+        <h2 class="section-title">↔️ I/O Redirection</h2>
+
+        <div class="three-column">
+            <div class="box">
+                <strong>stdin (Standard Input)</strong>
+                Input from keyboard by default. File Descriptor: <code>0</code>
+            </div>
+            <div class="box">
+                <strong>stdout (Standard Output)</strong>
+                Output sent to monitor by default. File Descriptor: <code>1</code>
+            </div>
+            <div class="box">
+                <strong>stderr (Standard Error)</strong>
+                Error messages sent to screen by default. File Descriptor: <code>2</code>
+            </div>
+        </div>
+
+        <div class="note" style="margin-top:14px;">
+            In Unix, <strong>everything is a file</strong>. Every file has a number called a <strong>file descriptor</strong>. These three files (stdin, stdout, stderr) are always open when a program runs.
+        </div>
+
+        <h3>Redirection Operators</h3>
+        <table>
+            <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><code>&gt;</code> or <code>1&gt;</code></td><td>Redirect stdout to a file (overwrites)</td><td><code>ls -al &gt; allfiles.txt</code></td></tr>
+                <tr><td><code>&lt;</code></td><td>Redirect stdin from a file instead of keyboard</td><td><code>sort &lt; aa.txt</code></td></tr>
+                <tr><td><code>&gt;&gt;</code> or <code>1&gt;&gt;</code></td><td>Append stdout to a file</td><td><code>date &gt;&gt; usrdata</code></td></tr>
+                <tr><td><code>2&gt;</code></td><td>Redirect stderr to a file</td><td><code>ls /root/ 2&gt; error.log</code></td></tr>
+                <tr><td><code>2&gt;&gt;</code></td><td>Append stderr to a file</td><td></td></tr>
+                <tr><td><code>&amp;&gt;</code></td><td>Redirect both stdout and stderr to a file</td><td></td></tr>
+            </tbody>
+        </table>
+
+        <h3>Redirection Examples</h3>
+        <pre><span class="comment"># Redirect stdout to a file</span>
+$ who > loggedusers
+
+<span class="comment"># Redirect stdin from a file</span>
+$ cat < loggedusers
+
+<span class="comment"># Combine: redirect input AND output</span>
+$ sort <aa.txt> sorted_file_list.txt
+
+<span class="comment"># Append multiple commands to one file</span>
+$ whoami >> usrdata
+$ date >> usrdata
+$ ls >> usrdata
+
+<span class="comment"># Separate stdout and stderr to different files</span>
+$ cat x y 1> file1 2> file2
+<span class="comment"># file1 → contents of y (stdout)</span>
+<span class="comment"># file2 → error for missing x (stderr)</span>
+
+<span class="comment"># Redirect permission denied error to log</span>
+$ ls -l /root/ 2> error.log</pre>
+    </div>
+
+    <!-- PIPES -->
+    <div class="card">
+        <h2 class="section-title">🔧 Pipe / Pipeline Mechanism</h2>
+
+        <div class="important">
+            A <strong>pipe</strong> makes the output of one program the input of another program. Operator: <code>|</code>
+        </div>
+
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Redirection</strong>
+                Connects programs to <strong>files</strong>
+            </div>
+            <div class="box">
+                <strong>Pipeline</strong>
+                Connects programs to <strong>programs</strong>
+            </div>
+        </div>
+
+        <h3>Pipeline Examples</h3>
+        <pre><span class="comment"># Sort logged users and save to file</span>
+$ who | sort > sortedloggedusrs
+
+<span class="comment"># Page through a long listing</span>
+$ ls -l | less
+
+<span class="comment"># Sort disk usage numerically in reverse</span>
+$ du | sort -nr
+
+<span class="comment"># cut — copies only certain parts of input to output</span>
+$ date
+Thu Jan 15 11:28:47 SLST 2017
+$ date | cut -f1 -d " "
+Thu
+$ date | cut -f2 -d " "
+Jan
+
+<span class="comment"># tr — translate characters</span>
+$ echo "Hello World" | tr eo 34
+H3ll4 W4rld</pre>
+
+        <h3>Background Processes</h3>
+        <p>Commands can be executed in the background by suffixing with an ampersand <code>&amp;</code>.</p>
+        <pre>$ date &amp;
+Thu Jan 15 11:28:47 SLST 2016</pre>
+    </div>
+
+    <!-- SUBSHELL -->
+    <div class="card">
+        <h2 class="section-title">🔄 Subshell</h2>
+
+        <div class="important">
+            To perform tasks, the current (parent) shell creates a new (child) shell. This child shell is called a <strong>subshell</strong>.
+        </div>
+
+        <h3>When is a Subshell Created?</h3>
+        <ul>
+            <li>To execute a <strong>group command</strong> — e.g., <code>$(ls; pwd; date)</code></li>
+            <li>To execute a <strong>script</strong></li>
+            <li>To execute commands in the <strong>background</strong> — e.g., <code>find /home -name myFile -print &amp;</code></li>
+        </ul>
+
+        <div class="note">
+            If <code>{ }</code> curly braces are used instead of <code>( )</code>, <strong>no subshell</strong> is created — commands run in the current shell.
+        </div>
+    </div>
+
+    <!-- VARIABLES -->
+    <div class="card">
+        <h2 class="section-title">📦 Variables</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Environment Variables</strong> (Global)
+                <ul>
+                    <li>Predefined when users log in</li>
+                    <li>Named in <strong>UPPERCASE</strong> by convention</li>
+                    <li>Transmitted to subshells (child gets a copy)</li>
+                    <li>View with: <code>env</code></li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Shell Variables</strong> (Local)
+                <ul>
+                    <li>User-defined; used in programming</li>
+                    <li>Named in <strong>lowercase</strong> by convention</li>
+                    <li>NOT passed to subshells</li>
+                    <li>View with: <code>set</code> (shows both local &amp; global)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Common Predefined Environment Variables</h3>
+        <table>
+            <thead><tr><th>Variable</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td><code>HOME</code></td><td>Path to your home directory</td></tr>
+                <tr><td><code>SHELL</code></td><td>Default shell</td></tr>
+                <tr><td><code>PATH</code></td><td>The search path for shell commands</td></tr>
+                <tr><td><code>PS1</code></td><td>Command line prompt</td></tr>
+                <tr><td><code>HOSTNAME</code></td><td>Name of this UNIX host</td></tr>
+                <tr><td><code>PRINTER</code></td><td>Default printer</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Setting &amp; Using Variables</h3>
+        <pre><span class="comment"># Set a variable (no spaces around =)</span>
+$ name=sunil
+$ echo $name
+sunil
+
+<span class="comment"># Multi-word values must be quoted</span>
+$ fullname="Sunil Sarath"
+$ echo My name is $fullname
+My name is Sunil Sarath
+
+<span class="comment"># Variable referencing another variable</span>
+$ SAMPLE="Hello World"
+$ SAMPLE1="Hello $SAMPLE"
+$ echo $SAMPLE1
+Hello Hello World
+
+<span class="comment"># Variable with grave operator — assign command output</span>
+$ NAME=`echo $USER`
+$ echo $NAME
+ict1
+
+<span class="comment"># Use variable as a command</span>
+$ DATE="cat datefile"
+$ $DATE
+Thu Jan 15 08:16:48 SLST 2004</pre>
+
+        <h3>Exporting Variables (Making Them Available to Subshells)</h3>
+        <pre><span class="comment"># Export a variable to subshells</span>
+$ OS=Linux
+$ export OS
+
+<span class="comment"># Create subshell and access the exported variable</span>
+$ bash
+$ echo $OS
+Linux
+
+<span class="comment"># Return to parent shell</span>
+$ <span class="keyword">Ctrl+D</span></pre>
+        <div class="note">Use <code>env</code> to see environment variables. Use <code>set</code> to see all variables (local + global).</div>
+    </div>
+
+    <!-- ARITHMETIC EXPRESSIONS -->
+    <div class="card">
+        <h2 class="section-title">➕ Arithmetic Expressions</h2>
+
+        <div class="warning">
+            Bash has <strong>limited direct support</strong> for arithmetic. Direct operations don't compute automatically.
+        </div>
+
+        <pre><span class="comment"># Direct — does NOT compute</span>
+$ num=3
+$ echo $num + 2
+3 + 2
+
+<span class="comment"># Using expr utility — DOES compute</span>
+$ echo `expr $num + 2`
+5
+
+<span class="comment"># Parentheses to control evaluation order (escape with \)</span>
+$ echo `expr \( 2 + 3 \) \* 5`
+25</pre>
+
+        <h3>Arithmetic Operators</h3>
+        <table>
+            <thead><tr><th>Operator</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td><code>*</code> &nbsp; <code>/</code> &nbsp; <code>%</code></td><td>Multiplication, Division, Remainder (Modulo)</td></tr>
+                <tr><td><code>+</code> &nbsp; <code>-</code></td><td>Addition, Subtraction</td></tr>
+                <tr><td><code>=</code> <code>&gt;</code> <code>&gt;=</code> <code>&lt;</code> <code>&lt;=</code> <code>!=</code></td><td>Comparison Operators</td></tr>
+                <tr><td><code>&amp;</code></td><td>Logical AND</td></tr>
+                <tr><td><code>|</code></td><td>Logical OR</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- GETTING STARTED WITH SHELL PROGRAMMING -->
+    <div class="card">
+        <h2 class="section-title">🚀 Getting Started with Shell Programming</h2>
+
+        <h3>Steps to Write and Run a Shell Script</h3>
+        <div class="flow-step"><div class="step-num">1</div><span>Use any editor (e.g., <code>vi</code>, <code>gedit</code>) to write the shell script</span></div>
+        <div class="flow-step"><div class="step-num">2</div><span>Set execute permission: <code>chmod permission scriptname</code> or <code>chmod u+x scriptname</code></span></div>
+        <div class="flow-step"><div class="step-num">3</div><span>Execute the script: <code>bash scriptname</code> / <code>sh scriptname</code> / <code>./scriptname</code> / <code>. scriptname</code> (runs in current shell)</span></div>
+
+        <h3 style="margin-top:18px;">Shell Script Structure</h3>
+        <div class="highlight">
+            The <strong>first line</strong> of every script must specify the shell using <code>#!/bin/bash</code> (called a <em>shebang</em>).
+        </div>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="comment">#</span>
+<span class="comment"># My first shell script</span>
+<span class="comment">#</span>
+<span class="fn">echo</span> <span class="string">"Hello World"</span></pre>
+        <pre><span class="comment"># Save as "first", then:</span>
+$ chmod <span class="num">755</span> first
+$ ./first
+Hello World</pre>
+
+        <h3>Comments</h3>
+        <p>Comments improve understandability. The <code>#</code> character ignores all characters up to the end of the line (except on line 1 where <code>#!/bin/bash</code> is the shebang).</p>
+        <pre><span class="comment">#</span>
+<span class="comment"># This program adds two numbers</span>
+<span class="comment">#</span></pre>
+
+        <h3>Ingredients for Shell Programming</h3>
+        <div class="grid">
+            <div class="box"><strong>Comments &amp; Variables</strong>Annotations and data storage</div>
+            <div class="box"><strong>Arithmetic Expressions</strong>Math operations via <code>expr</code></div>
+            <div class="box"><strong>Conditional Expressions</strong>Decision making</div>
+            <div class="box"><strong>Branching Structures</strong>if/else, case statements</div>
+            <div class="box"><strong>Looping Structures</strong>for, while, until loops</div>
+        </div>
+    </div>
+
+    <!-- EXERCISE -->
+    <div class="card">
+        <h2 class="section-title">✏️ Exercise</h2>
+        <div class="in-class">
+            <h3>📝 Write a shell script to display the following:</h3>
+            <ol style="margin-left:20px; line-height:2;">
+                <li>Clear the screen</li>
+                <li>Hello &lt;logged user&gt;</li>
+                <li>Today is &lt;current date&gt;</li>
+                <li>Display calendar</li>
+            </ol>
+        </div>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="fn">clear</span>
+<span class="fn">echo</span> <span class="string">"Hello $USER"</span>
+<span class="fn">echo</span> <span class="string">"Today is `date`"</span>
+<span class="fn">cal</span></pre>
+    </div>
+
+    <!-- SYSTEM ADMINISTRATION NOTE -->
+    <div class="card">
+        <h2 class="section-title">🔐 System Administration in Linux</h2>
+        <div class="warning">
+            The <strong>root</strong> account is the most privileged account in Linux. When using this account, it is crucial to be as careful as possible.
+        </div>
+        <p>Root account capabilities include:</p>
+        <ul>
+            <li>Adding user accounts</li>
+            <li>Changing user passwords</li>
+            <li>Removing user accounts</li>
+            <li>Examining log files</li>
+            <li>Installing software</li>
+            <li>Carrying out all facets of system administration</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 03 - Shell Programming • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>
