@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Events — Zero to Hero</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef6f5; padding: 20px; line-height: 1.6; color: #333; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+    .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+    .card { background: white; padding: 25px; margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .section-title { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 15px; font-size: 1.4em; }
+    ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+    ul li { margin: 8px 0; }
+    ul ul { margin-left: 25px; list-style-type: circle; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+    .box { background: #f3fbfa; padding: 15px; border-radius: 10px; border-left: 3px solid #2c6e6b; }
+    .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+    .highlight { background: #fff9e6; padding: 15px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 15px 0; }
+    .important { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 15px 0; }
+    .note { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 15px 0; }
+    .warning { background: #fce4ec; padding: 15px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 15px 0; }
+    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+    code { background: #000000; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; color: #c0392b; }
+    pre { background: #000; color: #d4d4d4; padding: 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.95em; line-height: 1.4; overflow-x: auto; margin: 12px 1px; font-weight: 800;}
+    pre .comment { color: #6a9955; }
+    pre .keyword { color: #569cd6; }
+    pre .string  { color: #ce9178; }
+    pre .fn      { color: #dcdcaa; }
+    pre .type    { color: #4ec9b0; }
+    pre .num     { color: #b5cea8; }
+    .model-diagram { text-align: center; padding: 20px; background: #f9f9f9; border-radius: 10px; margin: 15px 0; font-size: 0.95em; }
+    .tag { display: inline-block; background: #2c6e6b; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin: 2px; vertical-align: middle; }
+    .tag.orange { background: #e67e22; }
+    .tag.blue   { background: #2980b9; }
+    .tag.red    { background: #c0392b; }
+    .in-class { background: #f3e5f5; padding: 20px; border-radius: 10px; border-left: 4px solid #9c27b0; margin: 15px 0; }
+    .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+    .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+    @media print { body { background: white; padding: 0; } .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; } }
+    @media (max-width: 600px) { body { padding: 10px; } .card { padding: 15px; } h1 { font-size: 1.6em; } .two-column, .three-column { grid-template-columns: 1fr; } }
+    .step-number { display: inline-flex; align-items: center; justify-content: center; background: #2c6e6b; color: white; width: 30px; height: 30px; border-radius: 50%; font-size: 0.85em; font-weight: bold; margin-right: 10px; flex-shrink: 0; }
+    .section-title { display: flex; align-items: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.9em; }
+    th { background: #2c6e6b; color: white; padding: 10px 14px; text-align: left; }
+    td { padding: 9px 14px; border-bottom: 1px solid #e0f0ef; }
+    tr:nth-child(even) td { background: #f3fbfa; }
+    td:first-child { font-family: 'Courier New', monospace; color: #c0392b; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>⚡ JavaScript Events</h1>
+  <p class="subtitle">Zero to Hero — Complete Step-by-Step Guide</p>
+
+  <!-- 01 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">1</span>What is an Event?</h2>
+    <p>An <strong>event</strong> is something that happens in the browser — a click, a keypress, a page load, a form submission. JavaScript lets you <strong>"listen"</strong> for these moments and run code in response.</p>
+    <div class="note" style="margin-top:15px;">
+      💡 Think of events like notifications. The browser says <em>"hey, something happened!"</em> and your JS code decides what to do about it.
+    </div>
+    <div class="grid">
+      <div class="box"><strong>User Actions</strong>Clicking, typing, scrolling, hovering</div>
+      <div class="box"><strong>Browser Actions</strong>Page loaded, window resized, timer fired</div>
+      <div class="box"><strong>Your Response</strong>Run a function, update the DOM, fetch data</div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">2</span>The Basic Pattern</h2>
+    <p>Everything in JS events builds on one line. Learn this by heart:</p>
+    <pre><code><span class="fn">element</span>.<span class="fn">addEventListener</span>(<span class="string">"eventType"</span>, callbackFunction);</code></pre>
+    <p>Your first working event:</p>
+    <pre><code><span class="comment">// HTML: &lt;button id="btn"&gt;Click me&lt;/button&gt;</span>
+
+<span class="keyword">const</span> btn = document.<span class="fn">getElementById</span>(<span class="string">"btn"</span>);
+
+btn.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span> () {
+  <span class="fn">alert</span>(<span class="string">"Button clicked!"</span>);
+});</code></pre>
+    <div class="three-column">
+      <div class="box"><strong>element</strong>The DOM node to watch</div>
+      <div class="box"><strong>"eventType"</strong>Which event to listen for</div>
+      <div class="box"><strong>callback</strong>Function to run when fired</div>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">3</span>The Event Object</h2>
+    <p>Every callback automatically receives an <strong>event object</strong> packed with information about what just happened.</p>
+    <pre><code>btn.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span> (<span class="type">event</span>) {
+  console.<span class="fn">log</span>(event.<span class="fn">type</span>);       <span class="comment">// "click"</span>
+  console.<span class="fn">log</span>(event.<span class="fn">target</span>);     <span class="comment">// the element clicked</span>
+  console.<span class="fn">log</span>(event.<span class="fn">timeStamp</span>);  <span class="comment">// when it happened (ms)</span>
+  console.<span class="fn">log</span>(event.<span class="fn">clientX</span>);   <span class="comment">// mouse X coordinate</span>
+  console.<span class="fn">log</span>(event.<span class="fn">clientY</span>);   <span class="comment">// mouse Y coordinate</span>
+});</code></pre>
+    <div class="two-column">
+      <div class="important">✅ <strong>e.target</strong> — the element the user actually interacted with</div>
+      <div class="highlight">⚠️ <strong>e.currentTarget</strong> — the element the listener is attached to</div>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">4</span>Common Event Types</h2>
+    <table>
+      <thead><tr><th>Category</th><th>Events</th></tr></thead>
+      <tbody>
+        <tr><td>Mouse</td><td>click, dblclick, mouseenter, mouseleave, mousemove, contextmenu</td></tr>
+        <tr><td>Keyboard</td><td>keydown, keyup, keypress</td></tr>
+        <tr><td>Form</td><td>submit, change, input, focus, blur, reset</td></tr>
+        <tr><td>Window</td><td>load, resize, scroll, beforeunload</td></tr>
+        <tr><td>Clipboard</td><td>copy, paste, cut</td></tr>
+        <tr><td>Touch</td><td>touchstart, touchmove, touchend</td></tr>
+        <tr><td>Drag &amp; Drop</td><td>dragstart, dragover, drop</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 05 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">5</span>Mouse Events</h2>
+    <pre><code><span class="keyword">const</span> box = document.<span class="fn">getElementById</span>(<span class="string">"box"</span>);
+
+<span class="comment">// Highlight on hover</span>
+box.<span class="fn">addEventListener</span>(<span class="string">"mouseenter"</span>, () => box.style.background = <span class="string">"#2c6e6b"</span>);
+box.<span class="fn">addEventListener</span>(<span class="string">"mouseleave"</span>, () => box.style.background = <span class="string">""</span>);
+
+<span class="comment">// Double click to expand</span>
+box.<span class="fn">addEventListener</span>(<span class="string">"dblclick"</span>, () => <span class="fn">alert</span>(<span class="string">"Double clicked!"</span>));
+
+<span class="comment">// Track cursor position</span>
+document.<span class="fn">addEventListener</span>(<span class="string">"mousemove"</span>, (<span class="type">e</span>) => {
+  console.<span class="fn">log</span>(<span class="string">"X:"</span>, e.<span class="fn">clientX</span>, <span class="string">"Y:"</span>, e.<span class="fn">clientY</span>);
+});</code></pre>
+    <div class="grid">
+      <div class="box"><strong>click</strong>Single left button press + release</div>
+      <div class="box"><strong>dblclick</strong>Two rapid clicks in succession</div>
+      <div class="box"><strong>mouseenter</strong>Cursor enters element (no bubble)</div>
+      <div class="box"><strong>mouseleave</strong>Cursor leaves element (no bubble)</div>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">6</span>Keyboard Events</h2>
+    <pre><code>document.<span class="fn">addEventListener</span>(<span class="string">"keydown"</span>, <span class="keyword">function</span> (<span class="type">e</span>) {
+  console.<span class="fn">log</span>(e.<span class="fn">key</span>);      <span class="comment">// "a", "Enter", "ArrowUp"</span>
+  console.<span class="fn">log</span>(e.<span class="fn">code</span>);     <span class="comment">// "KeyA", "Enter", "ArrowUp"</span>
+  console.<span class="fn">log</span>(e.<span class="fn">ctrlKey</span>);  <span class="comment">// true if Ctrl held</span>
+  console.<span class="fn">log</span>(e.<span class="fn">shiftKey</span>); <span class="comment">// true if Shift held</span>
+  console.<span class="fn">log</span>(e.<span class="fn">altKey</span>);   <span class="comment">// true if Alt held</span>
+});
+
+<span class="comment">// Practical: detect Enter key in input</span>
+input.<span class="fn">addEventListener</span>(<span class="string">"keydown"</span>, <span class="keyword">function</span> (<span class="type">e</span>) {
+  <span class="keyword">if</span> (e.<span class="fn">key</span> === <span class="string">"Enter"</span>) {
+    console.<span class="fn">log</span>(<span class="string">"User submitted:"</span>, e.<span class="fn">target</span>.<span class="fn">value</span>);
+  }
+});</code></pre>
+    <div class="highlight">⚠️ <strong>e.key</strong> gives the human-readable value ("Enter", "a"). <strong>e.code</strong> gives the physical key position ("KeyA") — useful for games where WASD should work regardless of keyboard language.</div>
+  </div>
+
+  <!-- 07 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">7</span>Form Events</h2>
+    <div class="warning">🚨 <strong>Always call e.preventDefault() on form submit!</strong> Without it the page reloads, wiping all your JS state and data.</div>
+    <pre><code><span class="keyword">const</span> form = document.<span class="fn">getElementById</span>(<span class="string">"myForm"</span>);
+
+<span class="comment">// Submit — fires when the form is submitted</span>
+form.<span class="fn">addEventListener</span>(<span class="string">"submit"</span>, <span class="keyword">function</span> (<span class="type">e</span>) {
+  e.<span class="fn">preventDefault</span>(); <span class="comment">// 🛑 stop the page from reloading!</span>
+  console.<span class="fn">log</span>(<span class="string">"Form submitted"</span>);
+});
+
+<span class="comment">// Input — fires on every single keystroke (live)</span>
+input.<span class="fn">addEventListener</span>(<span class="string">"input"</span>, (<span class="type">e</span>) => console.<span class="fn">log</span>(e.<span class="fn">target</span>.<span class="fn">value</span>));
+
+<span class="comment">// Focus / Blur — user enters / leaves the field</span>
+input.<span class="fn">addEventListener</span>(<span class="string">"focus"</span>, () => console.<span class="fn">log</span>(<span class="string">"Focused!"</span>));
+input.<span class="fn">addEventListener</span>(<span class="string">"blur"</span>,  () => console.<span class="fn">log</span>(<span class="string">"Left the field"</span>));
+
+<span class="comment">// Change — fires when value changes AND user leaves the field</span>
+select.<span class="fn">addEventListener</span>(<span class="string">"change"</span>, (<span class="type">e</span>) => console.<span class="fn">log</span>(e.<span class="fn">target</span>.<span class="fn">value</span>));</code></pre>
+    <div class="three-column">
+      <div class="box"><strong>input</strong>Every keystroke — instant feedback</div>
+      <div class="box"><strong>change</strong>After edit + user leaves field</div>
+      <div class="box"><strong>submit</strong>When form is sent (use preventDefault!)</div>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">8</span>Event Propagation (Bubbling)</h2>
+    <p>When you click a child element, the event <strong>bubbles upward</strong> through all parent elements. This catches many beginners off guard.</p>
+    <pre><code><span class="comment">&lt;!-- HTML --&gt;
+&lt;div id="parent"&gt;
+  &lt;button id="child"&gt;Click me&lt;/button&gt;
+&lt;/div&gt;</span>
+
+document.<span class="fn">getElementById</span>(<span class="string">"parent"</span>).<span class="fn">addEventListener</span>(<span class="string">"click"</span>, () =>
+  console.<span class="fn">log</span>(<span class="string">"Parent fired!"</span>)
+);
+document.<span class="fn">getElementById</span>(<span class="string">"child"</span>).<span class="fn">addEventListener</span>(<span class="string">"click"</span>, () =>
+  console.<span class="fn">log</span>(<span class="string">"Child fired!"</span>)
+);
+<span class="comment">// Click button → logs "Child fired!" then "Parent fired!"</span>
+
+<span class="comment">// Stop it from bubbling up:</span>
+child.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, (<span class="type">e</span>) => {
+  e.<span class="fn">stopPropagation</span>(); <span class="comment">// parent never hears this</span>
+});</code></pre>
+    <div class="model-diagram">
+      <strong>Event Bubbles UP the DOM Tree</strong><br/><br/>
+      <span class="tag blue">document</span> ←
+      <span class="tag blue">html</span> ←
+      <span class="tag blue">body</span> ←
+      <span class="tag blue">div#parent</span> ←
+      <span class="tag orange">button#child</span> ← 🖱️ Click
+      <br/><br/>
+      <small style="color:#888">After firing on the target, the event travels up through each ancestor</small>
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">9</span>Event Delegation ⭐</h2>
+    <p>Instead of adding a listener to every child, add <strong>one listener on the parent</strong>. It captures events from all children — including ones added to the DOM in the future.</p>
+    <pre><code><span class="comment">&lt;!-- HTML --&gt;
+&lt;ul id="list"&gt;
+  &lt;li&gt;Item 1&lt;/li&gt;
+  &lt;li&gt;Item 2&lt;/li&gt;
+  &lt;li&gt;Item 3&lt;/li&gt;  &lt;!-- future items work too! --&gt;
+&lt;/ul&gt;</span>
+
+<span class="comment">// ✅ ONE listener handles ALL list items, forever</span>
+document.<span class="fn">getElementById</span>(<span class="string">"list"</span>).<span class="fn">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span> (<span class="type">e</span>) {
+  <span class="keyword">if</span> (e.<span class="fn">target</span>.tagName === <span class="string">"LI"</span>) {
+    console.<span class="fn">log</span>(<span class="string">"Clicked:"</span>, e.<span class="fn">target</span>.textContent);
+    e.<span class="fn">target</span>.style.color = <span class="string">"#2c6e6b"</span>;
+  }
+});</code></pre>
+    <div class="important">🚀 <strong>Why delegation?</strong> Better performance (1 listener vs 100), works on dynamic content, and keeps your code clean. Essential pattern for lists, tables, and any dynamically-rendered UI.</div>
+  </div>
+
+  <!-- 10 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">10</span>Removing Event Listeners</h2>
+    <pre><code><span class="comment">// ✅ Named function — can be removed later</span>
+<span class="keyword">function</span> <span class="fn">handleClick</span>() {
+  console.<span class="fn">log</span>(<span class="string">"Clicked!"</span>);
+}
+btn.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, handleClick);
+btn.<span class="fn">removeEventListener</span>(<span class="string">"click"</span>, handleClick); <span class="comment">// ✅ works</span>
+
+<span class="comment">// ❌ Anonymous function — impossible to remove</span>
+btn.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, () => console.<span class="fn">log</span>(<span class="string">"stuck forever!"</span>));
+
+<span class="comment">// ✅ { once: true } — auto-removes after first fire</span>
+btn.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span> () {
+  console.<span class="fn">log</span>(<span class="string">"Only fires once!"</span>);
+}, { once: <span class="keyword">true</span> });</code></pre>
+    <div class="warning">🚨 You must pass the <strong>exact same function reference</strong> to removeEventListener. Always name handlers if you plan to remove them later.</div>
+  </div>
+
+  <!-- 11 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">11</span>Custom Events</h2>
+    <p>Create and fire your own events — great for component-to-component communication.</p>
+    <pre><code><span class="comment">// 1. Create with a custom data payload</span>
+<span class="keyword">const</span> myEvent = <span class="keyword">new</span> <span class="type">CustomEvent</span>(<span class="string">"orderPlaced"</span>, {
+  detail: { orderId: <span class="num">42</span>, total: <span class="num">99.99</span> }
+});
+
+<span class="comment">// 2. Listen anywhere</span>
+document.<span class="fn">addEventListener</span>(<span class="string">"orderPlaced"</span>, <span class="keyword">function</span> (<span class="type">e</span>) {
+  console.<span class="fn">log</span>(<span class="string">"Order:"</span>, e.detail.orderId); <span class="comment">// 42</span>
+  console.<span class="fn">log</span>(<span class="string">"Total:"</span>, e.detail.total);   <span class="comment">// 99.99</span>
+});
+
+<span class="comment">// 3. Fire it</span>
+document.<span class="fn">dispatchEvent</span>(myEvent);</code></pre>
+  </div>
+
+  <!-- 12 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">12</span>Mini Project — Live Character Counter</h2>
+    <p>A real-world feature combining <code>input</code> events with live DOM updates:</p>
+    <pre><code><span class="comment">&lt;!-- HTML --&gt;
+&lt;textarea id="txt" maxlength="200" placeholder="Type here..."&gt;&lt;/textarea&gt;
+&lt;p&gt;Characters left: &lt;span id="counter"&gt;200&lt;/span&gt;&lt;/p&gt;</span>
+
+<span class="comment">// JS</span>
+<span class="keyword">const</span> txt     = document.<span class="fn">getElementById</span>(<span class="string">"txt"</span>);
+<span class="keyword">const</span> counter = document.<span class="fn">getElementById</span>(<span class="string">"counter"</span>);
+
+txt.<span class="fn">addEventListener</span>(<span class="string">"input"</span>, <span class="keyword">function</span> () {
+  <span class="keyword">const</span> remaining = <span class="num">200</span> - txt.value.length;
+  counter.textContent = remaining;
+  counter.style.color = remaining &lt; <span class="num">20</span> ? <span class="string">"#e91e63"</span> : <span class="string">"#2c6e6b"</span>;
+});</code></pre>
+    <div class="in-class">
+      <h3>🎯 What this demonstrates</h3>
+      <ul>
+        <li>Listening to <code>input</code> event on a textarea</li>
+        <li>Reading <code>e.target.value</code> in real time</li>
+        <li>Updating the DOM on every keystroke</li>
+        <li>Conditional styling based on remaining count</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="card">
+    <h2 class="section-title">🧠 Mental Model &amp; Key Rules</h2>
+    <div class="model-diagram">
+      <strong>How Every Event Works</strong><br/><br/>
+      <span class="tag orange">User Action</span> →
+      <span class="tag blue">Browser Fires Event</span> →
+      <span class="tag blue">Event Object Created</span> →
+      <span class="tag">Listener Callback Runs</span> →
+      <span class="tag blue">Event Bubbles Up</span>
+    </div>
+    <div class="two-column" style="margin-top:15px;">
+      <ul>
+        <li>✅ Use <code>addEventListener</code>, not inline <code>onclick=</code></li>
+        <li>✅ Always <code>e.preventDefault()</code> on form submit</li>
+        <li>✅ Use delegation for lists and dynamic content</li>
+      </ul>
+      <ul>
+        <li>✅ Name handlers if you plan to remove them</li>
+        <li>✅ <code>e.target</code> = who triggered the event</li>
+        <li>✅ <code>e.currentTarget</code> = who has the listener</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    📘 JavaScript Events — Zero to Hero &nbsp;·&nbsp; Keep this open while you practice!
+  </div>
+
+</div>
+</body>
+</html>

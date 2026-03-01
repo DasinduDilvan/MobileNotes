@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Functions — Zero to Hero</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef6f5; padding: 20px; line-height: 1.6; color: #333; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+    .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+    .card { background: white; padding: 25px; margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .section-title { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 15px; font-size: 1.4em; display: flex; align-items: center; }
+    ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+    ul li { margin: 8px 0; }
+    ul ul { margin-left: 25px; list-style-type: circle; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+    .box { background: #f3fbfa; padding: 15px; border-radius: 10px; border-left: 3px solid #2c6e6b; }
+    .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+    .highlight { background: #fff9e6; padding: 15px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 15px 0; }
+    .important { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 15px 0; }
+    .note { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 15px 0; }
+    .warning { background: #fce4ec; padding: 15px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 15px 0; }
+    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+    code { background: #000; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.95em; color: #c0392b; font-weight: 800;}
+    pre { background: #000; color: #d4d4d4; padding: 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.6; overflow-x: auto; margin: 12px 0; }
+    pre .comment { color: #6a9955; }
+    pre .keyword { color: #569cd6; }
+    pre .string  { color: #ce9178; }
+    pre .fn      { color: #dcdcaa; }
+    pre .type    { color: #4ec9b0; }
+    pre .num     { color: #b5cea8; }
+    .model-diagram { text-align: center; padding: 20px; background: #f9f9f9; border-radius: 10px; margin: 15px 0; font-size: 0.95em; }
+    .tag { display: inline-block; background: #2c6e6b; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin: 2px; vertical-align: middle; }
+    .tag.orange { background: #e67e22; }
+    .tag.blue   { background: #2980b9; }
+    .tag.red    { background: #c0392b; }
+    .in-class { background: #f3e5f5; padding: 20px; border-radius: 10px; border-left: 4px solid #9c27b0; margin: 15px 0; }
+    .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+    .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+    @media print { body { background: white; padding: 0; } .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; } }
+    @media (max-width: 600px) { body { padding: 10px; } .card { padding: 15px; } h1 { font-size: 1.6em; } .two-column, .three-column { grid-template-columns: 1fr; } }
+    .step-number { display: inline-flex; align-items: center; justify-content: center; background: #2c6e6b; color: white; width: 30px; height: 30px; border-radius: 50%; font-size: 0.85em; font-weight: bold; margin-right: 10px; flex-shrink: 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.9em; }
+    th { background: #2c6e6b; color: white; padding: 10px 14px; text-align: left; }
+    td { padding: 9px 14px; border-bottom: 1px solid #e0f0ef; }
+    tr:nth-child(even) td { background: #f3fbfa; }
+    td:first-child { font-family: 'Courier New', monospace; color: #c0392b; font-weight: bold; }
+    .anatomy-diagram { background: #000; border-radius: 10px; padding: 24px 30px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.95em; line-height: 2.2; color: #d4d4d4; }
+    .ann { display: inline-block; background: #2c6e6b; color: #fff; font-family: 'Segoe UI', sans-serif; font-size: 0.72em; padding: 1px 8px; border-radius: 10px; margin: 0 3px; vertical-align: middle; position: relative; top: -2px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🔧 JavaScript Functions</h1>
+  <p class="subtitle">Zero to Hero — Complete Step-by-Step Guide</p>
+
+  <!-- 01 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">1</span>What is a Function?</h2>
+    <p>A <strong>function</strong> is a reusable block of code that performs a specific task. Instead of writing the same logic over and over, you define it once and call it whenever you need it.</p>
+
+    <div class="note" style="margin-top:15px;">
+      💡 Think of a function like a recipe: you write it once, and anyone can follow it as many times as needed to get the same result.
+    </div>
+
+    <div class="anatomy-diagram">
+      <span style="color:#569cd6;">function</span>
+      <span style="color:#dcdcaa;"> greet</span><span style="color:#d4d4d4;">(</span><span style="color:#4ec9b0;">name</span><span style="color:#d4d4d4;">) {</span>
+      <br/>&nbsp;&nbsp;<span style="color:#569cd6;">return</span> <span style="color:#ce9178;">"Hello, "</span> <span style="color:#d4d4d4;">+</span> <span style="color:#4ec9b0;">name</span> <span style="color:#d4d4d4;">+</span> <span style="color:#ce9178;">"!"</span><span style="color:#d4d4d4;">;</span>
+      <br/><span style="color:#d4d4d4;">}</span>
+    </div>
+
+    <div class="grid">
+      <div class="box"><strong>function</strong>Keyword that declares a function</div>
+      <div class="box"><strong>greet</strong>The name — use it to call later</div>
+      <div class="box"><strong>(name)</strong>Parameters — inputs the function accepts</div>
+      <div class="box"><strong>{ ... }</strong>Body — the code that runs</div>
+      <div class="box"><strong>return</strong>Sends a value back to the caller</div>
+    </div>
+
+    <pre style="margin-top:15px;"><code><span class="comment">// Define once</span>
+<span class="keyword">function</span> <span class="fn">greet</span>(<span class="type">name</span>) {
+  <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="type">name</span> + <span class="string">"!"</span>;
+}
+
+<span class="comment">// Call many times</span>
+console.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="string">"Alice"</span>)); <span class="comment">// "Hello, Alice!"</span>
+console.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="string">"Bob"</span>));   <span class="comment">// "Hello, Bob!"</span></code></pre>
+  </div>
+
+  <!-- 02 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">2</span>Declaration vs Expression</h2>
+    <p>There are two main ways to define a function. The key difference is <strong>hoisting</strong> — JS moves declarations to the top automatically, but not expressions.</p>
+
+    <div class="two-column">
+      <div>
+        <div class="important">✅ <strong>Function Declaration — hoisted!</strong></div>
+        <pre><code><span class="comment">// Can call BEFORE definition</span>
+<span class="fn">sayHi</span>(); <span class="comment">// ✅ works!</span>
+
+<span class="keyword">function</span> <span class="fn">sayHi</span>() {
+  console.<span class="fn">log</span>(<span class="string">"Hi!"</span>);
+}</code></pre>
+      </div>
+      <div>
+        <div class="warning">⚠️ <strong>Function Expression — not hoisted</strong></div>
+        <pre><code><span class="comment">// Must define BEFORE calling</span>
+<span class="fn">sayHello</span>(); <span class="comment">// ❌ Error!</span>
+
+<span class="keyword">const</span> <span class="fn">sayHello</span> = <span class="keyword">function</span>() {
+  console.<span class="fn">log</span>(<span class="string">"Hello!"</span>);
+};</code></pre>
+      </div>
+    </div>
+
+    <div class="highlight">⚠️ <strong>Hoisting:</strong> JS scans your code before running it and moves function declarations to the top of their scope. Variables declared with <code>const</code> or <code>let</code> are NOT hoisted in the same way.</div>
+  </div>
+
+  <!-- 03 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">3</span>Parameters &amp; Arguments</h2>
+    <p><strong>Parameters</strong> are the names in the function definition. <strong>Arguments</strong> are the actual values passed when calling the function.</p>
+
+    <pre><code><span class="comment">// name, age = parameters (placeholders)</span>
+<span class="keyword">function</span> <span class="fn">introduce</span>(<span class="type">name</span>, <span class="type">age</span>) {
+  console.<span class="fn">log</span>(`My name is ${<span class="type">name</span>}, I'm ${<span class="type">age</span>}.`);
+}
+
+<span class="comment">// "Sara", 28 = arguments (real values)</span>
+<span class="fn">introduce</span>(<span class="string">"Sara"</span>, <span class="num">28</span>); <span class="comment">// "My name is Sara, I'm 28."</span>
+
+<span class="comment">// Extra arguments are silently ignored</span>
+<span class="fn">introduce</span>(<span class="string">"Tom"</span>, <span class="num">30</span>, <span class="string">"extra"</span>); <span class="comment">// works fine</span>
+
+<span class="comment">// Missing arguments become undefined</span>
+<span class="fn">introduce</span>(<span class="string">"Kim"</span>); <span class="comment">// "My name is Kim, I'm undefined."</span>
+
+<span class="comment">// Access ALL arguments (regular functions only)</span>
+<span class="keyword">function</span> <span class="fn">showAll</span>() {
+  console.<span class="fn">log</span>(arguments); <span class="comment">// array-like object of all passed values</span>
+}</code></pre>
+
+    <div class="two-column">
+      <div class="box"><strong>Parameters</strong>Variable names listed in the function definition</div>
+      <div class="box"><strong>Arguments</strong>Real values you pass when calling the function</div>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">4</span>Return Values</h2>
+    <p>The <code>return</code> statement sends a value back to the caller and <strong>immediately exits</strong> the function. Without it, a function returns <code>undefined</code>.</p>
+
+    <pre><code><span class="keyword">function</span> <span class="fn">add</span>(<span class="type">a</span>, <span class="type">b</span>) {
+  <span class="keyword">return</span> <span class="type">a</span> + <span class="type">b</span>;  <span class="comment">// exits immediately, sends value back</span>
+  console.<span class="fn">log</span>(<span class="string">"Never runs"</span>); <span class="comment">// ❌ unreachable!</span>
+}
+
+<span class="keyword">const</span> result = <span class="fn">add</span>(<span class="num">3</span>, <span class="num">7</span>); <span class="comment">// result = 10</span>
+
+<span class="comment">// Early return — great for guard clauses</span>
+<span class="keyword">function</span> <span class="fn">divide</span>(<span class="type">a</span>, <span class="type">b</span>) {
+  <span class="keyword">if</span> (<span class="type">b</span> === <span class="num">0</span>) <span class="keyword">return</span> <span class="string">"Cannot divide by zero"</span>;
+  <span class="keyword">return</span> <span class="type">a</span> / <span class="type">b</span>;
+}
+
+<span class="comment">// Functions can return anything — even other functions!</span>
+<span class="keyword">function</span> <span class="fn">makeMultiplier</span>(<span class="type">x</span>) {
+  <span class="keyword">return</span> (<span class="type">n</span>) => <span class="type">n</span> * <span class="type">x</span>;
+}
+<span class="keyword">const</span> double = <span class="fn">makeMultiplier</span>(<span class="num">2</span>);
+<span class="fn">double</span>(<span class="num">5</span>); <span class="comment">// 10</span></code></pre>
+
+    <div class="important">✅ <strong>Early return pattern:</strong> Put guard clauses at the top of your function using early returns. This keeps your code flat and avoids deeply nested if/else blocks.</div>
+  </div>
+
+  <!-- 05 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">5</span>Arrow Functions</h2>
+    <p>Arrow functions are a concise ES6+ syntax. They're perfect for short callbacks, but have one important difference: <strong>they don't have their own <code>this</code>.</strong></p>
+
+    <pre><code><span class="comment">// Traditional expression</span>
+<span class="keyword">const</span> <span class="fn">square</span> = <span class="keyword">function</span>(<span class="type">x</span>) { <span class="keyword">return</span> <span class="type">x</span> * <span class="type">x</span>; };
+
+<span class="comment">// Arrow function — same thing, shorter</span>
+<span class="keyword">const</span> <span class="fn">square</span> = (<span class="type">x</span>) => { <span class="keyword">return</span> <span class="type">x</span> * <span class="type">x</span>; };
+
+<span class="comment">// Implicit return — no braces needed for single expression</span>
+<span class="keyword">const</span> <span class="fn">square</span> = (<span class="type">x</span>) => <span class="type">x</span> * <span class="type">x</span>;
+
+<span class="comment">// One param? Parentheses optional</span>
+<span class="keyword">const</span> <span class="fn">square</span> = <span class="type">x</span> => <span class="type">x</span> * <span class="type">x</span>;
+
+<span class="comment">// No params? Empty parens required</span>
+<span class="keyword">const</span> <span class="fn">greet</span> = () => <span class="string">"Hello!"</span>;
+
+<span class="comment">// Returning an object? Wrap in parentheses</span>
+<span class="keyword">const</span> <span class="fn">makeUser</span> = <span class="type">name</span> => ({ name: <span class="type">name</span>, active: <span class="keyword">true</span> });</code></pre>
+
+    <div class="warning">🚨 <strong>Arrow functions have no own <code>this</code>.</strong> They inherit <code>this</code> from the surrounding context. Avoid using them as object methods if you need to reference the object with <code>this</code>.</div>
+
+    <div class="three-column" style="margin-top:15px;">
+      <div class="box"><strong>x => x * x</strong>One param, one expression</div>
+      <div class="box"><strong>() => "hi"</strong>No param, return value</div>
+      <div class="box"><strong>(a, b) => a + b</strong>Multiple params</div>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">6</span>Default &amp; Rest Parameters</h2>
+    <p><strong>Default parameters</strong> provide fallback values when an argument is missing. <strong>Rest parameters</strong> collect unlimited extra arguments into a real array.</p>
+
+    <pre><code><span class="comment">// Default parameters</span>
+<span class="keyword">function</span> <span class="fn">greet</span>(<span class="type">name</span> = <span class="string">"stranger"</span>, <span class="type">greeting</span> = <span class="string">"Hello"</span>) {
+  <span class="keyword">return</span> `${<span class="type">greeting</span>}, ${<span class="type">name</span>}!`;
+}
+<span class="fn">greet</span>();                <span class="comment">// "Hello, stranger!"</span>
+<span class="fn">greet</span>(<span class="string">"Alice"</span>);         <span class="comment">// "Hello, Alice!"</span>
+<span class="fn">greet</span>(<span class="string">"Bob"</span>, <span class="string">"Hey"</span>);   <span class="comment">// "Hey, Bob!"</span>
+
+<span class="comment">// Rest parameters — collect extras into an array</span>
+<span class="keyword">function</span> <span class="fn">sum</span>(<span class="type">first</span>, ...<span class="type">rest</span>) {
+  console.<span class="fn">log</span>(<span class="type">first</span>); <span class="comment">// 1</span>
+  console.<span class="fn">log</span>(<span class="type">rest</span>);  <span class="comment">// [2, 3, 4, 5]</span>
+  <span class="keyword">return</span> <span class="type">first</span> + <span class="type">rest</span>.<span class="fn">reduce</span>((<span class="type">a</span>, <span class="type">b</span>) => <span class="type">a</span> + <span class="type">b</span>, <span class="num">0</span>);
+}
+<span class="fn">sum</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>); <span class="comment">// 15</span></code></pre>
+
+    <div class="two-column">
+      <div class="box"><strong>Default = value</strong>Used when argument is undefined or missing</div>
+      <div class="box"><strong>...rest</strong>Must be the last parameter — collects all remaining args into an array</div>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">7</span>Scope &amp; Closures</h2>
+    <p><strong>Scope</strong> controls where variables are accessible. <strong>Closures</strong> allow a function to remember and access variables from its outer scope even after that outer function has finished executing.</p>
+
+    <pre><code><span class="comment">// Scope — variables live in their own "bubbles"</span>
+<span class="keyword">const</span> global = <span class="string">"I'm global"</span>;
+
+<span class="keyword">function</span> <span class="fn">outer</span>() {
+  <span class="keyword">const</span> outerVar = <span class="string">"I'm outer"</span>;
+
+  <span class="keyword">function</span> <span class="fn">inner</span>() {
+    <span class="keyword">const</span> innerVar = <span class="string">"I'm inner"</span>;
+    console.<span class="fn">log</span>(global);   <span class="comment">// ✅ can see global</span>
+    console.<span class="fn">log</span>(outerVar); <span class="comment">// ✅ can see parent scope</span>
+    console.<span class="fn">log</span>(innerVar); <span class="comment">// ✅ can see own scope</span>
+  }
+  console.<span class="fn">log</span>(innerVar);   <span class="comment">// ❌ ReferenceError!</span>
+}</code></pre>
+
+    <pre><code><span class="comment">// Closure — a function that "remembers" its outer variables</span>
+<span class="keyword">function</span> <span class="fn">makeCounter</span>() {
+  <span class="keyword">let</span> count = <span class="num">0</span>; <span class="comment">// lives in the closure</span>
+
+  <span class="keyword">return</span> {
+    increment: () => ++count,
+    decrement: () => --count,
+    value: () => count
+  };
+}
+
+<span class="keyword">const</span> counter = <span class="fn">makeCounter</span>();
+counter.<span class="fn">increment</span>(); <span class="comment">// 1</span>
+counter.<span class="fn">increment</span>(); <span class="comment">// 2</span>
+counter.<span class="fn">decrement</span>(); <span class="comment">// 1</span>
+counter.<span class="fn">value</span>();     <span class="comment">// 1  ← count is preserved!</span></code></pre>
+
+    <div class="important">🚀 <strong>Closures are everywhere</strong> — event handlers, setTimeout, module patterns, React hooks. Understanding closures is the key to truly mastering JavaScript.</div>
+  </div>
+
+  <!-- 08 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">8</span>Higher-Order Functions</h2>
+    <p>A <strong>higher-order function</strong> takes a function as an argument, or returns a function. This unlocks powerful functional programming patterns.</p>
+
+    <table>
+      <thead><tr><th>Method</th><th>What it does</th><th>Returns</th></tr></thead>
+      <tbody>
+        <tr><td>.map()</td><td>Transform every item in array</td><td>New array, same length</td></tr>
+        <tr><td>.filter()</td><td>Keep items matching a condition</td><td>New array, shorter or equal</td></tr>
+        <tr><td>.reduce()</td><td>Fold array down to a single value</td><td>Any single value</td></tr>
+        <tr><td>.forEach()</td><td>Run a function on each item</td><td>undefined</td></tr>
+        <tr><td>.find()</td><td>First item matching a condition</td><td>Item or undefined</td></tr>
+        <tr><td>.some()</td><td>Does any item match?</td><td>true / false</td></tr>
+        <tr><td>.every()</td><td>Do all items match?</td><td>true / false</td></tr>
+      </tbody>
+    </table>
+
+    <pre style="margin-top:15px;"><code><span class="keyword">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>];
+
+nums.<span class="fn">map</span>(<span class="type">n</span> => <span class="type">n</span> * <span class="num">2</span>);                    <span class="comment">// [2,4,6,8,10,12]</span>
+nums.<span class="fn">filter</span>(<span class="type">n</span> => <span class="type">n</span> % <span class="num">2</span> === <span class="num">0</span>);          <span class="comment">// [2, 4, 6]</span>
+nums.<span class="fn">reduce</span>((<span class="type">acc</span>, <span class="type">n</span>) => <span class="type">acc</span> + <span class="type">n</span>, <span class="num">0</span>);   <span class="comment">// 21</span>
+
+<span class="comment">// Chain them! Evens only → doubled → summed</span>
+nums
+  .<span class="fn">filter</span>(<span class="type">n</span> => <span class="type">n</span> % <span class="num">2</span> === <span class="num">0</span>)  <span class="comment">// [2, 4, 6]</span>
+  .<span class="fn">map</span>(<span class="type">n</span> => <span class="type">n</span> * <span class="num">2</span>)           <span class="comment">// [4, 8, 12]</span>
+  .<span class="fn">reduce</span>((<span class="type">acc</span>, <span class="type">n</span>) => <span class="type">acc</span> + <span class="type">n</span>, <span class="num">0</span>); <span class="comment">// 24</span></code></pre>
+  </div>
+
+  <!-- 09 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">9</span>Callbacks</h2>
+    <p>A <strong>callback</strong> is a function passed as an argument to be called later — either after an event, a delay, or an async operation. They're the backbone of async JavaScript.</p>
+
+    <pre><code><span class="comment">// Simple callback</span>
+<span class="keyword">function</span> <span class="fn">doWork</span>(<span class="type">callback</span>) {
+  console.<span class="fn">log</span>(<span class="string">"Working..."</span>);
+  <span class="fn">callback</span>(); <span class="comment">// call the function that was passed in</span>
+}
+<span class="fn">doWork</span>(() => console.<span class="fn">log</span>(<span class="string">"Done!"</span>));
+
+<span class="comment">// Callbacks with data — classic async pattern</span>
+<span class="keyword">function</span> <span class="fn">fetchUser</span>(<span class="type">id</span>, <span class="type">onSuccess</span>, <span class="type">onError</span>) {
+  <span class="keyword">if</span> (<span class="type">id</span> > <span class="num">0</span>) {
+    <span class="fn">onSuccess</span>({ id: <span class="type">id</span>, name: <span class="string">"Alice"</span> });
+  } <span class="keyword">else</span> {
+    <span class="fn">onError</span>(<span class="string">"Invalid ID"</span>);
+  }
+}
+
+<span class="fn">fetchUser</span>(
+  <span class="num">1</span>,
+  (<span class="type">user</span>) => console.<span class="fn">log</span>(<span class="string">"Got:"</span>, <span class="type">user</span>.name),  <span class="comment">// success</span>
+  (<span class="type">err</span>)  => console.<span class="fn">log</span>(<span class="string">"Error:"</span>, <span class="type">err</span>)        <span class="comment">// failure</span>
+);</code></pre>
+
+    <div class="note">💡 Deeply nested callbacks create "callback hell" — hard to read pyramid-shaped code. Modern JS solves this with <strong>Promises</strong> and <strong>async/await</strong>. But callbacks come first!</div>
+  </div>
+
+  <!-- 10 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">10</span>IIFE — Immediately Invoked Function Expression</h2>
+    <p>An <strong>IIFE</strong> is a function that runs the instant it's defined. Used to create a private scope and avoid polluting the global namespace.</p>
+
+    <pre><code><span class="comment">// Wrap in () then immediately call with ()</span>
+(<span class="keyword">function</span>() {
+  <span class="keyword">const</span> secret = <span class="string">"I'm private!"</span>;
+  console.<span class="fn">log</span>(secret); <span class="comment">// ✅ works inside</span>
+})();
+
+console.<span class="fn">log</span>(secret); <span class="comment">// ❌ ReferenceError — not accessible outside!</span>
+
+<span class="comment">// Arrow IIFE</span>
+(() => {
+  console.<span class="fn">log</span>(<span class="string">"Runs immediately!"</span>);
+})();
+
+<span class="comment">// IIFE with return value</span>
+<span class="keyword">const</span> result = (<span class="keyword">function</span>(<span class="type">a</span>, <span class="type">b</span>) {
+  <span class="keyword">return</span> <span class="type">a</span> + <span class="type">b</span>;
+})(<span class="num">3</span>, <span class="num">4</span>);
+<span class="comment">// result = 7</span></code></pre>
+
+    <div class="in-class">
+      <h3>🎯 When to use IIFEs</h3>
+      <ul>
+        <li>Avoid polluting global scope with setup code</li>
+        <li>Create isolated environments for modules</li>
+        <li>Run initialization code that only needs to run once</li>
+        <li>Capture loop variables in older JS (pre-ES6)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">11</span>Recursion</h2>
+    <p>A <strong>recursive function</strong> is one that calls itself. Every recursive function needs a <strong>base case</strong> to stop — without it, you get infinite loops and stack overflow errors.</p>
+
+    <pre><code><span class="comment">// Factorial: 5! = 5 × 4 × 3 × 2 × 1 = 120</span>
+<span class="keyword">function</span> <span class="fn">factorial</span>(<span class="type">n</span>) {
+  <span class="keyword">if</span> (<span class="type">n</span> <= <span class="num">1</span>) <span class="keyword">return</span> <span class="num">1</span>; <span class="comment">// ← base case: stop here</span>
+  <span class="keyword">return</span> <span class="type">n</span> * <span class="fn">factorial</span>(<span class="type">n</span> - <span class="num">1</span>); <span class="comment">// ← recursive case</span>
+}
+<span class="fn">factorial</span>(<span class="num">5</span>); <span class="comment">// 120</span>
+
+<span class="comment">// Fibonacci sequence: 0,1,1,2,3,5,8,13...</span>
+<span class="keyword">function</span> <span class="fn">fib</span>(<span class="type">n</span>) {
+  <span class="keyword">if</span> (<span class="type">n</span> <= <span class="num">1</span>) <span class="keyword">return</span> <span class="type">n</span>;
+  <span class="keyword">return</span> <span class="fn">fib</span>(<span class="type">n</span> - <span class="num">1</span>) + <span class="fn">fib</span>(<span class="type">n</span> - <span class="num">2</span>);
+}
+<span class="fn">fib</span>(<span class="num">7</span>); <span class="comment">// 13</span>
+
+<span class="comment">// Practical: flatten deeply nested arrays</span>
+<span class="keyword">function</span> <span class="fn">flatten</span>(<span class="type">arr</span>) {
+  <span class="keyword">return</span> <span class="type">arr</span>.<span class="fn">reduce</span>((<span class="type">acc</span>, <span class="type">item</span>) =>
+    Array.<span class="fn">isArray</span>(<span class="type">item</span>)
+      ? acc.<span class="fn">concat</span>(<span class="fn">flatten</span>(<span class="type">item</span>))
+      : acc.<span class="fn">concat</span>(<span class="type">item</span>)
+  , []);
+}
+<span class="fn">flatten</span>([<span class="num">1</span>, [<span class="num">2</span>, [<span class="num">3</span>, [<span class="num">4</span>]]]]); <span class="comment">// [1, 2, 3, 4]</span></code></pre>
+
+    <div class="highlight">⚠️ <strong>Always define a base case first.</strong> A recursive function without a base case will call itself forever until the browser throws a "Maximum call stack size exceeded" error.</div>
+  </div>
+
+  <!-- 12 -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">12</span>Pure Functions &amp; Best Practices</h2>
+    <p>A <strong>pure function</strong> always returns the same output for the same input and produces no side effects. Pure functions are predictable, easy to test, and safe to reuse.</p>
+
+    <div class="two-column">
+      <div>
+        <div class="warning">❌ <strong>Impure — has side effects</strong></div>
+        <pre><code><span class="keyword">let</span> total = <span class="num">0</span>;
+
+<span class="keyword">function</span> <span class="fn">addToTotal</span>(<span class="type">n</span>) {
+  total += <span class="type">n</span>; <span class="comment">// mutates outside!</span>
+  <span class="keyword">return</span> total;
+}
+<span class="comment">// Different result each call!</span></code></pre>
+      </div>
+      <div>
+        <div class="important">✅ <strong>Pure — predictable always</strong></div>
+        <pre><code><span class="keyword">function</span> <span class="fn">add</span>(<span class="type">a</span>, <span class="type">b</span>) {
+  <span class="keyword">return</span> <span class="type">a</span> + <span class="type">b</span>;
+}
+<span class="comment">// add(3, 4) is ALWAYS 7</span>
+<span class="comment">// No matter when you call it</span></code></pre>
+      </div>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin: 20px 0 12px;">✅ Function Best Practices</h3>
+    <div class="grid">
+      <div class="box"><strong>🎯 Single Responsibility</strong>Each function does one thing and does it well</div>
+      <div class="box"><strong>📛 Descriptive Names</strong>Use verbs: getUserById, formatDate, calculateTax</div>
+      <div class="box"><strong>📏 Keep It Short</strong>If it's over ~20 lines, consider splitting it up</div>
+      <div class="box"><strong>🧪 Prefer Pure</strong>Avoid side effects. Return values, don't mutate</div>
+      <div class="box"><strong>↩️ Early Returns</strong>Guard clauses at the top reduce nesting depth</div>
+      <div class="box"><strong>🔗 Compose</strong>Build complex logic from small, reusable pieces</div>
+    </div>
+  </div>
+
+  <!-- 13 FACTORY FUNCTIONS -->
+  <div class="card">
+    <h2 class="section-title"><span class="step-number">13</span>Factory Functions</h2>
+    <p>A <strong>factory function</strong> is a regular function that <strong>creates and returns an object</strong>. It's a clean alternative to classes for producing multiple similar objects — no <code>new</code>, no <code>this</code> confusion.</p>
+
+    <div class="note">
+      💡 Think of it like a real factory: you feed in some inputs, and it produces a finished product (object) every single time you call it.
+    </div>
+
+    <pre><code><span class="comment">// A factory function — returns a new object each call</span>
+<span class="keyword">function</span> <span class="fn">createUser</span>(<span class="type">name</span>, <span class="type">age</span>, <span class="type">role</span>) {
+  <span class="keyword">return</span> {
+    name,
+    age,
+    role,
+    <span class="fn">greet</span>() {
+      <span class="keyword">return</span> `Hi, I'm ${<span class="keyword">this</span>.name} and I'm a ${<span class="keyword">this</span>.role}.`;
+    },
+    <span class="fn">isAdult</span>() {
+      <span class="keyword">return</span> <span class="keyword">this</span>.age >= <span class="num">18</span>;
+    }
+  };
+}
+
+<span class="comment">// Each call produces an independent object</span>
+<span class="keyword">const</span> alice = <span class="fn">createUser</span>(<span class="string">"Alice"</span>, <span class="num">28</span>, <span class="string">"admin"</span>);
+<span class="keyword">const</span> bob   = <span class="fn">createUser</span>(<span class="string">"Bob"</span>,   <span class="num">17</span>, <span class="string">"viewer"</span>);
+
+alice.<span class="fn">greet</span>();   <span class="comment">// "Hi, I'm Alice and I'm a admin."</span>
+bob.<span class="fn">isAdult</span>();  <span class="comment">// false</span></code></pre>
+
+    <div class="two-column">
+      <div>
+        <div class="important">✅ <strong>Factory Function</strong></div>
+        <pre><code><span class="keyword">function</span> <span class="fn">createCar</span>(<span class="type">make</span>, <span class="type">model</span>) {
+  <span class="keyword">return</span> { make, model,
+    <span class="fn">drive</span>() {
+      <span class="keyword">return</span> `Driving ${<span class="keyword">this</span>.make}`;
+    }
+  };
+}
+<span class="comment">// No 'new' needed!</span>
+<span class="keyword">const</span> car = <span class="fn">createCar</span>(<span class="string">"Toyota"</span>, <span class="string">"Yaris"</span>);</code></pre>
+      </div>
+      <div>
+        <div class="highlight">⚙️ <strong>Class (equivalent)</strong></div>
+        <pre><code><span class="keyword">class</span> <span class="type">Car</span> {
+  <span class="fn">constructor</span>(<span class="type">make</span>, <span class="type">model</span>) {
+    <span class="keyword">this</span>.make = <span class="type">make</span>;
+    <span class="keyword">this</span>.model = <span class="type">model</span>;
+  }
+  <span class="fn">drive</span>() {
+    <span class="keyword">return</span> `Driving ${<span class="keyword">this</span>.make}`;
+  }
+}
+<span class="keyword">const</span> car = <span class="keyword">new</span> <span class="type">Car</span>(<span class="string">"Toyota"</span>, <span class="string">"Yaris"</span>);</code></pre>
+      </div>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin: 20px 0 10px;">Private State with Closures</h3>
+    <p>The most powerful feature of factory functions — you can create <strong>truly private variables</strong> using closures. No one outside the factory can access or modify them directly.</p>
+
+    <pre><code><span class="keyword">function</span> <span class="fn">createBankAccount</span>(<span class="type">owner</span>, <span class="type">initialBalance</span>) {
+  <span class="keyword">let</span> balance = <span class="type">initialBalance</span>; <span class="comment">// 🔒 private — inaccessible from outside</span>
+
+  <span class="keyword">return</span> {
+    owner,
+    <span class="fn">deposit</span>(<span class="type">amount</span>) {
+      <span class="keyword">if</span> (<span class="type">amount</span> > <span class="num">0</span>) balance += <span class="type">amount</span>;
+      <span class="keyword">return</span> <span class="keyword">this</span>; <span class="comment">// return this to allow method chaining</span>
+    },
+    <span class="fn">withdraw</span>(<span class="type">amount</span>) {
+      <span class="keyword">if</span> (<span class="type">amount</span> > balance) <span class="keyword">return</span> <span class="string">"Insufficient funds"</span>;
+      balance -= <span class="type">amount</span>;
+      <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+    <span class="fn">getBalance</span>() { <span class="keyword">return</span> balance; } <span class="comment">// read-only access</span>
+  };
+}
+
+<span class="keyword">const</span> account = <span class="fn">createBankAccount</span>(<span class="string">"Alice"</span>, <span class="num">1000</span>);
+account.<span class="fn">deposit</span>(<span class="num">500</span>).<span class="fn">withdraw</span>(<span class="num">200</span>); <span class="comment">// chaining works!</span>
+account.<span class="fn">getBalance</span>();               <span class="comment">// 1300</span>
+account.balance;                    <span class="comment">// undefined — truly private ✅</span></code></pre>
+
+    <div class="in-class">
+      <h3>🏭 Factory Function vs Class — When to use which?</h3>
+      <div class="two-column" style="margin-top:10px;">
+        <ul>
+          <li><strong>Use Factory Functions when:</strong></li>
+          <li>You need truly private state via closures</li>
+          <li>You want to avoid <code>new</code> and <code>this</code> confusion</li>
+          <li>You need flexible object composition</li>
+          <li>Creating simple data objects with methods</li>
+        </ul>
+        <ul>
+          <li><strong>Use Classes when:</strong></li>
+          <li>You need prototype-based inheritance</li>
+          <li>Working with frameworks that expect classes</li>
+          <li>You want <code>instanceof</code> checks to work</li>
+          <li>Building larger OOP hierarchies</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:5px;">
+      <div class="box"><strong>✅ No <code>new</code> keyword</strong>Call like any normal function — no confusion</div>
+      <div class="box"><strong>🔒 Truly Private State</strong>Closure variables are hidden from the outside</div>
+      <div class="box"><strong>🔗 Method Chaining</strong>Return <code>this</code> from methods to enable chaining</div>
+      <div class="box"><strong>🧩 Composable</strong>Easy to mix behaviors from multiple factories</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="card">
+    <h2 class="section-title">🧠 The Big Picture</h2>
+    <div class="model-diagram">
+      <strong>Function Types at a Glance</strong><br/><br/>
+      <span class="tag orange">Declaration</span>
+      <span class="tag blue">Expression</span>
+      <span class="tag">Arrow fn</span>
+      <span class="tag orange">IIFE</span>
+      <span class="tag blue">Callback</span>
+      <span class="tag">Higher-Order</span>
+      <span class="tag orange">Recursive</span>
+      <span class="tag blue">Pure</span>
+      <span class="tag red">Factory</span>
+      <br/><br/>
+      <small style="color:#888">All are functions — they differ in syntax, scope, hoisting, and use case</small>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin: 15px 0 10px;">Quick Reference</h3>
+    <table>
+      <thead><tr><th>Type</th><th>Syntax</th><th>Hoisted?</th><th>Own <code>this</code>?</th></tr></thead>
+      <tbody>
+        <tr><td>Declaration</td><td>function name() {}</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+        <tr><td>Expression</td><td>const fn = function() {}</td><td>❌ No</td><td>✅ Yes</td></tr>
+        <tr><td>Arrow</td><td>const fn = () => {}</td><td>❌ No</td><td>❌ No (inherits)</td></tr>
+        <tr><td>IIFE</td><td>(function() {})()</td><td>N/A</td><td>✅ Yes</td></tr>
+        <tr><td>Factory</td><td>function create() { return {} }</td><td>✅ Yes</td><td>✅ Yes (optional)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    📘 JavaScript Functions — Zero to Hero &nbsp;·&nbsp; Keep this open while you practice!
+  </div>
+
+</div>
+</body>
+</html>

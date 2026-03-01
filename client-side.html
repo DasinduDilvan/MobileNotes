@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fundamentals of Management — Study Notes</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Back link */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+
+/* Header card */
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.course-header {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 25px 22px;
+    margin-bottom: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border-top: 4px solid #2c6e6b;
+}
+
+.course-header .course-icon { font-size: 2em; margin-bottom: 10px; display: block; }
+.course-header h1 { color: #2c6e6b; font-size: 1.8em; margin-bottom: 6px; }
+.course-header p  { color: #777; font-size: 0.92em; }
+
+.section-label {
+    color: #777;
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 28px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #cfe9e7;
+}
+
+/* Lessons list */
+.lessons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Available lesson */
+.lesson-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    border-radius: 12px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border-left: 5px solid #2c6e6b;
+    transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+}
+
+.lesson-link:hover {
+    background: #f0faf9;
+    box-shadow: 0 6px 18px rgba(44,110,107,0.18);
+    transform: translateY(-2px);
+}
+
+.lesson-num {
+    min-width: 44px;
+    height: 44px;
+    background: #2c6e6b;
+    color: white;
+    border-radius: 10px;
+    font-size: 0.85em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lesson-info .lesson-title {
+    font-weight: 700;
+    color: #2c6e6b;
+    font-size: 0.98em;
+}
+
+.lesson-info .lesson-sub {
+    font-size: 0.82em;
+    color: #777;
+    margin-top: 2px;
+}
+
+.arrow {
+    margin-left: auto;
+    color: #5a9d99;
+    font-size: 1.1em;
+    flex-shrink: 0;
+}
+
+/* Coming soon lesson */
+.lesson-soon {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-left: 5px solid #ddd;
+    opacity: 0.6;
+    cursor: default;
+}
+
+.lesson-soon .lesson-num {
+    background: #ccc;
+}
+
+.lesson-soon .lesson-info .lesson-title { color: #aaa; }
+.lesson-soon .lesson-info .lesson-sub   { color: #bbb; }
+
+.badge-soon {
+    margin-left: auto;
+    display: inline-block;
+    background: #f5f5f5;
+    color: #bbb;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 3px 10px;
+    border: 1px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .course-header h1 { font-size: 1.4em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="index.html">← Back to Courses</a>
+
+    <div class="course-header">
+        <h1>👨🏻‍💻 Client Side Development With JS</h1>
+    </div>
+
+    <div class="section-label">Lessons</div>
+
+    <div class="lessons-list">
+
+        <a class="lesson-link" href="quick-js/events.html">
+            <div class="lesson-num">01</div>
+            <div class="lesson-info">
+                <div class="lesson-title">JS Events</div>
+            </div>
+            <span class="arrow">›</span>
+        </a>
+
+        <a class="lesson-link" href="quick-js/functions.html">
+            <div class="lesson-num">02</div>
+            <div class="lesson-info">
+                <div class="lesson-title">JS Functions</div>
+            </div>
+            <span class="arrow">›</span>
+        </a>
+
+
+        <div class="lesson-soon">
+            <div class="lesson-num">03</div>
+            <div class="lesson-info">
+                <div class="lesson-title">Organizing</div>
+            </div>
+            <span class="badge-soon">Coming Soon</span>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        🌱 Fundamentals of Management &nbsp;•&nbsp; BY_#D1
+    </div>
+
+</div>
+</body>
+</html>
