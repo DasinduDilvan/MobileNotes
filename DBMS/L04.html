@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Lecture 04 - Study Notes</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+.course-code {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+    font-weight: bold;
+}
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+ul li {
+    margin: 8px 0;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    border-bottom: 1px solid #aaac;
+}
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+.warning {
+    background: #ffebee;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f44336;
+    margin: 15px 0;
+}
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+table th {
+    background: #2c6e6b;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+.er-symbol-table table th { background: #2c6e6b; }
+.relationship-box {
+    background: #f3fbfa;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border-left: 3px solid #2c6e6b;
+    margin: 8px 0;
+}
+.relationship-box strong { color: #2c6e6b; }
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>📘 Database Management Systems</h1>
+<p class="subtitle">Lecture 04 — Data Modeling Using Entity-Relationship Model</p>
+
+<!-- What We Discuss -->
+<div class="card">
+    <h2 class="section-title">What We Discuss Today</h2>
+    <ul>
+        <li>An Example Database Application</li>
+        <li>Entity Types, Entity Sets, Attributes, and Keys</li>
+        <li>Relationships, Relationship Types, Roles, and Structural Constraints</li>
+        <li>Weak Entity Types</li>
+        <li>Refining the ER Design for the COMPANY Database</li>
+        <li>ER Diagrams, Naming Conventions, and Design Issues</li>
+    </ul>
+</div>
+
+<!-- Summary of DDLC -->
+<div class="card">
+    <h2 class="section-title">Summary of DDLC (Recap)</h2>
+    <div class="important">
+        <strong>Desirable properties of a database:</strong> Completeness, Integrity, Flexibility, Efficiency, Usability (ease of use)
+    </div>
+    <ul>
+        <li><strong>General Model of System development</strong> — by referring to the waterfall model</li>
+        <li><strong>Model for database development:</strong>
+            <ul style="margin-left: 30px; margin-top: 5px;">
+                <li>Requirements gathering</li>
+                <li>Analysis</li>
+                <li>Design</li>
+                <li>Implementation — Releasing the design, Populating the database, Supporting users and user processes, Supporting data management strategies</li>
+                <li>Testing</li>
+                <li>Maintenance</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<!-- Example COMPANY Database -->
+<div class="card">
+    <h2 class="section-title">Example COMPANY Database</h2>
+    <div class="highlight">
+        <strong>Requirements of the Company (oversimplified for illustrative purposes)</strong>
+    </div>
+    <ul>
+        <li>The company is organized into <strong>departments</strong>. Each department has a unique name, a unique number, and a particular employee who manages the department. The start date when the manager began is tracked. A department may have <strong>several locations</strong>.</li>
+        <li>A department controls a number of <strong>projects</strong>, each with a unique name, a unique number, and a single location.</li>
+        <li>Each <strong>employee's</strong> name, identity card number, address, salary, sex(gender), and birth date are stored. An employee is assigned to one department but may work on several projects. Hours per week and direct supervisor are also tracked.</li>
+        <li>Each employee's <strong>dependents</strong> are tracked for insurance — dependent's first name, sex(gender), birth date, and relationship to the employee.</li>
+    </ul>
+</div>
+
+<!-- E-R Model Concepts -->
+<div class="card">
+    <h2 class="section-title">E-R Model Concepts</h2>
+    <div class="two-column">
+        <div class="box">
+            <strong>Entities</strong>
+            Specific objects or things in the miniworld with an <em>independent existence</em> represented in the database.<br><br>
+            <em>Ex: student, car, a company, a job, or a university course</em>
+        </div>
+        <div class="box">
+            <strong>Attributes</strong>
+            Each entity has attributes — the particular <em>properties that describe it</em>.<br><br>
+            <em>Ex: an employee may be described by name, age, address, salary, and job</em>
+        </div>
+    </div>
+</div>
+
+<!-- Types of Attributes -->
+<div class="card">
+    <h2 class="section-title">Types of Attributes</h2>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Example</th>
+        </tr>
+        <tr>
+            <td><strong>Simple (Atomic)</strong></td>
+            <td>Not divisible into further components</td>
+            <td>Sex / Gender</td>
+        </tr>
+        <tr>
+            <td><strong>Composite</strong></td>
+            <td>Composed of several sub-components; may form a hierarchy</td>
+            <td>Address (Street, City, State, Zip); Name (First, Middle, Last)</td>
+        </tr>
+        <tr>
+            <td><strong>Single Valued</strong></td>
+            <td>Has a single value for a particular entity</td>
+            <td>National Identity Card No</td>
+        </tr>
+        <tr>
+            <td><strong>Multi Valued</strong></td>
+            <td>Can have a set of values for the same entity</td>
+            <td>Color of a CAR; Degrees of a STUDENT</td>
+        </tr>
+        <tr>
+            <td><strong>Stored</strong></td>
+            <td>Value cannot be determined from other attributes; must be stored directly</td>
+            <td>Date of Birth</td>
+        </tr>
+        <tr>
+            <td><strong>Derived</strong></td>
+            <td>Value can be determined from the values of other attributes</td>
+            <td>Age (derived from Date of Birth)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Null Values -->
+<div class="card">
+    <h2 class="section-title">Null Values</h2>
+    <div class="definition">
+        In some cases, a particular entity may <strong>not have an applicable value</strong> for an attribute.
+    </div>
+    <div class="two-column">
+        <div class="box" style="background: #fff9e6; border-left-color: #f0ad4e;">
+            <strong>1. Not Applicable</strong>
+            The attribute simply does not apply to this entity.<br><br>
+            <em>Ex: Apartment Number — only applies to apartment buildings, not single-family homes</em><br>
+            <em>Ex: College Degree — only applies to people who have degrees</em>
+        </div>
+        <div class="box" style="background: #ffebee; border-left-color: #f44336;">
+            <strong>2. Unknown</strong>
+            The value may exist but is missing, or it is not known whether the value exists.<br><br>
+            <em>Ex: Height of a person — value exists but is missing</em><br>
+            <em>Ex: Home Phone — not known whether value exists</em>
+        </div>
+    </div>
+</div>
+
+<!-- Complex Attributes -->
+<div class="card">
+    <h2 class="section-title">Complex Attributes</h2>
+    <div class="note">
+        Composite and multi-valued attributes may be <strong>nested arbitrarily</strong> to any number of levels, although this is rare.
+    </div>
+    <div class="centered-diagram">
+        <strong style="color: #2c6e6b;">Example: contact_details</strong><br><br>
+        <div style="display: inline-block; text-align: left; background: white; padding: 15px 25px; border-radius: 8px; font-family: monospace; font-size: 0.95em; line-height: 2;">
+            contact_details(<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;{ phone_no },<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;{ address (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;street_address(no, street, apartment_no),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;city, state, zip<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;) }<br>
+            )
+        </div>
+    </div>
+</div>
+
+<!-- Entity Types and Entity Sets -->
+<div class="card">
+    <h2 class="section-title">Entity Types and Entity Sets</h2>
+    <div class="two-column">
+        <div class="box">
+            <strong>Entity Type (Schema / Intension)</strong>
+            Defines a <em>collection (or set)</em> of entities that have the same attributes. Each entity type is described by its name and attributes.
+        </div>
+        <div class="box">
+            <strong>Entity Set (Extension)</strong>
+            The collection of <em>all entities</em> of a particular entity type in the database at any point in time. Usually referred to using the same name as the entity type.
+        </div>
+    </div>
+    <div class="note" style="margin-top: 15px;">
+        <strong>Example:</strong><br>
+        Entity Type: <strong>EMPLOYEE</strong> (Name, Age, Salary) → Entity Set: (John Smith, 55, 80k), (Fred Brown, 40, 30K), (Judy Clark, 25, 20K)...<br><br>
+        Entity Type: <strong>COMPANY</strong> (Name, Headquarters, President) → Entity Set: (Sunco Oil, Houston, John Smith), (Fast Computer, Dallas, Bob King)...
+    </div>
+</div>
+
+<!-- Key Attributes -->
+<div class="card">
+    <h2 class="section-title">Key Attributes</h2>
+    <ul>
+        <li>An entity type usually has <strong>one or more attributes</strong> whose values are distinct for each individual entity in the entity set</li>
+        <li>Its values can be used to <strong>identify each entity uniquely</strong></li>
+        <li>Sometimes <strong>several attributes together form a key</strong>, meaning that the <em>combination</em> of the attribute values must be distinct for each entity</li>
+    </ul>
+</div>
+
+<!-- Value Sets of Attributes -->
+<div class="card">
+    <h2 class="section-title">Value Sets (Domain) of Attributes</h2>
+    <ul>
+        <li>Also called <strong>Domain of Values</strong></li>
+        <li>Specifies the set of values that <strong>may be assigned</strong> to that attribute for each individual entity</li>
+        <li>The value set <strong>provides all possible values</strong></li>
+        <li>Represents data from the <strong>current state of the miniworld</strong></li>
+    </ul>
+    <div class="highlight">
+        <strong>Example:</strong> Age — valid values are integers in the range 16–70
+    </div>
+</div>
+
+<!-- ER Diagram Conventions -->
+<div class="card">
+    <h2 class="section-title">Conventions for ER Diagrams</h2>
+    <table class="er-symbol-table">
+        <tr>
+            <th>Symbol</th>
+            <th>Meaning</th>
+        </tr>
+        <tr>
+            <td>Rectangle</td>
+            <td>Entity</td>
+        </tr>
+        <tr>
+            <td>Double Rectangle</td>
+            <td>Weak Entity</td>
+        </tr>
+        <tr>
+            <td>Diamond</td>
+            <td>Relationship</td>
+        </tr>
+        <tr>
+            <td>Double Diamond</td>
+            <td>Identifying Relationship</td>
+        </tr>
+        <tr>
+            <td>Ellipse</td>
+            <td>Attribute</td>
+        </tr>
+        <tr>
+            <td>Underlined Ellipse</td>
+            <td>Key Attribute</td>
+        </tr>
+        <tr>
+            <td>Double Ellipse</td>
+            <td>Multivalued Attribute</td>
+        </tr>
+        <tr>
+            <td>Cluster of Ellipses</td>
+            <td>Composite Attribute</td>
+        </tr>
+        <tr>
+            <td>Dashed Ellipse</td>
+            <td>Derived Attribute</td>
+        </tr>
+        <tr>
+            <td>Double Line to Entity</td>
+            <td>Total Participation of Entity in Relationship</td>
+        </tr>
+        <tr>
+            <td>1 and N labels on lines</td>
+            <td>Cardinality Ratio (e.g., 1:N)</td>
+        </tr>
+        <tr>
+            <td>(min, max) on lines</td>
+            <td>Structural Constraint on Participation</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Preliminary Designs -->
+<div class="card">
+    <h2 class="section-title">Preliminary Entity Designs — COMPANY Database</h2>
+    <div class="grid">
+        <div class="box">
+            <strong>DEPARTMENT</strong>
+            Attributes: <u>Name</u>, <u>Number</u>, Manager, Manager_start_date, {Locations}
+        </div>
+        <div class="box">
+            <strong>PROJECT</strong>
+            Attributes: <u>Name</u>, <u>Number</u>, Location, Controlling_department
+        </div>
+        <div class="box">
+            <strong>EMPLOYEE</strong>
+            Attributes: <u>Ssn</u>, Name (Fname, Minit, Lname), Sex, Salary, Address, Birth_date, Department, Supervisor, Works_on (Project, Hours)
+        </div>
+        <div class="box">
+            <strong>DEPENDENT</strong>
+            Attributes: <u>Dependent_name</u>, Sex, Birth_date, Relationship, Employee
+        </div>
+    </div>
+</div>
+
+<!-- Relationships and Relationship Types -->
+<div class="card">
+    <h2 class="section-title">Relationships and Relationship Types</h2>
+    <div class="definition">
+        A <strong>relationship</strong> relates two or more distinct entities with a specific meaning. Relationships of the same type are grouped into a <strong>relationship type</strong>.
+    </div>
+    <ul>
+        <li><em>Ex: EMPLOYEE John Smith WORKS_ON the ProductX PROJECT</em></li>
+        <li><em>Ex: EMPLOYEE Franklin Wong MANAGES the Research DEPARTMENT</em></li>
+    </ul>
+    <div class="important" style="margin-top: 15px;">
+        <strong>Degree of a Relationship Type:</strong> The number of participating entity types.<br>
+        Both MANAGES and WORKS_ON are <strong>binary relationships</strong> (degree 2).
+    </div>
+    <div class="highlight" style="margin-top: 10px;">
+        <strong>Note:</strong> More than one relationship type can exist with the same participating entity types — e.g., MANAGES and WORKS_FOR are distinct relationships between EMPLOYEE and DEPARTMENT, but with different meanings.
+    </div>
+</div>
+
+<!-- Six Relationships in COMPANY -->
+<div class="card">
+    <h2 class="section-title">Six Relationships in the COMPANY Database</h2>
+    <div class="note">All six are <strong>binary relationships (degree 2)</strong>.</div>
+    <div class="relationship-box"><strong>WORKS_FOR</strong> — between EMPLOYEE and DEPARTMENT</div>
+    <div class="relationship-box"><strong>MANAGES</strong> — also between EMPLOYEE and DEPARTMENT (different meaning)</div>
+    <div class="relationship-box"><strong>CONTROLS</strong> — between DEPARTMENT and PROJECT</div>
+    <div class="relationship-box"><strong>WORKS_ON</strong> — between EMPLOYEE and PROJECT</div>
+    <div class="relationship-box"><strong>SUPERVISION</strong> — between EMPLOYEE (as subordinate) and EMPLOYEE (as supervisor)</div>
+    <div class="relationship-box"><strong>DEPENDENTS_OF</strong> — between EMPLOYEE and DEPENDENT</div>
+</div>
+
+<!-- Cardinality and Participation Constraints -->
+<div class="card">
+    <h2 class="section-title">Constraints of Binary Relationship Types</h2>
+    <div class="two-column">
+        <div class="box">
+            <strong>Cardinality Ratios (Maximum Cardinality)</strong>
+            Possible ratios for binary relationship types:<br><br>
+            <b>1:1</b> — One to One<br>
+            <b>1:N</b> — One to Many<br>
+            <b>N:1</b> — Many to One<br>
+            <b>M:N</b> — Many to Many
+        </div>
+        <div class="box">
+            <strong>Participation Constraints (Minimum Cardinality)</strong>
+            Two types:<br><br>
+            <b>Total Participation</b> — every entity must participate (existence dependency)<br>
+            <b>Partial Participation</b> — some entities may not participate
+        </div>
+    </div>
+</div>
+
+<!-- Cardinality Analysis -->
+<div class="card">
+    <h2 class="section-title">Cardinality &amp; Participation Analysis</h2>
+    <table>
+        <tr>
+            <th>Relationship</th>
+            <th>Cardinality</th>
+            <th>Participation</th>
+        </tr>
+        <tr>
+            <td><strong>MANAGES</strong></td>
+            <td>1:1 (EMPLOYEE ↔ DEPARTMENT)</td>
+            <td>EMPLOYEE: Partial | DEPARTMENT: Total (must always have a manager)</td>
+        </tr>
+        <tr>
+            <td><strong>WORKS_FOR</strong></td>
+            <td>1:N (DEPARTMENT ↔ EMPLOYEE)</td>
+            <td>Both: Total</td>
+        </tr>
+        <tr>
+            <td><strong>CONTROLS</strong></td>
+            <td>1:N (DEPARTMENT ↔ PROJECT)</td>
+            <td>PROJECT: Total | DEPARTMENT: Partial (some may control no projects)</td>
+        </tr>
+        <tr>
+            <td><strong>SUPERVISION</strong></td>
+            <td>1:N (EMPLOYEE supervisor ↔ EMPLOYEE supervisee)</td>
+            <td>Both: Partial (not every employee is a supervisor or has a supervisor)</td>
+        </tr>
+        <tr>
+            <td><strong>WORKS_ON</strong></td>
+            <td>M:N (EMPLOYEE ↔ PROJECT)</td>
+            <td>Both: Total</td>
+        </tr>
+        <tr>
+            <td><strong>DEPENDENTS_OF</strong></td>
+            <td>1:N (EMPLOYEE ↔ DEPENDENT)</td>
+            <td>EMPLOYEE: Partial | DEPENDENT: Total</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Attributes of Relationship Types -->
+<div class="card">
+    <h2 class="section-title">Attributes of Relationship Types</h2>
+    <ul>
+        <li>Relationship types can also have <strong>attributes</strong>, similar to those of entity types</li>
+        <li>Attributes of <strong>1:1 or 1:N</strong> relationship types can be migrated to one of the participating entity types</li>
+        <li>For <strong>M:N</strong> relationships, some attributes may be determined by the <em>combination of participating entities</em> — not by any single entity. Such attributes <strong>must be specified as relationship attributes</strong></li>
+    </ul>
+    <div class="highlight">
+        <strong>Example:</strong> In WORKS_ON (M:N), the attribute <strong>Hours</strong> depends on both the employee and the project together — it cannot belong to either entity alone.
+    </div>
+</div>
+
+<!-- Weak Entity Types -->
+<div class="card">
+    <h2 class="section-title">Weak Entity Types</h2>
+    <div class="definition">
+        An entity type that <strong>does not have a key attribute</strong> of its own. Its entities are identified by being related to specific entities from another entity type, combined with some of their own attribute values.
+    </div>
+    <div class="important">
+        <strong>Identification uses the combination of:</strong>
+        <ul style="margin-top: 8px;">
+            <li>A <strong>partial key</strong> of the weak entity type</li>
+            <li>The <strong>particular entity</strong> they are related to in the identifying entity type</li>
+        </ul>
+    </div>
+    <div class="note">
+        <strong>Example:</strong> DEPENDENT is a weak entity type. A DEPENDENT entity is identified by the dependent's first name and birthdate <em>and</em> the specific EMPLOYEE it is related to. EMPLOYEE is the identifying entity type, and DEPENDENT_OF is the identifying relationship.
+    </div>
+</div>
+
+<!-- Alternative min max notation -->
+<div class="card">
+    <h2 class="section-title">Alternative (min, max) Notation for Relationship Constraints</h2>
+    <ul>
+        <li>Specified on each participation of an entity type E in a relationship type R</li>
+        <li>Specifies that each entity e in E participates in <strong>at least min</strong> and <strong>at most max</strong> relationship instances in R</li>
+        <li>Default (no constraint): min=0, max=n (no limit)</li>
+        <li>Must have: <strong>min ≤ max</strong>, min ≥ 0, max ≥ 1</li>
+    </ul>
+    <div class="two-column" style="margin-top: 15px;">
+        <div class="box">
+            <strong>MANAGES Example</strong>
+            A department has exactly one manager; an employee can manage at most one department.<br><br>
+            EMPLOYEE in MANAGES: <b>(0, 1)</b><br>
+            DEPARTMENT in MANAGES: <b>(1, 1)</b>
+        </div>
+        <div class="box">
+            <strong>WORKS_FOR Example</strong>
+            An employee works for exactly one department; a department can have any number of employees.<br><br>
+            EMPLOYEE in WORKS_FOR: <b>(1, 1)</b><br>
+            DEPARTMENT in WORKS_FOR: <b>(1, N)</b>
+        </div>
+    </div>
+</div>
+
+<!-- Data Modeling Tools -->
+<div class="card">
+    <h2 class="section-title">Data Modeling Tools</h2>
+    <div class="note">
+        A number of popular tools cover <strong>conceptual modeling</strong> and mapping into relational schema design.
+    </div>
+    <div class="grid">
+        <div class="box"><strong>CA Erwin</strong> Industry-standard ER modeling tool</div>
+        <div class="box"><strong>ER/Studio</strong> Enterprise data modeling platform</div>
+        <div class="box"><strong>Sparx Enterprise Architect</strong> UML and ER design tool</div>
+        <div class="box"><strong>Oracle SQL Developer Data Modeler</strong> Free Oracle modeling tool</div>
+    </div>
+    <div class="important" style="margin-top: 15px;">
+        <strong>Positives:</strong> Serves as documentation of application requirements; provides easy user interface — mostly graphics editor support.
+    </div>
+</div>
+
+<!-- Problem with ER notation -->
+<div class="card">
+    <h2 class="section-title">Limitation of ER Notation</h2>
+    <div class="warning">
+        <strong>Problem:</strong> The entity relationship model in its original form did <strong>not support the specialization/generalization abstractions</strong>. This limitation led to the development of the Enhanced ER (EER) model.
+    </div>
+</div>
+
+<!-- Key Takeaways -->
+<div class="card">
+    <h2 class="section-title">Key Takeaways</h2>
+    <div class="important">
+        <strong>Remember:</strong>
+    </div>
+    <ul>
+        <li><strong>Entities</strong> are real-world objects; <strong>attributes</strong> describe their properties</li>
+        <li>Attributes can be simple, composite, single-valued, multi-valued, stored, or derived</li>
+        <li><strong>Null values</strong> arise when an attribute is not applicable or its value is unknown</li>
+        <li>A <strong>key attribute</strong> uniquely identifies each entity in an entity set</li>
+        <li><strong>Relationships</strong> link entities; their degree is the number of participating entity types</li>
+        <li><strong>Cardinality ratios</strong> (1:1, 1:N, M:N) and <strong>participation constraints</strong> (total/partial) define structural rules</li>
+        <li>A <strong>weak entity</strong> has no key of its own and relies on an identifying relationship</li>
+        <li>The <strong>(min, max) notation</strong> precisely expresses both minimum and maximum cardinality</li>
+        <li>The COMPANY database has <strong>six binary relationships</strong>: WORKS_FOR, MANAGES, CONTROLS, WORKS_ON, SUPERVISION, DEPENDENTS_OF</li>
+    </ul>
+</div>
+
+<div class="footer">
+    🌱 Lecture 04 - Data Modeling Using Entity-Relationship Model • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Lecture 03 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.course-code {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+    font-weight: bold;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    border-bottom: 1px solid #aaac;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #ffebee;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f44336;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+table th {
+    background: #2c6e6b;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>📘 Database Management Systems</h1>
+<p class="subtitle">Lecture 03 — Database Development Life Cycle</p>
+
+<div class="card">
+<h2 class="section-title">What We Discuss Today</h2>
+<ul>
+<li>Desirable properties of a database</li>
+<li>Characteristics of Bad Database</li>
+<li>General Model of System development</li>
+<li>Database Development Life Cycle</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Desirable Properties of a Database</h2>
+
+<table>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>Completeness</strong></td>
+<td>Ensures that users can access the data they want. Note that this includes ad hoc queries, which would not be explicitly given as part of a statement of data requirements.</td>
+</tr>
+<tr>
+<td><strong>Integrity</strong></td>
+<td>Ensures that data is both consistent (no contradictory data) and correct (no invalid data), and ensures that users trust the database.</td>
+</tr>
+<tr>
+<td><strong>Flexibility</strong></td>
+<td>Ensures that a database can evolve (without requiring excessive effort) to satisfy changing user requirements.</td>
+</tr>
+<tr>
+<td><strong>Efficiency</strong></td>
+<td>Ensures that users do not have unduly long response times when accessing data.</td>
+</tr>
+<tr>
+<td><strong>Usability (ease of use)</strong></td>
+<td>Ensures that data can be accessed and manipulated in ways which match user requirements.</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<h2 class="section-title">Characteristics of Bad Database</h2>
+
+<div class="warning">
+<strong>A bad database would:</strong>
+</div>
+
+<ul>
+<li><strong>Not satisfy all user requirements</strong></li>
+<li><strong>Would contain inconsistent and invalid data</strong></li>
+<li><strong>Would require excessive effort to change</strong></li>
+<li><strong>Would be slow and clumsy to use</strong> for achieving a desired outcome</li>
+</ul>
+
+<div class="important">
+When trying to decide if some choices are better than others, you need to consider the key desirable properties of a database.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">General Model of System Development</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">System Development Process</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.5;">
+<strong>Establishing Requirements</strong> → Statement of Requirements<br>
+↓<br>
+<strong>Analysis</strong> → System Specification<br>
+↓<br>
+<strong>Design</strong> → System Design Document<br>
+↓<br>
+<strong>Implementation</strong> → Initial System<br>
+↓<br>
+<strong>Testing</strong> → Release System<br>
+↓<br>
+<strong>Maintenance</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">1. Establishing Requirements</h2>
+
+<ul>
+<li>Involves <strong>consultation with, and agreement among, stakeholders</strong> as to what they want of a system</li>
+<li>Expressed as a <strong>statement of requirements</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">2. Analysis</h2>
+
+<ul>
+<li>Starts by considering the <strong>statement of requirements</strong></li>
+<li>Finishes by producing a <strong>system specification</strong></li>
+<li>The specification is a <strong>formal representation of what a system should do</strong>, expressed in terms that are independent of how it may be released</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">3. Design</h2>
+
+<ul>
+<li>Begins with a <strong>system specification</strong></li>
+<li>Produces <strong>design documents</strong></li>
+<li>Provides a <strong>detailed description of how a system should be constructed</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">4. Implementation</h2>
+
+<ul>
+<li><strong>Construction of a computer system</strong> according to a given design document</li>
+<li>Takes account of the <strong>environment in which the system will be operating</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Example: specific hardware or software available for the development</li>
+</ul>
+</li>
+<li>Implementation may be <strong>staged</strong>, usually with an initial system where requirements can be validated and tested before a final system is released for use</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">5. Testing</h2>
+
+<ul>
+<li><strong>Compares the implemented system</strong> against the design documents and requirements specification</li>
+<li>Produces an <strong>acceptance report</strong> or, more usually, a <strong>list of errors and bugs</strong></li>
+<li>Requires a review of the analysis, design and implementation processes to correct issues</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">6. Maintenance</h2>
+
+<ul>
+<li>Involves dealing with <strong>changes in the requirements or the implementation environment</strong></li>
+<li><strong>Bug fixing</strong> or <strong>porting</strong> of the system to new environments
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Example: migrating a system from a standalone PC to a UNIX workstation or a networked environment</li>
+</ul>
+</li>
+<li>Since maintenance involves the analysis of the changes required, design of a solution, implementation and testing of that solution over the lifetime of a maintained software system, the <strong>waterfall life cycle will be repeatedly revisited</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">The Mapping to Database Development</h2>
+
+<div class="important">
+We can use the general system development framework as the basis for a model of database development which incorporates three assumptions:
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Assumption 1</strong>
+We can separate the development of a database from the user processes that make use of the database (specification and creation of a schema to define data in a database)
+</div>
+<div class="box">
+<strong>Assumption 2</strong>
+We can use the three-schema architecture as a basis for distinguishing the activities associated with a schema
+</div>
+<div class="box">
+<strong>Assumption 3</strong>
+We can represent the constraints to enforce the semantics of the data once, within a database, rather than within every user process that uses the data
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database Development Life Cycle</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">Database Development Process</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.5;">
+<strong>Establishing Requirements</strong> → Data Requirements<br>
+↓<br>
+<strong>Data Analysis</strong> → Conceptual Data Model<br>
+↓<br>
+<strong>Database Design</strong> → Logical Schema<br>
+↓<br>
+<strong>Implementation</strong> → Initial Schema & Database<br>
+↓<br>
+<strong>Testing</strong> → Release Schema & Database<br>
+↓<br>
+<strong>Maintenance</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Requirements Gathering</h2>
+
+<ul>
+<li>Concerned only with the requirements that <strong>relate specifically to the data</strong></li>
+<li><strong>Consultation with, and agreement among, all the users</strong></li>
+<li><strong>Identifying meaning and interpretation</strong> of the data elements</li>
+<li><strong>Data administrator plays a key role</strong> in this process as they overview the business, legal and ethical issues within the organization that impact on the data requirements</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Requirement Document (DRD)</h2>
+
+<div class="highlight">
+Says nothing about how the data are processed, but it does state what the data items are, what attributes they have, what constraints apply and the relationships that hold between the data items.
+</div>
+
+<div class="important">
+<strong>Key Characteristics:</strong>
+</div>
+
+<ul>
+<li><strong>Used to agree requirements with users</strong></li>
+<li><strong>Easily understood</strong></li>
+<li><strong>Should not be overly formal or highly encoded</strong></li>
+<li><strong>Document should give a concise summary</strong> of all users' requirements – not just a collection of individuals' requirements</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Example DRD</h2>
+
+<div class="note">
+<strong>Sample Data Requirements Document:</strong>
+</div>
+
+<ul>
+<li>Each <strong>course</strong> which is available for study is given a course code, a title and a value for credit points – either a 2-credit course or a 3-credit course</li>
+<li>A course may have a <strong>quota</strong> – the maximum number of students that can be enrolled on the course in any one year; each quota is reviewed regularly and the last date of review is recorded with the quota</li>
+<li>A course need not (yet) have any students enrolled on it. <strong>Students may not enroll for more than 20 credit points' worth of courses</strong> at any one time</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Analysis - Data Analysis</h2>
+
+<ul>
+<li>Begins with the <strong>statement of data requirements</strong></li>
+<li>Produces a <strong>conceptual data model</strong></li>
+<li>Obtain a <strong>detailed description of the data</strong> that will suit user requirements</li>
+<li>Both <strong>high-level and low-level properties</strong> of data and their use are dealt with</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Conceptual Data Model</h2>
+
+<div class="definition">
+A conceptual data model is concerned with the <strong>meaning and structure of data</strong>, but not with the details affecting how they are implemented.
+</div>
+
+<div class="important">
+<strong>Key Characteristics:</strong>
+</div>
+
+<ul>
+<li>Focuses on <strong>'What is required?'</strong> not 'How is it achieved?'</li>
+<li><strong>Used by people</strong> for the database design activity</li>
+<li>It is <strong>not used by any DBMS</strong>, nor is it a programming language</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Design - Database Design</h2>
+
+<ul>
+<li>Starts with a <strong>conceptual data model</strong></li>
+<li>Produces a specification of a <strong>logical schema</strong></li>
+<li>Determine the <strong>specific type of database system</strong> (network, relational, object-oriented etc.)</li>
+</ul>
+
+<div class="definition">
+<strong>Logical Schema:</strong> All the tables and constraints needed to satisfy the description of the data in the conceptual data model.
+</div>
+
+<ul style="margin-top: 15px;">
+<li><strong>Choices are made</strong> as to which tables are most appropriate for representing the data in a database</li>
+<li>It is <strong>not uncommon</strong> to find that a single design cannot simultaneously satisfy all the properties of a good database</li>
+<li>Important that the designer has <strong>prioritized these properties</strong> (usually using information from the requirements specification)
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Example: To decide if integrity is more important than efficiency and whether usability is more important than flexibility in a given development</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Steps for Database Design</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Design Process Flow</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2; background: white; padding: 20px; border-radius: 8px;">
+<strong>Step 1:</strong> Use a relational representation of the conceptual data model to give a set of tables for a first-cut database design<br>
+↓<br>
+<strong>Step 2:</strong> Do the tables represent the data in an acceptable way according to the given criteria for usability, efficiency, and so on?<br>
+↓<br>
+<strong>If YES:</strong> Define constituents of schema for each table (columns, primary keys, foreign keys, constraints)<br>
+<strong>If NO:</strong> Flex tables to produce second-cut design<br>
+↓<br>
+<strong>Implementation</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Three General Points of Design</h2>
+
+<div class="box" style="background: #fff9e6; border-left-color: #f0ad4e;">
+<strong>Point 1:</strong>
+For a given conceptual data model, it is not necessary that all the user requirements it represents have to be satisfied by a single database.
+</div>
+
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+    <strong>Point 2:</strong>
+Separate the development of a database from the development of user processes that make use of it.
+</div>
+
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>Point 3:</strong>
+Many aspects of database design and implementation depend on the particular DBMS being used.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Implementation</h2>
+
+<ul>
+<li><strong>Construction of a database</strong> according to the specification of a logical schema</li>
+<li><strong>Include the specification of:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>1. Storage schema</li>
+<li>2. Security enforcement</li>
+<li>3. External schema</li>
+</ul>
+</li>
+<li><strong>Heavily influenced</strong> by the choice of available DBMS, database tools and operating environment</li>
+<li><strong>Requires a very detailed knowledge</strong> of the specific features and facilities that the DBMS has to offer</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Implementation Activities</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Releasing the Design</strong>
+Making the database structure available
+</div>
+<div class="box">
+<strong>Populating the Database</strong>
+Loading initial data into the database
+</div>
+<div class="box">
+<strong>Supporting Users</strong>
+Providing user support and user processes
+</div>
+<div class="box">
+<strong>Data Management Strategies</strong>
+Supporting ongoing data management
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Conceptual, Logical, Physical Schema</h2>
+
+<div class="note">
+<strong>Three Levels of Database Schema</strong>
+</div>
+
+<div class="box">
+<strong>Conceptual Schema</strong>
+• A conceptual entity-relationship model shows how the <strong>business world sees information</strong>
+• It <strong>suppresses non-critical details</strong> in order to emphasize business rules and user objects<br>
+• Typically includes only <strong>significant entities which have business meaning</strong>, along with their relationships<br>
+<strong>• Many-to-many relationships are acceptable</strong> to represent entity associations
+</div>
+
+<div class="box">
+<strong>Logical Schema</strong>
+• A logical entity-relationship model is <strong>provable in the mathematics of data science</strong>
+• Given the current predominance of relational databases, logical models generally <strong>conform to relational theory</strong>
+• A logical model contains only <strong>fully normalized entities</strong>
+• Some of these may represent logical domains rather than potential physical tables
+</div>
+
+<div class="box">
+<strong>Physical Schema</strong>
+• A physical data model is a single logical model <strong>instantiated in a specific database management product</strong> (e.g., Sybase, Oracle, Informix, etc.) in a specific installation<br>
+• The physical data model specifies <strong>implementation details</strong> which may be features of a particular product or version, as well as configuration choices for that database instance
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Testing</h2>
+
+<div class="important">
+<strong>Purpose:</strong> Uncover errors in the design and implementation of the database, its structure, constraints and associated user and management support.
+</div>
+
+<div class="two-column">
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>Validation</strong>
+<em>"Are we building the right database?"</em><br>
+Validation checks whether the database meets user needs and works correctly in real scenarios.<br><br>
+<strong>Examples:</strong>
+• Data is stored and retrieved correctly<br>
+• Queries return correct and meaningful results<br>
+• Transactions behave correctly (commit/rollback)
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Verification</strong>
+<em>"Are we building the database correctly?"</em><br>
+Verification checks whether the database design and implementation follow the specifications and rules.<br><br>
+<strong>Examples:</strong>
+• Database schema matches requirements<br>
+• Tables, attributes, and data types are correct<br>
+• Primary keys and foreign keys are defined properly
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Maintenance</h2>
+
+<table>
+<tr>
+<th>Maintenance Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>Operational Maintenance</strong></td>
+<td>Where the performance of the database is monitored.</td>
+</tr>
+<tr>
+<td><strong>Porting and Implementation</strong></td>
+<td>In which the DBMS, the user processes, the underlying computer system or some other aspect undergoes changes that require the database implementation to be revised.</td>
+</tr>
+<tr>
+<td><strong>Requirements Change</strong></td>
+<td>Where the original requirement specification changes.</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<h2 class="section-title">A Modern Approach to Database Development</h2>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.2em; color: #2c6e6b;">Modern Database Development Workflow</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.5;">
+<strong>Database Planning</strong><br>
+↓<br>
+<strong>System Definition</strong><br>
+↓<br>
+<strong>Requirements Collection and Analysis</strong><br>
+↓<br>
+<strong>Database Design</strong> ⟷ <strong>Application Design</strong><br>
+↑ ↓<br>
+<strong>DBMS Selection (optional)</strong> ← → <strong>Prototyping (optional)</strong><br>
+↓<br>
+<strong>Implementation</strong><br>
+↓<br>
+<strong>Data Conversion and Loading</strong><br>
+↓<br>
+<strong>Testing</strong> → <strong>Operational Maintenance</strong>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Key Takeaways</h2>
+
+<div class="important">
+<strong>Remember:</strong>
+</div>
+
+<ul>
+<li>A <strong>good database</strong> has five key properties: completeness, integrity, flexibility, efficiency, and usability</li>
+<li><strong>Database development</strong> follows a systematic life cycle from requirements to maintenance</li>
+<li><strong>Three schema levels</strong>: Conceptual (what users see), Logical (normalized structure), Physical (implementation details)</li>
+<li><strong>DRD</strong> (Data Requirement Document) captures what data is needed without specifying how to process it</li>
+<li><strong>Testing involves both validation</strong> (right database) and verification (built correctly)</li>
+<li><strong>Maintenance</strong> is ongoing and includes operational monitoring, porting, and requirement changes</li>
+</ul>
+</div>
+
+
+<div class="footer">
+🌱 Lecture 03 - Database Development Life Cycle • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

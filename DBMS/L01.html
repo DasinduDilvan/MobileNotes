@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Lecture 01 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.course-code {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 0.95em;
+    font-weight: bold;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    border-bottom: 1px solid #ccca;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #ffebee;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f44336;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>📘 Database Management Systems</h1>
+<p class="subtitle">Lecture 01 — Introduction to Databases and Database Users</p>
+
+<div class="card">
+<h2 class="section-title">What We Discuss Today</h2>
+<ul>
+<li>Introduction to databases</li>
+<li>Types of databases and database applications</li>
+<li>Characteristics of the database approach</li>
+<li>Actors on the scene</li>
+<li>Workers behind the scene</li>
+<li>Advantages of using a DBMS</li>
+<li>Implications of the database approach</li>
+<li>A brief history of database applications</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data vs Information</h2>
+
+<div class="two-column">
+<div class="box">
+<strong>Data</strong>
+Data refers to <strong>raw facts, figures and symbols</strong> that may be processed and turned into information.
+</div>
+<div class="box">
+<strong>Information</strong>
+Information means <strong>processed data</strong> that have been shaped into a form that is <strong>meaningful and useful to human beings</strong>.
+</div>
+</div>
+
+<div class="centered-diagram" style="margin-top: 15px;">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Data → Processing → Information</strong>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">What is a Database?</h2>
+
+<div class="definition">
+A database is a <strong>collection of related data</strong>.
+</div>
+
+<div class="important">
+<strong>Key Characteristics:</strong>
+</div>
+
+<ul>
+<li>A database is <strong>designed, built, and populated with data</strong> for a specific purpose</li>
+<li>It has an <strong>intended group of users</strong></li>
+<li>It has some <strong>preconceived applications</strong> in which these users are interested</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">What is Database Management System (DBMS)?</h2>
+
+<div class="definition">
+A database management system (DBMS) is a <strong>collection of programs</strong> that enables users to create and maintain a database.
+</div>
+
+<div class="important">
+<strong>DBMS is a general-purpose software system that facilitates:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Defining</strong>
+Specifying data types, structures, and constraints
+</div>
+<div class="box">
+<strong>Constructing</strong>
+Storing data on storage medium
+</div>
+<div class="box">
+<strong>Manipulating</strong>
+Querying, updating, and generating reports
+</div>
+<div class="box">
+<strong>Sharing</strong>
+Multiple users and applications accessing data
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Additional Functions:</strong> DBMS includes protecting the database and maintaining it over a long period of time.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">What is a Relational Database Management System (RDBMS)?</h2>
+
+<div class="definition">
+A relational database management system (RDBMS) is a program used to <strong>create, update, and manage relational databases</strong>.
+</div>
+
+<div class="highlight">
+<strong>Relational Database Characteristics:</strong>
+</div>
+
+<ul>
+<li>✓ <strong>Organize data in the form of tables (relations)</strong></li>
+<li>✓ <strong>Present the data to the user as relations in tabular form</strong></li>
+<li>✓ <strong>Provide relational operators to manipulate the data in tabular form</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Examples of RDBMS</h2>
+
+<div class="grid">
+<div class="box">
+<strong>MySQL</strong>
+Open-source, widely used
+</div>
+<div class="box">
+<strong>MS SQL Server</strong>
+Microsoft's enterprise solution
+</div>
+<div class="box">
+<strong>ORACLE</strong>
+Enterprise-grade database
+</div>
+<div class="box">
+<strong>IBM DB2</strong>
+IBM's database system
+</div>
+<div class="box">
+<strong>PostgreSQL</strong>
+Advanced open-source
+</div>
+<div class="box">
+<strong>SQLite</strong>
+Lightweight, embedded
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Why Not Traditional File Systems?</h2>
+
+<div class="warning">
+<strong>Problems with File Systems:</strong>
+</div>
+
+<ul>
+<li><strong>Redundancy in defining and storing data</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Same data stored in multiple files</li>
+<li>Inconsistencies when data is updated</li>
+</ul>
+</li>
+<li><strong>Wasted storage space</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Duplicate data occupies unnecessary space</li>
+</ul>
+</li>
+<li><strong>Redundant efforts to maintain common data up-to-date</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Must update the same data in multiple locations</li>
+<li>Time-consuming and error-prone</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of Databases and Database Applications</h2>
+
+<div class="two-column">
+<div class="box">
+<strong>Traditional Applications</strong>
+• Numeric databases<br>
+• Textual databases
+</div>
+<div class="box">
+<strong>More Recent Applications</strong>
+• Multimedia databases<br>
+• Geographic Information Systems (GIS)<br>
+• Biological and genome databases<br>
+• Data warehouses<br>
+• Mobile databases<br>
+• Real-time and active databases
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Recent Developments in Databases</h2>
+
+<div class="highlight">
+<strong>Social Networks & Web Data:</strong>
+</div>
+
+<ul>
+<li>Social Networks capture vast amounts of information:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Facebook</strong> - posts, photos, videos</li>
+<li><strong>Twitter</strong> - tweets, communications</li>
+<li><strong>LinkedIn</strong> - professional connections</li>
+</ul>
+</li>
+<li><strong>Search Engines</strong> (Google, Bing, Yahoo):
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Collect repository of web pages for searching purposes</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Emerging Database Technologies</h2>
+
+<div class="box">
+<strong>Big Data & Cloud Storage</strong>
+New technologies emerging from non-SQL vendors to manage vast amounts of web-generated data
+</div>
+
+<div class="grid" style="margin-top: 15px;">
+<div class="box">
+<strong>Big Data Storage Systems</strong>
+Large clusters of distributed databases
+</div>
+<div class="box">
+<strong>NOSQL Systems</strong>
+Non-SQL, Not Only SQL<br>
+Alternative to traditional RDBMS
+</div>
+<div class="box">
+<strong>Cloud Databases</strong>
+Huge data centers using thousands of machines
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Characteristics of the Database Approach</h2>
+
+<div class="grid">
+<div class="box">
+<strong>1. Self-Describing Nature</strong>
+Database system contains complete definition and description
+</div>
+<div class="box">
+<strong>2. Insulation & Abstraction</strong>
+Programs independent of data structure
+</div>
+<div class="box">
+<strong>3. Multiple Views</strong>
+Different perspectives for different users
+</div>
+<div class="box">
+<strong>4. Data Sharing</strong>
+Multiuser transaction processing
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">1. Self-Describing Nature of a Database System</h2>
+
+<ul>
+<li>Database system contains <strong>not only the database itself</strong> but also a <strong>complete definition or description</strong> of the database structure and constraints</li>
+<li>This description is stored in the <strong>system catalog (metadata)</strong></li>
+<li>The DBMS software must work <strong>equally well with any number of database applications</strong></li>
+<li>The DBMS uses the catalog to understand the database structure</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">2. Insulation between Programs and Data, and Data Abstraction</h2>
+
+<div class="box">
+<strong>Program-Data Independence</strong>
+Application programs are independent of the physical structure of the data stored in the database.
+</div>
+
+<div class="box">
+<strong>Program-Operation Independence</strong>
+The implementation of the operation is specified separately and can be changed without affecting the program.
+</div>
+
+<div class="box">
+<strong>Data and Operation Abstraction</strong>
+Hiding the complex details of how data is stored and managed, and showing users only what they need to see.
+</div>
+
+<div class="important" style="margin-top: 15px;">
+<strong>Benefit:</strong> Changes to data structure don't require changes to application programs
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">3. Support of Multiple Views of the Data</h2>
+
+<ul>
+<li>A database typically has <strong>many users</strong>, each of whom may require a <strong>different perspective or view</strong> of the database</li>
+<li>A view may be:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>A <strong>subset</strong> of the database</li>
+<li><strong>Virtual data</strong> derived from database files but not explicitly stored</li>
+</ul>
+</li>
+<li>A multiuser DBMS must provide <strong>facilities for defining multiple views</strong></li>
+</ul>
+
+<div class="note">
+<strong>Example:</strong> An accounting department may see financial data, while HR sees employee data from the same database.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">4. Sharing of Data and Multiuser Transaction Processing</h2>
+
+<div class="important">
+<strong>Concurrent Access:</strong> Allow multiple users to access the database at the same time
+</div>
+
+<ul>
+<li><strong>Online Transaction Processing (OLTP)</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Multiple users performing transactions simultaneously</li>
+<li>Examples: Banking systems, airline reservations</li>
+</ul>
+</li>
+<li><strong>Concurrency Control</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Ensures multiple users can access and modify database simultaneously</li>
+<li>Prevents data errors or inconsistencies</li>
+<li>Maintains data integrity</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Actors on the Scene</h2>
+
+<div class="note">
+People whose jobs involve the <strong>day-to-day use</strong> of a large database
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database Administrators (DBAs)</h2>
+
+<div class="important">
+<strong>Role:</strong> Administering the database and the DBMS
+</div>
+
+<div class="highlight">
+<strong>Responsibilities:</strong>
+</div>
+
+<ul>
+<li>✓ <strong>Authorizing access</strong> to the database</li>
+<li>✓ <strong>Coordinating and monitoring</strong> the use of database</li>
+<li>✓ <strong>Acquiring software and hardware resources</strong> as needed</li>
+<li>✓ <strong>Accountable for problems</strong> such as:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Breach of security</li>
+<li>Poor system response time</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database Designers</h2>
+
+<div class="important">
+<strong>Role:</strong> Responsible for identifying the data to be stored and choosing appropriate structures
+</div>
+
+<div class="highlight">
+<strong>Responsibilities:</strong>
+</div>
+
+<ul>
+<li>✓ <strong>Communicate with all prospective database users</strong> to understand their requirements</li>
+<li>✓ <strong>Identifying the data</strong> to be stored in the database</li>
+<li>✓ <strong>Choosing appropriate structures</strong> to represent and store this data</li>
+<li>✓ <strong>Develop a view of the database</strong> that meets the data and processing requirements</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">End Users</h2>
+
+<div class="definition">
+People whose jobs require <strong>access to the database</strong> for querying, updating, and generating reports
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Casual End Users</strong>
+• Occasionally access the database<br>
+• May need different information each time<br>
+• Use sophisticated query language<br>
+• Typically middle/high-level managers or occasional browsers
+</div>
+<div class="box">
+<strong>Naive/Parametric End Users</strong>
+• Make up sizable portion of end users<br>
+• Main job function revolves around constantly querying and updating<br>
+• Use pre-programmed transactions
+</div>
+<div class="box">
+<strong>Sophisticated End Users</strong>
+• Engineers, scientists, business analysts<br>
+• Thoroughly familiar with DBMS facilities<br>
+• Implement applications for complex requirements
+</div>
+<div class="box">
+<strong>Stand-alone Users</strong>
+• Maintain personal databases<br>
+• Use ready-made program packages<br>
+• Example: Tax software users
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">System Analysts and Application Programmers</h2>
+
+<div class="two-column">
+<div class="box">
+<strong>System Analysts</strong>
+• Determine requirements of end users<br>
+• Focus on naive and parametric users<br>
+• Develop specifications for canned transactions<br>
+• Bridge between users and programmers
+</div>
+<div class="box">
+<strong>Application Programmers</strong>
+• Implement specifications as programs<br>
+• Test, debug, document, and maintain canned transactions<br>
+• Should be familiar with full range of DBMS capabilities
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Also known as:</strong> Software Engineers, Software Developers
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Workers Behind the Scene</h2>
+
+<div class="note">
+Associated with the <strong>design, development, and operation</strong> of the DBMS software and system environment
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>DBMS System Designers & Implementers</strong>
+Design and implement the DBMS modules and interfaces as a software package
+</div>
+<div class="box">
+<strong>Tool Developers</strong>
+Design and implement tools for database design, performance monitoring, and optimization
+</div>
+<div class="box">
+<strong>Operators & Maintenance Personnel</strong>
+Responsible for actual running and maintenance of hardware and software environment
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Advantages of Using a DBMS</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Controlling Redundancy</strong>
+Minimize data duplication
+</div>
+<div class="box">
+<strong>Restricting Unauthorized Access</strong>
+Security and access control
+</div>
+<div class="box">
+<strong>Persistent Storage</strong>
+For program objects and data structures
+</div>
+<div class="box">
+<strong>Storage Structures</strong>
+Indexes for efficient query processing
+</div>
+<div class="box">
+<strong>Multiple User Interfaces</strong>
+Different interfaces for different users
+</div>
+<div class="box">
+<strong>Complex Relationships</strong>
+Representing relationships among data
+</div>
+<div class="box">
+<strong>Integrity Constraints</strong>
+Enforcing data rules and validations
+</div>
+<div class="box">
+<strong>Backup and Recovery</strong>
+Protection against data loss
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Implications of the Database Approach</h2>
+
+<ul>
+<li><strong>Potential for enforcing standards</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Standardization of data formats, naming conventions, and procedures</li>
+</ul>
+</li>
+<li><strong>Reduced application development time</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>DBMS provides many standard functions</li>
+</ul>
+</li>
+<li><strong>Flexibility</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Easy to change database structure</li>
+</ul>
+</li>
+<li><strong>Availability of up-to-date information</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Changes immediately available to all users</li>
+</ul>
+</li>
+<li><strong>Economies of scale</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Cost savings through consolidation</li>
+</ul>
+</li>
+<li><strong>Enhanced security and access control</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Centralized control over data security</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">A Brief History of Database Applications</h2>
+
+<div class="note">
+<strong>Self-Study Topic</strong>
+</div>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Evolution of Database Systems</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2;">
+<strong>1960s-1970s:</strong> Hierarchical and Network Systems<br>
+↓<br>
+<strong>1970s-1980s:</strong> Relational Databases<br>
+↓<br>
+<strong>1980s-1990s:</strong> Complex Databases (Object-oriented, Multimedia)<br>
+↓<br>
+<strong>1990s-2000s:</strong> Web-based databases, XML for e-commerce<br>
+↓<br>
+<strong>2000s-Present:</strong> Big Data, NoSQL, Cloud Databases<br>
+↓<br>
+<strong>Today:</strong> AI-integrated, Real-time Analytics
+</div>
+</div>
+
+<div class="highlight" style="margin-top: 15px;">
+<strong>Key Topics to Study:</strong>
+</div>
+
+<ul>
+<li>Hierarchical and Network Systems</li>
+<li>Relational Databases</li>
+<li>Complex Databases</li>
+<li>Interchanging data on the web for e-commerce using XML</li>
+<li>Extending database capabilities for new applications</li>
+<li>Databases versus Information Retrieval</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Key Takeaways</h2>
+
+<div class="important">
+<strong>Remember:</strong>
+</div>
+
+<ul>
+<li>A <strong>database</strong> is a collection of related data for a specific purpose</li>
+<li>A <strong>DBMS</strong> is software to create, maintain, and manage databases</li>
+<li><strong>RDBMS</strong> organizes data in tables with relationships</li>
+<li>Database approach provides <strong>data independence, multiple views, and concurrent access</strong></li>
+<li>Different <strong>actors</strong> have different roles in database systems</li>
+<li>DBMS offers numerous <strong>advantages</strong> over traditional file systems</li>
+</ul>
+</div>
+
+<div class="footer">
+🌱 Lecture 01 - Introduction to Databases and Database Users • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Lecture 02 - Study Notes</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li {
+    margin: 8px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 10px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    border-bottom: 1px solid #aaaa;
+    margin: 10px 0;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 1px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.definition {
+    background: #f3e5f5;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #9c27b0;
+    margin: 10px 0;
+}
+
+.example {
+    background: #fff3e0;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ff9800;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.centered-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.formula {
+    background: #e8eaf6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #3f51b5;
+    margin: 15px 0;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .footer {
+        page-break-before: avoid;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .two-column, .three-column {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>📘 Database Management Systems</h1>
+<p class="subtitle">Lecture 02 — Database System Concepts and Architectures</p>
+
+<div class="card">
+<h2 class="section-title">Basic Definitions - Review</h2>
+
+<div class="definition">
+<strong>Database:</strong> A collection of related data.
+</div>
+
+<div class="definition">
+<strong>Data:</strong> Known facts that can be recorded and have an implicit meaning.
+</div>
+
+<div class="definition">
+<strong>Mini-world:</strong> Some part of the real world about which data is stored in a database.<br>
+<em>Example: Student grades and transcripts at a university.</em>
+</div>
+
+<div class="definition">
+<strong>Database Management System (DBMS):</strong> A software package/system to facilitate the creation and maintenance of a computerized database.
+</div>
+
+<div class="definition">
+<strong>Database System:</strong> The DBMS software together with the data itself. Sometimes, the applications are also included.
+</div>
+
+<div class="definition">
+<strong>RDBMS:</strong> A program used to create, update, and manage relational databases.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Typical DBMS Functionality</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Define a Database</strong>
+In terms of data types, structures and constraints
+</div>
+<div class="box">
+<strong>Construct or Load</strong>
+Database on a secondary storage medium
+</div>
+<div class="box">
+<strong>Manipulate the Database</strong>
+Querying, reports, insertions, deletions, modifications
+</div>
+<div class="box">
+<strong>Concurrent Processing</strong>
+Multiple users and programs, keeping data valid and consistent
+</div>
+<div class="box">
+<strong>Protection/Security</strong>
+Prevent unauthorized access
+</div>
+<div class="box">
+<strong>Presentation & Visualization</strong>
+Display data in meaningful formats
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Example of a Database - UNIVERSITY</h2>
+
+<div class="example">
+<strong>Mini-world:</strong> Part of a UNIVERSITY environment
+</div>
+
+<div class="highlight">
+<strong>Mini-world Entities:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>STUDENTS</strong>
+Student records
+</div>
+<div class="box">
+<strong>COURSES</strong>
+Course offerings
+</div>
+<div class="box">
+<strong>SUBJECTS</strong>
+Course subjects
+</div>
+<div class="box">
+<strong>DEPARTMENTS</strong>
+Academic departments
+</div>
+<div class="box">
+<strong>LECTURERS</strong>
+Teaching staff
+</div>
+</div>
+
+<div class="highlight" style="margin-top: 15px;">
+<strong>Mini-world Relationships:</strong>
+</div>
+
+<ul>
+<li>SUBJECTS are of specific COURSES</li>
+<li>STUDENTS take SUBJECTS</li>
+<li>LECTURERS teach SUBJECTS</li>
+<li>COURSES are offered by DEPARTMENTS</li>
+<li>STUDENTS major in DEPARTMENTS</li>
+</ul>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Database Tables Example:</strong><br><br>
+• <strong>Students:</strong> Student ID, Student Name, Department ID, Course ID<br>
+• <strong>Courses:</strong> Course ID, Course Name, Department ID<br>
+• <strong>Subjects:</strong> Subject ID, Subject Name, Course ID<br>
+• <strong>Departments:</strong> Department ID, Department Name<br>
+• <strong>Enrollments:</strong> Enrollment ID, Student ID, Subject ID
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Models</h2>
+
+<div class="definition">
+<strong>Data Model:</strong> A set of concepts to describe the structure of a database, the operations for manipulating these structures, and certain constraints that the database should obey.
+</div>
+
+<div class="important">
+<strong>Data Model Components:</strong>
+</div>
+
+<div class="three-column">
+<div class="box">
+<strong>Structure</strong>
+Elements, data types, groups of elements (entities, records, tables)
+</div>
+<div class="box">
+<strong>Operations</strong>
+Retrievals, updates, manipulations
+</div>
+<div class="box">
+<strong>Constraints</strong>
+Restrictions on valid data
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Model Structure and Constraints</h2>
+
+<ul>
+<li><strong>Constructs</strong> are used to define the database structure</li>
+<li>Constructs typically include:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Elements</strong> and their data types</li>
+<li><strong>Groups of elements</strong> (e.g., entity, record, table)</li>
+<li><strong>Relationships</strong> among such groups</li>
+</ul>
+</li>
+<li><strong>Constraints</strong> specify restrictions on valid data</li>
+<li>These constraints must be <strong>enforced at all times</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Model Operations</h2>
+
+<ul>
+<li>Operations are used for <strong>specifying database retrievals and updates</strong></li>
+<li>Refer to the constructs of the data model</li>
+<li><strong>Types of operations:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Basic model operations:</strong> Generic insert, delete, update</li>
+<li><strong>User-defined operations:</strong> Custom operations for specific needs</li>
+</ul>
+</li>
+</ul>
+
+<div class="example">
+<strong>Examples of User-Defined Operations:</strong>
+</div>
+
+<div class="formula">
+<strong>Calculate Final Marks:</strong><br>
+10% Quizzes + 20% Assessments + 70% Final Exam
+</div>
+
+<div class="formula">
+<strong>Calculate GPA:</strong><br>
+Sum(GPV of the Result × No. of Credits) / Sum(Credits)
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Categories of Data Models</h2>
+
+<div class="box">
+<strong>Conceptual or High-Level Data Models</strong>
+• Provide concepts such as <strong>entities, attributes, and relationships</strong>
+• Close to the way many users perceive data<br>
+• Also called <strong>entity-based or object-based</strong> data models<br>
+• Used during database design phase
+</div>
+<br>
+<div class="box">
+<strong>Physical or Low-Level Data Models</strong>
+• Describe <strong>details of how data is stored</strong> in the computer<br>
+• Concepts for <strong>computer specialists</strong>, not for end users<br>
+• Describe how data is stored as files<br>
+• Include information such as <strong>record formats, record orderings, and access paths</strong>
+</div>
+<br>
+<div class="box">
+<strong>Implementation or Representational Data Models</strong>
+• Represent data by using <strong>record structures</strong> (record-based data models)<br>
+• Concepts easily understood by end users<br>
+• Hide many details of data storage<br>
+• Can be implemented on computer system directly<br>
+• Include the widely used <strong>relational data models</strong>
+</div>
+<br>
+<div class="box">
+<strong>Self-Describing Data Models</strong>
+    • Combine the <strong>description of data with the data values</strong>
+• Examples: XML, key-value stores, some NOSQL systems<br>
+• Created for managing <strong>big data</strong>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database Schema</h2>
+
+<div class="definition">
+<strong>Database Schema:</strong> The description of a database. Includes descriptions of the database structure, data types, and the constraints on the database.
+</div>
+
+<div class="definition">
+<strong>Schema Diagram:</strong> An illustrative display of (most aspects of) a database schema.
+</div>
+
+<div class="definition">
+<strong>Schema Construct:</strong> A component of the schema or an object within the schema.<br>
+<em>Examples: STUDENT, COURSE</em>
+</div>
+
+<div class="important">
+<strong>Key Point:</strong> The schema is the <strong>blueprint</strong> or <strong>design</strong> of the database.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database State</h2>
+
+<div class="definition">
+<strong>Database State (Snapshot):</strong> The actual data stored in a database at a particular moment in time.
+</div>
+
+<ul>
+<li>Includes the <strong>collection of all the data</strong> in the database</li>
+<li>Also called the <strong>current set of occurrences or instances</strong> in the database</li>
+<li>The term <strong>instance</strong> is also applied to individual database components
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Examples: record instance, table instance, entity instance</li>
+</ul>
+</li>
+<li>Every time we insert/delete/change a data item, we <strong>change one state into another state</strong></li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of Database States</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Empty State</strong>
+Database when it is first created (before loading any data)
+</div>
+<div class="box">
+<strong>Initial Database State</strong>
+Database when it is initially loaded into the system
+</div>
+<div class="box">
+<strong>Current State</strong>
+The state at the present moment
+</div>
+<div class="box">
+<strong>Valid State</strong>
+A state that satisfies the structure and constraints of the database
+</div>
+</div>
+
+<div class="centered-diagram" style="margin-top: 15px;">
+<strong style="font-size: 1.1em; color: #2c6e6b;">State Progression</strong><br><br>
+<strong>Empty State → Initial State → Current State</strong><br>
+(All states must be Valid States)
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database Schema vs. Database State</h2>
+
+<div class="two-column">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Schema (Intension)</strong>
+• The structure/design<br>
+• Changes <strong>very infrequently</strong>
+• Defines what data can be stored<br>
+• Like a blueprint
+</div>
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>State (Extension)</strong>
+• The actual data<br>
+• Changes <strong>every time database is updated</strong>
+• The current content<br>
+• Like actual data in tables
+</div>
+</div>
+
+<div class="important" style="margin-top: 15px;">
+<strong>Analogy:</strong> Schema is like a house blueprint (rarely changes), while State is like the furniture and people inside (changes frequently).
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Three-Schema Architecture</h2>
+
+<div class="important">
+<strong>Purpose:</strong> Proposed to support DBMS characteristics of:
+</div>
+
+<ul>
+<li><strong>Program-data independence</strong></li>
+<li><strong>Support of multiple views</strong> of the data</li>
+</ul>
+
+<div class="highlight">
+<strong>Goal:</strong> To separate the user applications from the physical database.
+</div>
+
+<div class="note">
+<strong>Note:</strong> Not explicitly used in commercial DBMS products, but has been useful in explaining database system organization.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">The Three Schema Levels</h2>
+
+<div class="box">
+<strong>Internal Schema (Internal Level)</strong>
+• Describes <strong>physical storage structures and access paths</strong> (e.g., indexes)<br>
+• Typically uses a <strong>physical data model</strong>
+• Closest to physical storage<br>
+• Concerned with how data is stored
+</div>
+
+<div class="box">
+<strong>Conceptual Schema (Conceptual Level)</strong>
+• Describes the <strong>structure and constraints for the whole database</strong>
+• For a <strong>community of users</strong>
+• Uses a conceptual or implementation data model<br>
+• Hides details of physical storage<br>
+• Describes what data is stored and relationships
+</div>
+
+<div class="box">
+<strong>External Schemas (External Level)</strong>
+• Describes the <strong>various user views</strong>
+• Each external schema describes the part of database that a <strong>particular user group</strong> is interested in<br>
+<strong>• Hides the rest of the database</strong> from that user group<br>
+• Usually uses the same data model as conceptual schema<br>
+• Multiple external schemas possible
+</div>
+
+<div class="centered-diagram" style="margin-top: 15px;">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Three-Schema Architecture Hierarchy</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2;">
+<strong>External Level</strong> (User Views)<br>
+↕ Mapping<br>
+<strong>Conceptual Level</strong> (Logical Structure)<br>
+↕ Mapping<br>
+<strong>Internal Level</strong> (Physical Storage)
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Mappings in Three-Schema Architecture</h2>
+
+<div class="definition">
+<strong>Mappings:</strong> The processes of transforming requests and results between schema levels.
+</div>
+
+<ul>
+<li>Programs refer to an <strong>external schema</strong></li>
+<li>DBMS <strong>maps</strong> the request to the <strong>internal schema</strong> for execution</li>
+<li>Data extracted from internal DBMS level is <strong>reformatted</strong> to match the user's external view</li>
+</ul>
+
+<div class="example">
+<strong>Example:</strong> Formatting the results of an SQL query for display in a Web page
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Independence</h2>
+
+<div class="definition">
+<strong>Data Independence:</strong> Capacity to change the schema at one level of a database system without having to change the schema at the next higher level.
+</div>
+
+<div class="two-column">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Logical Data Independence</strong>
+• Capacity to change the <strong>conceptual schema</strong>
+• Without changing <strong>external schemas and application programs</strong>
+• Allows changes to logical structure without affecting user views
+</div>
+<div class="box" style="background: #e3f2fd; border-left-color: #2196f3;">
+<strong>Physical Data Independence</strong>
+• Capacity to change the <strong>internal schema</strong>
+• Without changing the <strong>conceptual schema</strong>
+• Allows changes to storage without affecting logical structure
+</div>
+</div>
+
+<div class="important" style="margin-top: 15px;">
+<strong>Benefit:</strong> Data independence provides flexibility and reduces maintenance costs.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">DBMS Languages</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Data Definition Language (DDL)</strong>
+Defines database structure and constraints
+</div>
+<div class="box">
+<strong>Data Manipulation Language (DML)</strong>
+Manipulates data (query, insert, update, delete)
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>DML Types:</strong>
+</div>
+
+<div class="two-column">
+<div class="box">
+<strong>High-Level DML</strong>
+Non-procedural languages (e.g., SQL)
+</div>
+<div class="box">
+<strong>Low-Level DML</strong>
+Procedural languages
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Definition Language (DDL)</h2>
+
+<ul>
+<li>Used by the <strong>DBA and database designers</strong></li>
+<li>Specify the <strong>conceptual schema</strong> of a database</li>
+<li>In many DBMSs, DDL is also used to define <strong>internal and external schemas (views)</strong></li>
+<li>Some DBMSs use separate languages:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Storage Definition Language (SDL):</strong> Define internal schemas</li>
+<li><strong>View Definition Language (VDL):</strong> Specify user views and their mappings to conceptual schema</li>
+</ul>
+</li>
+</ul>
+
+<div class="note">
+<strong>Note:</strong> SDL is typically realized via DBMS commands provided to the DBA and database designers.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Data Manipulation Language (DML)</h2>
+
+<ul>
+<li>Used to specify database manipulations:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Retrieval</li>
+<li>Insertion</li>
+<li>Deletion</li>
+<li>Modification of data</li>
+</ul>
+</li>
+<li>DML commands (data sublanguage) can be <strong>embedded in a general-purpose programming language</strong> (host language)
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Examples: COBOL, C, C++, Java</li>
+</ul>
+</li>
+<li>A <strong>library of functions</strong> can also be provided to access the DBMS</li>
+<li>Alternatively, <strong>stand-alone DML commands</strong> can be applied directly (called a query language)</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Types of DML</h2>
+
+<div class="box">
+<strong>High Level or Non-Procedural Language</strong>
+• Include the relational language <strong>SQL</strong>
+• May be used in a standalone way or embedded in a programming language<br>
+• Can specify and retrieve <strong>many records in a single DML statement</strong>
+• Called <strong>set-at-a-time or set-oriented DMLs</strong>
+• Specifies <strong>which data to retrieve</strong> rather than how to retrieve it
+</div>
+
+<div class="box">
+<strong>Low Level or Procedural Language</strong>
+• Retrieve data <strong>one record-at-a-time</strong>
+• Must be <strong>embedded in a general-purpose programming language</strong>
+• Retrieves individual records or objects from the database<br>
+• Processes each separately<br>
+• More complex to use but offers more control
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">DBMS Interfaces</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Stand-alone Query Language</strong>
+Entering SQL queries at DBMS interactive interface (e.g., SQL*Plus in ORACLE)
+</div>
+<div class="box">
+<strong>Programmer Interfaces</strong>
+For embedding DML in programming languages
+</div>
+<div class="box">
+<strong>User-Friendly Interfaces</strong>
+Menu-based, forms-based, graphics-based
+</div>
+<div class="box">
+<strong>Mobile Interfaces</strong>
+Interfaces for performing transactions using mobile apps
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">DBMS Programming Language Interfaces</h2>
+
+<div class="box">
+<strong>Embedded Approach</strong>
+Examples: Embedded SQL (for C, C++, etc.), SQLJ (for Java)
+</div>
+
+<div class="box">
+<strong>Procedure Call Approach</strong>
+Examples: JDBC for Java, ODBC (Open Database Connectivity) for other programming languages as APIs (Application Programming Interfaces)
+</div>
+
+<div class="box">
+<strong>Database Programming Language Approach</strong>
+Example: ORACLE has PL/SQL, a programming language based on SQL; language incorporates SQL and its data types as integral components
+</div>
+
+<div class="box">
+<strong>Scripting Languages</strong>
+PHP (client-side scripting) and Python (server-side scripting) are used to write database programs
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">User-Friendly DBMS Interfaces</h2>
+
+<ul>
+<li><strong>Menu-based (Web-based):</strong> Popular for browsing on the web</li>
+<li><strong>Forms-based:</strong> Designed for naïve users used to filling in entries on a form</li>
+<li><strong>Graphics-based:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Point and Click, Drag and Drop</li>
+<li>Specifying a query on a schema diagram</li>
+</ul>
+</li>
+<li><strong>Natural language:</strong> Requests in written English</li>
+<li><strong>Combinations:</strong> Menus and forms used extensively in Web database interfaces</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Other DBMS Interfaces</h2>
+
+<div class="grid">
+<div class="box">
+<strong>Natural Language</strong>
+Free text as a query
+</div>
+<div class="box">
+<strong>Speech</strong>
+Input query and output response
+</div>
+<div class="box">
+<strong>Web Browser</strong>
+With keyword search
+</div>
+<div class="box">
+<strong>Parametric Interfaces</strong>
+Example: Bank tellers using function keys for routine transactions
+</div>
+<div class="box">
+<strong>DBA Interfaces</strong>
+Creating accounts, granting authorizations, setting parameters, changing schemas
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Database System Utilities</h2>
+
+<div class="highlight">
+<strong>Functions performed by utilities:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Loading</strong>
+Loading data stored in files into a database (includes data conversion tools)
+</div>
+<div class="box">
+<strong>Backup</strong>
+Backing up the database periodically on tape or cloud
+</div>
+<div class="box">
+<strong>Reorganization</strong>
+Reorganizing database file structures
+</div>
+<div class="box">
+<strong>Performance Monitoring</strong>
+Performance monitoring utilities
+</div>
+<div class="box">
+<strong>Report Generation</strong>
+Report generation utilities
+</div>
+<div class="box">
+<strong>Other Functions</strong>
+Sorting, user monitoring, data compression, etc.
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Centralized DBMS Architecture</h2>
+
+<div class="definition">
+<strong>Centralized DBMS:</strong> Combines everything into single system including DBMS software, hardware, application programs, and user interface processing software.
+</div>
+
+<ul>
+<li>All processing is done at <strong>centralized site</strong></li>
+<li>User can still connect through a <strong>remote terminal</strong></li>
+<li>All data stored in one location</li>
+<li>Simpler architecture but single point of failure</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Client-Server Architecture</h2>
+
+<div class="important">
+<strong>Specialized Servers with Specialized Functions:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Print Server</strong>
+Handles printing tasks
+</div>
+<div class="box">
+<strong>File Server</strong>
+Manages file storage
+</div>
+<div class="box">
+<strong>DBMS Server</strong>
+Database management
+</div>
+<div class="box">
+<strong>Web Server</strong>
+Web content delivery
+</div>
+<div class="box">
+<strong>Email Server</strong>
+Email services
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>Key Point:</strong> Clients can access the specialized servers as they need.
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Clients in Client-Server Architecture</h2>
+
+<ul>
+<li>Provide appropriate <strong>interfaces through a client software module</strong> to access and utilize various server resources</li>
+<li>Clients may be:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>Diskless machines</strong></li>
+<li><strong>PCs or Workstations</strong> with disks with only the client software installed</li>
+</ul>
+</li>
+<li>Connected to servers via some form of a <strong>network</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>LAN: Local Area Network</li>
+<li>Wireless network</li>
+<li>Internet</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">DBMS Server</h2>
+
+<ul>
+<li>Provides <strong>database query and transaction services</strong> to the clients</li>
+<li>Relational DBMS servers are often called:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>SQL servers</strong></li>
+<li><strong>Query servers</strong></li>
+<li><strong>Transaction servers</strong></li>
+</ul>
+</li>
+<li>Applications running on clients utilize an <strong>Application Program Interface (API)</strong> to access server databases via standard interfaces:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li><strong>ODBC:</strong> Open Database Connectivity standard</li>
+<li><strong>JDBC:</strong> For Java programming access</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Two-Tier Client-Server Architecture</h2>
+
+<ul>
+<li>Client and server must install appropriate <strong>client module and server module software</strong> for ODBC or JDBC</li>
+<li>A client program may connect to <strong>several DBMSs</strong>, sometimes called the <strong>data sources</strong></li>
+<li>In general, data sources can be:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>Files</li>
+<li>Other non-DBMS software that manages data</li>
+</ul>
+</li>
+</ul>
+
+<div class="centered-diagram">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Two-Tier Architecture</strong><br><br>
+<strong>Client (User Interface + Application Logic)</strong><br>
+↕<br>
+<strong>Server (Database Server)</strong>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Three-Tier Client-Server Architecture</h2>
+
+<div class="important">
+<strong>Common for Web Applications</strong>
+</div>
+
+<div class="box">
+<strong>Intermediate Layer - Application Server or Web Server</strong>
+• Stores the <strong>web connectivity software</strong>
+• Stores the <strong>business logic part of the application</strong>
+• Used to access the corresponding data from the database server
+</div>
+
+<div class="highlight">
+<strong>Enhanced Security Benefits:</strong>
+</div>
+
+<ul>
+<li>Database server only accessible via <strong>middle tier</strong></li>
+<li>Clients <strong>cannot directly access</strong> database server</li>
+<li>Clients contain <strong>user interfaces and Web browsers</strong></li>
+<li>The client is typically a <strong>PC or mobile device connected to the Web</strong></li>
+</ul>
+
+<div class="centered-diagram" style="margin-top: 15px;">
+<strong style="font-size: 1.1em; color: #2c6e6b;">Three-Tier Architecture</strong><br><br>
+<div style="display: inline-block; text-align: left; line-height: 2.2;">
+<strong>Tier 1: Client</strong> (User Interface)<br>
+↕<br>
+<strong>Tier 2: Application Server</strong> (Business Logic)<br>
+↕<br>
+<strong>Tier 3: Database Server</strong> (Data Management)
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Classification of DBMSs</h2>
+
+<div class="highlight">
+<strong>Based on the Data Model Used:</strong>
+</div>
+
+<div class="grid">
+<div class="box">
+<strong>Legacy</strong>
+Network, Hierarchical
+</div>
+<div class="box">
+<strong>Currently Used</strong>
+Relational, Object-oriented, Object-relational
+</div>
+<div class="box">
+<strong>Recent Technologies</strong>
+Key-value storage, NOSQL systems
+</div>
+</div>
+
+<div class="note" style="margin-top: 15px;">
+<strong>NOSQL Systems:</strong> Document-based, Column-based, Graph-based, Key-value based
+</div>
+
+<div class="highlight" style="margin-top: 15px;">
+<strong>Other Classifications:</strong>
+</div>
+
+<div class="two-column">
+<div class="box">
+<strong>Single-user vs Multi-user</strong>
+• Single-user: Typically used with personal computers<br>
+• Multi-user: Most DBMSs
+</div>
+<div class="box">
+<strong>Centralized vs Distributed</strong>
+• Centralized: Single computer with one database<br>
+• Distributed: Multiple computers with multiple databases
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">History of Data Models - Network Model</h2>
+
+<div class="note">
+<strong>Self-Study Topic</strong>
+</div>
+
+<ul>
+<li>First network DBMS implemented by <strong>Honeywell in 1964-65</strong> (IDS System)</li>
+<li>Adopted heavily due to support by <strong>CODASYL</strong> (Conference on Data Systems Languages) - CODASYL-DBTG report of 1971</li>
+<li>Implemented in various systems:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>IDMS (Cullinet - now Computer Associates)</li>
+<li>DMS 1100 (Unisys)</li>
+<li>IMAGE (H.P.)</li>
+<li>VAX-DBMS (Digital Equipment Corp.)</li>
+</ul>
+</li>
+</ul>
+
+<div class="two-column" style="margin-top: 15px;">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Advantages</strong>
+• Model complex relationships<br>
+• Represents semantics of add/delete<br>
+• Handle most situations<br>
+• Optimal navigation through database
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Disadvantages</strong>
+• Navigational and procedural nature<br>
+• Complex array of pointers<br>
+• Little scope for automated query optimization
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">History of Data Models - Hierarchical Model</h2>
+
+<ul>
+<li>Initially implemented in joint effort by <strong>IBM and North American Rockwell around 1965</strong></li>
+<li>Resulted in the <strong>IMS family</strong> of systems</li>
+<li><strong>IBM's IMS product</strong> had (and still has) a very large customer base worldwide</li>
+<li>Other systems: <strong>System 2k</strong> (SAS inc.)</li>
+</ul>
+
+<div class="two-column" style="margin-top: 15px;">
+<div class="box" style="background: #e8f5e9; border-left-color: #4caf50;">
+<strong>Advantages</strong>
+• Simple to construct and operate<br>
+• Corresponds to natural hierarchically organized domains (e.g., org chart)<br>
+• Simple language
+</div>
+<div class="box" style="background: #ffebee; border-left-color: #f44336;">
+<strong>Disadvantages</strong>
+• Navigational and procedural nature<br>
+• Database visualized as linear arrangement<br>
+• Little scope for query optimization
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">History of Data Models - Relational Model</h2>
+
+<ul>
+<li>Proposed in <strong>1970 by E.F. Codd (IBM)</strong></li>
+<li>First commercial system in <strong>1981-82</strong></li>
+<li>Available in several commercial products:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>DB2, ORACLE, MS SQL Server, SYBASE, INFORMIX</li>
+</ul>
+</li>
+<li>Several free open-source implementations:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>MySQL, PostgreSQL</li>
+</ul>
+</li>
+<li><strong>Currently most dominant</strong> for developing database applications</li>
+<li>SQL relational standards:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>SQL-89 (SQL1), SQL-92 (SQL2), SQL-99, SQL3, ...</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">History of Data Models - Object-Oriented</h2>
+
+<ul>
+<li>Several models proposed for implementing in a database system</li>
+<li><strong>Persistent O-O Programming Languages:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>C++ (e.g., in OBJECTSTORE or VERSANT)</li>
+<li>Smalltalk (e.g., in GEMSTONE)</li>
+</ul>
+</li>
+<li>Other systems: O2, ORION (at MCC - then ITASCA), IRIS (at H.P. - used in Open OODB)</li>
+<li><strong>Object Database Standards:</strong>
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>ODMG-93, ODMG-version 2.0, ODMG-version 3.0</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">History of Data Models - Object-Relational</h2>
+
+<ul>
+<li>Trend to <strong>mix object models with relational</strong> started with <strong>Informix Universal Server</strong></li>
+<li>Relational systems incorporated concepts from object databases leading to <strong>object-relational</strong></li>
+<li>Exemplified in versions of <strong>Oracle, DB2, and SQL Server</strong></li>
+<li>Current trend: Relational DBMS vendors extend relational DBMSs with capability to process:
+<ul style="margin-left: 30px; margin-top: 5px;">
+<li>XML</li>
+<li>Text</li>
+<li>Other data types</li>
+</ul>
+</li>
+<li>The term <strong>"Object-relational" is receding</strong> in the marketplace</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="section-title">Key Takeaways</h2>
+
+<div class="important">
+<strong>Remember:</strong>
+</div>
+
+<ul>
+<li><strong>Data models</strong> provide concepts to describe database structure, operations, and constraints</li>
+<li><strong>Schema</strong> is the database design (changes rarely), <strong>State</strong> is the current data (changes frequently)</li>
+<li><strong>Three-schema architecture</strong> provides data independence through internal, conceptual, and external levels</li>
+<li><strong>DDL</strong> defines structure, <strong>DML</strong> manipulates data</li>
+<li><strong>Two-tier</strong> architecture is simple, <strong>Three-tier</strong> adds security and business logic layer</li>
+<li>Database models evolved from <strong>Hierarchical/Network → Relational → Object-Oriented → Object-Relational → NoSQL</strong></li>
+</ul>
+</div>
+
+<div class="footer">
+🌱 Lecture 02 - Database System Concepts and Architectures • BY_#D1
+</div>
+
+</div>
+</body>
+</html>
