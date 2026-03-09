@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 04 – Shell Programming (Cont.)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.subsection {
+    color: #2c6e6b;
+    font-size: 1.1em;
+    margin: 18px 0 8px 0;
+    font-weight: 600;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .type    { color: #4ec9b0; }
+pre .num     { color: #b5cea8; }
+pre .var     { color: #9cdcfe; }
+pre .op      { color: #d4d4d4; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.95em;
+}
+
+th {
+    background: #2c6e6b;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+}
+
+td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0f0ef;
+}
+
+tr:nth-child(even) td { background: #f3fbfa; }
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.toc {
+    background: #f3fbfa;
+    padding: 18px 24px;
+    border-radius: 10px;
+    border-left: 4px solid #2c6e6b;
+    margin-bottom: 10px;
+}
+
+.toc ol {
+    margin-left: 18px;
+    line-height: 2;
+    list-style-type: decimal;
+}
+
+.toc li { font-size: 0.97em; color: #2c6e6b; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="../system-programming-linux.html">← Back to Notes</a>
+
+    <h1>🐚 Shell Programming</h1>
+    <p class="subtitle">System Programming Fundamentals and Linux &nbsp;|&nbsp; Week 5 (Lecture 04 Cont.)</p>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="card">
+        <h2 class="section-title">📋 Topics Covered</h2>
+        <div class="toc">
+            <ol>
+                <li>Interactive Shell Scripts &amp; the <code>read</code> Command</li>
+                <li>The <code>echo</code> Command &amp; Escape Sequences</li>
+                <li>Neutralizing Metacharacters</li>
+                <li>Shell Script Arguments: Positional Parameters</li>
+                <li>Special Shell Variables</li>
+                <li>The <code>exit</code> Command</li>
+                <li>Debugging Shell Scripts</li>
+                <li>Language Constructs: Decision Making</li>
+                <li>Language Constructs: Looping Structures</li>
+                <li>I/O Redirection with <code>&gt;&amp;</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- SECTION 1: INTERACTIVE SHELL SCRIPTS -->
+    <div class="card">
+        <h2 class="section-title">1. Interactive Shell Scripts</h2>
+        <p>A common task in shell scripts is to <strong>prompt for user input</strong> and then read their response. The <code>read</code> command is used to set the value of a variable — it reads the entire line of user input and assigns it to the specified variable(s).</p>
+
+        <div class="highlight">
+            <strong>💡 Syntax:</strong><br>
+            <code>read variable_name</code> &nbsp;or&nbsp; <code>read var1 var2</code>
+        </div>
+
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="fn">echo</span> <span class="string">"Enter your name please:"</span>
+<span class="keyword">read</span> <span class="var">fname lname</span>
+<span class="fn">echo</span> <span class="string">"Hello $fname $lname, Lets be friend!"</span></pre>
+
+        <h3 class="subsection">The <code>echo</code> Command</h3>
+        <p>The most common command used to output messages to the terminal. Output can be formatted using <strong>escape sequences</strong> with the <code>-e</code> option.</p>
+
+        <table>
+            <tr><th>Option / Sequence</th><th>Meaning</th></tr>
+            <tr><td><code>-e</code></td><td>Enable interpretation of escape sequences</td></tr>
+            <tr><td><code>-n</code></td><td>Do not output the trailing newline</td></tr>
+            <tr><td><code>\n</code></td><td>Newline</td></tr>
+            <tr><td><code>\t</code></td><td>Horizontal tab</td></tr>
+            <tr><td><code>\c</code></td><td>Suppress trailing newline (same effect as <code>-n</code>)</td></tr>
+        </table>
+
+        <pre><span class="fn">echo</span> -e <span class="string">"\t Enter your name:\c"</span>
+<span class="keyword">read</span> <span class="var">name</span>
+<span class="fn">echo</span> -e <span class="string">"\t I am $name"</span>
+<span class="fn">echo</span> -ne <span class="string">"\t $name Please enter your age: "</span>
+<span class="keyword">read</span> <span class="var">age</span></pre>
+    </div>
+
+    <!-- SECTION 2: METACHARACTERS -->
+    <div class="card">
+        <h2 class="section-title">2. Neutralizing Metacharacters</h2>
+        <p>Unix supports <strong>escape mechanisms</strong> to print messages containing special characters (metacharacters) literally.</p>
+
+        <div class="grid">
+            <div class="box">
+                <strong>\ (Backslash)</strong>
+                Negates the special property of the <em>single character</em> following it.<br>
+                Example: <code>\*</code> is a literal asterisk.
+            </div>
+            <div class="box">
+                <strong>' ' (Single Quotes)</strong>
+                Negates the special properties of <em>all enclosed characters</em>.<br>
+                Example: <code>'Take this *$?# sentence literally.'</code>
+            </div>
+            <div class="box">
+                <strong>" " (Double Quotes)</strong>
+                Negates special properties of all enclosed characters <em>except</em> <code>$</code>, <code>`</code>, and <code>\</code>.<br>
+                Example: <code>"The value of rent is $rent"</code> — <code>$rent</code> is still expanded.
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: POSITIONAL PARAMETERS -->
+    <div class="card">
+        <h2 class="section-title">3. Shell Script Arguments: Positional Parameters</h2>
+        <p>Inside shell scripts, arguments passed on the command line can be referred to by their position number.</p>
+
+        <div class="note">
+            <strong>Calling convention:</strong>&nbsp; <code>$ ./script $0 $1 $2 $3 ...</code>
+        </div>
+
+        <table>
+            <tr><th>Parameter</th><th>Meaning</th></tr>
+            <tr><td><code>$0</code></td><td>The name of the script itself</td></tr>
+            <tr><td><code>$1</code>, <code>$2</code>, …</td><td>First argument, second argument, etc.</td></tr>
+            <tr><td><code>$#</code></td><td>Number of positional parameters (argument count)</td></tr>
+            <tr><td><code>$*</code></td><td>List of all arguments — when enclosed in double quotes, treated as a single word</td></tr>
+            <tr><td><code>$@</code></td><td>List of all arguments — when enclosed in double quotes, each argument is a separate word</td></tr>
+        </table>
+
+        <h3 class="subsection">Example: testPara</h3>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="fn">echo</span> <span class="string">"Total command line arguments:$#"</span>
+<span class="fn">echo</span> <span class="string">"$0 is script name"</span>
+<span class="fn">echo</span> <span class="string">"$1 is first argument"</span>
+<span class="fn">echo</span> <span class="string">"$2 is second argument"</span>
+<span class="fn">echo</span> <span class="string">"All of them are: $* or $@"</span></pre>
+
+        <div class="important">
+            <strong>Run:</strong> <code>$./testPara Hello World</code><br><br>
+            Total command line arguments: 2<br>
+            ./testPara is script name<br>
+            Hello is first argument<br>
+            World is second argument<br>
+            All of them are: Hello World or Hello World
+        </div>
+    </div>
+
+    <!-- SECTION 4: SPECIAL SHELL VARIABLES -->
+    <div class="card">
+        <h2 class="section-title">4. Special Shell Variables</h2>
+
+        <div class="grid">
+            <div class="box">
+                <strong><code>$?</code></strong>
+                Exit status of the last executed command.<br>
+                <code>0</code> = success; non-zero = error.
+            </div>
+            <div class="box">
+                <strong><code>$$</code></strong>
+                Process number (PID) of the current shell.
+            </div>
+            <div class="box">
+                <strong><code>$!</code></strong>
+                Process number (PID) of the last background command.
+            </div>
+        </div>
+
+        <h3 class="subsection">Examples</h3>
+        <pre><span class="op">$</span> date &gt;&gt; datelog
+<span class="op">$</span> <span class="fn">echo</span> <span class="var">$?</span>     <span class="comment"># Exit status of last command → 0 (success)</span>
+<span class="num">0</span>
+
+<span class="op">$</span> date &gt;&gt; datelog &amp;
+<span class="num">4321</span>
+<span class="op">$</span> <span class="fn">echo</span> <span class="var">$!</span>     <span class="comment"># PID of last background job → 4321</span>
+<span class="num">4321</span>
+
+<span class="op">$</span> <span class="fn">echo</span> <span class="var">$$</span>     <span class="comment"># PID of current shell → 3865</span>
+<span class="num">3865</span></pre>
+
+        <h3 class="subsection">The <code>exit</code> Command</h3>
+        <ul>
+            <li>Terminates the script and provides an exit status.</li>
+            <li><strong>Exit status 0</strong> → success.</li>
+            <li><strong>Non-zero values</strong> → used to signify different types of errors.</li>
+            <li>Error messages inform the user; exit status can be used by other programs to determine the result.</li>
+        </ul>
+    </div>
+
+    <!-- SECTION 5: DEBUGGING -->
+    <div class="card">
+        <h2 class="section-title">5. Debugging Shell Scripts</h2>
+        <p>Used to find and correct errors (bugs) in shell scripts. Use the <code>-v</code> and <code>-x</code> options with <code>sh</code> or <code>bash</code>.</p>
+
+        <div class="two-column">
+            <div class="box">
+                <strong><code>-x</code> (Execution trace)</strong>
+                Shows the exact values of variables as commands are executed. Prints each command before it is run with variable values substituted.
+            </div>
+            <div class="box">
+                <strong><code>-v</code> (Verbose)</strong>
+                Prints shell input lines <em>as they are read</em>, before any substitution or execution.
+            </div>
+        </div>
+
+        <pre><span class="comment"># Example usage</span>
+<span class="op">$</span>bash -x mathDemo <span class="num">5</span> <span class="num">4</span>
+
+<span class="comment"># Inside the script:</span>
+<span class="var">tot</span>=`<span class="fn">expr</span> <span class="var">$1</span> + <span class="var">$2</span>`
+<span class="fn">echo</span> <span class="var">$tot</span>
+<span class="comment"># Output shows exact values assigned to variables at runtime</span></pre>
+    </div>
+
+    <!-- SECTION 6: DECISION MAKING -->
+    <div class="card">
+        <h2 class="section-title">6. Language Constructs: Decision Making</h2>
+        <p>Decision making is always based on <strong>true or false</strong>. The <code>test</code> command (or <code>[ expr ]</code>) evaluates an expression: returns <strong>zero</strong> if true, <strong>non-zero</strong> if false.</p>
+
+        <div class="highlight">
+            <strong>Syntax:</strong>&nbsp; <code>test expression</code> &nbsp;OR&nbsp; <code>[ expression ]</code>
+        </div>
+
+        <h3 class="subsection">String Comparison Operators</h3>
+        <table>
+            <tr><th>Operator</th><th>Meaning</th></tr>
+            <tr><td><code>str1 = str2</code></td><td>str1 is equal to str2</td></tr>
+            <tr><td><code>str1 != str2</code></td><td>str1 is NOT equal to str2</td></tr>
+            <tr><td><code>-z str1</code></td><td>str1 length is 0 (NULL)</td></tr>
+            <tr><td><code>-n str1</code></td><td>str1 length is greater than 0 (NOT NULL)</td></tr>
+        </table>
+
+        <h3 class="subsection">Integer (Number) Comparison Operators</h3>
+        <table>
+            <tr><th>Operator</th><th>Meaning</th></tr>
+            <tr><td><code>-eq</code></td><td>Equal</td></tr>
+            <tr><td><code>-ne</code></td><td>Not equal</td></tr>
+            <tr><td><code>-gt</code></td><td>Greater than</td></tr>
+            <tr><td><code>-ge</code></td><td>Greater than or equal to</td></tr>
+            <tr><td><code>-lt</code></td><td>Less than</td></tr>
+            <tr><td><code>-le</code></td><td>Less than or equal to</td></tr>
+        </table>
+
+        <h3 class="subsection">File Checking Options (test command)</h3>
+        <table>
+            <tr><th>Option</th><th>True if…</th></tr>
+            <tr><td><code>-r file</code></td><td>File exists and is readable</td></tr>
+            <tr><td><code>-w file</code></td><td>File exists and is writable</td></tr>
+            <tr><td><code>-f file</code></td><td>File exists and is NOT a directory</td></tr>
+            <tr><td><code>-d file</code></td><td>File exists and IS a directory</td></tr>
+            <tr><td><code>-s file</code></td><td>File exists and has size greater than 0</td></tr>
+            <tr><td><code>-x file</code></td><td>File exists and is executable</td></tr>
+            <tr><td><code>-nt file</code></td><td>File is newer than another file</td></tr>
+        </table>
+
+        <h3 class="subsection">test command — Logical Operators</h3>
+        <div class="two-column">
+            <div class="box">
+                <strong><code>&amp;&amp;</code></strong>
+                Run the following statement if the result is <em>true</em>.
+            </div>
+            <div class="box">
+                <strong><code>||</code></strong>
+                Run the following statement if the result is <em>false</em>.
+            </div>
+        </div>
+
+        <pre><span class="op">$</span> test <span class="num">5</span> -gt <span class="num">2</span> &amp;&amp; <span class="fn">echo</span> <span class="string">"Yes"</span>
+<span class="op">$</span> test <span class="num">1</span> -ge <span class="num">2</span> &amp;&amp; <span class="fn">echo</span> <span class="string">"yes"</span> || <span class="fn">echo</span> <span class="string">"no"</span></pre>
+    </div>
+
+    <!-- SECTION 7: IF STRUCTURES -->
+    <div class="card">
+        <h2 class="section-title">7. if…fi Constructs</h2>
+
+        <h3 class="subsection">Simple if</h3>
+        <pre><span class="keyword">if</span> condition
+<span class="keyword">then</span>
+    ... commands ...
+<span class="keyword">fi</span></pre>
+
+        <pre><span class="comment"># Example: copy file if readable</span>
+<span class="keyword">if</span> test -r <span class="var">$1</span>
+<span class="keyword">then</span>
+    cp <span class="var">$1</span> <span class="var">$HOME</span>/project_x
+<span class="keyword">fi</span></pre>
+
+        <h3 class="subsection">if…else…fi</h3>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="comment"># Script to see whether argument is positive or negative</span>
+<span class="keyword">if</span> test <span class="var">$1</span> -gt <span class="num">0</span>
+<span class="keyword">then</span>
+    <span class="fn">echo</span> <span class="string">"$1 :number is positive"</span>
+<span class="keyword">else</span>
+    <span class="fn">echo</span> <span class="string">"$1 :number is negative"</span>
+<span class="keyword">fi</span>
+<span class="comment"># Run: $./Demo 5</span></pre>
+
+        <h3 class="subsection">Nested if…else…fi</h3>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="var">osch</span>=0
+<span class="fn">echo</span> <span class="string">"1. Windows (Win10 os)"</span>
+<span class="fn">echo</span> <span class="string">"2. Linux (Fedora Os)"</span>
+<span class="fn">echo</span> -n <span class="string">"Select your os choice [1 or 2]?"</span>
+<span class="keyword">read</span> <span class="var">osch</span>
+<span class="keyword">if</span> [ <span class="var">$osch</span> -eq <span class="num">1</span> ] ; <span class="keyword">then</span>
+    <span class="fn">echo</span> <span class="string">"You Pick up Windows (Win10 Os)"</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span> [ <span class="var">$osch</span> -eq <span class="num">2</span> ] ; <span class="keyword">then</span>
+        <span class="fn">echo</span> <span class="string">"You Pick up Linux (Fedora Os)"</span>
+    <span class="keyword">else</span>
+        <span class="fn">echo</span> <span class="string">"Don't you like Windows/Linux OS."</span>
+    <span class="keyword">fi</span>
+<span class="keyword">fi</span></pre>
+
+        <h3 class="subsection">Multilevel if…elif…else…fi</h3>
+        <div class="note">Use <code>elif</code> to chain multiple conditions instead of deeply nested <code>if</code> blocks.</div>
+
+        <pre><span class="comment"># Syntax</span>
+<span class="keyword">if</span> condition
+<span class="keyword">then</span>
+    <span class="comment"># condition is true (zero)</span>
+<span class="keyword">elif</span> condition1
+<span class="keyword">then</span>
+    <span class="comment"># condition1 is true (zero)</span>
+<span class="keyword">elif</span> condition2
+<span class="keyword">then</span>
+    <span class="comment"># condition2 is true (zero)</span>
+<span class="keyword">else</span>
+    <span class="comment"># none of the conditions were true</span>
+<span class="keyword">fi</span></pre>
+
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="fn">echo</span> -n <span class="string">"Enter a number : "</span>
+<span class="keyword">read</span> <span class="var">n</span>
+<span class="keyword">if</span> [ <span class="var">$n</span> -gt <span class="num">0</span> ]; <span class="keyword">then</span>
+    <span class="fn">echo</span> <span class="string">"$n is a positive."</span>
+<span class="keyword">elif</span> [ <span class="var">$n</span> -lt <span class="num">0</span> ]
+<span class="keyword">then</span>
+    <span class="fn">echo</span> <span class="string">"$n is a negative."</span>
+<span class="keyword">elif</span> [ <span class="var">$n</span> -eq <span class="num">0</span> ]
+<span class="keyword">then</span>
+    <span class="fn">echo</span> <span class="string">"$n is zero number."</span>
+<span class="keyword">else</span>
+    <span class="fn">echo</span> <span class="string">"Oops! $n is not a number."</span>
+<span class="keyword">fi</span></pre>
+    </div>
+
+    <!-- SECTION 8: CASE STATEMENT -->
+    <div class="card">
+        <h2 class="section-title">8. case…in…esac Statement</h2>
+        <p>The <code>case</code> statement matches a variable against multiple patterns and executes the corresponding commands. It is a cleaner alternative to multilevel <code>if-elif</code> chains.</p>
+
+        <pre><span class="keyword">case</span> <span class="var">$variable-name</span> <span class="keyword">in</span>
+    pattern-1)
+        Commands
+        ;;
+    pattern-2)
+        Commands
+        ;;
+    *)
+        Commands  <span class="comment"># default / catch-all (optional)</span>
+        ;;
+<span class="keyword">esac</span></pre>
+
+        <h3 class="subsection">Example 1: Day of Week</h3>
+        <pre><span class="keyword">case</span> <span class="var">$day</span> <span class="keyword">in</span>
+    <span class="string">"Sun"</span> )
+        <span class="fn">echo</span> Sunday ;;
+    <span class="string">"Mon"</span> | <span class="string">"Tue"</span> | <span class="string">"Wed"</span> | <span class="string">"Thu"</span> | <span class="string">"Fri"</span> )
+        <span class="fn">echo</span> Weekday ;;
+    <span class="string">"Sat"</span> )
+        <span class="fn">echo</span> Saturday ;;
+<span class="keyword">esac</span></pre>
+
+        <h3 class="subsection">Example 2: Service Control</h3>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="keyword">case</span> <span class="var">$1</span> <span class="keyword">in</span>
+    start)   <span class="fn">echo</span> starting ;;
+    stop)    <span class="fn">echo</span> stoping ;;
+    restart) <span class="fn">echo</span> restarting ;;
+    *)       <span class="fn">echo</span> don\'t know ;;
+<span class="keyword">esac</span></pre>
+
+        <h3 class="subsection">Example 3: Vehicle Rental (with -z / -n checks)</h3>
+        <pre><span class="keyword">if</span> [ -z <span class="var">$1</span> ]; <span class="keyword">then</span>
+    <span class="var">rental</span>=<span class="string">"*** Unknown vehicle ***"</span>
+<span class="keyword">elif</span> [ -n <span class="var">$1</span> ]; <span class="keyword">then</span>
+    <span class="var">rental</span>=<span class="var">$1</span>
+<span class="keyword">fi</span>
+
+<span class="keyword">case</span> <span class="var">$rental</span> <span class="keyword">in</span>
+    <span class="string">"car"</span>)     <span class="fn">echo</span> <span class="string">"For $rental Rs.20 per k/m"</span> ;;
+    <span class="string">"van"</span>)     <span class="fn">echo</span> <span class="string">"For $rental Rs.10 per k/m"</span> ;;
+    <span class="string">"jeep"</span>)    <span class="fn">echo</span> <span class="string">"For $rental Rs.5 per k/m"</span>  ;;
+    <span class="string">"bicycle"</span>) <span class="fn">echo</span> <span class="string">"For $rental 40 per k/m"</span>    ;;
+    *)         <span class="fn">echo</span> <span class="string">"Sorry, I can not get a $rental for you"</span> ;;
+<span class="keyword">esac</span></pre>
+    </div>
+
+    <!-- SECTION 9: LOOPING STRUCTURES -->
+    <div class="card">
+        <h2 class="section-title">9. Looping Structures</h2>
+
+        <!-- FOR LOOP -->
+        <h3 class="subsection">9.1 for…do…done (Syntax 1 — List-based)</h3>
+        <p>Executes once for each item in the list, repeating all statements between <code>do</code> and <code>done</code>.</p>
+        <pre><span class="keyword">for</span> variable-name <span class="keyword">in</span> list
+<span class="keyword">do</span>
+    commands…
+<span class="keyword">done</span></pre>
+
+        <pre><span class="comment"># Example 1: iterate over values</span>
+<span class="keyword">for</span> <span class="var">num</span> <span class="keyword">in</span> <span class="num">1 2 3 4 5</span>
+<span class="keyword">do</span>
+    <span class="fn">echo</span> <span class="string">"This is loop $num"</span>
+<span class="keyword">done</span>
+
+<span class="comment"># Example 2: range with step {start..end..step}</span>
+<span class="keyword">for</span> <span class="var">table</span> <span class="keyword">in</span> {<span class="num">2</span>..<span class="num">20</span>..<span class="num">2</span>}
+<span class="keyword">do</span>
+    <span class="fn">echo</span> <span class="string">"Table for 2 :$table"</span>
+<span class="keyword">done</span></pre>
+
+        <h3 class="subsection">9.2 for…do…done (Syntax 2 — C-style)</h3>
+        <p>Repeats all statements between <code>do</code> and <code>done</code> until <code>expr2</code> is TRUE.</p>
+        <pre><span class="keyword">for</span> (( expr1; expr2; expr3 ))
+<span class="keyword">do</span>
+    commands….
+<span class="keyword">done</span>
+
+<span class="comment"># Example:</span>
+<span class="keyword">for</span> (( <span class="var">i</span> = <span class="num">0</span> ; <span class="var">i</span> &lt;= <span class="num">5</span>; <span class="var">i</span>++ ))
+<span class="keyword">do</span>
+    <span class="fn">echo</span> <span class="string">"This is loop $i"</span>
+<span class="keyword">done</span></pre>
+
+        <h3 class="subsection">9.3 Nested for Loops</h3>
+        <pre><span class="keyword">for</span> (( <span class="var">i</span> = <span class="num">1</span>; <span class="var">i</span> &lt;= <span class="num">5</span>; <span class="var">i</span>++ ))   <span class="comment">### Outer for loop ###</span>
+<span class="keyword">do</span>
+    <span class="keyword">for</span> (( <span class="var">j</span> = <span class="num">1</span> ; <span class="var">j</span> &lt;= <span class="num">5</span>; <span class="var">j</span>++ )) <span class="comment">### Inner for loop ###</span>
+    <span class="keyword">do</span>
+        <span class="fn">echo</span> -n <span class="string">"$i "</span>
+    <span class="keyword">done</span>
+    <span class="fn">echo</span> <span class="string">""</span>  <span class="comment">#### print the new line ###</span>
+<span class="keyword">done</span></pre>
+
+        <div class="important">
+            <strong>Output:</strong><br>
+            1 1 1 1 1<br>
+            2 2 2 2 2<br>
+            3 3 3 3 3<br>
+            4 4 4 4 4<br>
+            5 5 5 5 5
+        </div>
+
+        <!-- WHILE LOOP -->
+        <h3 class="subsection">9.4 while…do…done</h3>
+        <p>Repeats commands within <code>do</code> and <code>done</code> as long as the condition is satisfied (true).</p>
+        <pre><span class="keyword">while</span> [conditional_expression]
+<span class="keyword">do</span>
+    Commands…
+<span class="keyword">done</span></pre>
+
+        <pre><span class="comment"># Example 1: using test command</span>
+<span class="var">num</span>=<span class="num">0</span>
+<span class="keyword">while</span> test <span class="var">$num</span> -le <span class="num">5</span>
+<span class="keyword">do</span>
+    <span class="fn">echo</span> <span class="string">"This is loop $num"</span>
+    <span class="var">num</span>=`<span class="fn">expr</span> <span class="var">$num</span> + <span class="num">1</span>`
+<span class="keyword">done</span>
+
+<span class="comment"># Example 2: using [ ] and arithmetic ((++))</span>
+<span class="comment">#!/bin/bash</span>
+<span class="var">counter</span>=<span class="num">1</span>
+<span class="keyword">while</span> [ <span class="var">$counter</span> -le <span class="num">10</span> ]
+<span class="keyword">do</span>
+    <span class="fn">echo</span> <span class="var">$counter</span>
+    ((<span class="var">counter</span>++))
+<span class="keyword">done</span>
+<span class="fn">echo</span> All done</pre>
+
+        <!-- UNTIL LOOP -->
+        <h3 class="subsection">9.5 until…do…done</h3>
+        <p>The <code>until</code> loop is the <strong>reverse of while</strong> — it repeats commands as long as the condition is <em>false</em> (i.e., terminates when condition becomes true).</p>
+        <pre><span class="keyword">until</span> conditional_expression
+<span class="keyword">do</span>
+    commands
+<span class="keyword">done</span></pre>
+
+        <pre><span class="comment"># Example 1: count to 5</span>
+<span class="var">num</span>=<span class="num">0</span>
+<span class="keyword">until</span> test <span class="var">$num</span> -gt <span class="num">5</span>
+<span class="keyword">do</span>
+    <span class="fn">echo</span> <span class="string">"This is loop $num"</span>
+    <span class="var">num</span>=`<span class="fn">expr</span> <span class="var">$num</span> + <span class="num">1</span>`
+<span class="keyword">done</span>
+
+<span class="comment"># Example 2: wait for a file to appear (checks every 5 min)</span>
+<span class="keyword">until</span> test -f file123
+<span class="keyword">do</span>
+    sleep <span class="num">300</span>
+<span class="keyword">done</span>
+<span class="comment"># Will loop until file123 exists</span></pre>
+
+        <div class="warning">
+            <strong>⚠️ while vs until:</strong> In <code>while</code>, the loop continues as long as the condition is TRUE. In <code>until</code>, the termination condition is reversed — it loops as long as the condition is FALSE.
+        </div>
+    </div>
+
+    <!-- SECTION 10: I/O REDIRECTION -->
+    <div class="card">
+        <h2 class="section-title">10. I/O Redirection: The <code>&gt;&amp;</code> Operator</h2>
+        <p>Used when both <strong>standard output</strong> and <strong>standard error</strong> need to be redirected to the same file. Especially helpful when running a command in the background.</p>
+
+        <div class="two-column">
+            <div class="box">
+                <strong><code>2&gt;&amp;1</code></strong>
+                Merge <em>standard error</em> (stderr) into <em>standard output</em> (stdout).
+            </div>
+            <div class="box">
+                <strong><code>1&gt;&amp;2</code></strong>
+                Merge <em>standard output</em> (stdout) into <em>standard error</em> (stderr).
+            </div>
+        </div>
+
+        <h3 class="subsection">Example: Directing Error to a Log File</h3>
+        <pre><span class="comment">#!/bin/bash</span>
+<span class="keyword">if</span> [ <span class="var">$#</span> -ne <span class="num">2</span> ]
+<span class="keyword">then</span>
+    <span class="fn">echo</span> <span class="string">"Error: Numbers are not supplied"</span> <span class="num">1&gt;and 2</span>   <span class="comment"># goes to stderr</span>
+    <span class="fn">echo</span> <span class="string">"Usage: $0 number1 number2"</span>               <span class="comment"># goes to stdout (screen)</span>
+    exit <span class="num">1</span>
+<span class="keyword">fi</span>
+<span class="var">ans</span>=`<span class="fn">expr</span> <span class="var">$1</span> + <span class="var">$2</span>`
+<span class="fn">echo</span> <span class="string">"Sum is $ans"</span>
+
+<span class="comment"># Run: redirect stderr to logfile1, usage message still goes to screen</span>
+<span class="op">$</span>./demoR <span class="num">2</span>&gt; logfile1
+<span class="op">$</span>cat logfile1</pre>
+
+        <h3 class="subsection">Reading a File Line-by-Line with while + read</h3>
+        <p>A common pattern: use input redirection with <code>read</code> inside a <code>while</code> loop to process a file one line at a time.</p>
+        <pre><span class="keyword">while</span> <span class="keyword">read</span> <span class="var">LINE</span>
+<span class="keyword">do</span>
+    <span class="keyword">case</span> <span class="var">$LINE</span> <span class="keyword">in</span>
+        *root*) <span class="fn">echo</span> <span class="var">$LINE</span> ;;
+    <span class="keyword">esac</span>
+<span class="keyword">done</span> &lt; /etc/passwd
+<span class="comment"># Reads /etc/passwd line by line, prints lines containing "root"</span></pre>
+    </div>
+
+    <!-- QUICK REFERENCE -->
+    <div class="card">
+        <h2 class="section-title">📌 Quick Reference Summary</h2>
+
+        <h3 class="subsection">Decision Making Constructs</h3>
+        <div class="three-column">
+            <div class="box">
+                <strong>if…fi</strong>
+                Simple single-branch condition.
+            </div>
+            <div class="box">
+                <strong>if…else…fi</strong>
+                Two-branch condition (true / false).
+            </div>
+            <div class="box">
+                <strong>nested if…else…fi</strong>
+                if inside else block.
+            </div>
+        </div>
+        <div class="two-column" style="margin-top:12px;">
+            <div class="box">
+                <strong>multilevel if…elif…else…fi</strong>
+                Multiple conditions using <code>elif</code>.
+            </div>
+            <div class="box">
+                <strong>case…in…esac</strong>
+                Pattern matching for multiple fixed values. Use <code>|</code> to match multiple patterns per branch.
+            </div>
+        </div>
+
+        <h3 class="subsection">Looping Constructs</h3>
+        <div class="three-column">
+            <div class="box">
+                <strong>for (list)</strong>
+                Iterates over a list of values or a range.
+            </div>
+            <div class="box">
+                <strong>for (C-style)</strong>
+                Loops with initializer, condition, and increment — like C/Java.
+            </div>
+            <div class="box">
+                <strong>nested for</strong>
+                Loop inside a loop; useful for matrices or patterns.
+            </div>
+        </div>
+        <div class="two-column" style="margin-top:12px;">
+            <div class="box">
+                <strong>while</strong>
+                Loops while condition is <em>true</em> (zero exit status).
+            </div>
+            <div class="box">
+                <strong>until</strong>
+                Loops while condition is <em>false</em> (non-zero exit status); terminates when condition becomes true.
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 04 - Shell Programming (Cont.) &nbsp;•&nbsp; BY_#D1
+    </div>
+
+</div>
+</body>
+</html>
