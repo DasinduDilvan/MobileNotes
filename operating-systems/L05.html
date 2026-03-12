@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 05 – CPU Scheduling</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+.card { background: white; padding: 25px; margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.section-title { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 15px; font-size: 1.4em; }
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+.box { background: #f3fbfa; padding: 15px; border-radius: 10px; border-left: 3px solid #2c6e6b; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+.highlight { background: #fff9e6; padding: 15px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 15px 0; }
+.important { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 15px 0; }
+.note { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 15px 0; }
+.warning { background: #fce4ec; padding: 15px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 15px 0; }
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; color: #c0392b; }
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string { color: #ce9178; }
+pre .fn { color: #dcdcaa; }
+pre .type { color: #4ec9b0; }
+pre .num { color: #b5cea8; }
+.in-class { background: #f3e5f5; padding: 20px; border-radius: 10px; border-left: 4px solid #9c27b0; margin: 15px 0; }
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+.tag { display: inline-block; background: #2c6e6b; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin: 2px; vertical-align: middle; }
+.tag.orange { background: #e67e22; }
+.tag.blue { background: #2980b9; }
+.tag.red { background: #c0392b; }
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+/* Gantt Chart */
+.gantt-wrap { overflow-x: auto; margin: 15px 0; }
+.gantt { display: flex; align-items: stretch; min-width: max-content; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; }
+.gantt-block { padding: 10px 14px; text-align: center; font-weight: 600; font-size: 0.9em; border-right: 1px solid #ccc; }
+.gantt-block:last-child { border-right: none; }
+.gantt-p1 { background: #d5eaf9; color: #1a5f8a; }
+.gantt-p2 { background: #d5f5e3; color: #1a7a40; }
+.gantt-p3 { background: #fde8c8; color: #9a5000; }
+.gantt-p4 { background: #f9d5e5; color: #8a1a3a; }
+.gantt-p5 { background: #e8d5f9; color: #5a1a8a; }
+.gantt-times { display: flex; min-width: max-content; margin-top: 3px; }
+.gantt-times span { font-size: 0.78em; color: #555; padding: 0 2px; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.92em; }
+th { background: #2c6e6b; color: white; padding: 10px 12px; text-align: left; }
+td { padding: 9px 12px; border-bottom: 1px solid #e0f0ef; }
+tr:nth-child(even) td { background: #f3fbfa; }
+
+h3 { color: #2c6e6b; margin: 14px 0 8px 0; font-size: 1.1em; }
+p { margin: 8px 0; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2c6e6b;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="../operating-systems.html">← Back to Notes</a>
+
+<h1>💻 CPU Scheduling</h1>
+<p class="subtitle">Lecture 05 — Operating Systems</p>
+
+<!-- ========== OVERVIEW ========== -->
+<div class="card">
+    <h2 class="section-title">Overview</h2>
+    <ul>
+        <li>In a <strong>single processor system</strong>, only one process runs at a time.</li>
+        <li>When that process waits (e.g., for I/O), the CPU sits idle — this is <strong>wasteful</strong>.</li>
+        <li>In a <strong>multiprogramming system</strong>, several processes are kept in memory at once.</li>
+        <li>When one process waits, the OS gives the CPU to another — <strong>CPU never stays idle</strong>.</li>
+        <li>To achieve this, the CPU must be <strong>scheduled among processes</strong>.</li>
+    </ul>
+    <div class="important">
+        <strong>Key Concept — CPU–I/O Burst Cycle:</strong><br>
+        Process execution consists of a cycle of <em>CPU execution</em> and <em>I/O wait</em>. A CPU burst is followed by an I/O burst. There are large numbers of short CPU bursts and small numbers of long CPU bursts.
+    </div>
+</div>
+
+<!-- ========== CPU SCHEDULER ========== -->
+<div class="card">
+    <h2 class="section-title">CPU Scheduler</h2>
+    <p>When the CPU becomes idle, the OS selects one process from the <strong>ready queue</strong> (in memory) to be executed. This selection is done by the <strong>Short-term scheduler (CPU scheduler)</strong>. The records in the queue are generally <strong>PCBs</strong> of the processes.</p>
+
+    <h3>Scheduling Decision Points</h3>
+    <p>CPU scheduling decisions occur when a process:</p>
+    <div class="two-column" style="margin-top:12px;">
+        <div class="box">
+            <strong>Nonpreemptive Situations</strong>
+            <ul>
+                <li>1. Switches from <em>running → waiting</em> (I/O request or wait() call)</li>
+                <li>4. <em>Terminates</em></li>
+            </ul>
+            <p style="margin-top:8px; font-size:0.9em;">No choice — a new process <em>must</em> be selected.</p>
+        </div>
+        <div class="box">
+            <strong>Preemptive Situations</strong>
+            <ul>
+                <li>2. Switches from <em>running → ready</em> (interrupt)</li>
+                <li>3. Switches from <em>waiting → ready</em> (I/O completion)</li>
+            </ul>
+            <p style="margin-top:8px; font-size:0.9em;">There is a <em>choice</em> of which process to run next.</p>
+        </div>
+    </div>
+
+    <div class="highlight" style="margin-top:15px;">
+        <strong>Nonpreemptive Scheduling:</strong> A running task executes until completion — it cannot be interrupted.<br><br>
+        <strong>Preemptive Scheduling:</strong> A running task can be interrupted and resumed later. Requires consideration of: shared data access, preemption while in kernel mode, and interrupts during crucial OS activities.
+    </div>
+</div>
+
+<!-- ========== DISPATCHER ========== -->
+<div class="card">
+    <h2 class="section-title">Dispatcher</h2>
+    <p>The <strong>Dispatcher</strong> module gives control of the CPU to the process selected by the short-term scheduler. It involves:</p>
+    <ul>
+        <li><strong>Switching context</strong></li>
+        <li><strong>Switching to user mode</strong></li>
+        <li><strong>Jumping to the proper location</strong> in the user program to restart it</li>
+    </ul>
+    <div class="note">
+        <strong>Dispatch Latency:</strong> The time it takes for the dispatcher to stop one process and start another running. It should be as fast as possible since it is invoked during every process switch.
+    </div>
+</div>
+
+<!-- ========== SCHEDULING CRITERIA ========== -->
+<div class="card">
+    <h2 class="section-title">Scheduling Criteria</h2>
+    <div class="grid">
+        <div class="box">
+            <strong>CPU Utilization</strong>
+            Keep the CPU as busy as possible (0%–100%).
+        </div>
+        <div class="box">
+            <strong>Throughput</strong>
+            Number of processes completing execution per time unit.
+        </div>
+        <div class="box">
+            <strong>Turnaround Time</strong>
+            Time from submission to completion. Includes: waiting to get into memory + ready queue wait + CPU execution + I/O time.
+        </div>
+        <div class="box">
+            <strong>Waiting Time</strong>
+            Total time a process has been waiting in the ready queue.
+        </div>
+        <div class="box">
+            <strong>Response Time</strong>
+            Time from when a request was submitted until the first response is produced (not output).
+        </div>
+    </div>
+    <div class="important" style="margin-top:15px;">
+        <strong>Optimization Goals:</strong>
+        Maximize CPU utilization &amp; throughput. Minimize turnaround time, waiting time, and response time.
+    </div>
+</div>
+
+<!-- ========== SCHEDULING ALGORITHMS OVERVIEW ========== -->
+<div class="card">
+    <h2 class="section-title">Scheduling Algorithms — Overview</h2>
+    <div class="grid">
+        <div class="box"><strong>FCFS</strong>First-Come, First-Served</div>
+        <div class="box"><strong>SJF</strong>Shortest Job First</div>
+        <div class="box"><strong>Priority Scheduling</strong>Based on priority number</div>
+        <div class="box"><strong>Round Robin (RR)</strong>Time-sharing with time quantum</div>
+        <div class="box"><strong>Multilevel Queue</strong>Separate queues per class</div>
+        <div class="box"><strong>Multilevel Feedback Queue</strong>Processes can move between queues</div>
+    </div>
+</div>
+
+<!-- ========== FCFS ========== -->
+<div class="card">
+    <h2 class="section-title">First-Come, First-Served (FCFS)</h2>
+    <ul>
+        <li>Simplest CPU scheduling algorithm.</li>
+        <li>Process requesting the CPU first is allocated the CPU first.</li>
+        <li><strong>Nonpreemptive</strong> — implemented via a FIFO queue.</li>
+        <li>New PCB is attached to the end of the queue; when CPU is free, head of queue gets the CPU.</li>
+        <li>Simple to write and understand, but <strong>average waiting time is often quite long</strong>.</li>
+    </ul>
+
+    <h3>Example 1 — Arrival order: P1, P2, P3</h3>
+    <table>
+        <tr><th>Process</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>24</td></tr>
+        <tr><td>P2</td><td>3</td></tr>
+        <tr><td>P3</td><td>3</td></tr>
+    </table>
+    <div class="gantt-wrap">
+        <div class="gantt">
+            <div class="gantt-block gantt-p1" style="flex:24">P1 (24)</div>
+            <div class="gantt-block gantt-p2" style="flex:3">P2</div>
+            <div class="gantt-block gantt-p3" style="flex:3">P3</div>
+        </div>
+        <div class="gantt-times">
+            <span>0</span><span style="margin-left:120px;">24</span><span style="margin-left:12px;">27</span><span style="margin-left:8px;">30</span>
+        </div>
+    </div>
+    <p>Waiting: P1=0, P2=24, P3=27 → <strong>Average = (0+24+27)/3 = 17 ms</strong></p>
+
+    <h3>Example 2 — Arrival order: P2, P3, P1</h3>
+    <div class="gantt-wrap">
+        <div class="gantt">
+            <div class="gantt-block gantt-p2" style="flex:3">P2</div>
+            <div class="gantt-block gantt-p3" style="flex:3">P3</div>
+            <div class="gantt-block gantt-p1" style="flex:24">P1 (24)</div>
+        </div>
+        <div class="gantt-times">
+            <span>0</span><span style="margin-left:16px;">3</span><span style="margin-left:8px;">6</span><span style="margin-left:80px;">30</span>
+        </div>
+    </div>
+    <p>Waiting: P1=6, P2=0, P3=3 → <strong>Average = (6+0+3)/3 = 3 ms</strong> — Much better!</p>
+    <div class="warning">
+        <strong>Convoy Effect:</strong> Short processes wait for one long process to get off the CPU. Consider one CPU-bound and many I/O-bound processes — the I/O bound processes all get stuck waiting.
+    </div>
+</div>
+
+<!-- ========== SJF ========== -->
+<div class="card">
+    <h2 class="section-title">Shortest-Job-First (SJF) Scheduling</h2>
+    <ul>
+        <li>Associates each process with the <strong>length of its next CPU burst</strong>.</li>
+        <li>Assigns CPU to the process with the <strong>smallest next CPU burst</strong>.</li>
+        <li><strong>Optimal</strong> — gives minimum average waiting time for a given set of processes.</li>
+        <li>Difficulty: knowing the <em>length of the next CPU request</em> (could ask the user or estimate).</li>
+        <li>Can be either <strong>Preemptive</strong> or <strong>Nonpreemptive</strong>.</li>
+        <li>Preemptive version is called <strong>Shortest-Remaining-Time-First (SRTF)</strong>.</li>
+    </ul>
+
+    <h3>Example — SJF Nonpreemptive</h3>
+    <table>
+        <tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>0.0</td><td>6</td></tr>
+        <tr><td>P2</td><td>2.0</td><td>8</td></tr>
+        <tr><td>P3</td><td>4.0</td><td>7</td></tr>
+        <tr><td>P4</td><td>5.0</td><td>3</td></tr>
+    </table>
+    <div class="gantt-wrap" style="margin-top:10px;">
+        <div class="gantt">
+            <div class="gantt-block gantt-p1" style="flex:6">P1 (6)</div>
+            <div class="gantt-block gantt-p4" style="flex:3">P4 (3)</div>
+            <div class="gantt-block gantt-p3" style="flex:7">P3 (7)</div>
+            <div class="gantt-block gantt-p2" style="flex:8">P2 (8)</div>
+        </div>
+        <div class="gantt-times">
+            <span>0</span><span style="margin-left:30px;">3</span><span style="margin-left:16px;">9</span><span style="margin-left:26px;">16</span><span style="margin-left:26px;">24</span>
+        </div>
+    </div>
+
+    <h3>Example — SJF Preemptive (SRTF)</h3>
+    <table>
+        <tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>0</td><td>8</td></tr>
+        <tr><td>P2</td><td>1</td><td>4</td></tr>
+        <tr><td>P3</td><td>2</td><td>9</td></tr>
+        <tr><td>P4</td><td>3</td><td>5</td></tr>
+    </table>
+    <div class="gantt-wrap" style="margin-top:10px;">
+        <div class="gantt">
+            <div class="gantt-block gantt-p1" style="flex:1">P1</div>
+            <div class="gantt-block gantt-p2" style="flex:4">P2 (4)</div>
+            <div class="gantt-block gantt-p4" style="flex:5">P4 (5)</div>
+            <div class="gantt-block gantt-p1" style="flex:7">P1 (7)</div>
+            <div class="gantt-block gantt-p3" style="flex:9">P3 (9)</div>
+        </div>
+        <div class="gantt-times">
+            <span>0 1</span><span style="margin-left:18px;">5</span><span style="margin-left:22px;">10</span><span style="margin-left:26px;">17</span><span style="margin-left:30px;">26</span>
+        </div>
+    </div>
+    <div class="important">
+        <strong>Average Waiting Time (Preemptive SJF):</strong><br>
+        = [(10−1) + (1−1) + (17−2) + (5−3)] / 4 = 26/4 = <strong>6.5 ms</strong>
+    </div>
+</div>
+
+<!-- ========== ROUND ROBIN ========== -->
+<div class="card">
+    <h2 class="section-title">Round Robin (RR) Scheduling</h2>
+    <ul>
+        <li>Designed specially for <strong>time-sharing systems</strong>.</li>
+        <li>Similar to FCFS but with <strong>preemption</strong> to switch between processes.</li>
+        <li>A small unit of time called a <strong>time quantum (q)</strong> is defined — usually 10–100 ms.</li>
+        <li>Each process gets at most <em>q</em> time units of CPU. After that, it is <strong>preempted</strong> and added to the end of the ready queue.</li>
+        <li>The ready queue is a <strong>FIFO circular queue</strong>.</li>
+        <li>Timer interrupts every quantum to schedule the next process.</li>
+    </ul>
+
+    <h3>Execution Logic</h3>
+    <div class="two-column">
+        <div class="box">
+            <strong>If burst time &lt; time quantum</strong>
+            Process releases CPU voluntarily. CPU takes the next process in queue.
+        </div>
+        <div class="box">
+            <strong>If burst time &gt; time quantum</strong>
+            Timer fires → OS interrupt → context switch → process moved to end of ready queue.
+        </div>
+    </div>
+
+    <h3>Example — RR with q = 4</h3>
+    <table>
+        <tr><th>Process</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>24</td></tr>
+        <tr><td>P2</td><td>3</td></tr>
+        <tr><td>P3</td><td>3</td></tr>
+    </table>
+    <div class="gantt-wrap" style="margin-top:10px;">
+        <div class="gantt">
+            <div class="gantt-block gantt-p1" style="flex:4">P1</div>
+            <div class="gantt-block gantt-p2" style="flex:3">P2</div>
+            <div class="gantt-block gantt-p3" style="flex:3">P3</div>
+            <div class="gantt-block gantt-p1" style="flex:4">P1</div>
+            <div class="gantt-block gantt-p1" style="flex:4">P1</div>
+            <div class="gantt-block gantt-p1" style="flex:4">P1</div>
+            <div class="gantt-block gantt-p1" style="flex:4">P1</div>
+            <div class="gantt-block gantt-p1" style="flex:4">P1</div>
+        </div>
+        <div class="gantt-times">
+            <span>0</span><span style="margin-left:16px;">4</span><span style="margin-left:10px;">7</span><span style="margin-left:8px;">10</span><span style="margin-left:10px;">14</span><span style="margin-left:10px;">18</span><span style="margin-left:10px;">22</span><span style="margin-left:10px;">26</span><span style="margin-left:10px;">30</span>
+        </div>
+    </div>
+
+    <h3>Performance Characteristics</h3>
+    <ul>
+        <li>With <em>n</em> processes and time quantum <em>q</em>, each process gets <strong>1/n of CPU time</strong> in chunks of at most q.</li>
+        <li>No process waits more than <strong>(n−1)×q</strong> time units until its next quantum.</li>
+        <li>Typically <em>higher average turnaround</em> than SJF, but <em>better response time</em>.</li>
+    </ul>
+    <div class="highlight">
+        <strong>Effect of Time Quantum Size:</strong><br>
+        • q very large → behaves like FIFO/FCFS<br>
+        • q very small → too many context switches → overhead too high<br>
+        • Rule of thumb: <strong>80% of CPU bursts should be shorter than q</strong>.<br>
+        • Modern systems: q = 10–100 ms; context switch &lt; 10 µs.
+    </div>
+</div>
+
+<!-- ========== PRIORITY SCHEDULING ========== -->
+<div class="card">
+    <h2 class="section-title">Priority Scheduling</h2>
+    <ul>
+        <li>A <strong>priority number</strong> (integer) is associated with each process.</li>
+        <li>CPU is allocated to the process with the <strong>highest priority</strong> (smallest integer = highest priority).</li>
+        <li>Can be <strong>Preemptive</strong> or <strong>Nonpreemptive</strong>.</li>
+        <li>Equal-priority processes scheduled in FCFS or Round Robin order.</li>
+        <li><strong>SJF is a special case</strong> of priority scheduling — priority = inverse of predicted next CPU burst time.</li>
+    </ul>
+    <div class="two-column">
+        <div class="warning">
+            <strong>Problem — Starvation:</strong><br>
+            Low-priority processes may never execute if high-priority processes keep arriving.
+        </div>
+        <div class="important">
+            <strong>Solution — Aging:</strong><br>
+            As time progresses, increase the priority of waiting processes so they eventually get the CPU.
+        </div>
+    </div>
+
+    <h3>Example — Priority Scheduling</h3>
+    <table>
+        <tr><th>Process</th><th>Burst Time</th><th>Priority</th></tr>
+        <tr><td>P1</td><td>10</td><td>3</td></tr>
+        <tr><td>P2</td><td>1</td><td>1</td></tr>
+        <tr><td>P3</td><td>2</td><td>4</td></tr>
+        <tr><td>P4</td><td>1</td><td>5</td></tr>
+        <tr><td>P5</td><td>5</td><td>2</td></tr>
+    </table>
+    <div class="gantt-wrap" style="margin-top:10px;">
+        <div class="gantt">
+            <div class="gantt-block gantt-p2" style="flex:1">P2</div>
+            <div class="gantt-block gantt-p5" style="flex:5">P5 (5)</div>
+            <div class="gantt-block gantt-p1" style="flex:10">P1 (10)</div>
+            <div class="gantt-block gantt-p3" style="flex:2">P3</div>
+            <div class="gantt-block gantt-p4" style="flex:1">P4</div>
+        </div>
+        <div class="gantt-times">
+            <span>0 1</span><span style="margin-left:20px;">6</span><span style="margin-left:36px;">16</span><span style="margin-left:18px;">18</span><span style="margin-left:6px;">19</span>
+        </div>
+    </div>
+    <p style="margin-top:8px;"><strong>Average waiting time = 8.2 ms</strong></p>
+
+    <h3>Priority Scheduling with Round-Robin</h3>
+    <p>Processes with the highest priority run first. Processes with the <em>same priority</em> are scheduled using Round Robin.</p>
+    <table>
+        <tr><th>Process</th><th>Burst Time</th><th>Priority</th></tr>
+        <tr><td>P1</td><td>4</td><td>3</td></tr>
+        <tr><td>P2</td><td>5</td><td>2</td></tr>
+        <tr><td>P3</td><td>8</td><td>2</td></tr>
+        <tr><td>P4</td><td>7</td><td>1</td></tr>
+        <tr><td>P5</td><td>3</td><td>3</td></tr>
+    </table>
+    <div class="note">P4 (priority 1) runs first. P2 and P3 (priority 2) share CPU via RR with q=2. P1 and P5 (priority 3) run last via RR.</div>
+</div>
+
+<!-- ========== MULTILEVEL QUEUE ========== -->
+<div class="card">
+    <h2 class="section-title">Multilevel Queue Scheduling</h2>
+    <p>Processes are classified into groups with different response time requirements. The ready queue is <strong>partitioned into separate queues</strong>.</p>
+    <div class="two-column">
+        <div class="box">
+            <strong>Foreground Queue (Interactive)</strong>
+            Uses Round Robin scheduling. Gets 80% of CPU time.
+        </div>
+        <div class="box">
+            <strong>Background Queue (Batch)</strong>
+            Uses FCFS scheduling. Gets 20% of CPU time.
+        </div>
+    </div>
+    <ul style="margin-top:15px;">
+        <li>Processes are <strong>permanently assigned</strong> to a given queue.</li>
+        <li>Scheduling between queues uses <strong>fixed priority preemptive scheduling</strong> (foreground before background — risk of starvation) or <strong>time slicing</strong>.</li>
+    </ul>
+    <div class="warning">
+        <strong>Limitation:</strong> Low scheduling overhead but <strong>inflexible</strong> — processes cannot move between queues.
+    </div>
+</div>
+
+<!-- ========== MULTILEVEL FEEDBACK QUEUE ========== -->
+<div class="card">
+    <h2 class="section-title">Multilevel Feedback Queue Scheduling</h2>
+    <p>Solves the inflexibility of multilevel queue — <strong>processes can move between queues</strong>. Aging can be implemented this way to prevent starvation.</p>
+
+    <h3>Defined by Five Parameters:</h3>
+    <ul>
+        <li>Number of queues</li>
+        <li>Scheduling algorithm for each queue</li>
+        <li>Method to determine when to <strong>upgrade</strong> a process (to higher priority queue)</li>
+        <li>Method to determine when to <strong>demote</strong> a process (to lower priority queue)</li>
+        <li>Method to determine which queue a process enters when it first needs service</li>
+    </ul>
+
+    <h3>Classic Example — Three Queues</h3>
+    <div class="three-column">
+        <div class="box">
+            <strong>Q0</strong>
+            RR with time quantum = <strong>8 ms</strong> (highest priority)
+        </div>
+        <div class="box">
+            <strong>Q1</strong>
+            RR with time quantum = <strong>16 ms</strong>
+        </div>
+        <div class="box">
+            <strong>Q2</strong>
+            <strong>FCFS</strong> (lowest priority)
+        </div>
+    </div>
+    <div class="highlight" style="margin-top:15px;">
+        <strong>How it works:</strong><br>
+        1. New job enters <strong>Q0</strong> (RR, q=8). If it doesn't finish in 8 ms → moved to Q1.<br>
+        2. In <strong>Q1</strong> (RR, q=16). If it doesn't finish in 16 ms → moved to Q2.<br>
+        3. In <strong>Q2</strong> (FCFS) — runs only when Q0 and Q1 are empty.
+    </div>
+    <div class="note">
+        <strong>Preemption Rule:</strong> A process in a lower priority queue will be <em>preempted (only after its given time quantum)</em> by a process arriving in a higher priority queue.
+    </div>
+    <div class="two-column" style="margin-top:12px;">
+        <div class="important">
+            <strong>Short Processes:</strong> Complete quickly without migrating far down the hierarchy.
+        </div>
+        <div class="warning">
+            <strong>Long CPU-bound Processes:</strong> Danger of starvation on a system with many interactive processes.
+        </div>
+    </div>
+</div>
+
+<!-- ========== THREAD SCHEDULING ========== -->
+<div class="card">
+    <h2 class="section-title">Thread Scheduling</h2>
+    <ul>
+        <li>User-level threads are managed by <strong>thread APIs</strong>; kernel-level threads by the <strong>OS</strong>.</li>
+        <li>When threads are supported, <em>threads</em> are scheduled (not processes).</li>
+        <li>In many-to-one and many-to-many models, the thread library schedules user-level threads to run on LWPs (Lightweight Processes).</li>
+    </ul>
+    <div class="two-column">
+        <div class="box">
+            <strong>Process-Contention Scope (PCS)</strong>
+            Scheduling competition is <em>within the process</em>. Thread library schedules user-level threads. Typically done via priority set by programmer.
+        </div>
+        <div class="box">
+            <strong>System-Contention Scope (SCS)</strong>
+            Kernel decides which kernel-level thread to schedule onto a CPU. One-to-one model uses only SCS. Linux and Mac OS X allow only PTHREAD_SCOPE_SYSTEM.
+        </div>
+    </div>
+
+    <h3>Pthread Scheduling API</h3>
+    <ul>
+        <li><code>PTHREAD_SCOPE_PROCESS</code> — schedules threads using PCS scheduling.</li>
+        <li><code>PTHREAD_SCOPE_SYSTEM</code> — schedules threads using SCS scheduling.</li>
+    </ul>
+    <pre>
+<span class="keyword">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="keyword">#define</span> NUM_THREADS <span class="num">5</span>
+
+<span class="type">int</span> <span class="fn">main</span>(<span class="type">int</span> argc, <span class="type">char</span> *argv[]) {
+    <span class="type">int</span> i, scope;
+    pthread_t tid[NUM_THREADS];
+    pthread_attr_t attr;
+
+    <span class="comment">/* get default attributes */</span>
+    <span class="fn">pthread_attr_init</span>(&amp;attr);
+
+    <span class="comment">/* inquire on current scope */</span>
+    <span class="keyword">if</span> (<span class="fn">pthread_attr_getscope</span>(&amp;attr, &amp;scope) != <span class="num">0</span>)
+        <span class="fn">fprintf</span>(stderr, <span class="string">"Unable to get scheduling scope\n"</span>);
+    <span class="keyword">else</span> {
+        <span class="keyword">if</span> (scope == PTHREAD_SCOPE_PROCESS)
+            <span class="fn">printf</span>(<span class="string">"PTHREAD_SCOPE_PROCESS"</span>);
+        <span class="keyword">else if</span> (scope == PTHREAD_SCOPE_SYSTEM)
+            <span class="fn">printf</span>(<span class="string">"PTHREAD_SCOPE_SYSTEM"</span>);
+    }
+
+    <span class="comment">/* set the scheduling algorithm to SCS */</span>
+    <span class="fn">pthread_attr_setscope</span>(&amp;attr, PTHREAD_SCOPE_SYSTEM);
+
+    <span class="comment">/* create the threads */</span>
+    <span class="keyword">for</span> (i = <span class="num">0</span>; i &lt; NUM_THREADS; i++)
+        <span class="fn">pthread_create</span>(&amp;tid[i], &amp;attr, runner, NULL);
+
+    <span class="comment">/* join on each thread */</span>
+    <span class="keyword">for</span> (i = <span class="num">0</span>; i &lt; NUM_THREADS; i++)
+        <span class="fn">pthread_join</span>(tid[i], NULL);
+}
+
+<span class="comment">/* Each thread begins here */</span>
+<span class="type">void</span> *<span class="fn">runner</span>(<span class="type">void</span> *param) {
+    <span class="comment">/* do some work ... */</span>
+    <span class="fn">pthread_exit</span>(<span class="num">0</span>);
+}
+    </pre>
+</div>
+
+<!-- ========== MULTIPLE PROCESSOR SCHEDULING ========== -->
+<div class="card">
+    <h2 class="section-title">Multiple-Processor Scheduling</h2>
+    <p>CPU scheduling is more complex when multiple CPUs are available.</p>
+    <div class="three-column">
+        <div class="box">
+            <strong>Homogeneous Processors</strong>
+            All processors are identical within the multiprocessor.
+        </div>
+        <div class="box">
+            <strong>Asymmetric Multiprocessing</strong>
+            Only one processor accesses system data structures and handles scheduling. Reduces data sharing needs.
+        </div>
+        <div class="box">
+            <strong>Symmetric Multiprocessing (SMP)</strong>
+            Each processor is self-scheduling. Can use a common ready queue or each processor has its own private queue. <em>Currently most common.</em>
+        </div>
+    </div>
+    <div class="note" style="margin-top:15px;">
+        In SMP, all threads may be in a common ready queue (a), or each processor may have its own private queue of threads (b).
+    </div>
+</div>
+
+<!-- ========== ALGORITHM EVALUATION ========== -->
+<div class="card">
+    <h2 class="section-title">Algorithm Evaluation</h2>
+    <p>To select a CPU scheduling algorithm for an OS, first determine criteria then evaluate algorithms.</p>
+    <h3>Deterministic Modeling</h3>
+    <ul>
+        <li>A type of analytic evaluation.</li>
+        <li>Takes a particular <strong>predetermined workload</strong> and defines the performance of each algorithm for that workload.</li>
+        <li>Simple and fast, but requires exact numbers for input — applies only to those specific inputs.</li>
+    </ul>
+    <div class="highlight">
+        <strong>Example comparison for 5 processes arriving at time 0:</strong><br>
+        • FCFS → <strong>28 ms</strong> average waiting time<br>
+        • Non-preemptive SJF → <strong>13 ms</strong> average waiting time<br>
+        • Round Robin → <strong>23 ms</strong> average waiting time
+    </div>
+</div>
+
+<!-- ========== IN-CLASS QUESTION ========== -->
+<div class="card">
+    <h2 class="section-title">In-Class Question — Algorithms Comparison</h2>
+    <div class="in-class">
+        <h3>📋 Problem Statement</h3>
+        <table>
+            <tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th></tr>
+            <tr><td>P1</td><td>0</td><td>10</td></tr>
+            <tr><td>P2</td><td>1</td><td>8</td></tr>
+            <tr><td>P3</td><td>2</td><td>15</td></tr>
+            <tr><td>P4</td><td>5</td><td>12</td></tr>
+            <tr><td>P5</td><td>8</td><td>5</td></tr>
+        </table>
+    </div>
+
+    <h3>1. FCFS Results</h3>
+    <div class="gantt-wrap">
+        <div class="gantt">
+            <div class="gantt-block gantt-p1" style="flex:10">P1 (10)</div>
+            <div class="gantt-block gantt-p2" style="flex:8">P2 (8)</div>
+            <div class="gantt-block gantt-p3" style="flex:15">P3 (15)</div>
+            <div class="gantt-block gantt-p4" style="flex:12">P4 (12)</div>
+            <div class="gantt-block gantt-p5" style="flex:5">P5</div>
+        </div>
+    </div>
+    <table>
+        <tr><th>Process</th><th>Waiting Time</th><th>Turnaround Time</th><th>Response Time</th></tr>
+        <tr><td>P1</td><td>0</td><td>10</td><td>0</td></tr>
+        <tr><td>P2</td><td>10−1 = 9</td><td>18−1 = 17</td><td>9</td></tr>
+        <tr><td>P3</td><td>18−2 = 16</td><td>33−2 = 31</td><td>16</td></tr>
+        <tr><td>P4</td><td>33−5 = 28</td><td>45−5 = 40</td><td>28</td></tr>
+        <tr><td>P5</td><td>45−8 = 37</td><td>50−8 = 42</td><td>37</td></tr>
+    </table>
+    <div class="important" style="margin-top:10px;">Average Waiting Time = (0+9+16+28+37)/5 = <strong>18 ms</strong></div>
+
+    <h3>2. SJF Non-Preemptive Results</h3>
+    <p>Order: P1(10) → P5(5) → P2(8) → P4(12) → P3(15)</p>
+    <table>
+        <tr><th>Process</th><th>Waiting Time</th><th>Turnaround Time</th><th>Response Time</th></tr>
+        <tr><td>P1</td><td>0</td><td>10</td><td>0</td></tr>
+        <tr><td>P2</td><td>14</td><td>22</td><td>14</td></tr>
+        <tr><td>P3</td><td>33</td><td>48</td><td>33</td></tr>
+        <tr><td>P4</td><td>18</td><td>30</td><td>18</td></tr>
+        <tr><td>P5</td><td>2</td><td>7</td><td>2</td></tr>
+    </table>
+
+    <h3>3. Round Robin (q = 4) Results</h3>
+    <div class="note">Ready queue rotates: P1→P2→P3→P4→P5, each getting 4ms at a time.</div>
+    <table>
+        <tr><th>Process</th><th>Waiting Time</th><th>Turnaround Time</th><th>Response Time</th></tr>
+        <tr><td>P1</td><td>12−4 + 32−16 = 24</td><td>34−0 = 34</td><td>0−0 = 0</td></tr>
+        <tr><td>P2</td><td>4−1 + 24−8 = 19</td><td>28−1 = 27</td><td>4−1 = 3</td></tr>
+        <tr><td>P3</td><td>8−2 + 28−12 + 39−32 + 47−43 = 33</td><td>50−2 = 48</td><td>8−2 = 6</td></tr>
+        <tr><td>P4</td><td>16−5 + 34−20 + 43−38 = 30</td><td>47−5 = 42</td><td>16−5 = 11</td></tr>
+        <tr><td>P5</td><td>20−8 + 38−24 = 26</td><td>39−8 = 31</td><td>20−8 = 12</td></tr>
+    </table>
+</div>
+
+<!-- ========== EXERCISE — MULTILEVEL FEEDBACK QUEUE ========== -->
+<div class="card">
+    <h2 class="section-title">Exercise — Multilevel Feedback Queue</h2>
+    <div class="in-class">
+        <h3>📋 Configuration</h3>
+        <ul>
+            <li><strong>Queue 0:</strong> RR with time quantum = 8 ms</li>
+            <li><strong>Queue 1:</strong> RR with time quantum = 16 ms</li>
+            <li><strong>Queue 2:</strong> FCFS</li>
+        </ul>
+        <h3 style="margin-top:10px;">Rules:</h3>
+        <ul>
+            <li>New processes enter Queue 0.</li>
+            <li>If not finished in first Q0 iteration → moved to end of Queue 1.</li>
+            <li>Q0 empty → process at head of Q1 gets 16 ms quantum.</li>
+            <li>If not finished in first Q1 iteration → moved to end of Queue 2.</li>
+            <li>Q2 runs FCFS only when Q0 and Q1 are both empty.</li>
+        </ul>
+    </div>
+
+    <h3>Process Table</h3>
+    <table>
+        <tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th></tr>
+        <tr><td>P1</td><td>0</td><td>15</td></tr>
+        <tr><td>P2</td><td>5</td><td>50</td></tr>
+        <tr><td>P3</td><td>24</td><td>5</td></tr>
+        <tr><td>P4</td><td>30</td><td>60</td></tr>
+        <tr><td>P5</td><td>33</td><td>45</td></tr>
+        <tr><td>P6</td><td>40</td><td>20</td></tr>
+        <tr><td>P7</td><td>40</td><td>6</td></tr>
+    </table>
+
+    <div class="highlight" style="margin-top:15px;">
+        <strong>Questions to solve:</strong><br>
+        1. Draw a Gantt chart illustrating the execution of the processes.<br>
+        2. Calculate the <strong>waiting time</strong>, <strong>response time</strong>, and <strong>turnaround time</strong> for each process.
+    </div>
+    <div class="note">
+        <strong>Hint for Gantt Chart:</strong><br>
+        • t=0: P1 enters Q0 → runs 8 ms (0–8). Remaining: 7 ms → goes to Q1.<br>
+        • t=5: P2 arrives in Q0. Runs 8 ms (8–16). Remaining: 42 ms → goes to Q1.<br>
+        • t=16: Q0 empty. P1 at head of Q1 → runs remaining 7 ms (16–23). P1 finishes.<br>
+        • t=23: P2 in Q1. Runs 16 ms (23–39). Remaining: 26 ms → goes to Q2.<br>
+        • t=24: P3 arrives in Q0. Preempts Q1 → P3 runs 5 ms (39–44). P3 finishes.<br>
+        • Continue similarly for P4, P5, P6, P7...
+    </div>
+</div>
+
+<div class="footer">
+    🌱 Lecture 05 - CPU Scheduling • BY_#D1
+</div>
+
+</div>
+</body>
+</html>

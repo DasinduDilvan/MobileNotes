@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operating Systems — Study Notes</title>
+<title>Fundamentals of Management — Study Notes</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -20,6 +20,7 @@ body {
     margin: 0 auto;
 }
 
+/* Back link */
 .back-link {
     display: inline-flex;
     align-items: center;
@@ -32,6 +33,15 @@ body {
     transition: opacity 0.15s;
 }
 .back-link:hover { opacity: 0.7; }
+
+/* Header card */
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
 
 .course-header {
     background: white;
@@ -57,12 +67,14 @@ body {
     border-bottom: 1px solid #cfe9e7;
 }
 
+/* Lessons list */
 .lessons-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
+/* Available lesson */
 .lesson-link {
     display: flex;
     align-items: center;
@@ -116,6 +128,7 @@ body {
     flex-shrink: 0;
 }
 
+/* Coming soon lesson */
 .lesson-soon {
     display: flex;
     align-items: center;
@@ -129,7 +142,10 @@ body {
     cursor: default;
 }
 
-.lesson-soon .lesson-num { background: #ccc; }
+.lesson-soon .lesson-num {
+    background: #ccc;
+}
+
 .lesson-soon .lesson-info .lesson-title { color: #aaa; }
 .lesson-soon .lesson-info .lesson-sub   { color: #bbb; }
 
@@ -168,57 +184,49 @@ body {
     <a class="back-link" href="index.html">← Back to Courses</a>
 
     <div class="course-header">
-        <h1>💻 Operating Systems Concepts &amp; Application</h1>
+        <h1>🏢 Discrete Mathematics</h1>
     </div>
 
     <div class="section-label">Lessons</div>
 
     <div class="lessons-list">
 
-        <a class="lesson-link" href="operating-systems/L01.html">
+        <a class="lesson-link" href="management/L01.html">
             <div class="lesson-num">01</div>
             <div class="lesson-info">
-                <div class="lesson-title">Operating Systems Introduction</div>
+                <div class="lesson-title">Introduction to Management</div>
             </div>
             <span class="arrow">›</span>
         </a>
 
-        <a class="lesson-link" href="operating-systems/L02.html">
+        <a class="lesson-link" href="management/L02.html">
             <div class="lesson-num">02</div>
             <div class="lesson-info">
-                <div class="lesson-title">Operating System Structures</div>
+                <div class="lesson-title">Evolution in Management</div>
             </div>
             <span class="arrow">›</span>
         </a>
 
-        <a class="lesson-link" href="operating-systems/L03.html">
+        <a class="lesson-link" href="management/L03.html">
             <div class="lesson-num">03</div>
             <div class="lesson-info">
-                <div class="lesson-title">Processes</div>
+                <div class="lesson-title">Management Principles</div>
             </div>
             <span class="arrow">›</span>
         </a>
 
-        <a class="lesson-link" href="operating-systems/L04.html">
+        <a class="lesson-link" href="management/L04.html">
             <div class="lesson-num">04</div>
             <div class="lesson-info">
-                <div class="lesson-title">Threads</div>
-            </div>
-            <span class="arrow">›</span>
-        </a>
-
-        <a class="lesson-link" href="operating-systems/L05.html">
-            <div class="lesson-num">05</div>
-            <div class="lesson-info">
-                <div class="lesson-title">CPU Scheduling</div>
+                <div class="lesson-title">Planning & Decision Making</div>
             </div>
             <span class="arrow">›</span>
         </a>
 
         <div class="lesson-soon">
-            <div class="lesson-num">06</div>
+            <div class="lesson-num">05</div>
             <div class="lesson-info">
-                <div class="lesson-title">Memory Management</div>
+                <div class="lesson-title">Organizing</div>
             </div>
             <span class="badge-soon">Coming Soon</span>
         </div>
@@ -226,7 +234,7 @@ body {
     </div>
 
     <div class="footer">
-        🌱 Operating Systems Concepts &amp; Application &nbsp;•&nbsp; BY_#D1
+        🌱 Discrete Mathematics &nbsp;•&nbsp; BY_#D1
     </div>
 
 </div>
