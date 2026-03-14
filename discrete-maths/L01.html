@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L1 – Introduction & Propositional Logic | TMS1223</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Truth Tables */
+table {
+    border-collapse: collapse;
+    margin: 12px auto;
+    font-size: 0.95em;
+    min-width: 200px;
+}
+
+th {
+    background: #2c6e6b;
+    color: white;
+    padding: 8px 18px;
+    text-align: center;
+    font-weight: 600;
+}
+
+td {
+    padding: 7px 18px;
+    text-align: center;
+    border: 1px solid #cfe9e7;
+}
+
+tr:nth-child(even) td { background: #f3fbfa; }
+
+.t-val { color: #2e7d32; font-weight: 700; }
+.f-val { color: #c62828; font-weight: 700; }
+
+.operator-symbol {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #2c6e6b;
+    font-family: 'Courier New', monospace;
+}
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Introduction & Propositional Logic</h1>
+    <p class="subtitle">TMS1223 – Discrete Mathematics &nbsp;|&nbsp; Lecture 01</p>
+
+
+    <!-- ─── COURSE OBJECTIVES ───────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">🎯 Course Objectives & Learning Outcomes</h2>
+        <p>The purpose of this course is to equip learners with the mathematics related to the field of digital electronics.</p>
+        <br>
+        <p><b>After completing this course, students will be able to:</b></p>
+        <ul>
+            <li>Design simple logic circuits and describe digital logic elements.</li>
+            <li>Understand Set Theory.</li>
+            <li>Understand basic Boolean Algebra.</li>
+            <li>Understand Propositional Logic, Predicate Logic, and elementary number theory.</li>
+        </ul>
+    </div>
+
+    <!-- ─── MODULE COVERAGE ─────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">📚 Module Coverage</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>Mathematical Logic</strong>
+                Statements and notations, connectives, truth tables, tautology, implications, propositional logic.
+            </div>
+            <div class="box">
+                <strong>Predicate Logic</strong>
+                Universal and existential quantification; modus ponens and modus tollens.
+            </div>
+            <div class="box">
+                <strong>Set Theory</strong>
+                Subsets, pigeonhole principle; cardinality and countability.
+            </div>
+            <div class="box">
+                <strong>Boolean Algebra</strong>
+                Boolean values; standard operations; De Morgan's laws; digital logic.
+            </div>
+            <div class="box">
+                <strong>Mathematical Proofs</strong>
+                Direct, indirect, contradiction, mathematical induction.
+            </div>
+            <div class="box">
+                <strong>Graphs & Trees</strong>
+                Fundamental graph theory and tree structures.
+            </div>
+        </div>
+        <div class="note" style="margin-top:15px;">
+            <b>Recommended Textbook:</b> <i>Discrete Mathematics and Its Applications</i>, 7th Edition — Kenneth Rosen. McGraw-Hill Education (Asia), 2012. ISBN: 978-0-07-338309-5
+        </div>
+    </div>
+
+    <!-- ─── WHAT IS DISCRETE MATHEMATICS ───────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">🔢 What is Discrete Mathematics?</h2>
+        <div class="important">
+            <b>Definition:</b> Discrete Mathematics is a collection of mathematical topics that examine and use <b>finite or countably infinite</b> mathematical objects.
+        </div>
+        <p><b>Key distinction:</b> <i>Discrete</i> means consisting of <b>distinct or unconnected elements</b> — it is the opposite of continuous mathematics.</p>
+        <br>
+        <p><b>Problems solved using Discrete Mathematics include:</b></p>
+        <ul>
+            <li>How many ways are there to choose a valid password on a computer system?</li>
+            <li>What is the probability of winning a lottery?</li>
+            <li>Is there a link between two computers in a network?</li>
+            <li>How can I identify spam email messages?</li>
+            <li>How can I encrypt a message so that no unintended recipient can read it?</li>
+            <li>What is the shortest path between two cities using a transportation system?</li>
+            <li>How can a list of integers be sorted in increasing order? How many steps are required?</li>
+            <li>How can a circuit that adds two integers be designed?</li>
+            <li>How many valid Internet addresses are there?</li>
+        </ul>
+    </div>
+
+    <!-- ─── WHY STUDY DISCRETE MATH ─────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">💡 Why Study Discrete Mathematics?</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>Mathematical Reasoning</strong>
+                Develops the ability to understand and create mathematical arguments.
+            </div>
+            <div class="box">
+                <strong>Foundation for CS</strong>
+                Provides the mathematical foundation for advanced mathematics and computer science courses.
+            </div>
+            <div class="box">
+                <strong>Real-World Applications</strong>
+                Practical applications to computing machines, AI, programming, system specification, and programming languages.
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── MOTIVATION ──────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">🤔 Course Motivation</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Question 1 (Algebraic)</strong>
+                Six apples and three oranges cost 1200 rupees. Two apples and five oranges cost 800 rupees. What is the cost of each apple and each orange?<br><br>
+                <span style="color:#5a9d99;font-size:0.9em;">→ Solved using simultaneous equations (algebra)</span>
+            </div>
+            <div class="box">
+                <strong>Question 2 (Logical)</strong>
+                Everyone who sees the elephant is either tall or wearing red, but not both. Everyone who is not wearing red is either short, or else tall and wearing blue. Bob is wearing blue. Could he have seen the elephant?<br><br>
+                <span style="color:#5a9d99;font-size:0.9em;">→ Solved using formal logical reasoning</span>
+            </div>
+        </div>
+        <div class="highlight" style="margin-top:15px;">
+            <b>Course Goal:</b> Provide you with formal tools (a formal language) to solve logical problems like Question 2 systematically — just as algebra solves Question 1.
+        </div>
+    </div>
+
+    <!-- ─── PROPOSITIONS ────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">📌 Propositions — The Building Blocks of Logic</h2>
+        <div class="important">
+            <b>Definition (Proposition):</b> A <b>proposition</b> is a declarative sentence (a sentence that declares a fact) that is either <b>true</b> or <b>false</b>, but <b>not both</b>.
+        </div>
+        <p>Propositions are the basic building blocks of logic. They must be declarative statements with a definite truth value.</p>
+        <br>
+        <div class="warning">
+            <b>Not a proposition if:</b> It is a question, a command, a request, or if its truth value depends on unspecified variables (open sentence / propositional function).
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Exercise 1 — Are These Propositions?</h3>
+        <table style="width:100%; margin-top:10px;">
+            <thead>
+                <tr><th>Statement</th><th>Statement?</th><th>Proposition?</th><th>Truth Value</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Elephants are bigger than mice.</td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">True</span></td>
+                </tr>
+                <tr>
+                    <td>520 &lt; 111</td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="f-val">False</span></td>
+                </tr>
+                <tr>
+                    <td>y &gt; 5</td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="f-val">No</span></td>
+                    <td style="font-size:0.88em;color:#777;">Depends on y (open sentence / propositional function)</td>
+                </tr>
+                <tr>
+                    <td>Today is January 1 and 99 &lt; 5.</td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="f-val">False</span></td>
+                </tr>
+                <tr>
+                    <td>Please do not fall asleep.</td>
+                    <td><span class="f-val">No</span></td>
+                    <td><span class="f-val">No</span></td>
+                    <td style="color:#777;">It's a request, not a statement</td>
+                </tr>
+                <tr>
+                    <td>x &lt; y if and only if y &gt; x.</td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">True</span> (independent of x, y values)</td>
+                </tr>
+                <tr>
+                    <td>2 + 2 = 3</td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="t-val">Yes</span></td>
+                    <td><span class="f-val">False</span></td>
+                </tr>
+                <tr>
+                    <td>What time is it?</td>
+                    <td><span class="f-val">No</span></td>
+                    <td><span class="f-val">No</span></td>
+                    <td style="color:#777;">It's a question</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note" style="margin-top:15px;">
+            <b>Propositional Variables:</b> Letters such as <code>p, q, r, s, …</code> are used to denote propositions (statement variables). Truth values are denoted <b>T</b> (true) and <b>F</b> (false).
+        </div>
+    </div>
+
+    <!-- ─── PROPOSITIONAL LOGIC ─────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">🏛️ Propositional Logic</h2>
+        <div class="important">
+            <b>Propositional Logic</b> is the area of logic that deals with propositions. It was first developed systematically by the Greek philosopher <b>Aristotle</b> more than 2300 years ago.
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Compound Propositions</h3>
+        <p style="margin-top:8px;">One or more propositions can be combined to form a single <b>compound proposition</b>, using logical operators (connectives). Propositions are denoted by letters such as <code>p, q, r, s</code>.</p>
+
+        <div class="highlight" style="margin-top:15px;">
+            <b>Example Setup:</b><br>
+            Let <code>p</code> = "It is below freezing." &nbsp;&nbsp; Let <code>q</code> = "It is snowing."<br><br>
+            <b>Compound propositions formed:</b>
+            <ul style="margin-top:8px;">
+                <li>a) It is below freezing <b>and</b> snowing. → <code>p ∧ q</code></li>
+                <li>b) It is below freezing but <b>not</b> snowing. → <code>p ∧ ¬q</code></li>
+                <li>c) It is <b>not</b> below freezing and it is <b>not</b> snowing. → <code>¬p ∧ ¬q</code></li>
+                <li>d) It is either snowing or below freezing (or both). → <code>p ∨ q</code></li>
+                <li>e) <b>If</b> it is below freezing, <b>then</b> it is also snowing. → <code>p → q</code></li>
+                <li>f) Either it is below freezing or it is snowing, but not snowing if it is below freezing. → <code>p ⊕ q</code></li>
+                <li>g) It is below freezing is necessary and sufficient for it to be snowing. → <code>p ↔ q</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ─── LOGICAL OPERATORS OVERVIEW ─────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">⚙️ Logical Operators (Connectives) — Overview</h2>
+        <p>Truth tables are used to show how these operators combine propositions into compound propositions.</p>
+        <table style="width:100%; margin-top:15px;">
+            <thead>
+                <tr><th>Connective</th><th>Meaning</th><th>Symbol</th><th>Name</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Negation</td><td>not</td><td class="operator-symbol">¬</td><td>NOT</td></tr>
+                <tr><td>Conjunction</td><td>and</td><td class="operator-symbol">∧</td><td>AND</td></tr>
+                <tr><td>Disjunction</td><td>or</td><td class="operator-symbol">∨</td><td>OR (Inclusive)</td></tr>
+                <tr><td>Exclusive Or</td><td>either/or, not both</td><td class="operator-symbol">⊕</td><td>XOR</td></tr>
+                <tr><td>Conditional</td><td>if…then…</td><td class="operator-symbol">→</td><td>Implication</td></tr>
+                <tr><td>Biconditional</td><td>if and only if</td><td class="operator-symbol">↔</td><td>Biconditional</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ─── NEGATION ────────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">1. Negation (NOT) &nbsp;<span class="operator-symbol">¬</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> be a proposition. The <b>negation</b> of <code>p</code>, denoted <code>¬p</code> (also denoted <code>p̄</code>), is the statement <i>"It is not the case that p."</i><br><br>
+            The proposition <code>¬p</code> is read <b>"not p."</b> The truth value of <code>¬p</code> is the <b>opposite</b> of the truth value of <code>p</code>.
+        </div>
+        <p><b>Type:</b> Unary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">¬</span></p>
+
+        <table style="margin-top:12px;">
+            <thead><tr><th>p</th><th>¬p</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top:18px; color:#2c6e6b;">Examples</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Example 1</strong>
+                <b>p:</b> "Michael's PC runs Linux."<br>
+                <b>¬p:</b> "It is not the case that Michael's PC runs Linux."<br>
+                <span style="color:#5a9d99;">Simplified: "Michael's PC does not run Linux."</span>
+            </div>
+            <div class="box">
+                <strong>Example 2</strong>
+                <b>p:</b> "Vandana's smartphone has at least 32GB of memory."<br>
+                <b>¬p:</b> "It is not the case that Vandana's smartphone has at least 32GB of memory."<br>
+                <span style="color:#5a9d99;">Simplified: "Vandana's smartphone has less than 32GB of memory."</span>
+            </div>
+        </div>
+
+        <div class="in-class" style="margin-top:15px;">
+            <h3>Exercise – Find the Negation</h3>
+            <p><b>Set 1:</b></p>
+            <ul>
+                <li>a) Mei has an MP3 player.</li>
+                <li>b) There is no pollution in New Jersey.</li>
+                <li>c) 2 + 1 = 3.</li>
+                <li>d) The summer in Maine is hot and sunny.</li>
+            </ul>
+            <p style="margin-top:10px;"><b>Set 2:</b></p>
+            <ul>
+                <li>a) Jennifer and Teja are friends.</li>
+                <li>b) There are 13 items in a baker's dozen.</li>
+                <li>c) Abby sent more than 100 text messages every day.</li>
+                <li>d) 121 is a perfect square.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ─── CONJUNCTION ─────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">2. Conjunction (AND) &nbsp;<span class="operator-symbol">∧</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> and <code>q</code> be propositions. The <b>conjunction</b> of <code>p</code> and <code>q</code>, denoted <code>p ∧ q</code>, is the proposition <i>"p and q."</i><br><br>
+            <code>p ∧ q</code> is <b>true</b> when <b>both</b> <code>p</code> and <code>q</code> are true, and <b>false otherwise</b>.
+        </div>
+        <p><b>Type:</b> Binary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">∧</span></p>
+
+        <table style="margin-top:12px;">
+            <thead><tr><th>p</th><th>q</th><th>p ∧ q</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+            </tbody>
+        </table>
+
+        <div class="box" style="margin-top:15px;">
+            <strong>Example</strong>
+            <b>p:</b> "Rebecca's PC has more than 16 GB free hard disk space."<br>
+            <b>q:</b> "The processor in Rebecca's PC runs faster than 1 GHz."<br><br>
+            <b>p ∧ q:</b> "Rebecca's PC has more than 16 GB free hard disk space, and its processor runs faster than 1 GHz."
+        </div>
+    </div>
+
+    <!-- ─── DISJUNCTION ─────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">3. Disjunction / Inclusive OR &nbsp;<span class="operator-symbol">∨</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> and <code>q</code> be propositions. The <b>disjunction</b> of <code>p</code> and <code>q</code>, denoted <code>p ∨ q</code>, is the proposition <i>"p or q."</i><br><br>
+            <code>p ∨ q</code> is <b>false</b> when both <code>p</code> and <code>q</code> are false, and <b>true otherwise</b>. Also known as <b>Inclusive OR</b>.
+        </div>
+        <p><b>Type:</b> Binary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">∨</span></p>
+
+        <table style="margin-top:12px;">
+            <thead><tr><th>p</th><th>q</th><th>p ∨ q</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+            </tbody>
+        </table>
+
+        <div class="box" style="margin-top:15px;">
+            <strong>Example</strong>
+            <b>p ∨ q:</b> "Rebecca's PC has at least 16 GB free hard disk space, or the processor in Rebecca's PC runs faster than 1 GHz."<br><br>
+            This is <span class="f-val"><b>false</b></span> only when Rebecca's PC has less than 16 GB free hard disk space <b>AND</b> the processor runs at 1 GHz or slower.
+        </div>
+    </div>
+
+    <!-- ─── EXCLUSIVE OR ─────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">4. Exclusive Or (XOR) &nbsp;<span class="operator-symbol">⊕</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> and <code>q</code> be propositions. The <b>exclusive or</b> of <code>p</code> and <code>q</code>, denoted <code>p ⊕ q</code>, is the proposition that is <b>true when exactly one of p and q is true</b>, and <b>false otherwise</b>.
+        </div>
+        <p><b>Type:</b> Binary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">⊕</span></p>
+
+        <table style="margin-top:12px;">
+            <thead><tr><th>p</th><th>q</th><th>p ⊕ q</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top:18px; color:#2c6e6b;">Inclusive OR vs Exclusive OR</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Inclusive OR (∨)</strong>
+                "Students who have taken calculus <b>or</b> computer science can take this class."<br><br>
+                → Students who took <b>both</b> subjects are also allowed. At least one condition must be true.
+            </div>
+            <div class="box">
+                <strong>Exclusive OR (⊕)</strong>
+                "Students who have taken calculus or computer science, <b>but not both</b>, can enroll in this class."<br><br>
+                → Students who took both are <b>excluded</b>. Exactly one condition must be true.
+            </div>
+        </div>
+        <div class="note" style="margin-top:15px;">
+            <b>Real-life example (XOR):</b> A restaurant menu that states "Soup or salad comes with an entrée" almost always means <i>one or the other, not both</i> — this is Exclusive OR.
+        </div>
+    </div>
+
+    <!-- ─── CONDITIONAL / IMPLICATION ───────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">5. Conditional Statements (Implication) &nbsp;<span class="operator-symbol">→</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> and <code>q</code> be propositions. The <b>conditional statement</b> <code>p → q</code> is the proposition <i>"if p, then q."</i><br><br>
+            <code>p → q</code> is <b>false</b> when <code>p</code> is <b>true</b> and <code>q</code> is <b>false</b>, and <b>true otherwise</b>.
+        </div>
+
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Terminology</strong>
+                <ul style="list-style:none; margin:0;">
+                    <li><b>p</b> = hypothesis (antecedent / premise)</li>
+                    <li><b>q</b> = conclusion (consequence)</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Also called</strong>
+                A conditional statement is also called an <b>implication</b>, because <code>p → q</code> asserts that <code>q</code> is true on the condition that <code>p</code> holds.
+            </div>
+        </div>
+
+        <p><b>Type:</b> Binary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">→</span></p>
+
+        <table style="margin-top:12px;">
+            <thead><tr><th>p</th><th>q</th><th>p → q</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+
+        <div class="highlight" style="margin-top:15px;">
+            <b>Key insight:</b> A conditional statement is only <span class="f-val"><b>false</b></span> when the hypothesis (p) is <b>true</b> but the conclusion (q) is <b>false</b>. In all other cases it is true — including when the hypothesis is false (vacuously true).
+        </div>
+
+        <div class="box" style="margin-top:15px;">
+            <strong>Example</strong>
+            <b>p:</b> "Maria learns discrete mathematics." &nbsp;&nbsp; <b>q:</b> "Maria will find a good job."<br><br>
+            <b>p → q</b> can be expressed as:<br>
+            <ul style="margin-top:8px;">
+                <li>"If Maria learns discrete mathematics, then she will find a good job."</li>
+                <li>"Maria will find a good job when she learns discrete mathematics."</li>
+                <li>"For Maria to get a good job, it is sufficient for her to learn discrete mathematics."</li>
+                <li>"Maria will find a good job unless she does not learn discrete mathematics."</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ─── SUMMARY TABLE ───────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">📊 Truth Table Summary — All Operators</h2>
+        <table style="width:100%;">
+            <thead>
+                <tr>
+                    <th>p</th><th>q</th>
+                    <th>¬p</th>
+                    <th>p ∧ q</th>
+                    <th>p ∨ q</th>
+                    <th>p ⊕ q</th>
+                    <th>p → q</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="t-val">T</td><td class="t-val">T</td>
+                    <td class="f-val">F</td>
+                    <td class="t-val">T</td>
+                    <td class="t-val">T</td>
+                    <td class="f-val">F</td>
+                    <td class="t-val">T</td>
+                </tr>
+                <tr>
+                    <td class="t-val">T</td><td class="f-val">F</td>
+                    <td class="f-val">F</td>
+                    <td class="f-val">F</td>
+                    <td class="t-val">T</td>
+                    <td class="t-val">T</td>
+                    <td class="f-val">F</td>
+                </tr>
+                <tr>
+                    <td class="f-val">F</td><td class="t-val">T</td>
+                    <td class="t-val">T</td>
+                    <td class="f-val">F</td>
+                    <td class="t-val">T</td>
+                    <td class="t-val">T</td>
+                    <td class="t-val">T</td>
+                </tr>
+                <tr>
+                    <td class="f-val">F</td><td class="f-val">F</td>
+                    <td class="t-val">T</td>
+                    <td class="f-val">F</td>
+                    <td class="f-val">F</td>
+                    <td class="f-val">F</td>
+                    <td class="t-val">T</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 01 – Introduction & Propositional Logic • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

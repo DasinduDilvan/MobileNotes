@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L4 - Propositional Equivalences</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .subsection-title {
+            color: #3a8a87;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 18px 0 8px 0;
+        }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 6px 0; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        code {
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #c0392b;
+        }
+        .formula {
+            background: #f0f8ff;
+            border: 1px solid #b8d9f0;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 12px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05em;
+            color: #1a4f72;
+            text-align: center;
+        }
+        .formula-label {
+            font-size: 0.82em;
+            color: #666;
+            margin-bottom: 3px;
+            font-family: 'Segoe UI', sans-serif;
+            font-style: italic;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.93em;
+        }
+        th {
+            background: #2c6e6b;
+            color: white;
+            padding: 9px 13px;
+            text-align: center;
+        }
+        td {
+            padding: 8px 13px;
+            border-bottom: 1px solid #e0f0ef;
+            text-align: center;
+        }
+        tr:nth-child(even) td { background: #f3fbfa; }
+        td.left { text-align: left; }
+        th.left { text-align: left; }
+        .proof-step {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px 20px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.93em;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #5a9d99;
+        }
+        .proof-step .expr { color: #1a4f72; }
+        .proof-step .reason { color: #666; font-style: italic; font-family: 'Segoe UI', sans-serif; font-size: 0.9em; }
+        .outline-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .outline-item {
+            background: #f3fbfa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #5a9d99;
+            font-weight: 500;
+            color: #2c6e6b;
+            font-size: 0.95em;
+        }
+        .demorgan-box {
+            background: #fff3e0;
+            border: 1px solid #ffe0b2;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 12px 0;
+            text-align: center;
+        }
+        .demorgan-box .law {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #bf360c;
+            margin: 6px 0;
+        }
+        .demorgan-box .label {
+            font-size: 0.85em;
+            color: #777;
+            margin-bottom: 4px;
+        }
+        .eq-table td { font-family: 'Courier New', monospace; font-size: 0.92em; }
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .outline-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Propositional Equivalences</h1>
+    <p class="subtitle">TMS1233 — Discrete Mathematics &nbsp;|&nbsp; Lecture 4</p>
+
+    <!-- OUTLINE -->
+    <div class="card">
+        <h2 class="section-title">📋 Outline</h2>
+        <div class="outline-grid">
+            <div class="outline-item">1. Tautologies, Contradictions & Contingencies</div>
+            <div class="outline-item">2. Logical Equivalence</div>
+            <div class="outline-item">3. De Morgan's Laws</div>
+            <div class="outline-item">4. Key Logical Equivalences (Reference Tables)</div>
+            <div class="outline-item">5. Equivalence Proofs</div>
+            <div class="outline-item">6. Normal Forms <em>(Optional)</em></div>
+            <div class="outline-item">7. Propositional Satisfiability</div>
+            <div class="outline-item">8. Sudoku as a Satisfiability Problem</div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: INTRO + TAUT/CONTRA/CONTING -->
+    <div class="card">
+        <h2 class="section-title">1. Introduction & Core Definitions</h2>
+        <p>An important type of step used in a mathematical argument is the <strong>replacement of a statement with another statement with the same truth value</strong>. Methods that produce propositions with the same truth value as a given compound proposition are used extensively in the construction of mathematical arguments.</p>
+
+        <div class="subsection-title">Three Types of Propositions</div>
+        <div class="grid">
+            <div class="box">
+                <strong>Tautology</strong>
+                A proposition that is <em>always true</em>, regardless of the truth values of its variables.<br>
+                <span style="font-family:monospace; color:#2c6e6b;">Example: p ∨ ¬p</span>
+            </div>
+            <div class="box">
+                <strong>Contradiction</strong>
+                A proposition that is <em>always false</em>, regardless of the truth values of its variables.<br>
+                <span style="font-family:monospace; color:#c0392b;">Example: p ∧ ¬p</span>
+            </div>
+            <div class="box">
+                <strong>Contingency</strong>
+                A proposition that is <em>neither</em> a tautology nor a contradiction — its truth value depends on the variables.<br>
+                <span style="font-family:monospace; color:#777;">Example: p</span>
+            </div>
+        </div>
+
+        <div class="subsection-title">Truth Table Illustration</div>
+        <table>
+            <thead>
+                <tr><th>p</th><th>¬p</th><th>p ∨ ¬p (Tautology)</th><th>p ∧ ¬p (Contradiction)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>T</td><td>F</td><td style="color:#2c6e6b; font-weight:bold;">T</td><td style="color:#c0392b; font-weight:bold;">F</td></tr>
+                <tr><td>F</td><td>T</td><td style="color:#2c6e6b; font-weight:bold;">T</td><td style="color:#c0392b; font-weight:bold;">F</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 2: LOGICAL EQUIVALENCE -->
+    <div class="card">
+        <h2 class="section-title">2. Logical Equivalence</h2>
+        <div class="important">
+            <strong>Definition:</strong> Two compound propositions <strong>p</strong> and <strong>q</strong> are <em>logically equivalent</em> if <strong>p ↔ q</strong> is a tautology. We write this as <strong>p ⇔ q</strong> or <strong>p ≡ q</strong>.
+        </div>
+        <p>Two compound propositions are equivalent if and only if the columns in a truth table giving their truth values agree for all combinations of input variables.</p>
+
+        <div class="subsection-title">Example 1 — Show ¬p ∨ q ≡ p → q</div>
+        <table>
+            <thead>
+                <tr><th>p</th><th>q</th><th>¬p</th><th>¬p ∨ q</th><th>p → q</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>T</td><td>T</td><td>F</td><td style="background:#e8f5e9;">T</td><td style="background:#e8f5e9;">T</td></tr>
+                <tr><td>T</td><td>F</td><td>F</td><td style="background:#fce4ec;">F</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>F</td><td>T</td><td>T</td><td style="background:#e8f5e9;">T</td><td style="background:#e8f5e9;">T</td></tr>
+                <tr><td>F</td><td>F</td><td>T</td><td style="background:#e8f5e9;">T</td><td style="background:#e8f5e9;">T</td></tr>
+            </tbody>
+        </table>
+        <div class="important">The columns for <code>¬p ∨ q</code> and <code>p → q</code> agree for all rows. Therefore: <strong>¬p ∨ q ≡ p → q</strong></div>
+
+        <div class="subsection-title">Example 2 — Show ¬(p ∨ q) ≡ ¬p ∧ ¬q</div>
+        <table>
+            <thead>
+                <tr><th>p</th><th>q</th><th>p ∨ q</th><th>¬(p ∨ q)</th><th>¬p</th><th>¬q</th><th>¬p ∧ ¬q</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>T</td><td>T</td><td>T</td><td style="background:#fce4ec;">F</td><td>F</td><td>F</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>T</td><td>F</td><td>T</td><td style="background:#fce4ec;">F</td><td>F</td><td>T</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>F</td><td>T</td><td>T</td><td style="background:#fce4ec;">F</td><td>T</td><td>F</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>F</td><td>F</td><td>F</td><td style="background:#e8f5e9;">T</td><td>T</td><td>T</td><td style="background:#e8f5e9;">T</td></tr>
+            </tbody>
+        </table>
+        <div class="important">The last two columns agree. Therefore <strong>¬(p ∨ q) ≡ ¬p ∧ ¬q</strong> — this is De Morgan's Second Law confirmed by truth table.</div>
+    </div>
+
+    <!-- SECTION 3: DE MORGAN'S LAWS -->
+    <div class="card">
+        <h2 class="section-title">3. De Morgan's Laws &nbsp;<span style="font-size:0.65em; color:#888;">— Augustus De Morgan (1806–1871)</span></h2>
+        <p>De Morgan's Laws describe how negation distributes over conjunction and disjunction.</p>
+
+        <div class="two-column" style="margin-top:15px;">
+            <div class="demorgan-box">
+                <div class="label">First Law — Negate an AND</div>
+                <div class="law">¬(p ∧ q) ≡ ¬p ∨ ¬q</div>
+                <p style="font-size:0.88em; margin-top:8px; color:#555;">The negation of an <strong>"and"</strong> statement is the <strong>"or"</strong> of the negations.</p>
+            </div>
+            <div class="demorgan-box">
+                <div class="label">Second Law — Negate an OR</div>
+                <div class="law">¬(p ∨ q) ≡ ¬p ∧ ¬q</div>
+                <p style="font-size:0.88em; margin-top:8px; color:#555;">The negation of an <strong>"or"</strong> statement is the <strong>"and"</strong> of the negations.</p>
+            </div>
+        </div>
+
+        <div class="subsection-title">Verification — De Morgan's Second Law</div>
+        <table>
+            <thead>
+                <tr><th>p</th><th>q</th><th>¬p</th><th>¬q</th><th>p ∨ q</th><th>¬(p ∨ q)</th><th>¬p ∧ ¬q</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>T</td><td>T</td><td>F</td><td>F</td><td>T</td><td style="background:#fce4ec;">F</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td><td style="background:#fce4ec;">F</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td style="background:#fce4ec;">F</td><td style="background:#fce4ec;">F</td></tr>
+                <tr><td>F</td><td>F</td><td>T</td><td>T</td><td>F</td><td style="background:#e8f5e9;">T</td><td style="background:#e8f5e9;">T</td></tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">Applying De Morgan's Laws — English Example</div>
+        <div class="highlight">
+            <strong>Original:</strong> "Miguel has a cellphone <strong>and</strong> he has a laptop computer." → <code>p ∧ q</code><br><br>
+            <strong>Negation:</strong> By De Morgan's First Law, <code>¬(p ∧ q) ≡ ¬p ∨ ¬q</code><br><br>
+            <strong>Result:</strong> "Miguel does <strong>not</strong> have a cellphone <strong>or</strong> he does <strong>not</strong> have a laptop computer."
+        </div>
+    </div>
+
+    <!-- SECTION 4: KEY EQUIVALENCES TABLES -->
+    <div class="card">
+        <h2 class="section-title">4. Key Logical Equivalences (Reference)</h2>
+        <p style="margin-bottom:12px;">In these equivalences, <strong>T</strong> denotes the compound proposition that is always true, and <strong>F</strong> denotes the compound proposition that is always false.</p>
+
+        <div class="subsection-title">Core Equivalences</div>
+        <table class="eq-table">
+            <thead>
+                <tr><th class="left">Equivalence</th><th class="left" style="width:35%">Name</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="left">p ∧ T ≡ p &nbsp;&nbsp;&nbsp; p ∨ F ≡ p</td><td class="left">Identity Laws</td></tr>
+                <tr><td class="left">p ∨ T ≡ T &nbsp;&nbsp;&nbsp; p ∧ F ≡ F</td><td class="left">Domination Laws</td></tr>
+                <tr><td class="left">p ∨ p ≡ p &nbsp;&nbsp;&nbsp; p ∧ p ≡ p</td><td class="left">Idempotent Laws</td></tr>
+                <tr><td class="left">¬(¬p) ≡ p</td><td class="left">Double Negation Law</td></tr>
+                <tr><td class="left">p ∨ q ≡ q ∨ p &nbsp;&nbsp;&nbsp; p ∧ q ≡ q ∧ p</td><td class="left">Commutative Laws</td></tr>
+                <tr><td class="left">(p ∨ q) ∨ r ≡ p ∨ (q ∨ r) &nbsp;&nbsp; (p ∧ q) ∧ r ≡ p ∧ (q ∧ r)</td><td class="left">Associative Laws</td></tr>
+                <tr><td class="left">p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r) &nbsp;&nbsp; p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</td><td class="left">Distributive Laws</td></tr>
+                <tr><td class="left">¬(p ∧ q) ≡ ¬p ∨ ¬q &nbsp;&nbsp;&nbsp; ¬(p ∨ q) ≡ ¬p ∧ ¬q</td><td class="left">De Morgan's Laws</td></tr>
+                <tr><td class="left">p ∨ (p ∧ q) ≡ p &nbsp;&nbsp;&nbsp; p ∧ (p ∨ q) ≡ p</td><td class="left">Absorption Laws</td></tr>
+                <tr><td class="left">p ∨ ¬p ≡ T &nbsp;&nbsp;&nbsp; p ∧ ¬p ≡ F</td><td class="left">Negation Laws</td></tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">Equivalences Involving Conditional Statements</div>
+        <table class="eq-table">
+            <thead>
+                <tr><th class="left">Equivalence</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="left">p → q ≡ ¬p ∨ q</td></tr>
+                <tr><td class="left">p → q ≡ ¬q → ¬p</td></tr>
+                <tr><td class="left">p ∨ q ≡ ¬p → q</td></tr>
+                <tr><td class="left">p ∧ q ≡ ¬(p → ¬q)</td></tr>
+                <tr><td class="left">¬(p → q) ≡ p ∧ ¬q</td></tr>
+                <tr><td class="left">(p → q) ∧ (p → r) ≡ p → (q ∧ r)</td></tr>
+                <tr><td class="left">(p → r) ∧ (q → r) ≡ (p ∨ q) → r</td></tr>
+                <tr><td class="left">(p → q) ∨ (p → r) ≡ p → (q ∨ r)</td></tr>
+                <tr><td class="left">(p → r) ∨ (q → r) ≡ (p ∧ q) → r</td></tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">Equivalences Involving Biconditional Statements</div>
+        <table class="eq-table">
+            <thead>
+                <tr><th class="left">Equivalence</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="left">p ↔ q ≡ (p → q) ∧ (q → p)</td></tr>
+                <tr><td class="left">p ↔ q ≡ ¬p ↔ ¬q</td></tr>
+                <tr><td class="left">p ↔ q ≡ (p ∧ q) ∨ (¬p ∧ ¬q)</td></tr>
+                <tr><td class="left">¬(p ↔ q) ≡ p ↔ ¬q</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 5: EQUIVALENCE PROOFS -->
+    <div class="card">
+        <h2 class="section-title">5. Equivalence Proofs</h2>
+        <p>We can show two expressions are logically equivalent by developing a <strong>series of logically equivalent statements</strong>, beginning with A and ending with B:</p>
+        <div class="formula" style="font-size:0.95em;">A ≡ A₁ ≡ A₂ ≡ ... ≡ Aₙ ≡ B</div>
+        <p>Whenever a proposition (represented by a propositional variable) occurs in the equivalences listed, it may be replaced by an <strong>arbitrarily complex compound proposition</strong>.</p>
+
+        <div class="subsection-title">Proof 1 — Show ¬(p ∨ (¬p ∧ q)) ≡ ¬p ∧ ¬q</div>
+        <div class="proof-step">
+            <span class="expr">¬(p ∨ (¬p ∧ q))</span><span class="reason"></span>
+            <span class="expr">≡ ¬p ∧ ¬(¬p ∧ q)</span><span class="reason">by the second De Morgan law</span>
+            <span class="expr">≡ ¬p ∧ [¬(¬p) ∨ ¬q]</span><span class="reason">by the first De Morgan law</span>
+            <span class="expr">≡ ¬p ∧ (p ∨ ¬q)</span><span class="reason">by the double negation law</span>
+            <span class="expr">≡ (¬p ∧ p) ∨ (¬p ∧ ¬q)</span><span class="reason">by the second distributive law</span>
+            <span class="expr">≡ F ∨ (¬p ∧ ¬q)</span><span class="reason">because ¬p ∧ p ≡ F</span>
+            <span class="expr">≡ (¬p ∧ ¬q) ∨ F</span><span class="reason">by the commutative law for disjunction</span>
+            <span class="expr">≡ ¬p ∧ ¬q</span><span class="reason">by the identity law for F ✓</span>
+        </div>
+
+        <div class="subsection-title">Proof 2 — Show (p ∧ q) → (p ∨ q) is a Tautology</div>
+        <div class="proof-step">
+            <span class="expr">(p ∧ q) → (p ∨ q)</span><span class="reason"></span>
+            <span class="expr">≡ ¬(p ∧ q) ∨ (p ∨ q)</span><span class="reason">by p → q ≡ ¬p ∨ q</span>
+            <span class="expr">≡ (¬p ∨ ¬q) ∨ (p ∨ q)</span><span class="reason">by the first De Morgan law</span>
+            <span class="expr">≡ (¬p ∨ p) ∨ (¬q ∨ q)</span><span class="reason">by associative and commutative laws for disjunction</span>
+            <span class="expr">≡ T ∨ T</span><span class="reason">by Example 1 and commutative law for disjunction</span>
+            <span class="expr">≡ T</span><span class="reason">by the domination law ✓ (This is a tautology)</span>
+        </div>
+    </div>
+
+    <!-- SECTION 6: NORMAL FORMS (OPTIONAL) -->
+    <div class="card">
+        <h2 class="section-title">6. Normal Forms <span style="font-size:0.75em; color:#5a9d99;">(Optional)</span></h2>
+
+        <div class="subsection-title">Disjunctive Normal Form (DNF)</div>
+        <div class="important">
+            <strong>Definition:</strong> A propositional formula is in <strong>Disjunctive Normal Form (DNF)</strong> if it consists of a <em>disjunction</em> of disjuncts, where each disjunct consists of a <em>conjunction</em> of atomic formulas or negations of atomic formulas.
+            <br><br>Structure: <code>(literal ∧ literal ∧ ...) ∨ (literal ∧ literal ∧ ...) ∨ ...</code>
+        </div>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>✅ In DNF</strong>
+                <p style="font-family:monospace; margin-top:6px;">(p ∧ ¬q) ∨ (¬p ∨ q)</p>
+                <p style="font-size:0.85em; margin-top:5px; color:#555;">Disjunction of conjunctions of literals.</p>
+            </div>
+            <div class="box">
+                <strong>❌ Not in DNF</strong>
+                <p style="font-family:monospace; margin-top:6px;">p ∧ (p ∨ q)</p>
+                <p style="font-size:0.85em; margin-top:5px; color:#555;">Contains a conjunction with a disjunction inside — not allowed in DNF.</p>
+            </div>
+        </div>
+
+        <div class="note" style="margin-top:12px;">
+            <strong>How to construct DNF from a truth table:</strong> Build the disjunction with one disjunct per row where the formula evaluates to T. Each disjunct is a conjunction of all variables — using the positive form if the variable is T in that row, and the negated form if the variable is F. DNF is important for circuit design methods.
+        </div>
+
+        <div class="subsection-title">DNF Example — Find DNF of (p ∨ q) → ¬r</div>
+        <p>This proposition is true when <code>r</code> is false, or when both <code>p</code> and <code>q</code> are false.</p>
+        <div class="formula">(¬p ∧ ¬q) ∨ ¬r</div>
+
+        <div class="subsection-title">Conjunctive Normal Form (CNF)</div>
+        <div class="important">
+            <strong>Definition:</strong> A compound proposition is in <strong>Conjunctive Normal Form (CNF)</strong> if it is a <em>conjunction of disjunctions</em> (also called clauses).
+            <br><br>Structure: <code>(literal ∨ literal ∨ ...) ∧ (literal ∨ literal ∨ ...) ∧ ...</code>
+        </div>
+        <ul>
+            <li>Every proposition can be put in an equivalent CNF.</li>
+            <li>CNF is obtained by: (1) eliminating implications, (2) moving negation inwards, (3) applying distributive and associative laws.</li>
+            <li>CNF is important in <strong>resolution theorem proving</strong> used in Artificial Intelligence (AI).</li>
+        </ul>
+
+        <div class="subsection-title">CNF Example — Put ¬(p → q) ∨ (r → p) into CNF</div>
+        <div class="proof-step">
+            <span class="expr">¬(p → q) ∨ (r → p)</span><span class="reason">Original expression</span>
+            <span class="expr">Step 1: Eliminate implication signs</span><span class="reason"></span>
+            <span class="expr">¬(¬p ∨ q) ∨ (¬r ∨ p)</span><span class="reason">using p → q ≡ ¬p ∨ q</span>
+            <span class="expr">Step 2: Move negation inwards; eliminate double negation</span><span class="reason"></span>
+            <span class="expr">(p ∧ ¬q) ∨ (¬r ∨ p)</span><span class="reason">De Morgan + double negation</span>
+            <span class="expr">Step 3: Convert to CNF using associative/distributive laws</span><span class="reason"></span>
+            <span class="expr">(p ∨ ¬r ∨ p) ∧ (¬q ∨ ¬r ∨ p)</span><span class="reason">Distribute ∨ over ∧</span>
+        </div>
+        <div class="formula">(p ∨ ¬r ∨ p) ∧ (¬q ∨ ¬r ∨ p)</div>
+    </div>
+
+    <!-- SECTION 7: SATISFIABILITY -->
+    <div class="card">
+        <h2 class="section-title">7. Propositional Satisfiability</h2>
+        <div class="two-column">
+            <div class="important">
+                <strong>Satisfiable:</strong> A compound proposition is <em>satisfiable</em> if there is at least one assignment of truth values to its variables that makes it <strong>true</strong>.
+            </div>
+            <div class="warning">
+                <strong>Unsatisfiable:</strong> A compound proposition is <em>unsatisfiable</em> if <strong>no</strong> assignment of truth values makes it true. This is equivalent to saying its negation is a <strong>tautology</strong>.
+            </div>
+        </div>
+
+        <div class="subsection-title">Example — Determine Satisfiability of Three Propositions</div>
+        <div class="highlight">
+            <strong>Proposition 1:</strong> <code>(p ∨ ¬q) ∧ (q ∨ ¬r) ∧ (r ∨ ¬p)</code><br>
+            <strong>Proposition 2:</strong> <code>(p ∨ q ∨ r) ∧ (¬p ∨ ¬q ∨ ¬r)</code><br>
+            <strong>Proposition 3:</strong> <code>(p ∨ ¬q) ∧ (q ∨ ¬r) ∧ (r ∨ ¬p) ∧ (p ∨ q ∨ r) ∧ (¬p ∨ ¬q ∨ ¬r)</code>
+        </div>
+
+        <div class="subsection-title">Solution (Reasoning without truth tables)</div>
+        <div class="box" style="margin-bottom:12px;">
+            <strong>Proposition 1 — Satisfiable ✓</strong>
+            <p style="margin-top:6px;">True when p, q, and r all have the <em>same</em> truth value (all T or all F). So it is satisfiable.</p>
+        </div>
+        <div class="box" style="margin-bottom:12px;">
+            <strong>Proposition 2 — Satisfiable ✓</strong>
+            <p style="margin-top:6px;">True when <em>at least one</em> of p, q, r is true AND <em>at least one</em> is false. So it is satisfiable.</p>
+        </div>
+        <div class="warning">
+            <strong>Proposition 3 — Unsatisfiable ✗</strong>
+            <p style="margin-top:6px;">For Proposition 1 (part of 3) to be true: all three variables must have the <em>same</em> truth value. For Proposition 2 (part of 3) to be true: at least one must be true <em>and</em> at least one must be false. These two conditions are <strong>contradictory</strong> — they cannot both hold simultaneously. Therefore Proposition 3 is unsatisfiable.</p>
+        </div>
+
+        <div class="subsection-title">Useful Notation</div>
+        <div class="formula">
+            ⋁ⁿⱼ₌₁ pⱼ &nbsp; is used for &nbsp; p₁ ∨ p₂ ∨ ... ∨ pₙ<br><br>
+            ⋀ⁿⱼ₌₁ pⱼ &nbsp; is used for &nbsp; p₁ ∧ p₂ ∧ ... ∧ pₙ
+        </div>
+    </div>
+
+    <!-- SECTION 8: SUDOKU -->
+    <div class="card">
+        <h2 class="section-title">8. Sudoku as a Satisfiability Problem</h2>
+        <div class="note">
+            <strong>Sudoku</strong> (Japanese: suuji wa dokushin ni kagiru) means <em>"the digits must remain single."</em>
+        </div>
+
+        <div class="subsection-title">Structure of a Sudoku Puzzle</div>
+        <p>A Sudoku puzzle is represented by a <strong>9×9 grid</strong> made up of nine <strong>3×3 subgrids</strong> (called blocks). Some of the 81 cells are pre-assigned one of the numbers 1–9. The puzzle is solved by assigning numbers to blank cells so that every <strong>row</strong>, every <strong>column</strong>, and every <strong>block</strong> contains each of the nine numbers exactly once.</p>
+
+        <div class="subsection-title">Encoding as a Satisfiability Problem</div>
+        <p>Let <code>p(i, j, n)</code> denote the proposition that is true when the number <strong>n</strong> is in the cell in the <strong>i<sup>th</sup> row</strong> and <strong>j<sup>th</sup> column</strong>.</p>
+        <div class="important">
+            There are <strong>9 × 9 × 9 = 729</strong> such propositional variables.<br>
+            For example, in a sample puzzle: <code>p(5,1,6)</code> is true, but <code>p(5,j,6)</code> is false for j = 2, 3, …, 9.
+        </div>
+
+        <div class="subsection-title">The Four Types of Assertions Required</div>
+        <table>
+            <thead>
+                <tr><th class="left">Assertion</th><th class="left">Logical Formula</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="left">For each pre-filled cell with value n in row i, column j</td>
+                    <td class="left"><code>assert p(i, j, n)</code></td>
+                </tr>
+                <tr>
+                    <td class="left">Every row contains every number</td>
+                    <td class="left"><code>⋀⁹ᵢ₌₁ ⋀⁹ₙ₌₁ ⋁⁹ⱼ₌₁ p(i, j, n)</code></td>
+                </tr>
+                <tr>
+                    <td class="left">Every column contains every number</td>
+                    <td class="left"><code>⋀⁹ⱼ₌₁ ⋀⁹ₙ₌₁ ⋁⁹ᵢ₌₁ p(i, j, n)</code></td>
+                </tr>
+                <tr>
+                    <td class="left">Each 3×3 block contains every number</td>
+                    <td class="left"><code>⋀²ᵣ₌₀ ⋀²ₛ₌₀ ⋀⁹ₙ₌₁ ⋀³ᵢ₌₁ ⋁³ⱼ₌₁ p(3r+i, 3s+j, n)</code></td>
+                </tr>
+                <tr>
+                    <td class="left">No cell contains more than one number</td>
+                    <td class="left">For all i, j, n, n' where n ≠ n': <code>p(i,j,n) → ¬p(i,j,n')</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">Solving the Problem</div>
+        <p>To solve a Sudoku puzzle, we need to find an assignment of truth values to the 729 variables <code>p(i,j,n)</code> that makes the conjunction of all the above assertions true. Those variables assigned <strong>T</strong> yield the solution to the puzzle.</p>
+
+        <div class="warning">
+            <strong>Computational Challenge:</strong> A truth table can always be used to determine satisfiability, but this approach is computationally intractable for large problems, even for modern computers. There has been significant research into developing efficient SAT-solving algorithms, as many practical problems can be translated into satisfiability problems.
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 4 - Propositional Equivalences • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

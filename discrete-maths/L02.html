@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L2 – Propositional Logic Part 2 | TMS1233</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 6px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Truth Tables */
+table {
+    border-collapse: collapse;
+    margin: 12px auto;
+    font-size: 0.93em;
+}
+
+th {
+    background: #2c6e6b;
+    color: white;
+    padding: 8px 14px;
+    text-align: center;
+    font-weight: 600;
+}
+
+td {
+    padding: 7px 14px;
+    text-align: center;
+    border: 1px solid #cfe9e7;
+}
+
+tr:nth-child(even) td { background: #f3fbfa; }
+
+.t-val { color: #2e7d32; font-weight: 700; }
+.f-val { color: #c62828; font-weight: 700; }
+
+.operator-symbol {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #2c6e6b;
+    font-family: 'Courier New', monospace;
+}
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre.bitstring {
+    background: #f3fbfa;
+    border: 1px solid #cfe9e7;
+    color: #2c6e6b;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    line-height: 2;
+    margin: 12px 0;
+}
+
+.equiv-tag {
+    display: inline-block;
+    background: #4caf50;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.82em;
+    margin-left: 8px;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+.tautology-tag {
+    display: inline-block;
+    background: #2196f3;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.82em;
+    margin-left: 8px;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Propositional Logic — Part 2</h1>
+    <p class="subtitle">TMS1233 – Discrete Mathematics &nbsp;|&nbsp; Lecture 02</p>
+
+    <!-- ─── CONDITIONAL STATEMENTS ──────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">1. Conditional Statements (Implication) &nbsp;<span class="operator-symbol">→</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> and <code>q</code> be propositions. The <b>conditional statement</b> <code>p → q</code> is the proposition <i>"if p, then q."</i><br><br>
+            <code>p → q</code> is <b>false</b> only when <code>p</code> is <b>true</b> and <code>q</code> is <b>false</b>. It is <b>true</b> in all other cases.<br><br>
+            In <code>p → q</code>: &nbsp; <b>p</b> = hypothesis (antecedent / premise) &nbsp;&nbsp; <b>q</b> = conclusion (consequence).<br>
+            A conditional statement is also called an <b>implication</b>.
+        </div>
+
+        <div class="two-column">
+            <div>
+                <p><b>Type:</b> Binary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">→</span></p>
+                <table style="margin-top:10px;">
+                    <thead><tr><th>p</th><th>q</th><th>p → q</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                        <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                        <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                        <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box" style="align-self:start;">
+                <strong>All ways to express p → q in English</strong>
+                <ul style="list-style:none; margin:0; font-size:0.92em;">
+                    <li>• "if p, then q"</li>
+                    <li>• "p implies q"</li>
+                    <li>• "if p, q"</li>
+                    <li>• "p only if q"</li>
+                    <li>• "p is sufficient for q"</li>
+                    <li>• "a sufficient condition for q is p"</li>
+                    <li>• "q if p" / "q whenever p" / "q when p"</li>
+                    <li>• "q is necessary for p"</li>
+                    <li>• "a necessary condition for p is q"</li>
+                    <li>• "q follows from p"</li>
+                    <li>• "q unless ¬p"</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px;">Examples</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Example 1</strong>
+                <b>p:</b> "Maria learns discrete mathematics."<br>
+                <b>q:</b> "Maria will find a good job."<br><br>
+                <b>p → q:</b> "If Maria learns discrete mathematics, then she will find a good job."<br>
+                <span style="color:#5a9d99; font-size:0.9em;">Also: "Maria will find a good job when she learns discrete mathematics."</span>
+            </div>
+            <div class="box">
+                <strong>Example 2</strong>
+                <b>p:</b> "x = 2" &nbsp;&nbsp; <b>q:</b> "x² = 4"<br><br>
+                <b>p → q:</b> "If x = 2, then x² = 4."<br>
+                <span style="color:#5a9d99; font-size:0.9em;">Also: "x² = 4 when x = 2."<br>"x = 2 unless x² ≠ 4."</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── CONVERSE, CONTRAPOSITIVE, INVERSE ───────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">2. Converse, Contrapositive & Inverse of p → q</h2>
+
+        <div class="three-column">
+            <div class="box">
+                <strong>Converse</strong>
+                <code>q → p</code><br>
+                Swap the hypothesis and conclusion.
+            </div>
+            <div class="box">
+                <strong>Contrapositive</strong>
+                <code>¬q → ¬p</code><br>
+                Negate both and swap them.
+            </div>
+            <div class="box">
+                <strong>Inverse</strong>
+                <code>¬p → ¬q</code><br>
+                Negate both (without swapping).
+            </div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px;">Truth Table — Converse, Contrapositive & Inverse</h3>
+        <table style="width:100%; margin-top:10px;">
+            <thead>
+                <tr>
+                    <th>p</th><th>q</th>
+                    <th>p → q</th>
+                    <th>q → p (Converse)</th>
+                    <th>¬q → ¬p (Contrapositive)</th>
+                    <th>¬p → ¬q (Inverse)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+
+        <div class="important" style="margin-top:15px;">
+            <b>Equivalent Propositions:</b> Two compound propositions that always have the same truth value are called <b>logically equivalent</b>.<br><br>
+            <ul style="list-style:none; margin:0;">
+                <li>✅ <code>p → q</code> ≡ <code>¬q → ¬p</code> &nbsp; (Conditional ≡ Contrapositive)</li>
+                <li>✅ <code>q → p</code> ≡ <code>¬p → ¬q</code> &nbsp; (Converse ≡ Inverse)</li>
+                <li>❌ <code>p → q</code> is <b>NOT</b> equivalent to its converse or inverse.</li>
+            </ul>
+        </div>
+
+        <div class="box" style="margin-top:15px;">
+            <strong>Example — "The home team wins whenever it is raining."</strong>
+            <p style="margin-top:6px;">Rewritten as: <code>p → q</code> where p = "It is raining", q = "The home team wins".</p>
+            <ul style="margin-top:8px;">
+                <li><b>Original (p → q):</b> "If it is raining, then the home team wins."</li>
+                <li><b>Contrapositive (¬q → ¬p):</b> "If the home team does not win, then it is not raining."</li>
+                <li><b>Converse (q → p):</b> "If the home team wins, then it is raining."</li>
+                <li><b>Inverse (¬p → ¬q):</b> "If it is not raining, then the home team does not win."</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ─── BICONDITIONAL ───────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">3. Biconditional (if and only if) &nbsp;<span class="operator-symbol">↔</span></h2>
+        <div class="important">
+            <b>Definition:</b> Let <code>p</code> and <code>q</code> be propositions. The <b>biconditional statement</b> <code>p ↔ q</code> is the proposition <i>"p if and only if q."</i><br><br>
+            <code>p ↔ q</code> is <b>true</b> when <code>p</code> and <code>q</code> have the <b>same truth values</b>, and <b>false</b> otherwise. Also called <b>bi-implications</b>.
+        </div>
+
+        <div class="two-column">
+            <div>
+                <p><b>Type:</b> Binary Operator &nbsp;|&nbsp; <b>Symbol:</b> <span class="operator-symbol">↔</span></p>
+                <table style="margin-top:10px;">
+                    <thead><tr><th>p</th><th>q</th><th>p ↔ q</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                        <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                        <tr><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                        <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box" style="align-self:start;">
+                <strong>Ways to express p ↔ q</strong>
+                <ul style="list-style:none; margin:0;">
+                    <li>• "p is necessary and sufficient for q"</li>
+                    <li>• "if p then q, and conversely"</li>
+                    <li>• "p iff q"</li>
+                </ul>
+                <br>
+                <strong>Example</strong>
+                <p style="font-size:0.92em;">p: "You can take the flight." &nbsp; q: "You buy a ticket."<br>
+                <b>p ↔ q:</b> "You can take the flight if and only if you buy a ticket."<br>
+                True when both hold or both fail. False when one holds without the other.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── PRECEDENCE ──────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">4. Precedence of Logical Operators</h2>
+        <p>When parentheses are absent, operators are applied in the following order (lower number = higher precedence):</p>
+        <div class="two-column" style="margin-top:15px; align-items:start;">
+            <table style="margin:0;">
+                <thead><tr><th>Operator</th><th>Precedence</th></tr></thead>
+                <tbody>
+                    <tr><td class="operator-symbol">¬</td><td>1 (highest)</td></tr>
+                    <tr><td class="operator-symbol">∧</td><td>2</td></tr>
+                    <tr><td class="operator-symbol">∨</td><td>3</td></tr>
+                    <tr><td class="operator-symbol">→</td><td>4</td></tr>
+                    <tr><td class="operator-symbol">↔</td><td>5 (lowest)</td></tr>
+                </tbody>
+            </table>
+            <div>
+                <div class="box">
+                    <strong>Key Rules</strong>
+                    <ul style="list-style:none; margin:0;">
+                        <li>• <b>¬</b> is applied <b>before all</b> other operators.</li>
+                        <li>• <b>∧</b> takes precedence over <b>∨</b>.</li>
+                        <li>• <b>→</b> takes precedence over <b>↔</b>.</li>
+                    </ul>
+                </div>
+                <div class="highlight" style="margin-top:10px;">
+                    <b>Example:</b> <code>p ∨ q ∧ r</code> is read as <code>p ∨ (q ∧ r)</code>, not <code>(p ∨ q) ∧ r</code>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TRUTH TABLES OF COMPOUND PROPOSITIONS ───────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">5. Truth Tables of Compound Propositions</h2>
+        <p>To construct a truth table: evaluate each sub-expression in order of precedence, building up to the full expression column by column.</p>
+
+        <!-- a) p∧¬p and p∨¬p -->
+        <h3 style="color:#2c6e6b; margin-top:20px;">a) &nbsp;<code>p ∧ ¬p</code> &nbsp;and&nbsp; <code>p ∨ ¬p</code></h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div>
+                <p style="text-align:center; margin-bottom:8px;"><b>p ∧ ¬p</b> &nbsp;<span class="warning" style="display:inline; padding:2px 8px; font-size:0.82em; border-radius:8px; border:none; background:#fce4ec; color:#c62828;">Contradiction — always F</span></p>
+                <table style="margin:0 auto;">
+                    <thead><tr><th>p</th><th>¬p</th><th>p ∧ ¬p</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                        <tr><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <p style="text-align:center; margin-bottom:8px;"><b>p ∨ ¬p</b> &nbsp;<span class="note" style="display:inline; padding:2px 8px; font-size:0.82em; border-radius:8px; border:none; background:#e3f2fd; color:#1565c0;">Tautology — always T</span></p>
+                <table style="margin:0 auto;">
+                    <thead><tr><th>p</th><th>¬p</th><th>p ∨ ¬p</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                        <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- b) (p∨¬q) → (p∧q) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">b) &nbsp;<code>(p ∨ ¬q) → (p ∧ q)</code></h3>
+        <table style="width:100%; margin-top:10px;">
+            <thead><tr><th>p</th><th>q</th><th>¬q</th><th>p ∨ ¬q</th><th>p ∧ q</th><th>(p ∨ ¬q) → (p ∧ q)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+            </tbody>
+        </table>
+
+        <!-- c) ¬(P∧Q) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">c) &nbsp;<code>¬(P ∧ Q)</code></h3>
+        <table style="margin-top:10px;">
+            <thead><tr><th>P</th><th>Q</th><th>P ∧ Q</th><th>¬(P ∧ Q)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+
+        <!-- d) (¬P) ∨ (¬Q) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">d) &nbsp;<code>(¬P) ∨ (¬Q)</code></h3>
+        <table style="margin-top:10px;">
+            <thead><tr><th>P</th><th>Q</th><th>¬P</th><th>¬Q</th><th>(¬P) ∨ (¬Q)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+
+        <!-- e) De Morgan — ¬(P∧Q) ↔ (¬P)∨(¬Q) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">e) &nbsp;<code>¬(P ∧ Q) ↔ (¬P) ∨ (¬Q)</code> &nbsp;<span class="tautology-tag">Tautology — De Morgan's Law</span></h3>
+        <table style="width:100%; margin-top:10px;">
+            <thead><tr><th>P</th><th>Q</th><th>¬(P∧Q)</th><th>(¬P)∨(¬Q)</th><th>¬(P∧Q) ↔ (¬P)∨(¬Q)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+        <div class="important" style="margin-top:10px;">
+            Since <code>¬(P∧Q) ↔ (¬P)∨(¬Q)</code> is always <span class="t-val"><b>true</b></span>, the statements <b>¬(P∧Q)</b> and <b>(¬P)∨(¬Q)</b> are <b>logically equivalent</b>. This is <b>De Morgan's Law</b>.
+        </div>
+
+        <!-- f) (p∨¬q) → q -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">f) &nbsp;<code>(p ∨ ¬q) → q</code></h3>
+        <table style="margin-top:10px;">
+            <thead><tr><th>p</th><th>q</th><th>¬q</th><th>p ∨ ¬q</th><th>(p ∨ ¬q) → q</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td></tr>
+            </tbody>
+        </table>
+
+        <!-- g) (p∨q) → (p∧q) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">g) &nbsp;<code>(p ∨ q) → (p ∧ q)</code></h3>
+        <table style="margin-top:10px;">
+            <thead><tr><th>p</th><th>q</th><th>p ∨ q</th><th>p ∧ q</th><th>(p ∨ q) → (p ∧ q)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+
+        <!-- h) (p→q) ↔ (¬q→¬p) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">h) &nbsp;<code>(p → q) ↔ (¬q → ¬p)</code> &nbsp;<span class="tautology-tag">Tautology</span></h3>
+        <table style="width:100%; margin-top:10px;">
+            <thead><tr><th>p</th><th>q</th><th>p → q</th><th>¬q</th><th>¬p</th><th>¬q → ¬p</th><th>(p→q) ↔ (¬q→¬p)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+        <div class="important" style="margin-top:8px;">This confirms that a conditional statement and its contrapositive are always <b>logically equivalent</b>.</div>
+
+        <!-- i) (p→q) → (q→p) -->
+        <h3 style="color:#2c6e6b; margin-top:25px;">i) &nbsp;<code>(p → q) → (q → p)</code></h3>
+        <table style="margin-top:10px;">
+            <thead><tr><th>p</th><th>q</th><th>p → q</th><th>q → p</th><th>(p→q) → (q→p)</th></tr></thead>
+            <tbody>
+                <tr><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+                <tr><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="f-val">F</td><td class="f-val">F</td></tr>
+                <tr><td class="f-val">F</td><td class="f-val">F</td><td class="t-val">T</td><td class="t-val">T</td><td class="t-val">T</td></tr>
+            </tbody>
+        </table>
+        <div class="highlight" style="margin-top:8px;">This is <b>not</b> a tautology — it is false when p is false and q is true. This also shows that a conditional is <b>not equivalent</b> to its converse.</div>
+    </div>
+
+    <!-- ─── LOGIC AND BIT OPERATIONS ────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">6. Logic and Bit Operations</h2>
+
+        <div class="important">
+            <b>Bit:</b> A symbol with two possible values — <b>0</b> (zero) and <b>1</b> (one). The word <i>bit</i> comes from <b>binary digit</b>. Introduced by statistician <b>John Tukey</b> in 1946.<br><br>
+            Convention: &nbsp;<b>1</b> represents <b>True (T)</b> &nbsp;&nbsp; <b>0</b> represents <b>False (F)</b><br><br>
+            A variable is called a <b>Boolean variable</b> if its value is either true or false. Computer bit operations correspond directly to logical connectives.
+        </div>
+
+        <div class="two-column" style="margin-top:15px;">
+            <div>
+                <p style="text-align:center; margin-bottom:8px;"><b>Truth Value → Bit</b></p>
+                <table style="margin:0 auto;">
+                    <thead><tr><th>Truth Value</th><th>Bit</th></tr></thead>
+                    <tbody>
+                        <tr><td class="t-val">T</td><td><b>1</b></td></tr>
+                        <tr><td class="f-val">F</td><td><b>0</b></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <p style="text-align:center; margin-bottom:8px;"><b>Bit Operators OR, AND, XOR</b></p>
+                <table style="margin:0 auto;">
+                    <thead><tr><th>x</th><th>y</th><th>x ∨ y</th><th>x ∧ y</th><th>x ⊕ y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px;">Bit Strings</h3>
+        <div class="important" style="margin-top:8px;">
+            <b>Definition:</b> A <b>bit string</b> is a sequence of zero or more bits. The <b>length</b> of the string is the number of bits it contains.<br>
+            <b>Example:</b> <code>101010011</code> is a bit string of length <b>9</b>.
+        </div>
+        <p style="margin-top:10px;">The <b>bitwise OR</b> (∨), <b>bitwise AND</b> (∧), and <b>bitwise XOR</b> (⊕) of two equal-length bit strings are computed by applying the respective operation to each corresponding pair of bits.</p>
+
+        <h3 style="color:#2c6e6b; margin-top:20px;">Bit String Examples</h3>
+
+        <div class="box" style="margin-top:10px;">
+            <strong>Main Example — 0110110110 and 1100011101</strong>
+            <pre class="bitstring">  0110110110
+  1100011101
+  ──────────
+  1110111111  bitwise OR
+  0100010100  bitwise AND
+  1010101011  bitwise XOR</pre>
+        </div>
+
+        <div class="grid" style="margin-top:15px;">
+            <div class="box">
+                <strong>Example 1</strong>
+                <code>1011110</code> and <code>0100001</code>
+                <pre class="bitstring" style="font-size:0.85em; padding:8px;">OR:  1111111
+AND: 0000000
+XOR: 1111111</pre>
+            </div>
+            <div class="box">
+                <strong>Example 2</strong>
+                <code>11110000</code> and <code>10101010</code>
+                <pre class="bitstring" style="font-size:0.85em; padding:8px;">OR:  11111010
+AND: 10100000
+XOR: 01011010</pre>
+            </div>
+            <div class="box">
+                <strong>Example 3</strong>
+                <code>0001110001</code> and <code>1001001000</code>
+                <pre class="bitstring" style="font-size:0.85em; padding:8px;">OR:  1001111001
+AND: 0001000000
+XOR: 1000111001</pre>
+            </div>
+            <div class="box">
+                <strong>Example 4</strong>
+                <code>1111111111</code> and <code>0000000000</code>
+                <pre class="bitstring" style="font-size:0.85em; padding:8px;">OR:  1111111111
+AND: 0000000000
+XOR: 1111111111</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── EXERCISES ────────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">📝 Exercises</h2>
+
+        <div class="in-class">
+            <h3>Exercise 1 — Construct Truth Tables</h3>
+            <ul>
+                <li>a) <code>(p ∨ q) → (p ∧ q)</code></li>
+                <li>b) <code>(p → q) ↔ (¬q → ¬p)</code></li>
+                <li>c) <code>(p → q) → (q → p)</code></li>
+            </ul>
+        </div>
+
+        <div class="in-class" style="margin-top:15px;">
+            <h3>Exercise 2 — Show Logical Equivalence Using Truth Tables</h3>
+            <ul>
+                <li>a) <code>(p ∧ q) ∧ r ≡ p ∧ (q ∧ r)</code> &nbsp;&nbsp; <span style="color:#7b1fa2;">(Associativity of AND)</span></li>
+                <li>b) <code>(p ∨ q) ∨ r ≡ p ∨ (q ∨ r)</code> &nbsp;&nbsp; <span style="color:#7b1fa2;">(Associativity of OR)</span></li>
+                <li>c) <code>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</code> &nbsp;&nbsp; <span style="color:#7b1fa2;">(Distributivity)</span></li>
+            </ul>
+        </div>
+
+        <div class="in-class" style="margin-top:15px;">
+            <h3>Exercise 3 — Translate Using p and q</h3>
+            <p>Let <b>p</b>: "It is below freezing." &nbsp; <b>q</b>: "It is snowing."</p>
+            <ul style="margin-top:8px;">
+                <li>a) It is below freezing and snowing. → <code>p ∧ q</code></li>
+                <li>b) It is below freezing but not snowing. → <code>p ∧ ¬q</code></li>
+                <li>c) It is not below freezing and it is not snowing. → <code>¬p ∧ ¬q</code></li>
+                <li>d) It is either snowing or below freezing (or both). → <code>p ∨ q</code></li>
+                <li>e) If it is below freezing, it is also snowing. → <code>p → q</code></li>
+                <li>f) Either below freezing or snowing, but not snowing if below freezing. → <code>p ⊕ q</code></li>
+                <li>g) Below freezing is necessary and sufficient for snowing. → <code>p ↔ q</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ─── QUICK SUMMARY ────────────────────────────────────────────────── -->
+    <div class="card">
+        <h2 class="section-title">📊 Key Equivalences — Quick Reference</h2>
+        <table style="width:100%;">
+            <thead><tr><th>Statement</th><th>Equivalent To</th><th>Name</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><code>p → q</code></td>
+                    <td><code>¬q → ¬p</code></td>
+                    <td>Conditional ≡ Contrapositive</td>
+                </tr>
+                <tr>
+                    <td><code>q → p</code></td>
+                    <td><code>¬p → ¬q</code></td>
+                    <td>Converse ≡ Inverse</td>
+                </tr>
+                <tr>
+                    <td><code>¬(P ∧ Q)</code></td>
+                    <td><code>(¬P) ∨ (¬Q)</code></td>
+                    <td>De Morgan's Law (AND)</td>
+                </tr>
+                <tr>
+                    <td><code>¬(P ∨ Q)</code></td>
+                    <td><code>(¬P) ∧ (¬Q)</code></td>
+                    <td>De Morgan's Law (OR)</td>
+                </tr>
+                <tr>
+                    <td><code>p ∧ ¬p</code></td>
+                    <td>Always <span class="f-val">F</span></td>
+                    <td>Contradiction</td>
+                </tr>
+                <tr>
+                    <td><code>p ∨ ¬p</code></td>
+                    <td>Always <span class="t-val">T</span></td>
+                    <td>Tautology</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 02 – Propositional Logic Part 2 • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

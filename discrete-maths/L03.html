@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L3 - Application of Propositional Logic</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .subsection-title {
+            color: #3a8a87;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 18px 0 8px 0;
+        }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 8px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+        .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+        code {
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #c0392b;
+        }
+        .formula {
+            background: #f0f8ff;
+            border: 1px solid #b8d9f0;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 12px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05em;
+            color: #1a4f72;
+            text-align: center;
+        }
+        .formula-label {
+            font-size: 0.82em;
+            color: #666;
+            margin-bottom: 3px;
+            font-family: 'Segoe UI', sans-serif;
+            font-style: italic;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+        th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e0f0ef;
+        }
+        tr:nth-child(even) td { background: #f3fbfa; }
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+        .tag.orange { background: #e67e22; }
+        .tag.blue { background: #2980b9; }
+        .tag.purple { background: #8e44ad; }
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+        .outline-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .outline-item {
+            background: #f3fbfa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #5a9d99;
+            font-weight: 500;
+            color: #2c6e6b;
+            font-size: 0.95em;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .outline-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Application of Propositional Logic</h1>
+    <p class="subtitle">TMS1233 — Discrete Mathematics &nbsp;|&nbsp; Lecture 3</p>
+
+    <!-- OUTLINE -->
+    <div class="card">
+        <h2 class="section-title">📋 Outline</h2>
+        <div class="outline-grid">
+            <div class="outline-item">1. Translating English to Propositional Logic</div>
+            <div class="outline-item">2. System Specifications</div>
+            <div class="outline-item">3. Boolean Searching</div>
+            <div class="outline-item">4. Logic Puzzles</div>
+            <div class="outline-item">5. Logic Circuits</div>
+            <div class="outline-item">6. AI Diagnosis Method <em>(Optional)</em></div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: TRANSLATING ENGLISH -->
+    <div class="card">
+        <h2 class="section-title">1. Translating English Sentences</h2>
+        <p>System and software engineers routinely convert natural language requirements into precise logical statements. The process follows two main steps:</p>
+        <ul style="margin-top: 10px;">
+            <li><strong>Step 1:</strong> Identify <em>atomic propositions</em> and assign propositional variables to each.</li>
+            <li><strong>Step 2:</strong> Determine the appropriate <em>logical connectives</em> (¬, ∧, ∨, →, ↔) that connect them.</li>
+        </ul>
+
+        <div class="subsection-title">Example 1 — Simple Translation</div>
+        <div class="highlight">
+            <em>"If I go to the saloon or to the gym, I will not go shopping."</em>
+        </div>
+        <p><strong>Variable assignments:</strong> <code>p</code> = I go to the saloon &nbsp;|&nbsp; <code>q</code> = I go to the gym &nbsp;|&nbsp; <code>r</code> = I will go shopping</p>
+        <div class="formula">
+            <div class="formula-label">If p or q, then not r</div>
+            (p ∨ q) → ¬r
+        </div>
+
+        <div class="subsection-title">Example 2 — "Only if" Translation</div>
+        <div class="highlight">
+            <em>"You can access the Internet from campus only if you are a computer science major or you are not a freshman."</em>
+        </div>
+        <p><strong>Variable assignments:</strong> <code>a</code> = You can access the internet from campus &nbsp;|&nbsp; <code>c</code> = You are a computer science major &nbsp;|&nbsp; <code>f</code> = You are a freshman</p>
+        <div class="formula">
+            a → (c ∨ ¬f)
+        </div>
+
+        <div class="subsection-title">Example 3 — "Unless" Translation (In-class)</div>
+        <div class="highlight">
+            <em>"You cannot ride the roller coaster if you are under 4 feet tall unless you are older than 16 years old."</em>
+        </div>
+        <p><strong>Variable assignments:</strong> <code>q</code> = You can ride the roller coaster &nbsp;|&nbsp; <code>r</code> = You are under 4 feet tall &nbsp;|&nbsp; <code>s</code> = You are older than 16 years old</p>
+        <div class="formula">
+            (r ∧ ¬s) → ¬q
+        </div>
+    </div>
+
+    <!-- SECTION 2: SYSTEM SPECIFICATIONS -->
+    <div class="card">
+        <h2 class="section-title">2. System Specifications</h2>
+        <p>System and software engineers take requirements stated in English and express them in a precise specification language based on logic. This ensures requirements are unambiguous and can be checked for consistency.</p>
+
+        <div class="subsection-title">Example — Automated Reply System</div>
+        <div class="highlight">
+            <em>"The automated reply cannot be sent when the file system is full."</em>
+        </div>
+        <p><strong>Variable assignments:</strong> <code>p</code> = The automated reply can be sent &nbsp;|&nbsp; <code>q</code> = The file system is full</p>
+        <div class="formula">
+            q → ¬p
+        </div>
+
+        <div class="subsection-title">Consistent System Specifications</div>
+        <div class="important">
+            <strong>Definition:</strong> A list of propositions is <strong>consistent</strong> if it is possible to assign truth values to the propositional variables so that <em>each</em> proposition is simultaneously true.
+        </div>
+
+        <p><strong>Exercise:</strong> Are the following specifications consistent?</p>
+        <ul>
+            <li>"The diagnostic message is stored in the buffer, or it is retransmitted."</li>
+            <li>"The diagnostic message is not stored in the buffer."</li>
+            <li>"If the diagnostic message is stored in the buffer, then it is retransmitted."</li>
+        </ul>
+
+        <div class="subsection-title">Solution</div>
+        <p>Let <code>p</code> = "The diagnostic message is stored in the buffer" and <code>q</code> = "The diagnostic message is retransmitted."</p>
+        <p>The three specifications translate to: <code>p ∨ q</code>, <code>¬p</code>, <code>p → q</code>.</p>
+        <div class="important">
+            When <strong>p = false</strong> and <strong>q = true</strong>, all three statements are true. Therefore, the specification <strong>is consistent</strong>.
+        </div>
+
+        <div class="warning">
+            <strong>What if a fourth statement is added:</strong> "The diagnostic message is not retransmitted." (i.e., <code>¬q</code>)?<br><br>
+            Now there is no satisfying truth assignment. The specification becomes <strong>inconsistent</strong>.
+        </div>
+    </div>
+
+    <!-- SECTION 3: BOOLEAN SEARCHING -->
+    <div class="card">
+        <h2 class="section-title">3. Boolean Searching</h2>
+        <p>Logical connectives are used extensively in searches of large collections of information, such as indexes of web pages. Because these searches employ techniques from propositional logic, they are called <strong>Boolean searches</strong>.</p>
+
+        <div class="grid" style="margin-top: 15px;">
+            <div class="box">
+                <strong>AND</strong>
+                Matches records that contain <em>both</em> of two search terms. AND takes precedence over OR.
+            </div>
+            <div class="box">
+                <strong>OR</strong>
+                Matches records that contain <em>one or both</em> of two search terms.
+            </div>
+            <div class="box">
+                <strong>NOT (AND NOT)</strong>
+                <em>Excludes</em> a particular search term from results. In Google, written as <code>-</code>.
+            </div>
+        </div>
+
+        <div class="subsection-title">Boolean Search Examples</div>
+        <table>
+            <thead>
+                <tr><th>Goal</th><th>Search Query</th><th>What it Returns</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Universities in New Mexico</td>
+                    <td><code>NEW AND MEXICO AND UNIVERSITIES</code></td>
+                    <td>Pages containing all three words (may include "new universities in Mexico")</td>
+                </tr>
+                <tr>
+                    <td>Universities in New Mexico OR Arizona</td>
+                    <td><code>(NEW AND MEXICO OR ARIZONA) AND UNIVERSITIES</code></td>
+                    <td>Pages with UNIVERSITIES and either (NEW + MEXICO) or ARIZONA</td>
+                </tr>
+                <tr>
+                    <td>Universities in Mexico, not New Mexico</td>
+                    <td><code>(MEXICO AND UNIVERSITIES) NOT NEW</code></td>
+                    <td>Pages with MEXICO and UNIVERSITIES but without the word NEW</td>
+                </tr>
+                <tr>
+                    <td>Exact phrase search</td>
+                    <td><code>"New Mexico" AND UNIVERSITIES</code></td>
+                    <td>More precise — treats "New Mexico" as a single phrase</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <strong>Note on Google:</strong> In Google, the word "AND" is not needed (all search terms are included by default). The word "NOT" is replaced by the symbol <code>-</code>. Example: <code>MEXICO UNIVERSITIES -NEW</code>.
+        </div>
+    </div>
+
+    <!-- SECTION 4: LOGIC PUZZLES -->
+    <div class="card">
+        <h2 class="section-title">4. Logic Puzzles</h2>
+        <p>Puzzles that can be solved using logical reasoning are known as <strong>logic puzzles</strong>. Solving logic puzzles is an excellent way to practice working with the rules of logic. Computer programs designed to carry out logical reasoning often use well-known logic puzzles to illustrate their capabilities.</p>
+        <p style="margin-top:8px;">These puzzles were popularized by logician and philosopher <strong>Raymond Smullyan (Born 1919)</strong>.</p>
+
+        <div class="subsection-title">Knights and Knaves Puzzle</div>
+        <div class="highlight">
+            <strong>Setup:</strong> An island has two kinds of inhabitants — <strong>knights</strong>, who always tell the truth, and <strong>knaves</strong>, who always lie.<br><br>
+            You go to the island and meet A and B.<br>
+            &nbsp;&nbsp;• A says: <em>"B is a knight."</em><br>
+            &nbsp;&nbsp;• B says: <em>"The two of us are of opposite types."</em><br><br>
+            <strong>Question:</strong> What are the types of A and B?
+        </div>
+
+        <div class="subsection-title">Solution</div>
+        <p>Let <code>p</code> = "A is a knight" and <code>q</code> = "B is a knight." Then <code>¬p</code> = A is a knave and <code>¬q</code> = B is a knave.</p>
+        <ul style="margin-top:10px;">
+            <li><strong>Case 1 — Assume A is a knight (p = true):</strong> Then A tells the truth, so q must be true (B is a knight). If both are knights, B's statement "(p ∧ ¬q) ∨ (¬p ∧ q)" would have to be true, but it is not (both are the same type). Contradiction — so A is <em>not</em> a knight.</li>
+            <li><strong>Case 2 — Assume A is a knave (¬p = true):</strong> Since A lies, B must not be a knight. So ¬q is also true. Both A and B are knaves. B's statement ("we are opposite types") is false, which is consistent with B being a knave.</li>
+        </ul>
+        <div class="important">
+            <strong>Conclusion:</strong> Both A and B are <strong>knaves</strong>.
+        </div>
+
+        <div class="subsection-title">Muddy Children Puzzle (Example 02)</div>
+        <div class="highlight">
+            A father tells his two children (a boy and a girl) to play without getting dirty. Both get mud on their foreheads. The father says "At least one of you has a muddy forehead," then asks twice: "Do you know whether you have a muddy forehead?" (Children answer simultaneously; each can see the other's forehead but not their own.)
+        </div>
+        <p><strong>Solution:</strong> Let <code>s</code> = the son has a muddy forehead and <code>d</code> = the daughter has a muddy forehead. The father states <code>s ∨ d</code> is true.</p>
+        <ul style="margin-top:10px;">
+            <li><strong>First time asked:</strong> Both children answer <strong>"No"</strong> — the son sees mud on the daughter's forehead but cannot determine his own; same for the daughter.</li>
+            <li><strong>After the first "No":</strong> The daughter reasons: "If d were false, the son (knowing s ∨ d) would have concluded s = true and answered Yes. Since he said No, d must be true." The son reasons symmetrically.</li>
+            <li><strong>Second time asked:</strong> Both children answer <strong>"Yes"</strong>.</li>
+        </ul>
+    </div>
+
+    <!-- SECTION 5: LOGIC CIRCUITS -->
+    <div class="card">
+        <h2 class="section-title">5. Logic Circuits <span style="font-size:0.75em; color:#5a9d99;">(Studied in depth in Later Chapter)</span></h2>
+        <p>Electronic circuits process information as binary signals. Each input/output signal is viewed as a <code>0</code> (False) or <code>1</code> (True). Complex circuits are constructed from three fundamental building blocks called <strong>gates</strong>.</p>
+
+        <div class="grid" style="margin-top:15px;">
+            <div class="box">
+                <strong>Inverter (NOT Gate)</strong>
+                Takes a single input bit and produces its <em>negation</em>.<br>
+                Input: <code>p</code> → Output: <code>¬p</code>
+            </div>
+            <div class="box">
+                <strong>OR Gate</strong>
+                Takes two input bits and produces their <em>disjunction</em>.<br>
+                Inputs: <code>p, q</code> → Output: <code>p ∨ q</code>
+            </div>
+            <div class="box">
+                <strong>AND Gate</strong>
+                Takes two input bits and produces their <em>conjunction</em>.<br>
+                Inputs: <code>p, q</code> → Output: <code>p ∧ q</code>
+            </div>
+        </div>
+
+        <div class="subsection-title">Constructing Complex Circuits</div>
+        <p>More complicated digital circuits are built by combining these basic gates. To construct a circuit for an output expression, build a sub-circuit for each piece and then combine them using further gates.</p>
+
+        <div class="note">
+            <strong>Principle:</strong> Any Boolean expression can be implemented as a combination of NOT, OR, and AND gates by following the structure of the expression tree.
+        </div>
+
+        <div class="subsection-title">Worked Example 1</div>
+        <p>The AND gate takes inputs <code>p</code> and <code>¬q</code> (¬q from an inverter on q) and produces <code>p ∧ ¬q</code>. The OR gate then takes <code>p ∧ ¬q</code> and <code>¬r</code> (¬r from an inverter on r) to produce the final output:</p>
+        <div class="formula">(p ∧ ¬q) ∨ ¬r</div>
+
+        <div class="subsection-title">Worked Example 2</div>
+        <p>Build a circuit that produces the following output from input bits p, q, and r:</p>
+        <div class="formula">(p ∨ ¬r) ∧ (¬p ∨ (q ∨ ¬r))</div>
+        <p>This requires two main sub-circuits feeding into a final AND gate. The upper path computes <code>p ∨ ¬r</code>; the lower path computes <code>¬p ∨ (q ∨ ¬r)</code>. The final AND gate combines both.</p>
+
+        <div class="subsection-title">Practice Problems — Find the Output</div>
+        <div class="two-column">
+            <div class="box">
+                <strong>Circuit (a) — Inputs: p, q, r</strong>
+                <p style="margin-top:8px;">The q and r inputs pass through inverters (¬q, ¬r). An AND gate combines p and (q ∨ ¬r), followed by a NOT gate on the output.</p>
+                <div class="formula" style="font-size:0.95em;">¬(p ∧ (q ∨ ¬r))</div>
+            </div>
+            <div class="box">
+                <strong>Circuit (b) — Inputs: p, q, r</strong>
+                <p style="margin-top:8px;">p and q each pass through inverters. (¬p ∧ ¬q) is combined with (p ∧ r) via an OR gate.</p>
+                <div class="formula" style="font-size:0.95em;">((¬p) ∧ (¬q)) ∨ (p ∧ r)</div>
+            </div>
+        </div>
+
+        <div class="subsection-title">Construction Problem</div>
+        <p>Construct a combinatorial circuit using inverters, OR gates, and AND gates that produces the output from input bits p, q, and r:</p>
+        <div class="formula">((¬p ∨ ¬r) ∧ ¬q) ∨ (¬p ∧ (q ∨ r))</div>
+        <p>The circuit requires inverters on p, q, and r. Two AND-gate sub-circuits feed into a final OR gate.</p>
+    </div>
+
+    <!-- SECTION 6: AI DIAGNOSIS (OPTIONAL) -->
+    <div class="card">
+        <h2 class="section-title">6. AI Diagnosis Method <span style="font-size:0.75em; color:#5a9d99;">(Optional)</span></h2>
+        <p>This approach is from <em>Artificial Intelligence: Foundations of Computational Agents</em> by David Poole and Alan Mackworth (2010). It demonstrates how propositional logic can be applied to diagnose faults in physical systems.</p>
+
+        <div class="subsection-title">Core Concepts</div>
+        <div class="grid">
+            <div class="box">
+                <strong>Knowledge Base (KB)</strong>
+                A representation in propositional logic of the features of a piece of machinery or circuitry required for normal operation to produce observable outputs.
+            </div>
+            <div class="box">
+                <strong>Observations</strong>
+                Propositions representing the features that the system is currently exhibiting (what we can actually measure/see).
+            </div>
+            <div class="box">
+                <strong>Assumables</strong>
+                Atoms assumed to be true unless forced otherwise. Represent the assumption that components (switches, lights, circuit breakers) are functioning correctly.
+            </div>
+        </div>
+
+        <div class="subsection-title">Electrical System Description</div>
+        <p>The example system consists of: lights <code>l1, l2</code> — wires <code>w0, w1, w2, w3, w4</code> — switches <code>s1, s2, s3</code> — circuit breaker <code>cb1</code>.</p>
+
+        <div class="subsection-title">Knowledge Base Rules</div>
+        <table>
+            <thead>
+                <tr><th>English Description</th><th>Logical Formula</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>We have outside power</td><td><code>live_outside</code></td></tr>
+                <tr><td>l1 and l2 are lights</td><td><code>light_l1</code>, <code>light_l2</code></td></tr>
+                <tr><td>If w0 is live, then l1 is live</td><td><code>live_w0 → live_l1</code></td></tr>
+                <tr><td>If w1 live, s2 up, s2 ok → w0 live</td><td><code>live_w1 ∧ up_s2 ∧ ok_s2 → live_w0</code></td></tr>
+                <tr><td>If w2 live, s2 down, s2 ok → w0 live</td><td><code>live_w2 ∧ down_s2 ∧ ok_s2 → live_w0</code></td></tr>
+                <tr><td>If w3 live, s1 up, s1 ok → w1 live</td><td><code>live_w3 ∧ up_s1 ∧ ok_s1 → live_w1</code></td></tr>
+                <tr><td>If w3 live, s1 down, s1 ok → w2 live</td><td><code>live_w3 ∧ down_s1 ∧ ok_s1 → live_w2</code></td></tr>
+                <tr><td>If w4 is live, then l2 is live</td><td><code>live_w4 → live_l2</code></td></tr>
+                <tr><td>If w3 live, s3 up, s3 ok → w4 live</td><td><code>live_w3 ∧ up_s3 ∧ ok_s3 → live_w4</code></td></tr>
+                <tr><td>If outside power and cb1 ok → w3 live</td><td><code>live_outside ∧ ok_cb1 → live_w3</code></td></tr>
+                <tr><td>l1 light, live, ok → l1 lit</td><td><code>light_l1 ∧ live_l1 ∧ ok_l1 → lit_l1</code></td></tr>
+                <tr><td>l2 light, live, ok → l2 lit</td><td><code>light_l2 ∧ live_l2 ∧ ok_l2 → lit_l2</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">Observations Added to the KB</div>
+        <div class="two-column">
+            <div class="box">
+                <strong>Both switches up</strong>
+                <code>up_s1</code> &nbsp; <code>up_s2</code>
+            </div>
+            <div class="box">
+                <strong>Both lights are dark</strong>
+                <code>¬ lit_l1</code> &nbsp; <code>¬ lit_l2</code>
+            </div>
+        </div>
+
+        <div class="subsection-title">Diagnosis Method</div>
+        <ul style="margin-top:8px;">
+            <li>We assume all components are working correctly (assumables = true) unless forced to conclude otherwise.</li>
+            <li>Assumables: <code>ok_cb1, ok_s1, ok_s2, ok_s3, ok_l1, ok_l2</code></li>
+            <li>If the system is working correctly (all assumables true), the KB and observations should be consistent.</li>
+            <li>The augmented KB is <em>not</em> consistent when all assumables are true — switches are both up, but lights are dark. Therefore, <strong>some assumables must be false</strong>.</li>
+        </ul>
+        <div class="important">
+            <strong>Definition — Diagnosis:</strong> A <em>diagnosis</em> is a <strong>minimal set of assumables</strong> that must be false in order to explain the current observations of the system.
+        </div>
+
+        <div class="subsection-title">Diagnostic Results</div>
+        <p>The consistency-based diagnosis method yields <strong>7 possible faults</strong> in the system. At least one of the following must hold:</p>
+        <ul style="margin-top:8px;">
+            <li>Circuit Breaker 1 is not ok.</li>
+            <li>Both Switch 1 and Switch 2 are not ok.</li>
+            <li>Both Switch 1 and Light 2 are not ok.</li>
+            <li>Both Switch 2 and Switch 3 are not ok.</li>
+            <li>Both Switch 2 and Light 2 are not ok.</li>
+            <li>Both Light 1 and Switch 3 are not ok.</li>
+            <li>Both Light 1 and Light 2 are not ok.</li>
+        </ul>
+        <div class="note">
+            For full details on this method, see: <em>Artificial Intelligence: Foundations of Computational Agents</em> — David Poole & Alan Mackworth, 2010.
+        </div>
+    </div>
+
+    <!-- HOMEWORK -->
+    <div class="card">
+        <h2 class="section-title">📚 Homework</h2>
+        <div class="highlight">
+            <strong>Exercises:</strong> Kenneth H. Rosen — <em>Discrete Mathematics and Its Applications</em>, Seventh Edition<br>
+            Under <strong>Section 1.2 Propositional Logic</strong> — Pages 12–16
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 3 - Application of Propositional Logic • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>
