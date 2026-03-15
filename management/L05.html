@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Lesson 05 - Study Notes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li { margin: 8px 0; }
+
+        ul ul {
+            margin-left: 25px;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e0f0ef;
+        }
+
+        tr:nth-child(even) td { background: #f3fbfa; }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .tag.orange { background: #e67e22; }
+        .tag.blue   { background: #2980b9; }
+        .tag.red    { background: #c0392b; }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        .process-steps {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .step {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .step::after {
+            content: '→';
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #2c6e6b;
+            font-weight: bold;
+        }
+
+        .step:last-child::after { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+            .process-steps { flex-direction: column; }
+            .step::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>📋 Functions of Management</h1>
+    <p class="subtitle">Lecture 5 — Organizing</p>
+
+    <!-- Learning Outcomes -->
+    <div class="card">
+        <h2 class="section-title">🎯 Learning Outcomes</h2>
+        <ul>
+            <li>Identify the basic elements of organizations.</li>
+            <li>Discuss the rationale and the most common bases for grouping jobs into departments.</li>
+            <li>Describe the basic elements involved in establishing reporting relationships.</li>
+            <li>Discuss how authority is distributed in organizations.</li>
+            <li>Discuss the basic coordinating activities undertaken by organizations.</li>
+        </ul>
+    </div>
+
+    <!-- What is an Organization -->
+    <div class="card">
+        <h2 class="section-title">🏢 Large vs. Small Organizations</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Large Organizations</strong>
+                <ul>
+                    <li>Economies of scale</li>
+                    <li>Global reach</li>
+                    <li>Vertical hierarchy</li>
+                    <li>Complex structure</li>
+                    <li>Stable market</li>
+                    <li>Career longevity and stability</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Small Organizations</strong>
+                <ul>
+                    <li>Responsive</li>
+                    <li>Flexible</li>
+                    <li>Regional reach</li>
+                    <li>Flat structure</li>
+                    <li>Simple</li>
+                    <li>Niche finding</li>
+                    <li>Entrepreneurs</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- What is Organizing -->
+    <div class="card">
+        <h2 class="section-title">🔧 What is Organizing?</h2>
+        <div class="highlight">
+            <strong>Definition:</strong> "Organizing is the process of identifying and grouping the work to be performed, defining and delegating responsibility and authority, and establishing relationships for the purpose of enabling people to work most efficiently."
+        </div>
+        <p style="margin-top:12px;">Organizing involves:</p>
+        <ul>
+            <li>Deciding how best to group organizational activities and resources.</li>
+            <li>A systematic arrangement of the activities.</li>
+            <li>Managers can design their organizations in different ways.</li>
+        </ul>
+        <div class="important" style="margin-top:15px;">
+            <strong>Organization Structure</strong> — The set of elements that can be used to configure an organization. It is a key element in organizational design.
+        </div>
+    </div>
+
+    <!-- Fundamental Concepts -->
+    <div class="card">
+        <h2 class="section-title">⚙️ Fundamental Concepts of Organizing</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Differentiation</strong>
+                An organization is composed of units that work on specialized tasks using different work methods and requiring employees with unique competencies.
+            </div>
+            <div class="box">
+                <strong>Integration</strong>
+                The various units must be put back together so that work is coordinated across the organization.
+            </div>
+        </div>
+    </div>
+
+    <!-- Factors Affecting Structure -->
+    <div class="card">
+        <h2 class="section-title">🔍 Factors Affecting Organizational Structure</h2>
+        <p>The following four factors determine the design of organizational structure:</p>
+        <div class="grid">
+            <div class="box"><strong>🌍 Organizational Environment</strong>The external context in which the organization operates.</div>
+            <div class="box"><strong>💻 Technology</strong>The tools, systems, and processes used in operations.</div>
+            <div class="box"><strong>♟️ Strategy</strong>The long-term plans and goals of the organization.</div>
+            <div class="box"><strong>👥 Human Resources</strong>The skills, needs, and characteristics of employees.</div>
+        </div>
+    </div>
+
+    <!-- Nature of Organizing -->
+    <div class="card">
+        <h2 class="section-title">🌿 Nature of Organizing</h2>
+        <div class="grid">
+            <div class="box"><strong>1. Group of Persons</strong></div>
+            <div class="box"><strong>2. Common Objectives</strong></div>
+            <div class="box"><strong>3. Division of Work</strong></div>
+            <div class="box"><strong>4. Cooperative Efforts</strong></div>
+            <div class="box"><strong>5. Communication</strong></div>
+            <div class="box"><strong>6. Central Authority</strong></div>
+            <div class="box"><strong>7. Rules & Regulations</strong></div>
+            <div class="box"><strong>8. Dynamic Element</strong></div>
+        </div>
+    </div>
+
+    <!-- Process of Organizing -->
+    <div class="card">
+        <h2 class="section-title">🔄 Process of Organizing</h2>
+        <div class="process-steps">
+            <div class="step">1. Identification of Activities</div>
+            <div class="step">2. Grouping of Activities</div>
+            <div class="step">3. Delegation of Authority</div>
+            <div class="step">4. Assignment of Duties</div>
+        </div>
+        <div style="margin-top:20px;">
+            <div class="box" style="margin-bottom:10px;">
+                <strong>Identification of Activities</strong>
+                Determine the tasks that must be performed to achieve the established objectives.
+            </div>
+            <div class="box" style="margin-bottom:10px;">
+                <strong>Grouping of Activities</strong>
+                Various activities are grouped into departments or divisions according to similarity and common purpose.
+            </div>
+            <div class="box" style="margin-bottom:10px;">
+                <strong>Delegation of Authority</strong>
+                Every individual is given the authority required to carry out the responsibility assigned to them.
+            </div>
+            <div class="box">
+                <strong>Assignment of Duties</strong>
+                Groups of activities or departments are allotted to different positions. Every position is occupied by an individual best suited for it.
+            </div>
+        </div>
+        <div class="note" style="margin-top:15px;">
+            <strong>Steps in Organizing also include:</strong>
+            <ul>
+                <li>Identification and classification of required activities.</li>
+                <li>Grouping of activities necessary to attain objectives.</li>
+                <li>Assignment of each grouping to a manager with necessary authority to supervise it.</li>
+                <li>Provision for co-ordination horizontally and vertically in the organizational structure.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Importance of Organizing -->
+    <div class="card">
+        <h2 class="section-title">⭐ Importance of Organizing</h2>
+        <ul>
+            <li><strong>Facilitates Administration:</strong> Achieves objectives by providing a framework of coordination and control.</li>
+            <li><strong>Encourages Growth and Diversification:</strong> Enables organizations to grow and expand to giant sizes.</li>
+            <li><strong>Optimum Use of New Technology:</strong> Made through a sound structure manned with competent employees.</li>
+            <li><strong>Stimulates Innovation & Creativity:</strong> Stimulates creative thinking and initiative on the part of employees.</li>
+            <li><strong>Encourages Good Human Relations:</strong> Assignment of the right jobs to the right person improves job satisfaction and interpersonal relations.</li>
+            <li><strong>Ensures Continuity of Enterprise:</strong> Provides scope for training and development of future management.</li>
+            <li><strong>Coordination:</strong> Facilitates order and cohesiveness in the enterprise.</li>
+        </ul>
+    </div>
+
+    <!-- Formal & Informal Organization -->
+    <div class="card">
+        <h2 class="section-title">🏛️ Formal & Informal Organization Structures</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Formal Organization</strong>
+                The intentional structure of roles in a formally organized enterprise.
+            </div>
+            <div class="box">
+                <strong>Informal Organization</strong>
+                A network of personal and social relations not established/required by the formal organization but arising spontaneously as people associate with one another.
+            </div>
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Characteristic Features of Formal Organization</h3>
+        <ul style="margin-top:10px;">
+            <li>Structure is laid down by top management to achieve organizational goals.</li>
+            <li>Defines relationships among people working in the organization.</li>
+            <li>Enables people to work together to accomplish common objectives.</li>
+            <li>Concentrates on the jobs to be performed, not the individuals who perform them.</li>
+            <li>Individuals are fitted into jobs and work as per managerial decisions.</li>
+            <li>Bound by rules, regulations, and procedures.</li>
+            <li>Position, authority, responsibility, and accountability of each level are clearly defined.</li>
+            <li>Based on the division of labor and specialization to achieve efficiency.</li>
+            <li>Coordination proceeds according to the prescribed pattern.</li>
+        </ul>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Advantages of Formal Organization</h3>
+        <ul style="margin-top:10px;">
+            <li>Makes everybody responsible for a given task (concentrates on jobs to be performed).</li>
+            <li>Bound by rules and regulations — ensures law and order in the organization.</li>
+            <li>Enables people to work together to accomplish common objectives of the enterprise.</li>
+        </ul>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Characteristic Features of Informal Organization</h3>
+        <ul style="margin-top:10px;">
+            <li>Not established by any formal authority; unplanned and arises spontaneously.</li>
+            <li>Reflects human relationships — arises from personal and social relations among people.</li>
+            <li>Natural process; not based on rules, regulations, and procedures.</li>
+            <li>Inter-relations among people cannot be shown in an organization chart.</li>
+            <li>People cut across formal channels of communication and communicate directly.</li>
+            <li>Membership is voluntary; arises spontaneously, not by conscious efforts.</li>
+            <li>Based on common tastes, problems, language, religion, culture, etc. Influenced by personal attitudes, emotions, whims, likes and dislikes.</li>
+        </ul>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Benefits of Informal Organization</h3>
+        <ul style="margin-top:10px;">
+            <li>Blends with the formal organization to make it more effective.</li>
+            <li>Achieves things that cannot be achieved through formal organization alone.</li>
+            <li>Makes managers plan and act more carefully.</li>
+            <li>Best means of fast employee communication.</li>
+            <li>Has a powerful influence on productivity and job satisfaction.</li>
+            <li>Helps group members attain specific personal objectives.</li>
+        </ul>
+    </div>
+
+    <!-- Span of Control -->
+    <div class="card">
+        <h2 class="section-title">📏 Span of Control</h2>
+        <div class="important">
+            <strong>Definition:</strong> Refers to the number of subordinates who report directly to an executive or supervisor.
+        </div>
+        <ul style="margin-top:12px;">
+            <li>Differences in the span of control have direct implications on the shape of the organization.</li>
+            <li>Organizations must find the optimal span of control to be effective.</li>
+            <li>Narrow enough to permit managers to maintain control over subordinates.</li>
+            <li>Wide enough so that the possibility of micromanaging is minimized.</li>
+            <li>Depends on complexity of the organization, nature of relationships between supervisors and subordinates, and the need for optimum organizational output.</li>
+        </ul>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Dimensions of Span of Control</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Horizontal</strong>
+                The number of direct subordinates that managers actually supervise/manage.
+            </div>
+            <div class="box">
+                <strong>Vertical</strong>
+                The number of levels that managers (in)directly supervise/manage.
+            </div>
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Narrow Span — Advantages & Disadvantages</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>✅ Advantages</strong>
+                <ul>
+                    <li>Close supervision</li>
+                    <li>Close control</li>
+                    <li>Fast communication between subordinates and superiors</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>❌ Disadvantages</strong>
+                <ul>
+                    <li>Superiors tend to get too involved in subordinates' work</li>
+                    <li>Many levels of management</li>
+                    <li>High costs due to many levels</li>
+                    <li>Excessive distance between lowest and top level</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Wide Span — Advantages & Disadvantages</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>✅ Advantages</strong>
+                <ul>
+                    <li>Superiors are forced to delegate</li>
+                    <li>Clear policies must be made</li>
+                    <li>Subordinates must be carefully selected</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>❌ Disadvantages</strong>
+                <ul>
+                    <li>Tendency of overloaded superiors to become decision bottlenecks</li>
+                    <li>Danger of superior's loss of control</li>
+                    <li>Requires exceptional quality of managers</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="note" style="margin-top:15px;">
+            <strong>Tall vs. Flat Organizations:</strong> A tall organization has many hierarchical levels (narrow span), while a flat organization has few levels (wide span). Tall structures offer close control; flat structures offer faster communication and more autonomy.
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Factors Influencing Span of Control</h3>
+        <ul style="margin-top:10px;">
+            <li>Resources available</li>
+            <li>Competence of the manager</li>
+            <li>Nature of work</li>
+            <li>Assistance available to managers</li>
+            <li>Competence of subordinates</li>
+            <li>Organizational levels</li>
+            <li>Plans, policies, and regulations</li>
+        </ul>
+    </div>
+
+    <!-- Designing Jobs -->
+    <div class="card">
+        <h2 class="section-title">🛠️ Designing Jobs</h2>
+        <p>Job design involves the determination of an individual's work-related responsibilities. It specifies:</p>
+        <ul style="margin-top:10px;">
+            <li>What mechanics are to be operated and how they are to be operated.</li>
+            <li>What the expected performance standards are.</li>
+            <li>Areas of decision-making responsibility.</li>
+            <li>Goals and expectations.</li>
+            <li>Appropriate indicators of success.</li>
+        </ul>
+    </div>
+
+    <!-- Job Specialization -->
+    <div class="card">
+        <h2 class="section-title">🎯 Job Specialization</h2>
+        <div class="highlight">
+            <strong>Definition:</strong> The degree to which the overall task of the organization is broken down and divided into smaller component parts.
+        </div>
+        <div class="two-column" style="margin-top:15px;">
+            <div class="box">
+                <strong>✅ Benefits</strong>
+                <ul>
+                    <li>Workers become talented in their tasks.</li>
+                    <li>Less transfer time between tasks.</li>
+                    <li>Easier to develop specialized equipment to assist with the job.</li>
+                    <li>Easier to replace positions at a lower cost.</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>❌ Limitations</strong>
+                <ul>
+                    <li>Jobs may become boring and employees dissatisfied.</li>
+                    <li>Absenteeism will rise and quality of work may suffer.</li>
+                    <li>Benefits of specialization do not always occur.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Alternatives to Job Specialization</h3>
+        <table style="margin-top:10px;">
+            <thead>
+                <tr>
+                    <th>Alternative</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Job Rotation</strong></td>
+                    <td>Systematically moving employees from one job to another.</td>
+                </tr>
+                <tr>
+                    <td><strong>Job Enlargement</strong></td>
+                    <td>Giving the employee more tasks to perform.</td>
+                </tr>
+                <tr>
+                    <td><strong>Job Enrichment</strong></td>
+                    <td>Increasing both the number of tasks the worker does and the control the worker has over the job.</td>
+                </tr>
+                <tr>
+                    <td><strong>Work Team</strong></td>
+                    <td>Allows an entire group to design the work system it will use to perform an interrelated set of tasks.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Departmentalization -->
+    <div class="card">
+        <h2 class="section-title">🏗️ Departmentalization</h2>
+        <div class="important">
+            <strong>Definition:</strong> The process of grouping jobs according to some logical arrangement.
+        </div>
+        <h3 style="margin-top:15px; color:#2c6e6b;">Common Bases for Departmentalization</h3>
+        <div class="grid" style="margin-top:10px;">
+            <div class="box">
+                <strong>Functional</strong>
+                The grouping of activities by the functions performed (e.g., HR, Finance, Marketing).
+            </div>
+            <div class="box">
+                <strong>Product</strong>
+                The grouping of activities by product produced.
+            </div>
+            <div class="box">
+                <strong>Customer</strong>
+                The grouping of activities by common customers served.
+            </div>
+            <div class="box">
+                <strong>Location / Geographic</strong>
+                The grouping of activities by territory or region.
+            </div>
+        </div>
+    </div>
+
+    <!-- Reporting Relationships -->
+    <div class="card">
+        <h2 class="section-title">📊 Reporting Relationships</h2>
+        <p>Reporting relationships among positions are reflected by:</p>
+        <div class="two-column" style="margin-top:15px;">
+            <div class="box">
+                <strong>Chain of Command</strong>
+                A clear and distinct line of authority among the positions in an organization.
+            </div>
+            <div class="box">
+                <strong>Span of Management</strong>
+                The number of people who report to a particular manager.
+            </div>
+        </div>
+    </div>
+
+    <!-- Distributing Authority -->
+    <div class="card">
+        <h2 class="section-title">⚖️ Distributing Authority</h2>
+        <div class="highlight">
+            <strong>Authority</strong> — Power that has been legitimized by the organization. It involves the sub-division and sub-allocation of power to subordinates.
+        </div>
+        <p style="margin-top:12px;">When distributing authority, managers must address two key issues: <strong>Delegation</strong> and <strong>Decentralization</strong>.</p>
+
+        <h3 style="margin-top:20px; color:#2c6e6b;">Delegation</h3>
+        <div class="note">
+            <strong>Definition:</strong> The process by which a manager assigns a portion of his or her total workload to others.
+        </div>
+        <h4 style="margin-top:15px; color:#444;">Steps in the Delegation Process:</h4>
+        <div class="process-steps" style="margin-top:10px;">
+            <div class="step">1. Assigning Responsibility</div>
+            <div class="step">2. Granting Authority</div>
+            <div class="step">3. Creating Accountability</div>
+        </div>
+
+        <h4 style="margin-top:20px; color:#444;">Elements of Delegation:</h4>
+        <div class="three-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Authority</strong>
+                The power or right given to a manager/employee to make decisions, give orders, and use resources. Flows <em>Top Down</em>.
+            </div>
+            <div class="box">
+                <strong>Responsibility</strong>
+                The duty or obligation assigned to an individual to perform a task. Flows <em>Bottom Up</em>.
+            </div>
+            <div class="box">
+                <strong>Accountability</strong>
+                The obligation of a subordinate to report back on task performance and results. Ensures authority and responsibility are exercised properly.
+            </div>
+        </div>
+
+        <h4 style="margin-top:20px; color:#444;">Benefits of Delegation:</h4>
+        <ul style="margin-top:8px;">
+            <li>Helps managers by doing part of their work.</li>
+            <li>Subordinates may sometimes have more experience in specific areas.</li>
+            <li>Improves managerial skills by participating in decision-making and problem-solving.</li>
+        </ul>
+
+        <h4 style="margin-top:15px; color:#444;">Limitations of Delegation:</h4>
+        <ul style="margin-top:8px;">
+            <li><strong>Managers reluctant to delegate</strong> — due to disorganization, worry that subordinates do well and become a threat, or lack of trust.</li>
+            <li><strong>Subordinates avoid accepting delegation</strong> — due to risk aversion, fear of responsibility, or perceiving no reward.</li>
+        </ul>
+
+        <h4 style="margin-top:15px; color:#444;">Advantages of Delegation:</h4>
+        <div class="grid" style="margin-top:8px;">
+            <div class="box"><strong>Sharing of workload</strong></div>
+            <div class="box"><strong>Quick decision-making</strong></div>
+            <div class="box"><strong>Motivation</strong></div>
+            <div class="box"><strong>Training</strong></div>
+            <div class="box"><strong>Better performance</strong></div>
+            <div class="box"><strong>Better relations</strong></div>
+        </div>
+
+        <h3 style="margin-top:25px; color:#2c6e6b;">Decentralization vs. Centralization</h3>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Decentralization</strong>
+                The process of systematically delegating power and authority throughout the organization to middle and lower-level managers.
+            </div>
+            <div class="box">
+                <strong>Centralization</strong>
+                The process of systematically retaining power and authority in the hands of higher-level managers.
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Organizing -->
+    <div class="card">
+        <h2 class="section-title">🌐 Global Organizing</h2>
+        <div class="important">
+            <strong>Definition:</strong> Global organizing refers to structuring and coordinating business activities across multiple countries to achieve efficiency, competitiveness, and adaptation to local markets.
+        </div>
+        <p style="margin-top:12px;">It involves balancing two forces:</p>
+        <div class="two-column" style="margin-top:10px;">
+            <div class="box">
+                <strong>Global Integration</strong>
+                Achieving efficiency and consistency across all international operations.
+            </div>
+            <div class="box">
+                <strong>Local Responsiveness</strong>
+                Adapting to culture, laws, and customer needs in each specific market.
+            </div>
+        </div>
+    </div>
+
+    <!-- New Trends -->
+    <div class="card">
+        <h2 class="section-title">🚀 New Trends in Organizing</h2>
+        <div class="grid">
+            <div class="box"><strong>Team-Based Organization</strong>Work is structured around collaborative teams rather than traditional hierarchy.</div>
+            <div class="box"><strong>Network Organization</strong>A loosely connected set of firms or units linked together to share expertise and resources.</div>
+            <div class="box"><strong>Virtual Organization</strong>An organization that exists primarily through digital connections without a central physical location.</div>
+            <div class="box"><strong>Learning Organization</strong>An organization that continuously learns, adapts, and improves through shared knowledge.</div>
+            <div class="box"><strong>Self-Managed Team</strong>A team that operates with a high degree of autonomy and manages its own work processes.</div>
+        </div>
+    </div>
+
+    <div class="footer">🌱 Lecture 5 - Organizing • BY_#D1</div>
+
+</div>
+</body>
+</html>
