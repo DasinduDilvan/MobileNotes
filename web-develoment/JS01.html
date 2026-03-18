@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – JavaScript Introduction: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 8px;
+    font-size: 2.3em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 6px;
+    font-size: 1.05em;
+}
+
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+}
+
+.toc {
+    background: white;
+    padding: 22px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+}
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+
+.card {
+    background: white;
+    padding: 28px;
+    margin: 22px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.card-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.section-sub {
+    color: #2c6e6b;
+    font-size: 1.1em;
+    margin: 22px 0 10px 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-sub::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: #2c6e6b;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0;
+    line-height: 1.9;
+}
+ul li {
+    padding: 3px 0 3px 20px;
+    position: relative;
+}
+ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #5a9d99;
+    font-size: 0.85em;
+    top: 5px;
+}
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    font-size: 0.93em;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 14px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88em;
+    color: #c0392b;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.91em;
+}
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td {
+    padding: 9px 13px;
+    border-bottom: 1px solid #e0f0ee;
+    vertical-align: top;
+}
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS compare */
+.vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    margin: 14px 0;
+    align-items: stretch;
+}
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head {
+    padding: 8px 14px;
+    font-weight: bold;
+    color: white;
+    font-size: 0.9em;
+    text-align: center;
+}
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side .vs-body {
+    background: #f9f9f9;
+    padding: 12px 14px;
+    font-size: 0.88em;
+    line-height: 1.9;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+.vs-mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: #999;
+    font-size: 1.1em;
+    padding: 0 10px;
+}
+
+/* three-way compare */
+.three-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+}
+.scope-box {
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.88em;
+}
+.scope-box .scope-head {
+    padding: 8px 12px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+.scope-box.var-box  .scope-head { background: #e67e22; }
+.scope-box.let-box  .scope-head { background: #2980b9; }
+.scope-box.const-box .scope-head { background: #8e44ad; }
+.scope-box .scope-body {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 12px;
+    line-height: 1.9;
+}
+
+/* flow diagram */
+.flow-h {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 14px 0;
+    justify-content: center;
+}
+.flow-step {
+    background: #2c6e6b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    text-align: center;
+}
+.flow-step.orange { background: #e67e22; }
+.flow-step.blue   { background: #2980b9; }
+.flow-step.purple { background: #8e44ad; }
+.flow-step.red    { background: #c0392b; }
+.flow-arrow { color: #2c6e6b; font-size: 1.3em; font-weight: bold; }
+
+/* def blocks */
+.def-block {
+    border: 1px solid #cfe9e7;
+    border-radius: 10px;
+    margin: 11px 0;
+    overflow: hidden;
+}
+.def-term {
+    background: #2c6e6b;
+    color: white;
+    padding: 7px 16px;
+    font-weight: bold;
+    font-size: 0.93em;
+    font-family: 'Courier New', monospace;
+}
+.def-body {
+    background: #f9fefd;
+    padding: 11px 16px;
+    font-size: 0.92em;
+}
+
+/* type pills */
+.type-pill {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 700;
+    margin: 3px;
+    font-family: 'Courier New', monospace;
+}
+.tp-bool    { background: #e8f5e9; color: #1b5e20; border: 1px solid #4caf50; }
+.tp-num     { background: #e3f2fd; color: #0d47a1; border: 1px solid #2196f3; }
+.tp-str     { background: #fff3e0; color: #e65100; border: 1px solid #ff9800; }
+.tp-null    { background: #fce4ec; color: #880e4f; border: 1px solid #e91e63; }
+.tp-undef   { background: #f3e5f5; color: #4a148c; border: 1px solid #9c27b0; }
+.tp-sym     { background: #e0f7fa; color: #006064; border: 1px solid #00bcd4; }
+.tp-obj     { background: #fff9e6; color: #7d4e00; border: 1px solid #f0ad4e; }
+
+.lec-badge {
+    display: inline-block;
+    background: #2980b9;
+    color: white;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .scope-box .scope-head,
+    .flow-step, .lec-badge, .exam-banner, .type-pill {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid, .three-grid { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>⚡ JavaScript — Introduction</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: Scripting Languages · Client-Side Scripting · JavaScript Basics · Variables · Types · Output Methods · Functions</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#scripting">Scripting Languages & Client-Side Scripting</a></li>
+      <li><a href="#howweb">How Web Pages Work</a></li>
+      <li><a href="#whatis">What Is JavaScript?</a></li>
+      <li><a href="#features">Features of JavaScript</a></li>
+      <li><a href="#howto">How to Use JavaScript with HTML</a></li>
+      <li><a href="#loading">How JavaScript Gets Loaded & Executed</a></li>
+      <li><a href="#output">Output Methods in JavaScript</a></li>
+      <li><a href="#variables">Variables — var, let, const</a></li>
+      <li><a href="#types">Data Types in JavaScript</a></li>
+      <li><a href="#functions">Functions in JavaScript</a></li>
+      <li><a href="#comparisons">Master Comparison Tables & Glossary</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: SCRIPTING LANGUAGE ===== -->
+  <div class="card" id="scripting">
+    <h2 class="card-title">🗂️ Scripting Languages & Client-Side Scripting</h2>
+
+    <h3 class="section-sub">What Is a Scripting Language?</h3>
+    <div class="important">
+      A scripting language is a programming language designed to <strong>automate tasks</strong> or <strong>control other software</strong>. Scripts are usually <strong>interpreted</strong> (not compiled) — they run line-by-line through an interpreter.
+    </div>
+    <ul>
+      <li>Used to add <strong>dynamic behaviour</strong> to applications such as web pages, servers, and system tools</li>
+      <li>Common examples: <strong>JavaScript, Python, PHP, Ruby, Shell scripts</strong></li>
+      <li>Key difference from compiled languages: no separate compilation step — the interpreter processes source code directly at runtime</li>
+    </ul>
+
+    <h3 class="section-sub">What Is Client-Side Scripting?</h3>
+    <div class="important">
+      Client-side scripting refers to code that runs <strong>inside the user's web browser</strong>, not on the server. It allows web pages to become <strong>interactive, dynamic, and responsive</strong> without reloading the page.
+    </div>
+
+    <h3 class="section-sub">Common Tasks of Client-Side Scripts</h3>
+    <ul>
+      <li><strong>DOM Manipulation</strong> — updating text, styles, or layout on the page</li>
+      <li><strong>Form Validation</strong> — checking inputs before submitting to the server</li>
+      <li><strong>Event Handling</strong> — responding to clicks, typing, scrolling, and other user actions</li>
+      <li><strong>API Communication</strong> — fetching data from servers using AJAX / fetch without a page reload</li>
+    </ul>
+
+    <h3 class="section-sub">Key Characteristics of Client-Side Scripting</h3>
+    <div class="grid">
+      <div class="box"><strong>✅ Improved User Experience</strong>Pages respond instantly to user actions without waiting for the server.</div>
+      <div class="box"><strong>🔧 Browser Engines Execute It</strong>Each browser has a built-in JavaScript engine (e.g., V8 in Chrome) that runs the code.</div>
+      <div class="box"><strong>🔒 Limited Access (Security)</strong>Browser scripts cannot access the local file system or OS for security reasons.</div>
+      <div class="box"><strong>🌐 Essential for Modern Web</strong>Single Page Applications (SPAs) like Gmail and React apps rely entirely on client-side scripting.</div>
+    </div>
+
+    <h3 class="section-sub">Most Commonly Used Client-Side Language</h3>
+    <div class="highlight">
+      <strong>JavaScript</strong> is the most commonly used — and currently the <em>only</em> programming language that browsers can execute natively.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: HOW WEB PAGES WORK ===== -->
+  <div class="card" id="howweb">
+    <h2 class="card-title">🌐 How Web Pages Work</h2>
+
+    <h3 class="section-sub">The Request-Response Cycle</h3>
+    <div class="flow-h">
+      <div class="flow-step">User types URL<br><small>in browser</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step orange">Browser sends<br>HTTP Request</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Server responds<br>with HTML file</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step purple">Browser requests<br>CSS, JS, images</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step red">Page renders<br>in browser</div>
+    </div>
+
+    <ul>
+      <li>The browser sends an <strong>HTTP GET request</strong> to the server asking for the page</li>
+      <li>The server responds with an <strong>HTML file</strong></li>
+      <li>The HTML references other resources (CSS, JS, images) which trigger <strong>additional requests</strong></li>
+      <li>Once all resources are loaded, the browser <strong>renders</strong> the final page</li>
+    </ul>
+
+    <h3 class="section-sub">HTML + CSS Alone Are Not Enough</h3>
+    <div class="two-column">
+      <div class="box"><strong>HTML</strong>Describes the content and structure of the page</div>
+      <div class="box"><strong>CSS</strong>Describes the appearance and style of the page</div>
+    </div>
+    <div class="warning" style="margin-top:12px;">
+      HTML + CSS alone produce a web page that <strong>doesn't do anything</strong>. They cannot get user input, save data, or show/hide elements dynamically. That is why JavaScript is needed.
+    </div>
+
+    <h3 class="section-sub">What JavaScript Adds</h3>
+    <ul>
+      <li>Get and respond to <strong>user input</strong></li>
+      <li><strong>Show and hide elements</strong> when the user interacts</li>
+      <li><strong>Save data</strong> locally or send it to a server</li>
+      <li>Create <strong>animations</strong>, validate forms, make API calls, update the page without reloading</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 3: WHAT IS JAVASCRIPT ===== -->
+  <div class="card" id="whatis">
+    <h2 class="card-title">💡 What Is JavaScript?</h2>
+
+    <div class="important">
+      JavaScript is a <strong>programming language</strong> and currently the <strong>only programming language that browsers can execute natively</strong>. If you want to make a webpage interactive, you must use JavaScript — or a language that compiles to JavaScript (e.g., TypeScript).
+    </div>
+
+    <h3 class="section-sub">Historical Facts</h3>
+    <ul>
+      <li>Created in <strong>1995</strong> by <strong>Brendan Eich</strong> at Netscape</li>
+      <li>The first version was written in <strong>10 days</strong></li>
+      <li>JavaScript has <strong>nothing to do with Java</strong> — it was named that way purely for <em>marketing reasons</em></li>
+      <li>Today it is standardized as <strong>ECMAScript</strong> and used across browsers, servers (Node.js), and apps</li>
+    </ul>
+
+    <div class="highlight">
+      <strong>Important distinction:</strong> JavaScript ≠ Java. They are completely separate languages with different syntax, purpose, and design. The name similarity is a historical marketing decision, not a technical relationship.
+    </div>
+
+    <h3 class="section-sub">JavaScript vs PHP — Client vs Server</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">⚡ JavaScript</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Runs <strong>in the browser</strong> (client-side)</li>
+            <li>▸ Executed by the browser's JS engine</li>
+            <li>▸ Used for UI interactivity & DOM updates</li>
+            <li>▸ Can also run server-side via Node.js</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">🐘 PHP</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Runs <strong>on the server</strong> (server-side)</li>
+            <li>▸ Executed by the web server</li>
+            <li>▸ Used for database access & page generation</li>
+            <li>▸ Client never sees PHP source code</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: FEATURES ===== -->
+  <div class="card" id="features">
+    <h2 class="card-title">🌟 Features of JavaScript</h2>
+
+    <table>
+      <thead><tr><th>Feature</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Dynamic Typing</strong></td>
+          <td>Variable types are determined by the <strong>value stored</strong>, not declared by the programmer. The same variable can hold a string, number, or array at different times.</td>
+        </tr>
+        <tr>
+          <td><strong>Case Sensitive</strong></td>
+          <td>Identifiers like variable and function names are case-sensitive. <code>count</code> and <code>Count</code> are two different variables.</td>
+        </tr>
+        <tr>
+          <td><strong>Event-Driven</strong></td>
+          <td>JavaScript can handle user interactions (clicks, keyboard input, mouse movements) through an event-driven model — code runs in response to events.</td>
+        </tr>
+        <tr>
+          <td><strong>Platform Independent</strong></td>
+          <td>Write the script once and run it on any platform or browser without changes. The browser's JS engine handles execution.</td>
+        </tr>
+        <tr>
+          <td><strong>Interpreted Language</strong></td>
+          <td>Scripts are processed <strong>line by line</strong> by the JavaScript interpreter — a built-in component of the web browser. No separate compilation step by the developer.</td>
+        </tr>
+        <tr>
+          <td><strong>First-Class Functions</strong></td>
+          <td>Functions are treated like variables — they can be passed as arguments to other functions, returned from functions, and stored in variables.</td>
+        </tr>
+        <tr>
+          <td><strong>Asynchronous & Non-Blocking</strong></td>
+          <td>Uses an <strong>event loop</strong> with callbacks, promises, and async/await. Tasks like API calls run in the background — the UI does not freeze while waiting.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 5: HOW TO USE JS WITH HTML ===== -->
+  <div class="card" id="howto">
+    <h2 class="card-title">🔗 How to Use JavaScript with HTML</h2>
+
+    <h3 class="section-sub">Three Ways to Include JavaScript</h3>
+
+    <table>
+      <thead><tr><th>Method</th><th>Where</th><th>How</th><th>Key Point</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Internal — in &lt;head&gt;</strong></td>
+          <td>Inside <code>&lt;head&gt;</code> tag</td>
+          <td>Wrapped in <code>&lt;script&gt;</code> tags</td>
+          <td>Functions defined here are available to the body. Good for defining reusable functions.</td>
+        </tr>
+        <tr>
+          <td><strong>Internal — in &lt;body&gt;</strong></td>
+          <td>Inside <code>&lt;body&gt;</code> tag</td>
+          <td>Wrapped in <code>&lt;script&gt;</code> tags</td>
+          <td>Runs when the browser reaches that point in parsing. Can directly manipulate elements above it.</td>
+        </tr>
+        <tr>
+          <td><strong>External File</strong></td>
+          <td>Separate <code>.js</code> file</td>
+          <td><code>&lt;script src="file.js"&gt;&lt;/script&gt;</code></td>
+          <td>Best practice. Reusable across multiple pages. File does <strong>not</strong> contain <code>&lt;script&gt;</code> tags.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">The &lt;script&gt; Tag — Key Rules</h3>
+    <ul>
+      <li>JavaScript code must be placed between <code>&lt;script&gt;</code> and <code>&lt;/script&gt;</code> tags</li>
+      <li>Can be placed in <strong>either</strong> <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code></li>
+      <li>The <code>type="text/javascript"</code> attribute is <strong>not required</strong> — JavaScript is the default scripting language in HTML</li>
+      <li>External scripts use the <code>src</code> attribute: <code>&lt;script src="myScript.js"&gt;&lt;/script&gt;</code></li>
+    </ul>
+
+    <h3 class="section-sub">External Script — Three Reference Types</h3>
+    <div class="grid">
+      <div class="box"><strong>Full URL</strong>Links to a script hosted on another server<br><code>src="https://example.com/js/file.js"</code></div>
+      <div class="box"><strong>File Path</strong>Links to a script in a specific folder on the same server<br><code>src="/js/myScript.js"</code></div>
+      <div class="box"><strong>No Path</strong>Links to a script in the same folder as the HTML file<br><code>src="myScript.js"</code></div>
+    </div>
+
+    <h3 class="section-sub">Advantages of External Scripts</h3>
+    <ul>
+      <li>The <strong>same code</strong> can be reused across many different web pages</li>
+      <li>Separates HTML structure from JavaScript behaviour — cleaner code</li>
+      <li>Browsers can <strong>cache</strong> the JS file, speeding up subsequent page loads</li>
+      <li>External <code>.js</code> files do <strong>NOT</strong> contain <code>&lt;script&gt;</code> tags — just pure JavaScript</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 6: LOADING & EXECUTION ===== -->
+  <div class="card" id="loading">
+    <h2 class="card-title">⚙️ How JavaScript Gets Loaded & Executed</h2>
+
+    <h3 class="section-sub">Loading Process</h3>
+    <div class="flow-h">
+      <div class="flow-step">Browser parses HTML</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step orange">Encounters &lt;script&gt; tag</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Requests .js file from server</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step purple">Server sends .js file</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step red">JS executes client-side in browser</div>
+    </div>
+
+    <h3 class="section-sub">Execution Model — Key Rules</h3>
+    <ul>
+      <li>There is <strong>no "main method"</strong> — the script file executes <strong>from top to bottom</strong></li>
+      <li>There is <strong>no compilation step by the developer</strong> — JavaScript is compiled and executed on the fly by the browser</li>
+      <li>The browser uses <strong>JIT (Just-In-Time) compilation</strong> — technically different from pure interpretation</li>
+      <li>JavaScript runs <strong>client-side</strong> — on the user's computer inside the browser, not on the server</li>
+    </ul>
+
+    <h3 class="section-sub">Function Hoisting</h3>
+    <div class="important">
+      <strong>Hoisting:</strong> Function declarations (using the <code>function</code> keyword) are <em>hoisted</em> — the browser moves them to the top of their scope before execution begins. This means you can call a function <strong>before</strong> it is defined in the code.
+    </div>
+    <div class="warning">
+      <strong>⚠️ Warning:</strong> There are other ways to define functions (function expressions, arrow functions) that are <strong>NOT hoisted</strong>. Avoid relying on hoisting in your code — it leads to confusing bugs.
+    </div>
+
+    <h3 class="section-sub">console.log()</h3>
+    <ul>
+      <li>Prints log messages to the <strong>browser's Developer Console</strong></li>
+      <li>JavaScript's equivalent of <code>printf()</code> in C — used for debugging</li>
+      <li>To view: Right-click on the page → <strong>Inspect</strong> → <strong>Console tab</strong></li>
+      <li>The Console is also a <strong>REPL</strong> (Read-Eval-Print Loop) — you can type JS expressions directly to test them</li>
+      <li>Output does <strong>not</strong> appear on the visible webpage — only in the developer tools</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 7: OUTPUT METHODS ===== -->
+  <div class="card" id="output">
+    <h2 class="card-title">📤 Output Methods in JavaScript</h2>
+
+    <table>
+      <thead><tr><th>Method</th><th>How It Works</th><th>Best Used For</th><th>Caution</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>alert()</code></td>
+          <td>Displays a <strong>popup dialog box</strong> with a message. Script pauses until user clicks OK.</td>
+          <td>Simple notifications or debugging</td>
+          <td><strong>Blocking</strong> — freezes the page until dismissed</td>
+        </tr>
+        <tr>
+          <td><code>document.write()</code></td>
+          <td>Writes text directly to the webpage <strong>while it is loading</strong>.</td>
+          <td>Quick output during page load</td>
+          <td>If called <strong>after</strong> the page loads, it <strong>deletes the entire page</strong> and replaces it</td>
+        </tr>
+        <tr>
+          <td><code>innerHTML</code></td>
+          <td>Changes or sets the <strong>HTML content</strong> of an element found by <code>getElementById()</code>.</td>
+          <td>Most common — dynamically updating page content</td>
+          <td>Can be a security risk (HTML injection) if used with untrusted input</td>
+        </tr>
+        <tr>
+          <td><code>textContent</code></td>
+          <td>Sets <strong>plain text only</strong> — no HTML tags are rendered.</td>
+          <td>Safely displaying user-generated content</td>
+          <td>HTML tags are treated as literal text — safer than innerHTML</td>
+        </tr>
+        <tr>
+          <td><code>console.log()</code></td>
+          <td>Prints output to the <strong>browser's developer console</strong>.</td>
+          <td>Debugging — not for showing content to users</td>
+          <td>Not visible to end users — only in DevTools</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="margin-top:6px;">
+      <strong>innerHTML vs textContent:</strong> Use <code>textContent</code> when inserting plain text (especially user input) to avoid HTML injection attacks. Use <code>innerHTML</code> when you intentionally want to render HTML tags.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: VARIABLES ===== -->
+  <div class="card" id="variables">
+    <h2 class="card-title">📦 Variables — var, let, const</h2>
+
+    <h3 class="section-sub">Variable Naming Rules</h3>
+    <ul>
+      <li>Variable names are <strong>case-sensitive</strong> — <code>count</code> and <code>Count</code> are different</li>
+      <li>Can contain: <strong>letters (a–z, A–Z), digits (0–9), underscores (_), dollar signs ($)</strong></li>
+      <li>Must <strong>begin with</strong> a letter, underscore, or dollar sign — <strong>never a digit</strong></li>
+      <li>JavaScript <strong>reserved keywords</strong> cannot be used as variable names</li>
+      <li>Convention: use <strong>camelCase</strong> for variables and functions — e.g., <code>userName</code>, <code>totalPrice</code></li>
+    </ul>
+
+    <h3 class="section-sub">Three Declaration Keywords</h3>
+
+    <div class="three-grid">
+      <div class="scope-box var-box">
+        <div class="scope-head">var</div>
+        <div class="scope-body">
+          <ul class="plain">
+            <li>▸ <strong>Function scope</strong></li>
+            <li>▸ Accessible anywhere inside the function, even outside loops/if blocks</li>
+            <li>▸ Can be re-declared and reassigned</li>
+            <li>▸ Gets hoisted to top of function</li>
+            <li>▸ <strong>Avoid using</strong> in modern JS</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scope-box let-box">
+        <div class="scope-head">let</div>
+        <div class="scope-body">
+          <ul class="plain">
+            <li>▸ <strong>Block scope</strong></li>
+            <li>▸ Only accessible within the <code>{ }</code> block it is declared in</li>
+            <li>▸ Can be reassigned, cannot be re-declared in the same scope</li>
+            <li>▸ Not accessible outside its block</li>
+            <li>▸ <strong>Use when reassignment is needed</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="scope-box const-box">
+        <div class="scope-head">const</div>
+        <div class="scope-body">
+          <ul class="plain">
+            <li>▸ <strong>Block scope</strong></li>
+            <li>▸ <strong>Cannot be reassigned</strong> after declaration</li>
+            <li>▸ Must be initialized at declaration</li>
+            <li>▸ Objects/arrays can still be <em>mutated</em> (like Java's <code>final</code>)</li>
+            <li>▸ <strong>Use by default — preferred choice</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Scope — var vs let/const</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">var — Function Scope</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Scoped to the <strong>entire function</strong></li>
+            <li>▸ Accessible outside of <code>if</code>, <code>for</code>, and other blocks</li>
+            <li>▸ Only goes out of scope at the end of the function</li>
+            <li>▸ NOT accessible outside the function it was declared in</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">let / const — Block Scope</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Scoped to the <strong>nearest enclosing block</strong> <code>{ }</code></li>
+            <li>▸ Accessing outside its block causes a <strong>ReferenceError</strong></li>
+            <li>▸ Predictable, safer scoping behaviour</li>
+            <li>▸ Strongly recommended over <code>var</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">const — Important Nuance</h3>
+    <div class="highlight">
+      <code>const</code> prevents <strong>reassignment</strong> of the variable binding — but it does <strong>NOT prevent mutation</strong> of the underlying object or array. For example, you cannot do <code>list = []</code> but you CAN do <code>list.push(4)</code>. This is similar to Java's <code>final</code> keyword, NOT C++'s <code>const</code>.
+    </div>
+
+    <h3 class="section-sub">Best Practices</h3>
+    <div class="important">
+      <strong>Rule of thumb:</strong>
+      <ul class="plain" style="margin-top:8px;">
+        <li>✅ Use <code>const</code> whenever possible (default choice)</li>
+        <li>✅ Use <code>let</code> only when the variable needs to be reassigned</li>
+        <li>❌ Do NOT use <code>var</code> — it has confusing function-scope behaviour</li>
+      </ul>
+      <p style="margin-top:8px; font-size:0.9em;">This is recommended by both the <strong>Google</strong> and <strong>AirBnB</strong> JavaScript Style Guides. Note: older code on the internet uses <code>var</code> heavily — ignore that pattern.</p>
+    </div>
+
+    <h3 class="section-sub">Dynamic Typing</h3>
+    <ul>
+      <li>Variables in JS do <strong>not have a fixed type</strong></li>
+      <li>The <strong>value</strong> has a type, not the variable</li>
+      <li>You do <strong>not declare the datatype</strong> before using a variable</li>
+      <li>The same variable can hold different types at different times</li>
+      <li>Function parameters are <strong>NOT declared</strong> with var, let, or const</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 9: DATA TYPES ===== -->
+  <div class="card" id="types">
+    <h2 class="card-title">🏷️ Data Types in JavaScript</h2>
+
+    <h3 class="section-sub">Six Primitive Types</h3>
+    <div style="margin: 14px 0;">
+      <span class="type-pill tp-bool">Boolean</span>
+      <span class="type-pill tp-num">Number</span>
+      <span class="type-pill tp-str">String</span>
+      <span class="type-pill tp-null">Null</span>
+      <span class="type-pill tp-undef">Undefined</span>
+      <span class="type-pill tp-sym">Symbol</span>
+    </div>
+    <p style="margin-bottom:12px;">Plus <span class="type-pill tp-obj">Object types</span> — which include Array, Date, and String object wrappers.</p>
+
+    <table>
+      <thead><tr><th>Type</th><th>Definition</th><th>Values / Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Boolean</strong></td>
+          <td>Represents a logical true/false value</td>
+          <td><code>true</code> and <code>false</code> only. Used in conditions and logical operators.</td>
+        </tr>
+        <tr>
+          <td><strong>Number</strong></td>
+          <td>All numeric values — there is <strong>no separate integer type</strong></td>
+          <td>Everything is a <strong>floating-point double</strong>. Special values: <code>NaN</code> (not-a-number), <code>+Infinity</code>, <code>-Infinity</code>. Use <code>Math.floor()</code>, <code>Math.ceil()</code> etc.</td>
+        </tr>
+        <tr>
+          <td><strong>String</strong></td>
+          <td>A sequence of characters representing text</td>
+          <td>Defined with single <code>'</code> or double <code>"</code> quotes. <strong>Immutable</strong>. No separate <code>char</code> type — letters are strings of length 1. Concatenate with <code>+</code>. Check length with <code>.length</code> property.</td>
+        </tr>
+        <tr>
+          <td><strong>Null</strong></td>
+          <td>Represents an intentional absence of any value</td>
+          <td>The value is <code>null</code> — explicitly set to "no value".</td>
+        </tr>
+        <tr>
+          <td><strong>Undefined</strong></td>
+          <td>A variable that has been declared but not assigned a value</td>
+          <td>Default value of uninitialized variables.</td>
+        </tr>
+        <tr>
+          <td><strong>Symbol</strong></td>
+          <td>A unique, immutable identifier</td>
+          <td>Advanced use case — used for unique property keys.</td>
+        </tr>
+        <tr>
+          <td><strong>Object</strong></td>
+          <td>A collection of key-value pairs; includes arrays, functions, dates</td>
+          <td><code>Array</code>, <code>Date</code>, <code>String</code> object wrapper, custom objects, etc.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Truthy & Falsy Values</h3>
+    <div class="important">
+      Non-boolean values are automatically converted to boolean when used in conditions. This is called <strong>truthy/falsy evaluation</strong>.
+    </div>
+    <div class="two-column">
+      <div class="box" style="border-left-color: #e91e63; background: #fce4ec;">
+        <strong style="color:#c0392b;">Falsy Values (evaluate to false)</strong>
+        <code>null</code> &nbsp; <code>undefined</code> &nbsp; <code>0</code> &nbsp; <code>NaN</code> &nbsp; <code>''</code> &nbsp; <code>""</code>
+      </div>
+      <div class="box">
+        <strong>Truthy Values (evaluate to true)</strong>
+        Everything else — any non-zero number, any non-empty string, any object or array.
+      </div>
+    </div>
+
+    <h3 class="section-sub">Template Literals</h3>
+    <div class="important">
+      <strong>Definition:</strong> Template literals provide an easy way to create <strong>multi-line strings</strong> and perform <strong>string interpolation</strong> (embedding variables/expressions directly into strings).
+    </div>
+    <ul>
+      <li>Created using <strong>backtick</strong> characters: <code>` `</code> — not single or double quotes</li>
+      <li>Variables and expressions are embedded using <code>${ }</code> syntax — e.g., <code>${a + b}</code></li>
+      <li>Can span <strong>multiple lines</strong> without special characters</li>
+      <li>Much cleaner than string concatenation with <code>+</code></li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 10: FUNCTIONS ===== -->
+  <div class="card" id="functions">
+    <h2 class="card-title">🔧 Functions in JavaScript</h2>
+
+    <h3 class="section-sub">Function Declaration Syntax</h3>
+    <div class="highlight">
+      <strong>Syntax:</strong><br>
+      <code>function name(param1, param2) { </code><br>
+      <code>&nbsp;&nbsp;// statements;</code><br>
+      <code>}</code>
+    </div>
+
+    <ul>
+      <li>Functions are defined with the <code>function</code> keyword followed by a name and parentheses</li>
+      <li>Parameters are listed inside the parentheses — they are <strong>NOT declared</strong> with var, let, or const</li>
+      <li>The function body is enclosed in <code>{ }</code></li>
+      <li>Functions are called by writing their name followed by <code>()</code></li>
+    </ul>
+
+    <h3 class="section-sub">Function Hoisting</h3>
+    <ul>
+      <li>Function <strong>declarations</strong> (using the <code>function</code> keyword) are <strong>hoisted</strong> — they can be called before they appear in the code</li>
+      <li>This works because the browser moves declarations to the top of their scope before execution</li>
+      <li>Other function forms (expressions, arrow functions) are <strong>NOT hoisted</strong></li>
+      <li><strong>Best practice:</strong> Do not rely on hoisting — define functions before calling them</li>
+    </ul>
+
+    <h3 class="section-sub">First-Class Functions</h3>
+    <div class="important">
+      In JavaScript, functions are <strong>first-class citizens</strong> — they are treated like any other value. This means functions can be:
+      <ul style="margin-top:8px;">
+        <li>Stored in a variable</li>
+        <li>Passed as an argument to another function</li>
+        <li>Returned from another function</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 11: COMPARISONS ===== -->
+  <div class="card" id="comparisons">
+    <h2 class="card-title">⚖️ Master Comparison Tables & Glossary</h2>
+
+    <h3 class="section-sub">var vs let vs const — Full Comparison</h3>
+    <table>
+      <thead><tr><th>Aspect</th><th>var</th><th>let</th><th>const</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Scope</strong></td><td>Function scope</td><td>Block scope</td><td>Block scope</td></tr>
+        <tr><td><strong>Re-assignable?</strong></td><td>Yes</td><td>Yes</td><td><strong>No</strong></td></tr>
+        <tr><td><strong>Re-declarable?</strong></td><td>Yes</td><td>No</td><td>No</td></tr>
+        <tr><td><strong>Hoisted?</strong></td><td>Yes (to top of function)</td><td>Yes (but not initialized)</td><td>Yes (but not initialized)</td></tr>
+        <tr><td><strong>Object/Array mutable?</strong></td><td>Yes</td><td>Yes</td><td>Yes (only binding is fixed)</td></tr>
+        <tr><td><strong>Recommended?</strong></td><td>❌ Avoid</td><td>✅ When reassignment needed</td><td>✅ Default choice</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Output Methods — Full Comparison</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Where Output Appears</th><th>Blocks Page?</th><th>Security Risk?</th></tr></thead>
+      <tbody>
+        <tr><td><code>alert()</code></td><td>Popup dialog box</td><td><strong>Yes</strong></td><td>No</td></tr>
+        <tr><td><code>document.write()</code></td><td>Directly in the webpage</td><td>No</td><td>Deletes page if called after load</td></tr>
+        <tr><td><code>innerHTML</code></td><td>Inside a specific HTML element</td><td>No</td><td><strong>Yes</strong> (HTML injection)</td></tr>
+        <tr><td><code>textContent</code></td><td>Inside a specific HTML element (plain text)</td><td>No</td><td>No — safe alternative to innerHTML</td></tr>
+        <tr><td><code>console.log()</code></td><td>Browser developer console only</td><td>No</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">JS Placement in HTML — Comparison</h3>
+    <table>
+      <thead><tr><th>Placement</th><th>When It Runs</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td><code>&lt;head&gt;</code> (internal)</td><td>Before body content loads</td><td>Defining functions used later in the body</td></tr>
+        <tr><td><code>&lt;body&gt;</code> (internal)</td><td>When the browser reaches that line in parsing</td><td>Inline output or scripts tied to nearby elements</td></tr>
+        <tr><td>External file (<code>.js</code>)</td><td>When browser parses the <code>&lt;script src&gt;</code> tag</td><td>Reusable code across multiple pages — best practice</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Truthy vs Falsy — Quick Reference</h3>
+    <table>
+      <thead><tr><th>Falsy Values</th><th>Truthy Examples</th></tr></thead>
+      <tbody>
+        <tr><td><code>false</code>, <code>0</code>, <code>""</code>, <code>''</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code></td><td>Any non-zero number, any non-empty string, any object <code>{}</code>, any array <code>[]</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Key Definitions Glossary</h3>
+
+    <div class="def-block">
+      <div class="def-term">Scripting Language</div>
+      <div class="def-body">A programming language designed to automate tasks or control other software. Scripts are usually interpreted, running line-by-line through an interpreter without a separate compilation step.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Client-Side Scripting</div>
+      <div class="def-body">Code that runs inside the user's web browser (not on the server). Enables interactive, dynamic web pages without full page reloads. JavaScript is the primary client-side scripting language.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">JavaScript</div>
+      <div class="def-body">A programming language created in 1995 by Brendan Eich. Currently the only language browsers can execute natively. Standardized as ECMAScript. Has nothing to do with Java despite the name.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Dynamic Typing</div>
+      <div class="def-body">The type of a variable is determined by the value it currently holds, not by an explicit declaration. The same variable can hold different types at different times.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Hoisting</div>
+      <div class="def-body">A JavaScript behaviour where function declarations are moved to the top of their scope before code execution. This allows functions to be called before they appear in the source code. Not all function forms are hoisted.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Block Scope</div>
+      <div class="def-body">A variable is only accessible within the block (curly braces { }) in which it was declared. Exiting the block makes the variable inaccessible. Used by let and const.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Function Scope</div>
+      <div class="def-body">A variable is accessible anywhere within the function it was declared in — including inside loops, if-statements, and other blocks within that function. Used by var.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Template Literal</div>
+      <div class="def-body">A string defined using backticks (` `) that supports multi-line text and string interpolation via ${expression} syntax. Cleaner alternative to string concatenation with +.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">First-Class Function</div>
+      <div class="def-body">Functions treated as values — they can be assigned to variables, passed as arguments, and returned from other functions. A fundamental feature of JavaScript.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">DOM (Document Object Model)</div>
+      <div class="def-body">A programming interface for HTML documents. Represents the page as a tree of objects. JavaScript can manipulate the DOM to dynamically change content, structure, and styles.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">REPL (Read-Eval-Print Loop)</div>
+      <div class="def-body">An interactive programming environment that reads input, evaluates it, prints the result, and loops. The browser's Console tab is a JavaScript REPL — useful for quickly testing code.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">JIT Compilation (Just-In-Time)</div>
+      <div class="def-body">A technique where code is compiled to machine code at runtime (just before execution) rather than ahead of time. Modern JS engines (like V8) use JIT — this is why JavaScript is technically compiled, not purely interpreted.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — JavaScript Introduction · Theory & Concepts Exam Notes · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

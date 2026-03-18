@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – JavaScript Arrays & Functions: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 8px;
+    font-size: 2.3em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 6px;
+    font-size: 1.05em;
+}
+
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+}
+
+.toc {
+    background: white;
+    padding: 22px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+}
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+
+.card {
+    background: white;
+    padding: 28px;
+    margin: 22px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.card-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.section-sub {
+    color: #2c6e6b;
+    font-size: 1.1em;
+    margin: 22px 0 10px 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-sub::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: #2c6e6b;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0;
+    line-height: 1.9;
+}
+ul li {
+    padding: 3px 0 3px 20px;
+    position: relative;
+}
+ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #5a9d99;
+    font-size: 0.85em;
+    top: 5px;
+}
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    font-size: 0.93em;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 14px 0;
+    font-size: 0.93em;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 14px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88em;
+    color: #c0392b;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.91em;
+}
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td {
+    padding: 9px 13px;
+    border-bottom: 1px solid #e0f0ee;
+    vertical-align: top;
+}
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS compare */
+.vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    margin: 14px 0;
+    align-items: stretch;
+}
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head {
+    padding: 8px 14px;
+    font-weight: bold;
+    color: white;
+    font-size: 0.9em;
+    text-align: center;
+}
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side.orange .vs-head { background: #e67e22; }
+.vs-side .vs-body {
+    background: #f9f9f9;
+    padding: 12px 14px;
+    font-size: 0.88em;
+    line-height: 1.9;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+.vs-mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: #999;
+    font-size: 1.1em;
+    padding: 0 10px;
+}
+
+/* def blocks */
+.def-block {
+    border: 1px solid #cfe9e7;
+    border-radius: 10px;
+    margin: 11px 0;
+    overflow: hidden;
+}
+.def-term {
+    background: #2c6e6b;
+    color: white;
+    padding: 7px 16px;
+    font-weight: bold;
+    font-size: 0.93em;
+    font-family: 'Courier New', monospace;
+}
+.def-body {
+    background: #f9fefd;
+    padding: 11px 16px;
+    font-size: 0.92em;
+}
+
+/* array visual */
+.arr-visual {
+    display: flex;
+    align-items: stretch;
+    margin: 14px 0 4px 0;
+    flex-wrap: wrap;
+    gap: 0;
+}
+.arr-cell {
+    border: 2px solid #2c6e6b;
+    min-width: 72px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+.arr-cell .idx {
+    background: #2c6e6b;
+    color: white;
+    font-size: 0.72em;
+    padding: 2px 4px;
+    font-family: 'Segoe UI', sans-serif;
+}
+.arr-cell .val {
+    padding: 8px 6px;
+    font-size: 0.88em;
+    background: #f3fbfa;
+}
+.arr-cell + .arr-cell { border-left: none; }
+
+/* method cards */
+.method-card {
+    border: 1px solid #cfe9e7;
+    border-radius: 10px;
+    margin: 12px 0;
+    overflow: hidden;
+}
+.method-head {
+    background: #e67e22;
+    color: white;
+    padding: 7px 16px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.95em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.method-head .tag {
+    background: rgba(255,255,255,0.25);
+    font-size: 0.75em;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-family: 'Segoe UI', sans-serif;
+}
+.method-head.blue   { background: #2980b9; }
+.method-head.green  { background: #27ae60; }
+.method-head.purple { background: #8e44ad; }
+.method-head.teal   { background: #2c6e6b; }
+.method-body {
+    background: #f9fefd;
+    padding: 12px 16px;
+    font-size: 0.92em;
+    line-height: 1.85;
+}
+
+/* function type cards */
+.ftype {
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+.ftype-head {
+    padding: 8px 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+.ftype-head.decl  { background: #2980b9; }
+.ftype-head.expr  { background: #8e44ad; }
+.ftype-head.anon  { background: #e67e22; }
+.ftype-head.named { background: #27ae60; }
+.ftype-body {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 13px 16px;
+    font-size: 0.91em;
+    line-height: 1.9;
+}
+
+.lec-badge {
+    display: inline-block;
+    background: #2980b9;
+    color: white;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .method-head,
+    .ftype-head, .arr-cell .idx, .lec-badge, .exam-banner {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>⚡ JavaScript — Arrays & Functions</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: JS Arrays · Array Methods · Functions · Parameters vs Arguments · Return Statements · Function Expressions</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#arrays">JavaScript Arrays — Definition & Structure</a></li>
+      <li><a href="#arraymethods">Array Methods — Add, Remove & Transform</a></li>
+      <li><a href="#iteration">Array Iteration Methods</a></li>
+      <li><a href="#functions">Functions — Definition & Declaration</a></li>
+      <li><a href="#params">Parameters vs Arguments & Return Statement</a></li>
+      <li><a href="#expressions">Function Expressions — Anonymous & Named</a></li>
+      <li><a href="#comparisons">Master Comparison Tables & Glossary</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: ARRAYS ===== -->
+  <div class="card" id="arrays">
+    <h2 class="card-title">🗂️ JavaScript Arrays</h2>
+
+    <h3 class="section-sub">What Is an Array?</h3>
+    <div class="important">
+      An array is a <strong>collection of individual data values</strong> that can be counted in order — first, second, third, and so on. Arrays allow multiple values to be stored under a single variable name, accessed by their position.
+    </div>
+
+    <h3 class="section-sub">Key Terminology</h3>
+    <div class="grid">
+      <div class="box"><strong>Element</strong>Each individual value stored inside an array is called an element.</div>
+      <div class="box"><strong>Length</strong>The total number of elements in an array. Accessed via the <code>.length</code> property.</div>
+      <div class="box"><strong>Index</strong>The position number of an element within the array. Always starts at <strong>0</strong>.</div>
+      <div class="box"><strong>Zero-Based Indexing</strong>Index numbers always begin at <strong>0</strong> and go up to <strong>length − 1</strong>.</div>
+    </div>
+
+    <h3 class="section-sub">Visual — Array Structure</h3>
+    <p style="margin-bottom:10px; font-size:0.92em;">Example: <code>const COIN_VALUES = [1, 5, 10, 25, 50, 100]</code></p>
+    <div class="arr-visual">
+      <div class="arr-cell"><div class="idx">Index [0]</div><div class="val">1</div></div>
+      <div class="arr-cell"><div class="idx">Index [1]</div><div class="val">5</div></div>
+      <div class="arr-cell"><div class="idx">Index [2]</div><div class="val">10</div></div>
+      <div class="arr-cell"><div class="idx">Index [3]</div><div class="val">25</div></div>
+      <div class="arr-cell"><div class="idx">Index [4]</div><div class="val">50</div></div>
+      <div class="arr-cell"><div class="idx">Index [5]</div><div class="val">100</div></div>
+    </div>
+    <p style="font-size:0.85em; color:#666; margin-top:4px;">Length = 6 &nbsp;|&nbsp; First index = 0 &nbsp;|&nbsp; Last index = 5 (length − 1)</p>
+
+    <h3 class="section-sub">Two Ways to Create an Array</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Square Bracket Literal (Preferred)</strong>
+        <code>const arr = [1, 2, 3];</code><br>
+        Direct, concise syntax. Most common approach.
+      </div>
+      <div class="box">
+        <strong>Array Constructor</strong>
+        <code>const arr = new Array(1, 2, 3);</code><br>
+        Less common. Used for special cases like pre-allocating size.
+      </div>
+    </div>
+
+    <h3 class="section-sub">Non-Numeric Arrays</h3>
+    <ul>
+      <li>Arrays may contain values of <strong>any JavaScript type</strong> — not just numbers</li>
+      <li>Strings, booleans, objects, other arrays, and mixed types are all valid</li>
+      <li>Example: <code>const COIN_NAMES = ["penny", "nickel", "dime", "quarter"]</code></li>
+    </ul>
+    <div class="arr-visual">
+      <div class="arr-cell"><div class="idx">Index [0]</div><div class="val">"penny"</div></div>
+      <div class="arr-cell"><div class="idx">Index [1]</div><div class="val">"nickel"</div></div>
+      <div class="arr-cell"><div class="idx">Index [2]</div><div class="val">"dime"</div></div>
+      <div class="arr-cell"><div class="idx">Index [3]</div><div class="val">"quarter"</div></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: ARRAY METHODS ===== -->
+  <div class="card" id="arraymethods">
+    <h2 class="card-title">🔧 Array Methods — Add, Remove & Transform</h2>
+
+    <h3 class="section-sub">Adding & Removing Elements</h3>
+
+    <div class="method-card">
+      <div class="method-head"><span>push( element, ... )</span><span class="tag">Add to END</span></div>
+      <div class="method-body">Adds one or more elements to the <strong>end</strong> of the array. The array length increases. Returns the new length.</div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head"><span>unshift( element, ... )</span><span class="tag">Add to FRONT</span></div>
+      <div class="method-body">Adds one or more elements to the <strong>front (beginning)</strong> of the array. All existing elements shift to higher indices. Returns the new length.</div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head blue"><span>pop()</span><span class="tag">Remove from END</span></div>
+      <div class="method-body">Removes and <strong>returns</strong> the <strong>last element</strong> of the array. The array length decreases by 1.</div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head blue"><span>shift()</span><span class="tag">Remove from FRONT</span></div>
+      <div class="method-body">Removes and <strong>returns</strong> the <strong>first element</strong> of the array. All remaining elements shift to lower indices. The array length decreases by 1.</div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head teal"><span>slice( start, finish )</span><span class="tag">Extract subarray</span></div>
+      <div class="method-body">Returns a <strong>new subarray</strong> containing elements from index <em>start</em> up to (but <strong>not including</strong>) index <em>finish</em>. The original array is <strong>not modified</strong>.</div>
+    </div>
+
+    <h3 class="section-sub">Transforming Elements</h3>
+
+    <div class="method-card">
+      <div class="method-head green"><span>map( callback )</span><span class="tag">Transform — returns new array</span></div>
+      <div class="method-body">
+        <strong>Definition:</strong> Returns a <strong>new array</strong> where each element is the result of applying a given function to each element of the original array. The original array is <strong>not changed</strong>.
+        <ul style="margin-top:8px;">
+          <li>Good for <strong>transforming or converting</strong> data</li>
+          <li>The new array has the <strong>same length</strong> as the original</li>
+          <li>Does not modify the original array</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head purple"><span>filter( callback )</span><span class="tag">Select — returns new array</span></div>
+      <div class="method-body">
+        <strong>Definition:</strong> Returns a <strong>new array</strong> containing only the elements that <strong>pass a given condition</strong> (the callback returns true for them). The original array is <strong>not changed</strong>.
+        <ul style="margin-top:8px;">
+          <li>Good for <strong>selecting a subset</strong> of data based on a condition</li>
+          <li>The new array may be <strong>shorter</strong> than the original</li>
+          <li>Elements that fail the condition are excluded</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Testing Methods</h3>
+
+    <div class="two-column">
+      <div class="method-card" style="margin:0;">
+        <div class="method-head" style="background:#c0392b;"><span>some( callback )</span><span class="tag">At least one?</span></div>
+        <div class="method-body">Returns <strong>true</strong> if <strong>at least one</strong> element in the array passes the test defined by the callback function. Returns false if no elements pass. <em>Stops as soon as one passes.</em></div>
+      </div>
+      <div class="method-card" style="margin:0;">
+        <div class="method-head" style="background:#1a6644;"><span>every( callback )</span><span class="tag">All pass?</span></div>
+        <div class="method-body">Returns <strong>true</strong> if <strong>all elements</strong> in the array pass the test defined by the callback function. Returns false as soon as any element fails. <em>Stops as soon as one fails.</em></div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Key Differences — map() vs filter()</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">map()</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Transforms <strong>every</strong> element</li>
+            <li>▸ Returns array of <strong>same length</strong></li>
+            <li>▸ Each element is <strong>converted</strong> to a new value</li>
+            <li>▸ Use for: doubling numbers, converting units</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">filter()</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ <strong>Selects</strong> elements that pass a test</li>
+            <li>▸ Returns array of <strong>equal or shorter</strong> length</li>
+            <li>▸ Elements are kept or <strong>removed</strong></li>
+            <li>▸ Use for: finding even numbers, filtering adults</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">some() vs every()</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Returns true when...</th><th>Stops early when...</th></tr></thead>
+      <tbody>
+        <tr><td><code>some()</code></td><td>At least <strong>one</strong> element passes</td><td>First passing element found</td></tr>
+        <tr><td><code>every()</code></td><td><strong>All</strong> elements pass</td><td>First failing element found</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 3: ITERATION ===== -->
+  <div class="card" id="iteration">
+    <h2 class="card-title">🔁 Array Iteration Methods</h2>
+
+    <h3 class="section-sub">Three Ways to Iterate an Array</h3>
+
+    <table>
+      <thead><tr><th>Method</th><th>Syntax Form</th><th>Key Characteristic</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Classic for loop</strong></td>
+          <td><code>for (let i = 0; i &lt; arr.length; i++)</code></td>
+          <td>Full control over index. Can break/continue. Access by index.</td>
+        </tr>
+        <tr>
+          <td><strong>for...of loop</strong></td>
+          <td><code>for (let item of array)</code></td>
+          <td>Cleaner syntax. Access to value directly. Can break/continue.</td>
+        </tr>
+        <tr>
+          <td><strong>forEach() method</strong></td>
+          <td><code>array.forEach(item =&gt; { })</code></td>
+          <td>Functional style. Cannot use break/continue. Always runs to end.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">forEach() — Definition & Key Points</h3>
+    <div class="important">
+      <strong>Definition:</strong> <code>forEach()</code> is an array method that executes a provided callback function <strong>once for each element</strong> in the array, in order. It is the functional alternative to a for loop for simple iteration.
+    </div>
+    <ul>
+      <li>The callback receives the <strong>element</strong> and optionally the <strong>index</strong></li>
+      <li><strong>Cannot</strong> use <code>break</code> or <code>continue</code> to exit early</li>
+      <li>Does <strong>not return</strong> a new array — use <code>map()</code> if you need a return value</li>
+      <li>Best for <strong>side effects</strong> like printing, logging, or updating external variables</li>
+    </ul>
+    <div class="highlight">
+      <strong>Syntax:</strong> <code>array.forEach((element, index) =&gt; { // code });</code>
+    </div>
+
+    <h3 class="section-sub">Iteration Methods Summary</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Returns</th><th>Use For</th><th>Can Break Early?</th></tr></thead>
+      <tbody>
+        <tr><td><code>for loop</code></td><td>—</td><td>Full index control</td><td>✅ Yes</td></tr>
+        <tr><td><code>for...of</code></td><td>—</td><td>Clean value iteration</td><td>✅ Yes</td></tr>
+        <tr><td><code>forEach()</code></td><td>undefined</td><td>Side effects per element</td><td>❌ No</td></tr>
+        <tr><td><code>map()</code></td><td>New array (same length)</td><td>Transform elements</td><td>❌ No</td></tr>
+        <tr><td><code>filter()</code></td><td>New array (shorter/equal)</td><td>Select elements by condition</td><td>❌ No</td></tr>
+        <tr><td><code>some()</code></td><td>Boolean</td><td>Check if any pass</td><td>✅ (on first pass)</td></tr>
+        <tr><td><code>every()</code></td><td>Boolean</td><td>Check if all pass</td><td>✅ (on first fail)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 4: FUNCTIONS ===== -->
+  <div class="card" id="functions">
+    <h2 class="card-title">🔧 Functions — Definition & Declaration</h2>
+
+    <h3 class="section-sub">What Is a Function?</h3>
+    <div class="important">
+      A function is an <strong>action or process</strong> that receives an input and returns an output. Functions can perform various tasks and calculations. They are named, reusable blocks of code defined once and called (executed) as many times as needed.
+    </div>
+
+    <h3 class="section-sub">Why Use Functions?</h3>
+    <ul>
+      <li><strong>Reusability</strong> — write once, call many times</li>
+      <li><strong>Abstraction</strong> — hide complex logic behind a simple name</li>
+      <li><strong>Organisation</strong> — break large programs into manageable pieces</li>
+      <li><strong>Maintainability</strong> — fix or update logic in one place</li>
+    </ul>
+
+    <h3 class="section-sub">Ways to Define a Function</h3>
+    <div class="grid">
+      <div class="box"><strong>Function Declaration</strong>Standard named function. Hoisted. Most common for beginners.</div>
+      <div class="box"><strong>Function Expression</strong>Function assigned to a variable. NOT hoisted. Anonymous or named.</div>
+      <div class="box"><strong>Arrow Function</strong>Compact syntax using <code>=&gt;</code>. Not hoisted. Often used with array methods.</div>
+      <div class="box"><strong>IIFE</strong>Immediately Invoked Function Expression — runs as soon as it is defined.</div>
+      <div class="box"><strong>Generator Function</strong>Advanced — can pause and resume execution.</div>
+      <div class="box"><strong>Method</strong>A function defined inside an object.</div>
+    </div>
+
+    <h3 class="section-sub">Function Declaration — Key Points</h3>
+    <div class="ftype">
+      <div class="ftype-head decl">Function Declaration (function definition / function statement)</div>
+      <div class="ftype-body">
+        <ul>
+          <li>Created using the <code>function</code> keyword followed by a <strong>required name</strong></li>
+          <li>This is the <strong>most standard, basic way</strong> of writing a function</li>
+          <li><strong>Hoisted</strong> — can be called <em>before</em> the function definition appears in the code</li>
+          <li>Defines a named function that exists in the current scope</li>
+        </ul>
+        <div class="highlight" style="margin-top:10px;">
+          <strong>Syntax:</strong><br>
+          <code>function functionName(param1, param2) {</code><br>
+          <code>&nbsp;&nbsp;// statements</code><br>
+          <code>}</code><br><br>
+          <strong>Call:</strong> <code>functionName(arg1, arg2);</code>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Hoisting — Declaration vs Expression</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Function Declaration — Hoisted ✅</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Definition is <strong>moved to the top</strong> of scope before execution</li>
+            <li>▸ Can be called <strong>before</strong> it appears in the file</li>
+            <li>▸ <code>hello();</code> works even if defined below</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Function Expression — NOT Hoisted ❌</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ The variable is hoisted but <strong>not initialized</strong></li>
+            <li>▸ Calling it before its definition causes an <strong>error</strong></li>
+            <li>▸ Must be defined <strong>before</strong> it is called</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: PARAMS VS ARGS & RETURN ===== -->
+  <div class="card" id="params">
+    <h2 class="card-title">📨 Parameters vs Arguments & Return Statement</h2>
+
+    <h3 class="section-sub">Function Parameter — Definition</h3>
+    <div class="important">
+      A <strong>function parameter</strong> is a <em>name</em> included in the function definition. It acts as a placeholder for a value the function will receive when called.
+    </div>
+
+    <h3 class="section-sub">Parameter Rules</h3>
+    <ul>
+      <li>Parameter names must be <strong>unique</strong> — no two parameters can share the same name</li>
+      <li>Parameters are <strong>not required</strong> — a function can have zero parameters</li>
+      <li><strong>Order matters</strong> — arguments are matched to parameters by position (left to right)</li>
+      <li>You do <strong>not declare the data type</strong> of a parameter — JavaScript is dynamically typed</li>
+      <li>Parameters are <strong>not declared</strong> with <code>var</code>, <code>let</code>, or <code>const</code></li>
+    </ul>
+
+    <h3 class="section-sub">Function Argument — Definition</h3>
+    <div class="important">
+      A <strong>function argument</strong> is the <em>actual value</em> that is passed to the function when it is called. The argument value is received by the corresponding parameter inside the function.
+    </div>
+
+    <h3 class="section-sub">Parameter vs Argument — Key Difference</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Parameter</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ In the <strong>function definition</strong></li>
+            <li>▸ Acts as a <strong>placeholder / variable name</strong></li>
+            <li>▸ Example: <code>function greet(<strong>name</strong>)</code></li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Argument</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ In the <strong>function call</strong></li>
+            <li>▸ The <strong>actual value</strong> being passed</li>
+            <li>▸ Example: <code>greet(<strong>"Alice"</strong>)</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Return Statement — Key Rules</h3>
+    <div class="important">
+      A <code>return</code> statement <strong>returns one specific value</strong> and <strong>immediately stops</strong> function execution. Any code written after the <code>return</code> statement will <strong>never execute</strong>.
+    </div>
+    <ul>
+      <li>The <code>return</code> statement should always be the <strong>last statement</strong> in a function</li>
+      <li>The returned value can be of <strong>any data type</strong> — number, string, boolean, array, object, etc.</li>
+      <li>A function with <strong>no return statement</strong> implicitly returns <code>undefined</code></li>
+      <li>A function can only return <strong>one value</strong> — but that value can be an array or object containing multiple values</li>
+    </ul>
+    <div class="highlight">
+      <strong>Key Rule:</strong> Code placed <em>after</em> a <code>return</code> statement is <strong>dead code</strong> — it will never run. Always put <code>return</code> last.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: FUNCTION EXPRESSIONS ===== -->
+  <div class="card" id="expressions">
+    <h2 class="card-title">📝 Function Expressions</h2>
+
+    <h3 class="section-sub">What Is a Function Expression?</h3>
+    <div class="important">
+      A <strong>function expression</strong> is a function that is <strong>assigned to a variable</strong>. Unlike a function declaration, function expressions are <strong>NOT hoisted</strong> — they cannot be called before the line where they are defined.
+    </div>
+
+    <h3 class="section-sub">Two Types of Function Expressions</h3>
+
+    <!-- Anonymous -->
+    <div class="ftype">
+      <div class="ftype-head anon">1. Anonymous Function Expression</div>
+      <div class="ftype-body">
+        <ul>
+          <li>A function expression <strong>without a name</strong></li>
+          <li>This is the <strong>most common type</strong> of function expression</li>
+          <li>The function is identified only by the variable it is stored in</li>
+          <li>Cannot call itself by name (no recursion with its own name)</li>
+        </ul>
+        <div class="highlight" style="margin-top:10px;">
+          <strong>Syntax:</strong><br>
+          <code>const greet = function () {</code><br>
+          <code>&nbsp;&nbsp;console.log("Hello!");</code><br>
+          <code>};</code><br>
+          <code>greet(); // → Hello!</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Named -->
+    <div class="ftype">
+      <div class="ftype-head named">2. Named Function Expression</div>
+      <div class="ftype-body">
+        <ul>
+          <li>A function expression that <strong>has its own internal name</strong>, even though it is stored in a variable</li>
+          <li>The function's internal name is <strong>only accessible inside</strong> the function itself — not outside</li>
+          <li>Calling the internal name from outside causes a <strong>ReferenceError</strong></li>
+        </ul>
+        <div class="highlight" style="margin-top:10px;">
+          <strong>Syntax:</strong><br>
+          <code>const greet = function sayHello() {</code><br>
+          <code>&nbsp;&nbsp;console.log("Hello!");</code><br>
+          <code>};</code><br>
+          <code>greet();     // → Hello! ✅</code><br>
+          <code>sayHello();  // → ReferenceError ❌</code>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Why Use a Named Function Expression?</h3>
+    <div class="grid">
+      <div class="box">
+        <strong>🐛 Better Debugging</strong>
+        If an error occurs, the function's <strong>name appears in the stack trace</strong>, making it easier to identify which function caused the issue.
+      </div>
+      <div class="box">
+        <strong>🔁 Self-Reference (Recursion)</strong>
+        The internal name allows the function to <strong>call itself</strong> from within its own body — useful for recursive algorithms without relying on the external variable name.
+      </div>
+    </div>
+
+    <h3 class="section-sub">Function Declaration vs Function Expression — Full Comparison</h3>
+    <table>
+      <thead><tr><th>Aspect</th><th>Function Declaration</th><th>Function Expression</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Syntax</strong></td><td><code>function name() { }</code></td><td><code>const name = function() { };</code></td></tr>
+        <tr><td><strong>Name required?</strong></td><td>✅ Yes — always named</td><td>❌ No — can be anonymous</td></tr>
+        <tr><td><strong>Hoisted?</strong></td><td>✅ Yes — can call before definition</td><td>❌ No — must define first</td></tr>
+        <tr><td><strong>Stored in variable?</strong></td><td>No (exists in scope directly)</td><td>Yes — assigned to a variable</td></tr>
+        <tr><td><strong>Ends with semicolon?</strong></td><td>No</td><td>Yes (it's a statement)</td></tr>
+        <tr><td><strong>Use case</strong></td><td>General-purpose reusable functions</td><td>Callbacks, conditionally defined functions</td></tr>
+      </tbody>
+    </table>
+
+    <div class="warning">
+      <strong>⚠️ Important:</strong> A <strong>function declaration</strong> defines a named function that is hoisted. A <strong>function expression</strong> assigns a function to a variable and is <strong>not hoisted</strong>. This is one of the most tested distinctions in JavaScript theory.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: COMPARISONS & GLOSSARY ===== -->
+  <div class="card" id="comparisons">
+    <h2 class="card-title">⚖️ Master Comparison Tables & Glossary</h2>
+
+    <h3 class="section-sub">All Array Methods — Quick Reference</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Action</th><th>Modifies Original?</th><th>Returns</th></tr></thead>
+      <tbody>
+        <tr><td><code>push()</code></td><td>Add to end</td><td>✅ Yes</td><td>New length</td></tr>
+        <tr><td><code>unshift()</code></td><td>Add to front</td><td>✅ Yes</td><td>New length</td></tr>
+        <tr><td><code>pop()</code></td><td>Remove from end</td><td>✅ Yes</td><td>Removed element</td></tr>
+        <tr><td><code>shift()</code></td><td>Remove from front</td><td>✅ Yes</td><td>Removed element</td></tr>
+        <tr><td><code>slice(s,f)</code></td><td>Extract subarray</td><td>❌ No</td><td>New subarray</td></tr>
+        <tr><td><code>forEach()</code></td><td>Run callback on each</td><td>❌ No</td><td>undefined</td></tr>
+        <tr><td><code>map()</code></td><td>Transform each element</td><td>❌ No</td><td>New array (same length)</td></tr>
+        <tr><td><code>filter()</code></td><td>Select passing elements</td><td>❌ No</td><td>New array (shorter/equal)</td></tr>
+        <tr><td><code>some()</code></td><td>Test if any pass</td><td>❌ No</td><td>Boolean</td></tr>
+        <tr><td><code>every()</code></td><td>Test if all pass</td><td>❌ No</td><td>Boolean</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">push/unshift vs pop/shift</h3>
+    <table>
+      <thead><tr><th>Operation</th><th>Front of Array</th><th>End of Array</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Add</strong></td><td><code>unshift()</code></td><td><code>push()</code></td></tr>
+        <tr><td><strong>Remove</strong></td><td><code>shift()</code></td><td><code>pop()</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Parameter vs Argument vs Return</h3>
+    <table>
+      <thead><tr><th>Term</th><th>Where</th><th>What It Is</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Parameter</strong></td><td>Function definition</td><td>A placeholder variable name that will hold the incoming value</td></tr>
+        <tr><td><strong>Argument</strong></td><td>Function call</td><td>The actual value passed to the function</td></tr>
+        <tr><td><strong>Return value</strong></td><td>Inside function body</td><td>The value the function sends back to the caller; stops execution</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Key Definitions Glossary</h3>
+
+    <div class="def-block">
+      <div class="def-term">Array</div>
+      <div class="def-body">A collection of individual data values stored in order, each identified by a numeric index starting from 0. Arrays can hold any JavaScript type and are created using square bracket notation.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Element</div>
+      <div class="def-body">An individual value stored inside an array. Each element has a position (index) that identifies it within the array.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Index</div>
+      <div class="def-body">The positional number of an element in an array. Always begins at 0 for the first element and extends to length − 1 for the last.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">forEach()</div>
+      <div class="def-body">An array method that executes a callback function once for each element in order. Returns undefined. Cannot be broken out of early. Used for side effects.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">map()</div>
+      <div class="def-body">An array method that returns a new array by applying a transformation function to every element. Does not modify the original. The new array has the same length.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">filter()</div>
+      <div class="def-body">An array method that returns a new array containing only elements for which the callback returns true. Does not modify the original. The result may be shorter than the original.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Function Declaration</div>
+      <div class="def-body">A function defined with the function keyword and a required name. It is hoisted — meaning it can be called anywhere in its scope, even before the line where it is defined.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Function Expression</div>
+      <div class="def-body">A function assigned to a variable. It is NOT hoisted — it must be defined before being called. Can be anonymous (no name) or named.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Anonymous Function</div>
+      <div class="def-body">A function with no name, typically used in function expressions. The function can only be referenced through the variable it is assigned to. Most common type of function expression.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Named Function Expression</div>
+      <div class="def-body">A function expression that has an internal name. The name is only accessible inside the function body — useful for debugging (stack traces) and recursion. Calling the name from outside causes a ReferenceError.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Hoisting</div>
+      <div class="def-body">JavaScript's behaviour of moving function declarations to the top of their scope before execution. Function expressions are NOT hoisted. Avoid relying on hoisting.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Return Statement</div>
+      <div class="def-body">A statement that sends a value back to the caller and immediately stops function execution. Any code after return is never executed. A function without return implicitly returns undefined.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — JavaScript Arrays & Functions · Theory & Concepts Exam Notes · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

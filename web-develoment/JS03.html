@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – Arrow Functions, Async JS & Objects: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 8px;
+    font-size: 2.3em;
+}
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 6px;
+    font-size: 1.05em;
+}
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+}
+
+.toc {
+    background: white;
+    padding: 22px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+}
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+
+.card {
+    background: white;
+    padding: 28px;
+    margin: 22px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.card-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.section-sub {
+    color: #2c6e6b;
+    font-size: 1.1em;
+    margin: 22px 0 10px 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-sub::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: #2c6e6b;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0;
+    line-height: 1.9;
+}
+ul li { padding: 3px 0 3px 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: #5a9d99; font-size: 0.85em; top: 5px; }
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+.box {
+    background: #f3fbfa;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    font-size: 0.93em;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight { background: #fff9e6; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 14px 0; font-size: 0.93em; }
+.important { background: #e8f5e9; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 14px 0; font-size: 0.93em; }
+.note      { background: #e3f2fd; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; font-size: 0.93em; }
+.warning   { background: #fce4ec; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 14px 0; font-size: 0.93em; }
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 14px; }
+
+code {
+    background: #eee; padding: 2px 6px; border-radius: 4px;
+    font-family: 'Courier New', monospace; font-size: 0.88em; color: #c0392b;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.91em; }
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td { padding: 9px 13px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS compare */
+.vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 14px 0; align-items: stretch; }
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head { padding: 8px 14px; font-weight: bold; color: white; font-size: 0.9em; text-align: center; }
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side.orange .vs-head { background: #e67e22; }
+.vs-side .vs-body { background: #f9f9f9; padding: 12px 14px; font-size: 0.88em; line-height: 1.9; height: 100%; border: 1px solid #ddd; border-top: none; }
+.vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: #999; font-size: 1.1em; padding: 0 10px; }
+
+/* def blocks */
+.def-block { border: 1px solid #cfe9e7; border-radius: 10px; margin: 11px 0; overflow: hidden; }
+.def-term { background: #2c6e6b; color: white; padding: 7px 16px; font-weight: bold; font-size: 0.93em; font-family: 'Courier New', monospace; }
+.def-body { background: #f9fefd; padding: 11px 16px; font-size: 0.92em; }
+
+/* arrow syntax cards */
+.syntax-card { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.syntax-head { padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em; font-family: 'Courier New', monospace; display: flex; justify-content: space-between; align-items: center; }
+.syntax-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; font-family: 'Segoe UI', sans-serif; }
+.syntax-head.h1 { background: #2980b9; }
+.syntax-head.h2 { background: #27ae60; }
+.syntax-head.h3 { background: #8e44ad; }
+.syntax-head.h4 { background: #e67e22; }
+.syntax-body { background: #f9fefd; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 16px; font-size: 0.91em; line-height: 1.85; }
+
+/* flow */
+.flow-h { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.flow-step { background: #2c6e6b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.84em; font-weight: 600; text-align: center; }
+.flow-step.orange { background: #e67e22; }
+.flow-step.blue   { background: #2980b9; }
+.flow-step.purple { background: #8e44ad; }
+.flow-step.red    { background: #c0392b; }
+.flow-arrow { color: #2c6e6b; font-size: 1.3em; font-weight: bold; }
+
+/* object visual */
+.obj-visual { background: #f3fbfa; border: 2px solid #2c6e6b; border-radius: 10px; padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 0.88em; }
+.obj-visual .obj-title { background: #2c6e6b; color: white; display: inline-block; padding: 2px 12px; border-radius: 6px; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif; font-size: 0.85em; font-weight: bold; }
+.obj-row { display: flex; gap: 0; margin: 4px 0; align-items: stretch; }
+.obj-key { background: #2c6e6b; color: white; padding: 5px 14px; border-radius: 6px 0 0 6px; min-width: 110px; text-align: center; font-size: 0.9em; }
+.obj-sep { background: #cfe9e7; padding: 5px 10px; color: #2c6e6b; font-weight: bold; }
+.obj-val { background: #fff; border: 1px solid #cfe9e7; border-left: none; padding: 5px 14px; border-radius: 0 6px 6px 0; flex: 1; color: #333; font-size: 0.9em; }
+.obj-val.fn { color: #8e44ad; font-style: italic; }
+
+/* notation cards */
+.notation-card { border-radius: 10px; overflow: hidden; margin: 10px 0; }
+.notation-head { padding: 7px 14px; color: white; font-weight: bold; font-size: 0.9em; }
+.notation-head.dot    { background: #2980b9; }
+.notation-head.bracket { background: #8e44ad; }
+.notation-body { background: #f9f9f9; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 14px; font-size: 0.91em; line-height: 1.85; }
+
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .syntax-head, .notation-head,
+    .obj-key, .obj-visual .obj-title, .flow-step, .exam-banner {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>⚡ Arrow Functions, Async JS & Objects</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: Arrow Functions · Sync vs Async · Callbacks · setTimeout · JS Objects · Properties · Methods · this · Factory Functions</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#arrow">Arrow Functions — Syntax & Rules</a></li>
+      <li><a href="#async">Synchronous vs Asynchronous JavaScript</a></li>
+      <li><a href="#callback">Callback Functions</a></li>
+      <li><a href="#settimeout">setTimeout()</a></li>
+      <li><a href="#objects">JavaScript Objects — Definition & Creation</a></li>
+      <li><a href="#access">Accessing, Adding, Updating & Deleting Properties</a></li>
+      <li><a href="#methods">Methods & the this Keyword</a></li>
+      <li><a href="#factory">Factory Functions</a></li>
+      <li><a href="#comparisons">Master Comparison Tables & Glossary</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: ARROW FUNCTIONS ===== -->
+  <div class="card" id="arrow">
+    <h2 class="card-title">➡️ Arrow Functions (ES6 Feature)</h2>
+
+    <h3 class="section-sub">What Is an Arrow Function?</h3>
+    <div class="important">
+      An arrow function is an <strong>ES6 (2015) feature</strong> that provides a <strong>shorter, more concise syntax</strong> for writing functions. Also called <strong>"fat arrow functions"</strong> because of the <code>=&gt;</code> symbol.
+    </div>
+    <ul>
+      <li>Introduced in <strong>ECMAScript 2015 (ES6)</strong></li>
+      <li>Often used for <strong>callbacks</strong> and concise one-liner functions</li>
+      <li>The variable holding the function should use <strong><code>const</code></strong> (recommended)</li>
+      <li>Single-line expressions are <strong>automatically returned</strong> — no <code>return</code> keyword needed</li>
+      <li>Multi-line bodies require <strong>curly braces <code>{ }</code></strong> and an explicit <code>return</code> statement</li>
+    </ul>
+
+    <h3 class="section-sub">Basic Syntax</h3>
+    <div class="highlight">
+      <code>const functionName = (parameters) =&gt; expression;</code><br><br>
+      <strong>parameters</strong> — zero, one, or multiple inputs<br>
+      <strong>expression</strong> — automatically returned if single-line<br>
+      <strong>const</strong> — recommended keyword for the variable
+    </div>
+
+    <h3 class="section-sub">Four Forms of Arrow Functions</h3>
+
+    <div class="syntax-card">
+      <div class="syntax-head h1"><span>No Parameters</span><span class="badge">() =&gt; ...</span></div>
+      <div class="syntax-body">
+        <ul>
+          <li>Use <strong>empty parentheses <code>()</code></strong> when there are no parameters</li>
+          <li>Parentheses are <strong>required</strong> when there are no parameters</li>
+        </ul>
+        <div class="highlight" style="margin-top:8px;"><code>const greet = () =&gt; "Hello!";</code></div>
+      </div>
+    </div>
+
+    <div class="syntax-card">
+      <div class="syntax-head h2"><span>Single Parameter</span><span class="badge">x =&gt; ...</span></div>
+      <div class="syntax-body">
+        <ul>
+          <li>Parentheses around the parameter are <strong>optional</strong> (but can be included)</li>
+          <li>Most concise form for single-input functions</li>
+        </ul>
+        <div class="highlight" style="margin-top:8px;"><code>const square = x =&gt; x * x;</code></div>
+      </div>
+    </div>
+
+    <div class="syntax-card">
+      <div class="syntax-head h3"><span>Multiple Parameters</span><span class="badge">(a, b) =&gt; ...</span></div>
+      <div class="syntax-body">
+        <ul>
+          <li>Parentheses are <strong>required</strong> when there are two or more parameters</li>
+        </ul>
+        <div class="highlight" style="margin-top:8px;"><code>const add = (a, b) =&gt; a + b;</code></div>
+      </div>
+    </div>
+
+    <div class="syntax-card">
+      <div class="syntax-head h4"><span>Multi-line Body</span><span class="badge">{ } + return</span></div>
+      <div class="syntax-body">
+        <ul>
+          <li>When the function body has <strong>more than one statement</strong>, use curly braces <code>{ }</code></li>
+          <li>An explicit <strong><code>return</code></strong> statement is required — it is NOT automatic with <code>{ }</code></li>
+        </ul>
+        <div class="highlight" style="margin-top:8px;">
+          <code>const multiply = (a, b) =&gt; {</code><br>
+          <code>&nbsp;&nbsp;const result = a * b;</code><br>
+          <code>&nbsp;&nbsp;return result;</code><br>
+          <code>};</code>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Arrow Function Rules — Quick Reference</h3>
+    <table>
+      <thead><tr><th>Scenario</th><th>Parentheses?</th><th>Curly Braces?</th><th>return needed?</th></tr></thead>
+      <tbody>
+        <tr><td>No parameters</td><td><strong>Required</strong> <code>()</code></td><td>Optional</td><td>No (auto-returned)</td></tr>
+        <tr><td>One parameter</td><td><strong>Optional</strong></td><td>Optional</td><td>No (auto-returned)</td></tr>
+        <tr><td>Two+ parameters</td><td><strong>Required</strong></td><td>Optional</td><td>No (auto-returned)</td></tr>
+        <tr><td>Multi-line body</td><td>Required</td><td><strong>Required</strong></td><td><strong>Yes — explicit return</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Arrow Function vs Regular Function</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Regular Function</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Uses <code>function</code> keyword</li>
+            <li>▸ Longer syntax</li>
+            <li>▸ Has its own <code>this</code> binding</li>
+            <li>▸ Can be hoisted (if declaration)</li>
+            <li>▸ Suitable for object methods</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Arrow Function</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Uses <code>=&gt;</code> symbol</li>
+            <li>▸ Shorter, concise syntax</li>
+            <li>▸ No own <code>this</code> — inherits from surrounding scope</li>
+            <li>▸ Not hoisted</li>
+            <li>▸ Best for callbacks and one-liners</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: SYNCHRONOUS VS ASYNCHRONOUS ===== -->
+  <div class="card" id="async">
+    <h2 class="card-title">⏱️ Synchronous vs Asynchronous JavaScript</h2>
+
+    <h3 class="section-sub">Direct (Synchronous) Execution</h3>
+    <div class="important">
+      <strong>Synchronous execution</strong> means code runs <strong>line by line, in order</strong>. Each statement must complete before the next one begins. Functions are called one after another and follow the same sequence.
+    </div>
+    <ul>
+      <li>Code executes from <strong>top to bottom</strong> in strict order</li>
+      <li>Each function waits for the previous one to <strong>finish completely</strong> before starting</li>
+      <li>Simple and predictable — but can <strong>block</strong> the page if a task takes a long time</li>
+    </ul>
+
+    <h3 class="section-sub">Indirect (Asynchronous) Execution</h3>
+    <div class="important">
+      <strong>Asynchronous execution</strong> means certain functions can run <strong>outside the normal sequence</strong>. They do not block other code — they are started and the program continues, with the result handled later when the task completes.
+    </div>
+    <ul>
+      <li>Functions can <strong>go outside the execution order</strong> and not depend on it</li>
+      <li>Allows time-consuming tasks (API calls, timers, file reads) to run <strong>in the background</strong></li>
+      <li>The rest of the program continues <strong>without waiting</strong></li>
+      <li>Result is handled later via a <strong>callback, promise, or async/await</strong></li>
+    </ul>
+
+    <h3 class="section-sub">Real-World Analogy — Café Order</h3>
+    <table>
+      <thead><tr><th>Café Scenario</th><th>JavaScript Equivalent</th></tr></thead>
+      <tbody>
+        <tr><td>You order a coffee</td><td>Starting an asynchronous task</td></tr>
+        <tr><td>Coffee is being prepared</td><td>Background task running (non-blocking)</td></tr>
+        <tr><td>You talk to a friend while waiting</td><td>Other JS code continues executing</td></tr>
+        <tr><td>Barista calls your name</td><td>Callback / event fires</td></tr>
+        <tr><td>You collect your coffee</td><td>Async task completes — result is processed</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Ways to Implement Asynchronous Flow</h3>
+    <div class="grid">
+      <div class="box"><strong>Callbacks</strong>A function passed as an argument to be executed later. Covered in this module.</div>
+      <div class="box"><strong>Promises</strong>An object representing the eventual completion or failure of an async task.</div>
+      <div class="box"><strong>Async / Await</strong>Syntactic sugar over promises for cleaner async code.</div>
+      <div class="box"><strong>Timers</strong>Built-in functions like <code>setTimeout()</code> and <code>setInterval()</code>.</div>
+      <div class="box"><strong>Event Loop</strong>The mechanism that handles async execution in JavaScript's single thread.</div>
+      <div class="box"><strong>Non-blocking I/O</strong>Reading files, making network requests without pausing execution.</div>
+    </div>
+
+    <h3 class="section-sub">Sync vs Async — Comparison</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Synchronous (Direct)</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Executes <strong>in order</strong>, line by line</li>
+            <li>▸ Each task <strong>blocks</strong> the next</li>
+            <li>▸ Simple and predictable</li>
+            <li>▸ Can cause UI to <strong>freeze</strong> on long tasks</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Asynchronous (Indirect)</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Executes <strong>out of order</strong> when needed</li>
+            <li>▸ <strong>Non-blocking</strong> — program continues</li>
+            <li>▸ More complex to reason about</li>
+            <li>▸ Keeps UI <strong>responsive</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: CALLBACK ===== -->
+  <div class="card" id="callback">
+    <h2 class="card-title">🔔 Callback Functions</h2>
+
+    <h3 class="section-sub">What Is a Callback Function?</h3>
+    <div class="important">
+      A <strong>callback function</strong> is a function that is <strong>passed as an argument</strong> to another function, to be <strong>executed later</strong> — usually after a task is completed.
+    </div>
+
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>The callback is passed by <strong>reference</strong> (without calling it) — no parentheses when passing</li>
+      <li>The receiving function decides <strong>when</strong> to call the callback</li>
+      <li>Callbacks are the foundation of asynchronous JavaScript</li>
+      <li>Used with timers, event listeners, array methods (<code>forEach</code>, <code>map</code>, <code>filter</code>), and more</li>
+    </ul>
+
+    <div class="highlight">
+      <strong>Key distinction:</strong><br>
+      <code>performTask(displayMessage)</code> — ✅ passes the function as a callback (no parentheses)<br>
+      <code>performTask(displayMessage())</code> — ❌ calls the function immediately and passes its return value
+    </div>
+
+    <h3 class="section-sub">How Callbacks Enable Asynchronous Behaviour</h3>
+    <div class="flow-h">
+      <div class="flow-step">Function A is called</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step orange">Callback passed as argument</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">A does its task</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step purple">Task completes</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step red">Callback is invoked</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: SETTIMEOUT ===== -->
+  <div class="card" id="settimeout">
+    <h2 class="card-title">⏰ setTimeout()</h2>
+
+    <h3 class="section-sub">What Is setTimeout()?</h3>
+    <div class="important">
+      <code>setTimeout()</code> is a <strong>built-in JavaScript function</strong> that executes a callback function <strong>once</strong> after a specified delay (in milliseconds). It is asynchronous — the rest of the code continues running while the timer counts down.
+    </div>
+
+    <h3 class="section-sub">Syntax</h3>
+    <div class="highlight">
+      <code>setTimeout(function, delay);</code><br><br>
+      <strong>function</strong> — the callback to execute after the delay<br>
+      <strong>delay</strong> — time in milliseconds (1000 ms = 1 second)
+    </div>
+
+    <h3 class="section-sub">Key Behaviour — Execution Order</h3>
+    <ul>
+      <li><code>setTimeout()</code> does <strong>not pause</strong> the program — it schedules the callback and moves on immediately</li>
+      <li>Code <strong>after</strong> the <code>setTimeout()</code> call runs <strong>before</strong> the callback executes</li>
+      <li>The callback runs <strong>after the delay</strong>, once the call stack is empty</li>
+    </ul>
+
+    <div class="note">
+      <strong>Classic Example:</strong> If you call <code>one()</code>, then <code>setTimeout(three, 2000)</code>, then <code>two()</code> — the output order is: <strong>one → two → three</strong>. <code>three</code> is delayed by 2 seconds while <code>two</code> runs immediately.
+    </div>
+
+    <table>
+      <thead><tr><th>Feature</th><th>setTimeout()</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Runs how many times?</strong></td><td>Once (after the delay)</td></tr>
+        <tr><td><strong>Delay unit</strong></td><td>Milliseconds (1000 ms = 1 second)</td></tr>
+        <tr><td><strong>Blocks execution?</strong></td><td>No — asynchronous, non-blocking</td></tr>
+        <tr><td><strong>What it accepts</strong></td><td>A callback function + a delay value</td></tr>
+        <tr><td><strong>Use case</strong></td><td>Delayed execution, animations, simulating async tasks</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 5: OBJECTS ===== -->
+  <div class="card" id="objects">
+    <h2 class="card-title">📦 JavaScript Objects</h2>
+
+    <h3 class="section-sub">What Is an Object?</h3>
+    <div class="important">
+      An object is a <strong>collection of key-value pairs</strong>. The keys are called <strong>properties</strong>. Values can be any JavaScript type — primitives, arrays, functions (called <em>methods</em>), or other objects.
+    </div>
+
+    <h3 class="section-sub">Object Structure — Visual</h3>
+    <div class="obj-visual">
+      <div class="obj-title">student object</div>
+      <div class="obj-row"><div class="obj-key">name</div><div class="obj-sep">:</div><div class="obj-val">"Alice"</div></div>
+      <div class="obj-row"><div class="obj-key">age</div><div class="obj-sep">:</div><div class="obj-val">20</div></div>
+      <div class="obj-row"><div class="obj-key">isActive</div><div class="obj-sep">:</div><div class="obj-val">true</div></div>
+      <div class="obj-row"><div class="obj-key">courses</div><div class="obj-sep">:</div><div class="obj-val">["Math", "Science"]</div></div>
+      <div class="obj-row"><div class="obj-key">greet()</div><div class="obj-sep">:</div><div class="obj-val fn">function — called a method</div></div>
+    </div>
+
+    <h3 class="section-sub">Values an Object Can Hold</h3>
+    <div class="grid">
+      <div class="box"><strong>Primitive types</strong>string, number, boolean, null, undefined</div>
+      <div class="box"><strong>Arrays</strong>A list of values stored as a property</div>
+      <div class="box"><strong>Functions (Methods)</strong>When a function is a property of an object, it is called a <em>method</em></div>
+      <div class="box"><strong>Other Objects</strong>Objects can be nested inside other objects</div>
+    </div>
+
+    <h3 class="section-sub">Three Ways to Create an Object</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Syntax</th><th>Key Point</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Object Literal</strong></td>
+          <td><code>const obj = { key: value };</code></td>
+          <td>Most common and concise. Define properties directly inside <code>{ }</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>new Object() Constructor</strong></td>
+          <td><code>const obj = new Object();</code></td>
+          <td>Less common. Properties added after creation using dot notation.</td>
+        </tr>
+        <tr>
+          <td><strong>ES6 Shorthand Literal</strong></td>
+          <td><code>const obj = { name, age };</code></td>
+          <td>When variable names match property names, you can omit the <code>: value</code> part.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>ES6 Shorthand:</strong> If the variable name and property name are the <em>same</em>, you write it once — <code>{ name }</code> instead of <code>{ name: name }</code>. This is called <strong>property shorthand</strong>.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ACCESSING / MODIFYING PROPERTIES ===== -->
+  <div class="card" id="access">
+    <h2 class="card-title">🔑 Accessing, Adding, Updating & Deleting Properties</h2>
+
+    <h3 class="section-sub">Two Ways to Access Properties</h3>
+
+    <div class="two-column">
+      <div class="notation-card">
+        <div class="notation-head dot">Dot Notation — obj.property</div>
+        <div class="notation-body">
+          <ul>
+            <li>Most <strong>common and readable</strong></li>
+            <li>Property name must be a <strong>valid identifier</strong> (no spaces, no special chars)</li>
+            <li>Used when the property name is <strong>known in advance</strong></li>
+            <li>Example: <code>student.name</code></li>
+          </ul>
+        </div>
+      </div>
+      <div class="notation-card">
+        <div class="notation-head bracket">Bracket Notation — obj["property"]</div>
+        <div class="notation-body">
+          <ul>
+            <li>Property name is written as a <strong>string</strong></li>
+            <li>Required when property name <strong>contains spaces</strong> or special characters</li>
+            <li>Used when property name is <strong>dynamic</strong> (stored in a variable)</li>
+            <li>Example: <code>student["first name"]</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">When Dot Notation Fails — Use Bracket Notation</h3>
+    <div class="warning">
+      Dot notation fails when the property name <strong>contains spaces</strong>, <strong>starts with a digit</strong>, or when the <strong>property name is stored in a variable</strong> (dynamic access). In all these cases, use bracket notation.
+    </div>
+
+    <h3 class="section-sub">Accessing Properties Dynamically</h3>
+    <ul>
+      <li>Store the property name in a variable, then use <strong>bracket notation</strong> with that variable</li>
+      <li>JavaScript evaluates the variable first, then uses its value to access the property</li>
+    </ul>
+    <div class="highlight"><code>const key = "name";</code><br><code>console.log(student[key]);</code> &nbsp;→ same as <code>student.name</code></div>
+
+    <h3 class="section-sub">Adding, Updating & Deleting Properties</h3>
+    <table>
+      <thead><tr><th>Operation</th><th>How</th><th>Key Point</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Add new property</strong></td>
+          <td><code>obj.newProp = value;</code></td>
+          <td>JavaScript objects are <strong>dynamic</strong> — properties can be added at any time after creation.</td>
+        </tr>
+        <tr>
+          <td><strong>Update existing property</strong></td>
+          <td><code>obj.existingProp = newValue;</code></td>
+          <td>Simply assign a new value to an existing key. No special syntax required.</td>
+        </tr>
+        <tr>
+          <td><strong>Delete a property</strong></td>
+          <td><code>delete obj.prop;</code></td>
+          <td>Completely removes the property from the object. Accessing it afterwards returns <code>undefined</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Check if property exists</strong></td>
+          <td><code>"prop" in obj</code></td>
+          <td>Returns <code>true</code> if the property exists, <code>false</code> otherwise.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 7: METHODS & this ===== -->
+  <div class="card" id="methods">
+    <h2 class="card-title">⚙️ Methods & the this Keyword</h2>
+
+    <h3 class="section-sub">What Is a Method?</h3>
+    <div class="important">
+      When a <strong>function is stored as a value (property) inside an object</strong>, it is called a <strong>method</strong>. Methods allow objects to have behaviour as well as data.
+    </div>
+
+    <h3 class="section-sub">Method Shorthand Syntax (ES6)</h3>
+    <ul>
+      <li>In ES6+, you can write methods <strong>without the <code>function</code> keyword</strong></li>
+      <li>Instead of <code>greet: function() { }</code> you write <code>greet() { }</code></li>
+      <li>Both forms are functionally equivalent — shorthand is cleaner and preferred</li>
+    </ul>
+    <div class="two-column">
+      <div class="box"><strong>Traditional Method Syntax</strong><code>greet: function() {<br>&nbsp;&nbsp;return "Hi!";<br>}</code></div>
+      <div class="box"><strong>ES6 Shorthand Method</strong><code>greet() {<br>&nbsp;&nbsp;return "Hi!";<br>}</code></div>
+    </div>
+
+    <h3 class="section-sub">The this Keyword</h3>
+    <div class="important">
+      <code>this</code> is a special keyword in JavaScript that <strong>refers to the object that is currently calling the function</strong>. The value of <code>this</code> depends entirely on <strong>how the function is called</strong>, not where it is defined.
+    </div>
+
+    <ul>
+      <li>Inside an <strong>object method</strong>, <code>this</code> refers to the <strong>object that owns the method</strong></li>
+      <li>It allows methods to access <strong>the object's own properties</strong> using <code>this.propertyName</code></li>
+      <li>Arrow functions do <strong>NOT</strong> have their own <code>this</code> — they inherit it from the surrounding scope</li>
+    </ul>
+
+    <div class="highlight">
+      <strong>Example:</strong> If <code>student.greet()</code> is called, then inside <code>greet()</code>, <code>this</code> refers to <code>student</code>. So <code>this.name</code> gives <code>student.name</code>.
+    </div>
+
+    <h3 class="section-sub">this — Where It Points</h3>
+    <table>
+      <thead><tr><th>Context</th><th>What this refers to</th></tr></thead>
+      <tbody>
+        <tr><td>Inside an object method (regular function)</td><td>The <strong>object</strong> that called the method</td></tr>
+        <tr><td>Inside an arrow function</td><td>The <strong>outer/enclosing scope's</strong> this (not the object)</td></tr>
+        <tr><td>In global scope (non-strict mode)</td><td>The global object (<code>window</code> in browsers)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="warning">
+      <strong>⚠️ Arrow functions and this:</strong> Because arrow functions do not have their own <code>this</code>, they should <strong>not</strong> be used as object methods when you need to reference the object via <code>this</code>.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: FACTORY FUNCTIONS ===== -->
+  <div class="card" id="factory">
+    <h2 class="card-title">🏭 Factory Functions</h2>
+
+    <h3 class="section-sub">What Is a Factory Function?</h3>
+    <div class="important">
+      A <strong>factory function</strong> is a regular function that <strong>creates and returns an object</strong>. It acts as a "factory" for producing multiple similar objects with the same structure and behaviour, without using the <code>class</code> or <code>new</code> keyword.
+    </div>
+
+    <h3 class="section-sub">Key Characteristics</h3>
+    <ul>
+      <li>The object is created at <strong>runtime</strong>, specifically at the <code>return { ... }</code> statement</li>
+      <li>Each call to the factory function creates a <strong>new, independent object</strong></li>
+      <li>Can use <strong>ES6 shorthand</strong> when parameter names match property names</li>
+      <li><code>this</code> inside a method of a factory-created object refers to that <strong>specific object instance</strong></li>
+    </ul>
+
+    <h3 class="section-sub">Why Use Factory Functions?</h3>
+    <div class="grid">
+      <div class="box"><strong>🔁 Reusability</strong>Create many objects with the same shape using one function call per object.</div>
+      <div class="box"><strong>📦 Encapsulation</strong>Group related data and behaviour (methods) together in one object.</div>
+      <div class="box"><strong>✅ No new keyword needed</strong>Simpler than class-based creation — no confusion about <code>new</code>.</div>
+    </div>
+
+    <h3 class="section-sub">this Inside a Factory Function Method</h3>
+    <div class="note">
+      When a method is defined inside a factory function's returned object, <code>this</code> refers to the <strong>returned object itself</strong> — not the factory function's parameters. This ensures the method always accesses the object's own properties, regardless of the outer scope.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: COMPARISONS & GLOSSARY ===== -->
+  <div class="card" id="comparisons">
+    <h2 class="card-title">⚖️ Master Comparison Tables & Glossary</h2>
+
+    <h3 class="section-sub">Arrow Function Forms — Summary</h3>
+    <table>
+      <thead><tr><th>Form</th><th>Syntax</th><th>Parentheses</th><th>Braces</th><th>Explicit return?</th></tr></thead>
+      <tbody>
+        <tr><td>No params</td><td><code>() =&gt; expr</code></td><td>Required</td><td>Optional</td><td>No</td></tr>
+        <tr><td>One param</td><td><code>x =&gt; expr</code></td><td>Optional</td><td>Optional</td><td>No</td></tr>
+        <tr><td>Multi params</td><td><code>(a, b) =&gt; expr</code></td><td>Required</td><td>Optional</td><td>No</td></tr>
+        <tr><td>Multi-line</td><td><code>(a, b) =&gt; { stmt; return; }</code></td><td>Required</td><td><strong>Required</strong></td><td><strong>Yes</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Dot Notation vs Bracket Notation</h3>
+    <table>
+      <thead><tr><th>Aspect</th><th>Dot Notation</th><th>Bracket Notation</th></tr></thead>
+      <tbody>
+        <tr><td>Syntax</td><td><code>obj.property</code></td><td><code>obj["property"]</code></td></tr>
+        <tr><td>Readability</td><td>More readable</td><td>Less readable</td></tr>
+        <tr><td>Property with spaces?</td><td>❌ Cannot use</td><td>✅ Works</td></tr>
+        <tr><td>Dynamic property name?</td><td>❌ Cannot use</td><td>✅ Works</td></tr>
+        <tr><td>When to use</td><td>Known, simple property names</td><td>Dynamic, special char, or variable key</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Regular Function vs Arrow Function vs Method</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Regular Function</th><th>Arrow Function</th><th>Method (in object)</th></tr></thead>
+      <tbody>
+        <tr><td>Syntax</td><td><code>function f() {}</code></td><td><code>const f = () =&gt; {}</code></td><td><code>{ f() {} }</code></td></tr>
+        <tr><td>Hoisted?</td><td>✅ Yes (declaration)</td><td>❌ No</td><td>❌ No</td></tr>
+        <tr><td>Own <code>this</code>?</td><td>✅ Yes</td><td>❌ No (inherits)</td><td>✅ Yes</td></tr>
+        <tr><td>Best used for</td><td>General reusable functions</td><td>Callbacks, concise logic</td><td>Object behaviour</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Object Operation Summary</h3>
+    <table>
+      <thead><tr><th>Operation</th><th>Syntax</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Add property</td><td><code>obj.newProp = val</code></td><td>New property created dynamically</td></tr>
+        <tr><td>Update property</td><td><code>obj.prop = newVal</code></td><td>Existing value overwritten</td></tr>
+        <tr><td>Delete property</td><td><code>delete obj.prop</code></td><td>Property fully removed; returns <code>undefined</code></td></tr>
+        <tr><td>Check existence</td><td><code>"prop" in obj</code></td><td>Returns <code>true</code> or <code>false</code></td></tr>
+        <tr><td>Access (known key)</td><td><code>obj.prop</code></td><td>Dot notation — most readable</td></tr>
+        <tr><td>Access (dynamic key)</td><td><code>obj[varName]</code></td><td>Bracket notation — evaluates variable first</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Key Definitions Glossary</h3>
+
+    <div class="def-block">
+      <div class="def-term">Arrow Function</div>
+      <div class="def-body">An ES6 shorthand function syntax using =&gt;. No own <code>this</code> binding. Single-line expressions are auto-returned. Multi-line bodies need { } and explicit return. Not hoisted.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Synchronous Execution</div>
+      <div class="def-body">Code runs line by line in strict order. Each statement completes before the next begins. Can block the page if a task takes long.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Asynchronous Execution</div>
+      <div class="def-body">Code can run outside the normal sequence. Long tasks run in the background without blocking the rest of the program. Results are handled later via callbacks, promises, or async/await.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Callback Function</div>
+      <div class="def-body">A function passed as an argument to another function, to be executed later — usually after a task completes. Passed by reference (without parentheses). The foundation of async JavaScript.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">setTimeout()</div>
+      <div class="def-body">A built-in JS function that schedules a callback to run once after a specified delay in milliseconds. Asynchronous — does not block code execution while waiting.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Object</div>
+      <div class="def-body">A collection of key-value pairs. Keys are called properties. Values can be primitives, arrays, functions (methods), or other objects. Objects are dynamic — properties can be added, updated, or deleted at runtime.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Property</div>
+      <div class="def-body">A key-value pair stored inside an object. The key is a string name; the value can be any type. Accessed using dot notation or bracket notation.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Method</div>
+      <div class="def-body">A function stored as a property of an object. Gives objects behaviour. Defined using function expressions or ES6 shorthand syntax. Can use <code>this</code> to refer to the owning object.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">this Keyword</div>
+      <div class="def-body">A special keyword that refers to the object currently calling the function. Its value depends on how the function is called, not where it is defined. Arrow functions do not have their own <code>this</code>.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Factory Function</div>
+      <div class="def-body">A regular function that creates and returns an object. Used to produce multiple similar objects with the same structure. Does not use the <code>new</code> or <code>class</code> keywords.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">ES6 Property Shorthand</div>
+      <div class="def-body">When a variable name matches the desired property name in an object literal, you can write it once instead of twice. <code>{ name }</code> is equivalent to <code>{ name: name }</code>.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Dynamic Object</div>
+      <div class="def-body">JavaScript objects are dynamic — properties can be added, updated, or deleted at any time after the object is created. No fixed schema is required.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — Arrow Functions, Async JS & Objects · Theory & Concepts Exam Notes · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>
