@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – JavaScript Events: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 8px; font-size: 2.3em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 6px; font-size: 1.05em; }
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white; padding: 12px 20px; border-radius: 10px;
+    margin-bottom: 30px; font-size: 1em; letter-spacing: 0.5px;
+}
+
+.toc { background: white; padding: 22px 28px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+
+.card { background: white; padding: 28px; margin: 22px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.card-title {
+    color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px;
+    margin-bottom: 18px; font-size: 1.5em; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.section-sub {
+    color: #2c6e6b; font-size: 1.1em; margin: 22px 0 10px 0; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.section-sub::before {
+    content: ''; display: inline-block; width: 4px; height: 18px;
+    background: #2c6e6b; border-radius: 2px; flex-shrink: 0;
+}
+
+ul { list-style: none; margin-left: 0; line-height: 1.9; }
+ul li { padding: 3px 0 3px 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: #5a9d99; font-size: 0.85em; top: 5px; }
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 14px; }
+.box { background: #f3fbfa; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #2c6e6b; font-size: 0.93em; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight { background: #fff9e6; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 14px 0; font-size: 0.93em; }
+.important { background: #e8f5e9; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 14px 0; font-size: 0.93em; }
+.note      { background: #e3f2fd; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; font-size: 0.93em; }
+.warning   { background: #fce4ec; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 14px 0; font-size: 0.93em; }
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 14px; }
+
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.88em; color: #c0392b; }
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.91em; }
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td { padding: 9px 13px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS compare */
+.vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 14px 0; align-items: stretch; }
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head { padding: 8px 14px; font-weight: bold; color: white; font-size: 0.9em; text-align: center; }
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side.orange .vs-head { background: #e67e22; }
+.vs-side .vs-body { background: #f9f9f9; padding: 12px 14px; font-size: 0.88em; line-height: 1.9; height: 100%; border: 1px solid #ddd; border-top: none; }
+.vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: #999; font-size: 1.1em; padding: 0 10px; }
+
+/* def blocks */
+.def-block { border: 1px solid #cfe9e7; border-radius: 10px; margin: 11px 0; overflow: hidden; }
+.def-term { background: #2c6e6b; color: white; padding: 7px 16px; font-weight: bold; font-size: 0.93em; font-family: 'Courier New', monospace; }
+.def-body { background: #f9fefd; padding: 11px 16px; font-size: 0.92em; }
+
+/* flow diagram */
+.flow-h { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.flow-step { background: #2c6e6b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.84em; font-weight: 600; text-align: center; }
+.flow-step.orange { background: #e67e22; }
+.flow-step.blue   { background: #2980b9; }
+.flow-step.purple { background: #8e44ad; }
+.flow-step.red    { background: #c0392b; }
+.flow-arrow { color: #2c6e6b; font-size: 1.3em; font-weight: bold; }
+
+/* DOM tree visual */
+.dom-tree {
+    background: #f3fbfa; border: 2px solid #2c6e6b; border-radius: 10px;
+    padding: 18px 24px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 0.88em;
+    line-height: 2.2;
+}
+.dom-node { display: inline-block; background: #2c6e6b; color: white; padding: 2px 12px; border-radius: 6px; font-size: 0.85em; }
+.dom-node.blue   { background: #2980b9; }
+.dom-node.purple { background: #8e44ad; }
+.dom-node.orange { background: #e67e22; }
+.dom-indent1 { margin-left: 24px; }
+.dom-indent2 { margin-left: 48px; }
+.dom-indent3 { margin-left: 72px; }
+.dom-line { color: #aaa; margin-right: 6px; }
+
+/* event flow visual */
+.event-flow {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 14px 0; border-radius: 10px; overflow: hidden;
+    border: 2px solid #2c6e6b;
+}
+.ef-row {
+    display: grid; grid-template-columns: 180px 1fr;
+    border-bottom: 1px solid #cfe9e7;
+}
+.ef-row:last-child { border-bottom: none; }
+.ef-label {
+    background: #2c6e6b; color: white; padding: 10px 14px;
+    font-weight: bold; font-size: 0.85em; display: flex; align-items: center;
+}
+.ef-label.orange { background: #e67e22; }
+.ef-label.blue   { background: #2980b9; }
+.ef-label.purple { background: #8e44ad; }
+.ef-label.red    { background: #c0392b; }
+.ef-content { padding: 10px 14px; font-size: 0.91em; background: #f9fefd; display: flex; align-items: center; }
+
+/* method card */
+.method-card { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.method-head {
+    padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em;
+    font-family: 'Courier New', monospace; display: flex; justify-content: space-between; align-items: center;
+}
+.method-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; font-family: 'Segoe UI', sans-serif; }
+.method-head.blue   { background: #2980b9; }
+.method-head.purple { background: #8e44ad; }
+.method-head.orange { background: #e67e22; }
+.method-head.teal   { background: #2c6e6b; }
+.method-body { background: #f9fefd; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 16px; font-size: 0.91em; line-height: 1.85; }
+
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .method-head, .dom-node,
+    .ef-label, .flow-step, .exam-banner {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+    .ef-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🖱️ JavaScript Events</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: Event-Driven Programming · The DOM · querySelector · addEventListener · HTML Event Attributes · Common Events · defer</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#eventdriven">Event-Driven Programming</a></li>
+      <li><a href="#dom">The DOM — Document Object Model</a></li>
+      <li><a href="#queryselector">querySelector — Accessing Elements</a></li>
+      <li><a href="#addeventlistener">addEventListener — Attaching Events</a></li>
+      <li><a href="#commonevents">Common JavaScript Events</a></li>
+      <li><a href="#inline">HTML Inline Event Attributes</a></li>
+      <li><a href="#defer">The defer Attribute & Script Loading Problem</a></li>
+      <li><a href="#comparisons">Master Comparison Tables & Glossary</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: EVENT-DRIVEN PROGRAMMING ===== -->
+  <div class="card" id="eventdriven">
+    <h2 class="card-title">⚡ Event-Driven Programming</h2>
+
+    <h3 class="section-sub">What Is Event-Driven Programming?</h3>
+    <div class="important">
+      <strong>Event-driven programming</strong> is a paradigm where code does <strong>not run immediately</strong> — instead, it executes only <strong>after a specific event fires</strong>. The program waits for user interactions or browser actions, then responds accordingly.
+    </div>
+    <ul>
+      <li>Most JavaScript written in the browser is <strong>event-driven</strong></li>
+      <li>Code is <strong>passive</strong> — it sits and waits until triggered</li>
+      <li>Events can be triggered by users (click, type, hover) or by the browser (page load, resize)</li>
+    </ul>
+
+    <h3 class="section-sub">How Event-Driven Flow Works</h3>
+    <div class="event-flow">
+      <div class="ef-row">
+        <div class="ef-label">1. UI Element</div>
+        <div class="ef-content">A clickable button, input field, or other interactive HTML element exists on the page.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label orange">2. User Interaction</div>
+        <div class="ef-content">The user performs an action — clicking, hovering, typing, submitting, etc.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label blue">3. Event Fires</div>
+        <div class="ef-content">The element emits an <strong>event</strong> — an announcement that something interesting has occurred (e.g., a "click" event).</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label purple">4. Event Handler Runs</div>
+        <div class="ef-content">Any function that is <strong>listening</strong> for that event is executed. This function is called an <strong>event handler</strong>.</div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">What Is an Event?</h3>
+    <div class="important">
+      An <strong>event</strong> is a signal (announcement) fired by an HTML element when something interesting happens — usually as a result of user interaction or a browser action. Events are the mechanism that makes web pages interactive.
+    </div>
+
+    <h3 class="section-sub">What Is an Event Handler?</h3>
+    <div class="important">
+      An <strong>event handler</strong> is a JavaScript function that is set up to execute <strong>when a specific event fires</strong> on a specific element. It "handles" (responds to) the event. Also called a <em>listener</em> or <em>callback</em> in this context.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: THE DOM ===== -->
+  <div class="card" id="dom">
+    <h2 class="card-title">🌳 The DOM — Document Object Model</h2>
+
+    <h3 class="section-sub">What Is the DOM?</h3>
+    <div class="important">
+      The <strong>DOM (Document Object Model)</strong> is a <strong>tree of objects</strong> representing every HTML element on a web page. It is the programming interface that allows JavaScript to <strong>access, modify, add, and remove</strong> HTML elements dynamically.
+    </div>
+
+    <h3 class="section-sub">Key Properties of the DOM</h3>
+    <ul>
+      <li>Every HTML element on the page is accessible in JavaScript <strong>through the DOM</strong></li>
+      <li>The DOM represents the page as a <strong>tree of nodes</strong> — each element is a node</li>
+      <li>JavaScript can <strong>modify</strong> nodes → changes the element on the page</li>
+      <li>JavaScript can <strong>add</strong> nodes → adds new elements to the page</li>
+      <li>JavaScript can <strong>remove</strong> nodes → removes elements from the page</li>
+      <li>The global <code>document</code> object is the <strong>entry point</strong> to the DOM</li>
+    </ul>
+
+    <h3 class="section-sub">DOM Tree — Visual Structure</h3>
+    <div class="dom-tree">
+      <div><span class="dom-node">document</span></div>
+      <div class="dom-indent1"><span class="dom-line">└─</span><span class="dom-node blue">html</span></div>
+      <div class="dom-indent2"><span class="dom-line">├─</span><span class="dom-node purple">head</span></div>
+      <div class="dom-indent3"><span class="dom-line">├─</span><span class="dom-node orange">title</span> <br> <span class="dom-line">├─</span><span class="dom-node orange">link</span> &nbsp; <span class="dom-line"><br>└─</span><span class="dom-node orange">script</span></div>
+      <div class="dom-indent2"><span class="dom-line">└─</span><span class="dom-node purple">body</span></div>
+      <div class="dom-indent3"><span class="dom-line">├─</span><span class="dom-node orange">h1</span> &nbsp; <span class="dom-line"><br>├─</span><span class="dom-node orange">p</span> &nbsp; <span class="dom-line"><br>└─</span><span class="dom-node orange">button</span></div>
+    </div>
+    <div class="note">
+      Each box in the tree is a <strong>DOM node</strong> corresponding to an HTML element. The <code>document</code> is the root — all elements are descendants of it.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: QUERYSELECTOR ===== -->
+  <div class="card" id="queryselector">
+    <h2 class="card-title">🔍 querySelector — Accessing DOM Elements</h2>
+
+    <h3 class="section-sub">What Is querySelector?</h3>
+    <div class="important">
+      <code>document.querySelector()</code> is a built-in JavaScript function that <strong>returns the first DOM element</strong> matching a given CSS selector. It is the standard way to access an HTML element from JavaScript.
+    </div>
+
+    <h3 class="section-sub">Syntax & Rules</h3>
+    <div class="highlight">
+      <code>document.querySelector('css selector');</code><br><br>
+      <strong>css selector</strong> — any valid CSS selector string<br>
+      Returns the <strong>first matching element</strong> — or <strong>null</strong> if no match is found
+    </div>
+
+    <ul>
+      <li>Uses the <strong>same CSS selector syntax</strong> as your stylesheets</li>
+      <li><code>#id</code> — select by ID &nbsp;|&nbsp; <code>.class</code> — select by class &nbsp;|&nbsp; <code>button</code> — select by tag</li>
+      <li>Returns <strong>only the first match</strong> — use <code>querySelectorAll()</code> to get all matches</li>
+      <li>If no element matches, it returns <strong><code>null</code></strong> — calling methods on null causes an error</li>
+    </ul>
+
+    <div class="method-card">
+      <div class="method-head blue"><span>document.querySelector('#button')</span><span class="badge">Select by ID</span></div>
+      <div class="method-body">Returns the element whose <code>id</code> attribute is <code>"button"</code>. IDs should be unique per page.</div>
+    </div>
+    <div class="method-card">
+      <div class="method-head purple"><span>document.querySelector('.box')</span><span class="badge">Select by Class</span></div>
+      <div class="method-body">Returns the <strong>first</strong> element with class <code>"box"</code>.</div>
+    </div>
+    <div class="method-card">
+      <div class="method-head teal"><span>document.querySelector('button')</span><span class="badge">Select by Tag</span></div>
+      <div class="method-body">Returns the <strong>first</strong> <code>&lt;button&gt;</code> element found in the document.</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ADDEVENTLISTENER ===== -->
+  <div class="card" id="addeventlistener">
+    <h2 class="card-title">👂 addEventListener — Attaching Events</h2>
+
+    <h3 class="section-sub">What Is addEventListener?</h3>
+    <div class="important">
+      <code>addEventListener()</code> is a method available on every DOM object. It <strong>registers a function</strong> (event handler) to be called whenever a specified event fires on that element.
+    </div>
+
+    <h3 class="section-sub">Syntax & Rules</h3>
+    <div class="highlight">
+      <code>element.addEventListener(eventName, functionName);</code><br><br>
+      <strong>eventName</strong> — a string: the name of the JS event to listen for (e.g., <code>"click"</code>)<br>
+      <strong>functionName</strong> — the function to run when the event fires<br>
+      <strong>Note:</strong> Pass the function <em>without</em> parentheses — <code>onClick</code> not <code>onClick()</code>
+    </div>
+
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>The event handler function is passed as a <strong>callback</strong> — called only when the event fires</li>
+      <li>You can attach <strong>multiple listeners</strong> to the same element for the same or different events</li>
+      <li>The function name passed must be <strong>without parentheses</strong> — otherwise it executes immediately instead of being registered</li>
+      <li>This is the <strong>modern, recommended</strong> way to handle events (vs inline HTML attributes)</li>
+      <li><code>removeEventListener()</code> can be used to detach a listener later</li>
+    </ul>
+
+    <h3 class="section-sub">Two-Step Process</h3>
+    <div class="flow-h">
+      <div class="flow-step">Step 1<br><small>Get the element<br>via querySelector</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step orange">Step 2<br><small>Add listener<br>via addEventListener</small></div>
+    </div>
+
+    <div class="note" style="margin-top:14px;">
+      <strong>Full pattern:</strong><br>
+      <code>const btn = document.querySelector('#myBtn');</code><br>
+      <code>btn.addEventListener('click', handleClick);</code><br><br>
+      <code>function handleClick() {</code><br>
+      <code>&nbsp;&nbsp;console.log('Button was clicked!');</code><br>
+      <code>}</code>
+    </div>
+
+    <h3 class="section-sub">addEventListener vs Inline HTML Events</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">addEventListener (Recommended)</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Keeps JS <strong>separate</strong> from HTML</li>
+            <li>▸ Can attach <strong>multiple handlers</strong> to one element</li>
+            <li>▸ Can be <strong>removed</strong> later with removeEventListener</li>
+            <li>▸ Cleaner, more maintainable code</li>
+            <li>▸ Modern best practice</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Inline HTML Attributes (Older)</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Mixes HTML and JavaScript together</li>
+            <li>▸ Only <strong>one handler</strong> per event per element</li>
+            <li>▸ Cannot be removed cleanly</li>
+            <li>▸ Harder to maintain in large projects</li>
+            <li>▸ Still widely seen in older code</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: COMMON EVENTS ===== -->
+  <div class="card" id="commonevents">
+    <h2 class="card-title">📋 Common JavaScript Events</h2>
+
+    <h3 class="section-sub">JavaScript Events (used with addEventListener)</h3>
+    <table>
+      <thead><tr><th>Event Name</th><th>When It Fires</th><th>Common Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>click</code></td><td>When an element is clicked</td><td>Buttons, links, interactive elements</td></tr>
+        <tr><td><code>mouseover</code></td><td>When the mouse pointer moves <strong>onto</strong> an element</td><td>Hover effects, tooltips</td></tr>
+        <tr><td><code>mouseout</code></td><td>When the mouse pointer moves <strong>away</strong> from an element</td><td>Remove hover effects</td></tr>
+        <tr><td><code>mousemove</code></td><td>When the mouse pointer is moving over an element</td><td>Tracking cursor position</td></tr>
+        <tr><td><code>keydown</code></td><td>When a keyboard key is <strong>pressed down</strong></td><td>Keyboard shortcuts, game controls</td></tr>
+        <tr><td><code>keyup</code></td><td>When a keyboard key is <strong>released</strong></td><td>Input validation after typing</td></tr>
+        <tr><td><code>submit</code></td><td>When a form is submitted</td><td>Form validation before sending</td></tr>
+        <tr><td><code>load</code></td><td>When the webpage or resource finishes loading</td><td>Run code only after page is ready</td></tr>
+        <tr><td><code>change</code></td><td>When an input element's value changes (and loses focus)</td><td>Dropdowns, checkboxes, file inputs</td></tr>
+        <tr><td><code>focus</code></td><td>When an element gains focus (selected/clicked into)</td><td>Highlight active input fields</td></tr>
+        <tr><td><code>blur</code></td><td>When an element loses focus</td><td>Validate input when user leaves field</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">HTML Event Attributes (used inline in HTML)</h3>
+    <table>
+      <thead><tr><th>HTML Attribute</th><th>JS Equivalent</th><th>When It Fires</th></tr></thead>
+      <tbody>
+        <tr><td><code>onclick</code></td><td><code>click</code></td><td>User clicks the element</td></tr>
+        <tr><td><code>onchange</code></td><td><code>change</code></td><td>Value of input, dropdown, or checkbox changes</td></tr>
+        <tr><td><code>onmouseover</code></td><td><code>mouseover</code></td><td>Mouse hovers over element</td></tr>
+        <tr><td><code>onmousemove</code></td><td><code>mousemove</code></td><td>Mouse pointer moves over element</td></tr>
+        <tr><td><code>onmouseout</code></td><td><code>mouseout</code></td><td>Mouse leaves the element</td></tr>
+        <tr><td><code>onkeydown</code></td><td><code>keydown</code></td><td>A keyboard key is pushed down</td></tr>
+        <tr><td><code>onload</code></td><td><code>load</code></td><td>Browser finishes loading the page</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Naming pattern:</strong> HTML event attributes are always prefixed with <strong><code>on</code></strong> (e.g., <code>onclick</code>, <code>onload</code>). JavaScript event names used in <code>addEventListener</code> do <strong>not</strong> have the <code>on</code> prefix (e.g., <code>"click"</code>, <code>"load"</code>).
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: INLINE EVENT HANDLING ===== -->
+  <div class="card" id="inline">
+    <h2 class="card-title">🏷️ HTML Inline Event Attributes</h2>
+
+    <h3 class="section-sub">What Are HTML Event Attributes?</h3>
+    <div class="important">
+      HTML allows <strong>event handler attributes</strong> to be added directly to HTML elements. These attributes contain JavaScript code (or a function call) that runs when the specified event occurs. This is called <strong>inline event handling</strong>.
+    </div>
+
+    <h3 class="section-sub">How Inline Event Handling Works</h3>
+    <ul>
+      <li>Event attributes are added directly <strong>inside the HTML tag</strong></li>
+      <li>The attribute value is JavaScript code as a <strong>string</strong></li>
+      <li>The browser executes the code when the event fires</li>
+      <li>Example: <code>&lt;button onclick="alert('Clicked!')"&gt;Click Me&lt;/button&gt;</code></li>
+    </ul>
+
+    <div class="highlight">
+      <strong>Syntax:</strong><br>
+      <code>&lt;element eventAttribute="javascriptCode"&gt;</code><br><br>
+      Example:<br>
+      <code>&lt;input type="button" value="Click me!" onclick="event_handler_code"&gt;</code><br>
+      <code>&lt;button onclick="alert('Button Clicked!')"&gt;Click Me&lt;/button&gt;</code>
+    </div>
+
+    <h3 class="section-sub">Inline vs addEventListener — When to Use Which</h3>
+    <table>
+      <thead><tr><th>Aspect</th><th>Inline HTML Attribute</th><th>addEventListener</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Location of code</strong></td><td>Inside HTML tag</td><td>In separate JavaScript file or script block</td></tr>
+        <tr><td><strong>Separation of concerns</strong></td><td>❌ Mixes HTML and JS</td><td>✅ Keeps HTML and JS separate</td></tr>
+        <tr><td><strong>Multiple handlers</strong></td><td>❌ One handler per event</td><td>✅ Multiple handlers per event</td></tr>
+        <tr><td><strong>Removable?</strong></td><td>❌ Difficult</td><td>✅ Yes, with removeEventListener</td></tr>
+        <tr><td><strong>Recommended for</strong></td><td>Quick prototypes, legacy code</td><td>Modern, maintainable projects</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 7: DEFER & SCRIPT LOADING ===== -->
+  <div class="card" id="defer">
+    <h2 class="card-title">⏳ The defer Attribute & Script Loading Problem</h2>
+
+    <h3 class="section-sub">The Problem — Script in &lt;head&gt;</h3>
+    <div class="warning">
+      <strong>⚠️ Classic Error:</strong> When a <code>&lt;script&gt;</code> tag is placed in the <code>&lt;head&gt;</code>, the JavaScript runs before the <code>&lt;body&gt;</code> elements exist in the DOM. Any <code>querySelector</code> call returns <strong><code>null</code></strong> because the elements haven't been parsed yet.
+    </div>
+
+    <h3 class="section-sub">Why This Happens — Step by Step</h3>
+    <div class="event-flow">
+      <div class="ef-row">
+        <div class="ef-label">Browser parses HTML</div>
+        <div class="ef-content">Reads the HTML file top to bottom.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label orange">Reaches &lt;script&gt; tag</div>
+        <div class="ef-content">In the <code>&lt;head&gt;</code> — before <code>&lt;body&gt;</code> elements exist.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label blue">Fetches and runs JS</div>
+        <div class="ef-content">JavaScript executes immediately. The <code>&lt;body&gt;</code> has not been parsed yet.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label red">querySelector returns null</div>
+        <div class="ef-content">The element doesn't exist in the DOM yet — <code>querySelector('button')</code> returns <code>null</code>.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label purple">Error occurs</div>
+        <div class="ef-content">Calling <code>addEventListener</code> on <code>null</code> throws a <strong>TypeError</strong>.</div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">The Solution — defer Attribute</h3>
+    <div class="important">
+      Adding the <code>defer</code> attribute to a <code>&lt;script&gt;</code> tag tells the browser to <strong>download the script but not execute it until after the entire DOM has been fully parsed</strong>.
+    </div>
+    <div class="highlight">
+      <strong>Syntax:</strong> <code>&lt;script src="script.js" <strong>defer</strong>&gt;&lt;/script&gt;</code>
+    </div>
+
+    <h3 class="section-sub">What defer Does</h3>
+    <ul>
+      <li>The script file is <strong>downloaded in parallel</strong> with HTML parsing (non-blocking)</li>
+      <li>The script <strong>executes only after</strong> the entire HTML document has been parsed</li>
+      <li>All DOM elements are guaranteed to exist when the script runs</li>
+      <li><code>querySelector</code> calls will find their elements correctly</li>
+      <li><strong>Widely supported</strong> across modern browsers</li>
+    </ul>
+
+    <h3 class="section-sub">Old Workarounds — Why to Avoid Them</h3>
+    <table>
+      <thead><tr><th>Old Method</th><th>Problem</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Put <code>&lt;script&gt;</code> at the bottom of the page (before <code>&lt;/body&gt;</code>)</td>
+          <td>Works but is untidy and considered outdated. Hard to maintain in large projects.</td>
+        </tr>
+        <tr>
+          <td>Listen for the <code>"load"</code> event on the <code>window</code> object</td>
+          <td>Waits for ALL resources (images, CSS) to load — slower than necessary. Outdated pattern.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="important" style="margin-top:10px;">
+      <strong>✅ Best Practice:</strong> Always use <code>defer</code> on external script tags placed in <code>&lt;head&gt;</code>. It is modern, well-supported, and the cleanest solution.
+    </div>
+
+    <h3 class="section-sub">Summary — Script Loading Options</h3>
+    <table>
+      <thead><tr><th>Method</th><th>When JS Runs</th><th>Blocks HTML Parsing?</th><th>Recommended?</th></tr></thead>
+      <tbody>
+        <tr><td><code>&lt;script&gt;</code> in <code>&lt;head&gt;</code></td><td>Immediately on encounter</td><td>✅ Yes</td><td>❌ No</td></tr>
+        <tr><td><code>&lt;script&gt;</code> at bottom of body</td><td>After body is parsed</td><td>No</td><td>⚠️ Outdated</td></tr>
+        <tr><td><code>&lt;script defer&gt;</code></td><td>After entire DOM is parsed</td><td>❌ No</td><td>✅ Yes — Best Practice</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 8: COMPARISONS & GLOSSARY ===== -->
+  <div class="card" id="comparisons">
+    <h2 class="card-title">⚖️ Master Comparison Tables & Glossary</h2>
+
+    <h3 class="section-sub">Event Handling Methods — Full Comparison</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Inline HTML Attribute</th><th>addEventListener()</th></tr></thead>
+      <tbody>
+        <tr><td>Where written</td><td>In HTML tag</td><td>In JavaScript file/block</td></tr>
+        <tr><td>Syntax</td><td><code>onclick="fn()"</code></td><td><code>el.addEventListener('click', fn)</code></td></tr>
+        <tr><td>Separation of concerns</td><td>❌ Mixes HTML + JS</td><td>✅ Clean separation</td></tr>
+        <tr><td>Multiple handlers?</td><td>❌ One per event</td><td>✅ Many per event</td></tr>
+        <tr><td>Removable?</td><td>❌ Hard</td><td>✅ removeEventListener</td></tr>
+        <tr><td>Best for</td><td>Quick demos, legacy code</td><td>All modern projects</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">HTML vs JS Event Name Mapping</h3>
+    <table>
+      <thead><tr><th>HTML Attribute</th><th>addEventListener Name</th></tr></thead>
+      <tbody>
+        <tr><td><code>onclick</code></td><td><code>"click"</code></td></tr>
+        <tr><td><code>onchange</code></td><td><code>"change"</code></td></tr>
+        <tr><td><code>onmouseover</code></td><td><code>"mouseover"</code></td></tr>
+        <tr><td><code>onmouseout</code></td><td><code>"mouseout"</code></td></tr>
+        <tr><td><code>onmousemove</code></td><td><code>"mousemove"</code></td></tr>
+        <tr><td><code>onkeydown</code></td><td><code>"keydown"</code></td></tr>
+        <tr><td><code>onkeyup</code></td><td><code>"keyup"</code></td></tr>
+        <tr><td><code>onload</code></td><td><code>"load"</code></td></tr>
+        <tr><td><code>onsubmit</code></td><td><code>"submit"</code></td></tr>
+      </tbody>
+    </table>
+    <div class="note">HTML attributes use <strong>on + eventname</strong>. addEventListener uses <strong>eventname only</strong> (no "on" prefix).</div>
+
+    <h3 class="section-sub">Key Definitions Glossary</h3>
+
+    <div class="def-block">
+      <div class="def-term">Event</div>
+      <div class="def-body">A signal fired by a browser or HTML element when something notable happens — usually a user interaction (click, keypress) or browser action (page load). Events are the trigger mechanism for interactive web pages.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Event-Driven Programming</div>
+      <div class="def-body">A programming paradigm where code does not execute immediately — instead it waits and runs only when a specific event fires. Most browser JavaScript is event-driven.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Event Handler</div>
+      <div class="def-body">A function registered to execute when a specific event fires on a specific element. Also called an event listener or callback. It "handles" the incoming event.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">DOM (Document Object Model)</div>
+      <div class="def-body">A tree-structured programming interface representing every HTML element on a page as an object (node). JavaScript accesses and manipulates the page through the DOM. The global entry point is the <code>document</code> object.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">document.querySelector(selector)</div>
+      <div class="def-body">A DOM method that returns the first HTML element matching the given CSS selector. Returns null if no match is found. Used to get a reference to a DOM element before attaching events or changing content.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">addEventListener(event, fn)</div>
+      <div class="def-body">A DOM method that registers a callback function to run when a specified event fires on an element. The modern, recommended approach for event handling. Multiple listeners can be added to the same element.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Inline Event Attribute</div>
+      <div class="def-body">An HTML attribute (e.g., onclick, onchange) that contains JavaScript code directly inside an HTML tag. Older approach — mixes HTML and JavaScript. Only one handler per event per element.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">defer (script attribute)</div>
+      <div class="def-body">An attribute added to a &lt;script&gt; tag that tells the browser to download the script in parallel but only execute it after the full DOM has been parsed. Prevents null errors from querySelector. Current best practice.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">null (from querySelector)</div>
+      <div class="def-body">The value returned by querySelector when no matching element is found — often because the script ran before the DOM was ready. Calling addEventListener on null throws a TypeError. Solved by using defer.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Node (DOM Node)</div>
+      <div class="def-body">An individual object in the DOM tree, corresponding to one HTML element. Every element on the page — &lt;div&gt;, &lt;button&gt;, &lt;p&gt; etc. — is represented as a DOM node that JavaScript can interact with.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — JavaScript Events · Theory & Concepts Exam Notes · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

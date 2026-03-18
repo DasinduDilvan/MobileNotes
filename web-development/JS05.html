@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – Form Encoding & Validation: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 8px; font-size: 2.3em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 6px; font-size: 1.05em; }
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white; padding: 12px 20px; border-radius: 10px;
+    margin-bottom: 30px; font-size: 1em; letter-spacing: 0.5px;
+}
+
+.toc { background: white; padding: 22px 28px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+
+.card { background: white; padding: 28px; margin: 22px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.card-title {
+    color: #2c6e6b; border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px; margin-bottom: 18px; font-size: 1.5em;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.section-sub {
+    color: #2c6e6b; font-size: 1.1em; margin: 22px 0 10px 0;
+    font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.section-sub::before {
+    content: ''; display: inline-block; width: 4px; height: 18px;
+    background: #2c6e6b; border-radius: 2px; flex-shrink: 0;
+}
+
+ul { list-style: none; margin-left: 0; line-height: 1.9; }
+ul li { padding: 3px 0 3px 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: #5a9d99; font-size: 0.85em; top: 5px; }
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 14px; }
+.box { background: #f3fbfa; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #2c6e6b; font-size: 0.93em; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight { background: #fff9e6; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 14px 0; font-size: 0.93em; }
+.important { background: #e8f5e9; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 14px 0; font-size: 0.93em; }
+.note      { background: #e3f2fd; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; font-size: 0.93em; }
+.warning   { background: #fce4ec; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 14px 0; font-size: 0.93em; }
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 14px; }
+
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.88em; color: #c0392b; }
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.91em; }
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td { padding: 9px 13px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS */
+.vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 14px 0; align-items: stretch; }
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head { padding: 8px 14px; font-weight: bold; color: white; font-size: 0.9em; text-align: center; }
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side.orange .vs-head { background: #e67e22; }
+.vs-side .vs-body { background: #f9f9f9; padding: 12px 14px; font-size: 0.88em; line-height: 1.9; height: 100%; border: 1px solid #ddd; border-top: none; }
+.vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: #999; font-size: 1.1em; padding: 0 10px; }
+
+/* def blocks */
+.def-block { border: 1px solid #cfe9e7; border-radius: 10px; margin: 11px 0; overflow: hidden; }
+.def-term { background: #2c6e6b; color: white; padding: 7px 16px; font-weight: bold; font-size: 0.93em; font-family: 'Courier New', monospace; }
+.def-body { background: #f9fefd; padding: 11px 16px; font-size: 0.92em; }
+
+/* encoding flow visual */
+.enc-flow {
+    background: #f3fbfa; border: 2px solid #2c6e6b; border-radius: 10px;
+    padding: 16px 20px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 0.9em;
+}
+.enc-row { display: flex; align-items: center; gap: 12px; margin: 8px 0; flex-wrap: wrap; }
+.enc-plain { background: #fff3e0; border: 1px solid #e67e22; color: #7d4e00; padding: 5px 12px; border-radius: 6px; }
+.enc-arrow { color: #2c6e6b; font-weight: bold; font-size: 1.1em; }
+.enc-encoded { background: #e8f5f4; border: 1px solid #2c6e6b; color: #1a5c59; padding: 5px 12px; border-radius: 6px; }
+.enc-note { font-family: 'Segoe UI', sans-serif; font-size: 0.82em; color: #666; font-style: italic; }
+
+/* method cards */
+.method-card { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.method-head {
+    padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;
+}
+.method-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; }
+.method-head.m1 { background: #2980b9; }
+.method-head.m2 { background: #8e44ad; }
+.method-head.m3 { background: #27ae60; }
+.method-head.m4 { background: #e67e22; }
+.method-body { background: #f9fefd; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 16px; font-size: 0.91em; line-height: 1.85; }
+
+/* validation type cards */
+.val-card { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.val-head { padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em; display: flex; justify-content: space-between; align-items: center; }
+.val-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; }
+.val-head.nums  { background: #2980b9; }
+.val-head.chars { background: #8e44ad; }
+.val-head.alnum { background: #e67e22; }
+.val-body { background: #f9f9f9; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 13px 16px; font-size: 0.91em; line-height: 1.9; }
+
+/* event flow */
+.ef-flow { display: flex; flex-direction: column; gap: 0; margin: 14px 0; border-radius: 10px; overflow: hidden; border: 2px solid #2c6e6b; }
+.ef-row { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid #cfe9e7; }
+.ef-row:last-child { border-bottom: none; }
+.ef-label { background: #2c6e6b; color: white; padding: 10px 14px; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; }
+.ef-label.orange { background: #e67e22; }
+.ef-label.blue   { background: #2980b9; }
+.ef-label.purple { background: #8e44ad; }
+.ef-label.red    { background: #c0392b; }
+.ef-content { padding: 10px 14px; font-size: 0.91em; background: #f9fefd; display: flex; align-items: center; }
+
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .method-head, .val-head,
+    .ef-label, .exam-banner {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+    .ef-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>📋 Form Encoding & Validation</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: enctype · URL Encoding Rules · Form Data Structure · Form Validation · event.preventDefault() · Event Object · Validation Methods · RegEx test()</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#encoding">HTML Form Encoding — Why It Matters</a></li>
+      <li><a href="#enctype">enctype — Encoding Types</a></li>
+      <li><a href="#urlencoding">URL Encoding Rules & Character Conversion</a></li>
+      <li><a href="#structure">Encoded Data Structure & Rules</a></li>
+      <li><a href="#validation">Form Validation — Definition & Goals</a></li>
+      <li><a href="#eventobj">The Event Object & event.preventDefault()</a></li>
+      <li><a href="#emptiness">Emptiness Validation — Four Methods</a></li>
+      <li><a href="#patterns">Pattern Validation — Numbers, Characters, Alphanumeric</a></li>
+      <li><a href="#comparisons">Master Comparison Tables & Glossary</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: WHY ENCODING MATTERS ===== -->
+  <div class="card" id="encoding">
+    <h2 class="card-title">🔐 HTML Form Encoding — Why It Matters</h2>
+
+    <h3 class="section-sub">What Is Form Encoding?</h3>
+    <div class="important">
+      Form encoding is the process of <strong>converting form data into a safe format</strong> before it is sent to the server. It ensures that special characters, spaces, and non-ASCII content do not corrupt or misinterpret the data during transmission.
+    </div>
+
+    <h3 class="section-sub">Why Encoding Is Necessary</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">❌ Without Encoding</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Special characters (<code>? & # =</code>) can <strong>change the meaning</strong> of the URL</li>
+            <li>▸ Spaces and non-ASCII characters can make the request <strong>invalid</strong></li>
+            <li>▸ Data can get <strong>corrupted or misread</strong> by the server</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">✅ With Encoding</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ URLs are <strong>safe to send</strong> over the web</li>
+            <li>▸ The server <strong>parses values exactly</strong> as intended</li>
+            <li>▸ Stays compliant with <strong>URL/HTTP rules</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">JavaScript Encoding Function</h3>
+    <div class="highlight">
+      <code>encodeURIComponent(value)</code> — Encodes a string value so it is safe to include in a URL. Converts special characters to their percent-encoded equivalents.<br><br>
+      Example: <code>encodeURIComponent("Nimal Perera")</code> → <code>Nimal%20Perera</code>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: ENCTYPE ===== -->
+  <div class="card" id="enctype">
+    <h2 class="card-title">🏷️ enctype — Encoding Types</h2>
+
+    <h3 class="section-sub">What Is enctype?</h3>
+    <div class="important">
+      <code>enctype</code> (encoding type) is an HTML form attribute that <strong>specifies how form data is encoded</strong> when it is submitted to the server. It is set on the <code>&lt;form&gt;</code> element.
+    </div>
+
+    <div class="highlight">
+      <strong>Syntax:</strong> <code>&lt;form method="post" enctype="value"&gt;</code>
+    </div>
+
+    <h3 class="section-sub">Key Rules for enctype</h3>
+    <ul>
+      <li><code>enctype</code> works with both GET and POST but is only <strong>meaningful for POST requests</strong></li>
+      <li>If <code>enctype</code> is <strong>not specified</strong>, browsers automatically apply <code>application/x-www-form-urlencoded</code> (the default)</li>
+    </ul>
+
+    <h3 class="section-sub">Three enctype Values</h3>
+    <table>
+      <thead><tr><th>enctype Value</th><th>Name</th><th>When to Use</th><th>Key Behaviour</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>application/x-www-form-urlencoded</code></td>
+          <td>Default</td>
+          <td>Standard text forms (no file upload)</td>
+          <td>All data encoded as <code>name=value</code> pairs. Special characters percent-encoded. Spaces become <code>+</code>.</td>
+        </tr>
+        <tr>
+          <td><code>multipart/form-data</code></td>
+          <td>Multipart</td>
+          <td>Forms that include <strong>file uploads</strong></td>
+          <td>Each field is sent as a separate part. Required for <code>&lt;input type="file"&gt;</code>.</td>
+        </tr>
+        <tr>
+          <td><code>text/plain</code></td>
+          <td>Plain text</td>
+          <td>Debugging / testing only</td>
+          <td>Sends data in human-readable format. Special characters are <strong>NOT encoded</strong>. Not recommended for production.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 3: URL ENCODING RULES ===== -->
+  <div class="card" id="urlencoding">
+    <h2 class="card-title">🔄 URL Encoding Rules & Character Conversion</h2>
+
+    <h3 class="section-sub">How Data Is Converted (application/x-www-form-urlencoded)</h3>
+    <table>
+      <thead><tr><th>Original Character</th><th>Encoded As</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Space</td><td><code>+</code></td><td>Spaces in values become <code>+</code></td></tr>
+        <tr><td>Special chars (<code>@</code>, <code>&amp;</code>, <code>#</code>, etc.)</td><td><code>%HH</code></td><td>Percent encoding using ASCII hex value</td></tr>
+        <tr><td><code>&amp;</code> (ampersand)</td><td><code>%26</code></td><td>ASCII hex of &amp; is 26</td></tr>
+        <tr><td><code>@</code> (at sign)</td><td><code>%40</code></td><td>ASCII hex of @ is 40</td></tr>
+        <tr><td>Line break (multi-line field)</td><td><code>%0D%0A</code></td><td>Carriage return + line feed</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Encoding Examples — Visual</h3>
+    <div class="enc-flow">
+      <div class="enc-row">
+        <span class="enc-plain">Nimal Perera</span>
+        <span class="enc-arrow">→</span>
+        <span class="enc-encoded">Nimal+Perera</span>
+        <span class="enc-note">space → +</span>
+      </div>
+      <div class="enc-row">
+        <span class="enc-plain">Kandy &amp; Colombo</span>
+        <span class="enc-arrow">→</span>
+        <span class="enc-encoded">Kandy+%26+Colombo</span>
+        <span class="enc-note">space→+ &amp; &amp;→%26</span>
+      </div>
+      <div class="enc-row">
+        <span class="enc-plain">john@example.com</span>
+        <span class="enc-arrow">→</span>
+        <span class="enc-encoded">john%40example.com</span>
+        <span class="enc-note">@→%40</span>
+      </div>
+      <div class="enc-row">
+        <span class="enc-plain">Line 1 ↵ Line 2</span>
+        <span class="enc-arrow">→</span>
+        <span class="enc-encoded">Line+1%0D%0ALine+2</span>
+        <span class="enc-note">line break → %0D%0A</span>
+      </div>
+    </div>
+
+    <h3 class="section-sub">ASCII Hex Reference (Common Characters)</h3>
+    <div class="grid">
+      <div class="box"><strong>@ (at sign)</strong>ASCII Hex: <code>40</code> → encoded as <code>%40</code></div>
+      <div class="box"><strong>&amp; (ampersand)</strong>ASCII Hex: <code>26</code> → encoded as <code>%26</code></div>
+      <div class="box"><strong>Line break (CRLF)</strong>CR=<code>0D</code> + LF=<code>0A</code> → encoded as <code>%0D%0A</code></div>
+      <div class="box"><strong>Space</strong>Encoded as <code>+</code> in form data (not <code>%20</code>)</div>
+    </div>
+
+    <div class="note" style="margin-top:14px;">
+      <strong>Percent Encoding (%HH):</strong> The <code>%</code> symbol signals an encoded character. The two characters that follow (<code>HH</code>) are the <strong>hexadecimal ASCII value</strong> of the original character. For example, <code>%40</code> = <code>@</code> because the ASCII hex value of <code>@</code> is <code>40</code>.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ENCODED DATA STRUCTURE ===== -->
+  <div class="card" id="structure">
+    <h2 class="card-title">📐 Encoded Data Structure & Rules</h2>
+
+    <h3 class="section-sub">Structure of Encoded Form Data</h3>
+    <div class="important">
+      Form data is encoded as a <strong>series of name=value pairs</strong> joined by <code>&amp;</code>. Each pair represents one form field and its value.
+    </div>
+
+    <div class="highlight">
+      <strong>Format:</strong> <code>name1=value1&amp;name2=value2&amp;name3=value3</code><br><br>
+      <strong>Example:</strong> Username: John Doe, Password: my@password<br>
+      <code>username=John+Doe&amp;password=my%40password</code>
+    </div>
+
+    <h3 class="section-sub">Rules for Which Fields Are Included</h3>
+    <table>
+      <thead><tr><th>Field Type</th><th>Included in Encoded Data?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>Text input with <code>name</code> attribute</td><td>✅ Yes</td><td>Only fields with a <code>name</code> attribute are submitted</td></tr>
+        <tr><td>Submit button</td><td>❌ No</td><td>Browsers treat submit buttons as action triggers, not form data</td></tr>
+        <tr><td>Empty field (null value)</td><td>❌ May be omitted</td><td>Fields with null values may be excluded</td></tr>
+        <tr><td>Unselected radio button</td><td>❌ No</td><td>Only the selected radio button is included</td></tr>
+        <tr><td>Unchecked checkbox</td><td>❌ No</td><td>Checkboxes only appear when checked</td></tr>
+        <tr><td>Hidden field with value</td><td>✅ Yes</td><td>Always included even though invisible to user</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Field Ordering</h3>
+    <ul>
+      <li>Fields are listed in the <strong>order they appear</strong> in the HTML form</li>
+      <li>Each field produces exactly one <code>name=value</code> pair</li>
+    </ul>
+
+    <h3 class="section-sub">Encoding & Decoding Summary</h3>
+    <div class="ef-flow">
+      <div class="ef-row">
+        <div class="ef-label">User fills form</div>
+        <div class="ef-content">Raw data entered: e.g., name = "John Doe", email = "john@example.com"</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label orange">Browser encodes</div>
+        <div class="ef-content">Converts to: <code>name=John+Doe&amp;email=john%40example.com</code></div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label blue">Sent to server</div>
+        <div class="ef-content">Encoded string is transmitted in the HTTP request body (POST) or URL (GET)</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label purple">Server decodes</div>
+        <div class="ef-content">Server reads the name=value pairs and reconstructs the original values</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: FORM VALIDATION ===== -->
+  <div class="card" id="validation">
+    <h2 class="card-title">✅ Form Validation — Definition & Goals</h2>
+
+    <h3 class="section-sub">What Is Form Validation?</h3>
+    <div class="important">
+      <strong>Form validation</strong> is the process of <strong>verifying that user input is correct, complete, and acceptable</strong> before it is processed or sent to the server. It acts as a quality-control checkpoint between the user and the server.
+    </div>
+
+    <h3 class="section-sub">Goals of Form Validation</h3>
+    <div class="grid">
+      <div class="box"><strong>🛡️ Prevent Invalid Data</strong>Stop incorrect, incomplete, or malformed input from reaching the server.</div>
+      <div class="box"><strong>😊 Improve UX</strong>Give users immediate, helpful feedback about what went wrong and how to fix it.</div>
+      <div class="box"><strong>⚙️ Reduce Server Errors</strong>Catch problems client-side before sending a request — saves bandwidth and server load.</div>
+      <div class="box"><strong>📏 Enforce Input Rules</strong>Ensure data matches required formats (e.g., numbers only, email format, min length).</div>
+    </div>
+
+    <h3 class="section-sub">When Validation Happens</h3>
+    <table>
+      <thead><tr><th>Trigger</th><th>Event Used</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>On form submission</strong></td><td><code>submit</code></td><td>Validation runs when user clicks the submit button</td></tr>
+        <tr><td><strong>While typing</strong></td><td><code>input</code></td><td>Validation runs in real-time as the user types</td></tr>
+        <tr><td><strong>After leaving a field</strong></td><td><code>blur</code></td><td>Validation runs when focus moves away from a field</td></tr>
+        <tr><td><strong>On value change</strong></td><td><code>change</code></td><td>Validation runs when a field's value changes (dropdowns, checkboxes)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Encoding vs Validation — Key Difference</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Form Encoding</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Converts data into a <strong>safe transmission format</strong></li>
+            <li>▸ Handles special characters and spaces</li>
+            <li>▸ Done <strong>automatically by the browser</strong></li>
+            <li>▸ About <em>how</em> data is sent</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Form Validation</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Checks that data is <strong>correct and complete</strong></li>
+            <li>▸ Enforces rules like required fields, format, length</li>
+            <li>▸ Done by <strong>HTML attributes or JavaScript</strong></li>
+            <li>▸ About <em>whether</em> data should be sent</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: EVENT OBJECT & PREVENTDEFAULT ===== -->
+  <div class="card" id="eventobj">
+    <h2 class="card-title">🛑 The Event Object & event.preventDefault()</h2>
+
+    <h3 class="section-sub">What Happens When an Event Occurs</h3>
+    <div class="ef-flow">
+      <div class="ef-row">
+        <div class="ef-label">1. User Action</div>
+        <div class="ef-content">User interacts — clicks a button, submits a form, presses a key, etc.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label orange">2. Browser Detects</div>
+        <div class="ef-content">The browser notices the action and recognises it as a specific event type.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label blue">3. Event Object Created</div>
+        <div class="ef-content">The browser <strong>automatically creates an event object</strong> containing information about the event.</div>
+      </div>
+      <div class="ef-row">
+        <div class="ef-label purple">4. Handler Receives Object</div>
+        <div class="ef-content">The event object is <strong>passed as a parameter</strong> to the JavaScript event handler function.</div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">What Is the Event Object?</h3>
+    <div class="important">
+      The <strong>event object</strong> is automatically created by the browser whenever an event fires. It is passed to the event handler and contains detailed information about what happened.
+    </div>
+    <ul>
+      <li>Which <strong>element</strong> triggered the event (<code>event.target</code>)</li>
+      <li>The <strong>type</strong> of event (e.g., <code>"click"</code>, <code>"submit"</code>)</li>
+      <li><strong>Mouse position</strong> or <strong>key pressed</strong> (for mouse/keyboard events)</li>
+      <li>The <strong>default browser behaviour</strong> associated with the event</li>
+    </ul>
+    <div class="highlight">
+      <strong>Pattern:</strong><br>
+      <code>element.addEventListener("submit", function(event) {</code><br>
+      <code>&nbsp;&nbsp;// event is the event object — automatically passed in</code><br>
+      <code>&nbsp;&nbsp;console.log(event);</code><br>
+      <code>});</code>
+    </div>
+
+    <h3 class="section-sub">What Is event.preventDefault()?</h3>
+    <div class="important">
+      <code>event.preventDefault()</code> is a method on the event object that <strong>stops the browser from performing its default behaviour</strong> for that event. For a form submit event, the default behaviour is to send the form data and reload the page — calling <code>preventDefault()</code> stops this.
+    </div>
+
+    <h3 class="section-sub">Without vs With preventDefault()</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Without preventDefault()</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Form <strong>submits immediately</strong> when button clicked</li>
+            <li>▸ Page reloads / navigates away</li>
+            <li>▸ No chance to validate the data first</li>
+            <li>▸ Invalid data can reach the server</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">With preventDefault()</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Default form submission is <strong>blocked</strong></li>
+            <li>▸ JavaScript <strong>validates first</strong></li>
+            <li>▸ Error messages can be displayed</li>
+            <li>▸ Submission only proceeds if data is valid</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Three Key Concepts Together</h3>
+    <div class="grid">
+      <div class="box"><strong>Event</strong>Something that happens — a user clicking, typing, or submitting.</div>
+      <div class="box"><strong>Event Object</strong>Information about what happened — automatically created and passed to the handler.</div>
+      <div class="box"><strong>preventDefault()</strong>Stop the browser's automatic response — e.g., prevent form from submitting.</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: EMPTINESS VALIDATION ===== -->
+  <div class="card" id="emptiness">
+    <h2 class="card-title">🔍 Emptiness Validation — Four Methods</h2>
+
+    <h3 class="section-sub">Overview</h3>
+    <p>To check if a field is empty before submission, there are four approaches — from basic to best practice:</p>
+
+    <div class="method-card">
+      <div class="method-head m1"><span>Method 1 — HTML required Attribute</span><span class="badge">HTML Only</span></div>
+      <div class="method-body">
+        <ul>
+          <li>Add the <code>required</code> attribute directly to the input element in HTML</li>
+          <li>The browser handles the empty check <strong>automatically</strong> — no JavaScript needed</li>
+          <li>Simple but limited — cannot customise error message styling easily</li>
+          <li>Example: <code>&lt;input type="text" name="name" required&gt;</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head m2"><span>Method 2 — JavaScript Empty String Check</span><span class="badge">JS Basic</span></div>
+      <div class="method-body">
+        <ul>
+          <li>Check if the field value equals an empty string: <code>if (field.value === "")</code></li>
+          <li>More flexible than HTML <code>required</code> — allows custom error messages and logic</li>
+          <li><strong>Problem:</strong> A value of just spaces <code>"&nbsp;&nbsp;&nbsp;"</code> passes this check — it is not truly empty</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head m3"><span>Method 3 — Trimmed Empty Check</span><span class="badge">✅ Best Practice</span></div>
+      <div class="method-body">
+        <ul>
+          <li>Use <code>.trim()</code> before checking: <code>if (field.value.trim() === "")</code></li>
+          <li><code>.trim()</code> removes all leading and trailing whitespace</li>
+          <li>A value of only spaces is now correctly identified as empty</li>
+          <li><strong>Why better:</strong> Detects <em>logical</em> emptiness, not just string emptiness</li>
+          <li>This is the <strong>recommended approach</strong> for emptiness validation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-card">
+      <div class="method-head m4"><span>Method 4 — Length-Based Validation</span><span class="badge">JS Alternative</span></div>
+      <div class="method-body">
+        <ul>
+          <li>Check the length: <code>if (field.value.trim().length === 0)</code></li>
+          <li>Functionally equivalent to Method 3 — both check trimmed content</li>
+          <li>Useful when you also need to enforce a minimum length in the same check</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Why .trim() Matters</h3>
+    <div class="warning">
+      <strong>⚠️ Common mistake:</strong> Without <code>.trim()</code>, a user can enter only spaces and pass the empty string check (<code>value === ""</code> is false for <code>"&nbsp;&nbsp;&nbsp;"</code>). Always use <code>.trim()</code> for reliable emptiness detection.
+    </div>
+
+    <h3 class="section-sub">Emptiness Methods Comparison</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Approach</th><th>Detects Spaces as Empty?</th><th>Recommended?</th></tr></thead>
+      <tbody>
+        <tr><td>HTML <code>required</code></td><td>Browser-handled</td><td>✅ Yes</td><td>✅ Simple cases</td></tr>
+        <tr><td><code>value === ""</code></td><td>JS string comparison</td><td>❌ No</td><td>⚠️ Basic only</td></tr>
+        <tr><td><code>value.trim() === ""</code></td><td>JS with trim</td><td>✅ Yes</td><td>✅ Best Practice</td></tr>
+        <tr><td><code>value.trim().length === 0</code></td><td>JS length check</td><td>✅ Yes</td><td>✅ Good alternative</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 8: PATTERN VALIDATION ===== -->
+  <div class="card" id="patterns">
+    <h2 class="card-title">🔡 Pattern Validation — Numbers, Characters, Alphanumeric</h2>
+
+    <h3 class="section-sub">What Is test() in JavaScript?</h3>
+    <div class="important">
+      <code>test()</code> is a method used with <strong>Regular Expressions (RegEx)</strong>. It checks whether a given value <strong>matches a pattern</strong>. Returns <code>true</code> if the pattern matches, <code>false</code> if it does not.
+    </div>
+    <div class="highlight">
+      <strong>Syntax:</strong> <code>/pattern/.test(value)</code><br><br>
+      Returns <code>true</code> → value matches the pattern<br>
+      Returns <code>false</code> → value does NOT match the pattern
+    </div>
+
+    <h3 class="section-sub">Three Common Validation Patterns</h3>
+
+    <div class="val-card">
+      <div class="val-head nums"><span>Numbers Only Validation</span><span class="badge">digits 0–9 only</span></div>
+      <div class="val-body">
+        <ul>
+          <li><strong>HTML approach:</strong> <code>&lt;input type="number"&gt;</code> or <code>pattern="[0-9]+"</code></li>
+          <li><strong>JS approach:</strong> Use RegEx <code>/^[0-9]+$/</code> with <code>.test()</code></li>
+          <li><code>^</code> = start of string &nbsp;|&nbsp; <code>[0-9]</code> = any digit &nbsp;|&nbsp; <code>+</code> = one or more &nbsp;|&nbsp; <code>$</code> = end of string</li>
+          <li>Use for: phone numbers, IDs, quantities — any field that must only contain digits</li>
+        </ul>
+        <div class="note" style="margin-top:8px;">
+          <code>/^[0-9]+$/.test("12345")</code> → <code>true</code> &nbsp;|&nbsp;
+          <code>/^[0-9]+$/.test("12a45")</code> → <code>false</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="val-card">
+      <div class="val-head chars"><span>Characters Only Validation</span><span class="badge">letters a-z, A-Z only</span></div>
+      <div class="val-body">
+        <ul>
+          <li><strong>HTML approach:</strong> <code>pattern="[A-Za-z]+"</code></li>
+          <li><strong>JS approach:</strong> Use RegEx <code>/^[A-Za-z]+$/</code> with <code>.test()</code></li>
+          <li><code>[A-Za-z]</code> = any uppercase or lowercase letter — no digits, spaces, or symbols</li>
+          <li>Use for: names, labels — any field that must only contain letters</li>
+        </ul>
+        <div class="note" style="margin-top:8px;">
+          <code>/^[A-Za-z]+$/.test("Alice")</code> → <code>true</code> &nbsp;|&nbsp;
+          <code>/^[A-Za-z]+$/.test("Alice1")</code> → <code>false</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="val-card">
+      <div class="val-head alnum"><span>Alphanumeric Validation</span><span class="badge">letters + digits only</span></div>
+      <div class="val-body">
+        <ul>
+          <li><strong>HTML approach:</strong> <code>pattern="[A-Za-z0-9]+"</code></li>
+          <li><strong>JS approach:</strong> Use RegEx <code>/^[A-Za-z0-9]+$/</code> with <code>.test()</code></li>
+          <li><code>[A-Za-z0-9]</code> = any letter or digit — no spaces or symbols</li>
+          <li>Use for: usernames, index numbers, codes — any field mixing letters and numbers</li>
+        </ul>
+        <div class="note" style="margin-top:8px;">
+          <code>/^[A-Za-z0-9]+$/.test("CS2024")</code> → <code>true</code> &nbsp;|&nbsp;
+          <code>/^[A-Za-z0-9]+$/.test("CS 2024")</code> → <code>false</code> (space not allowed)
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">HTML vs JavaScript Validation Approaches</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">HTML Validation (pattern attribute)</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Uses the <code>pattern</code> attribute on <code>&lt;input&gt;</code></li>
+            <li>▸ Browser handles validation automatically</li>
+            <li>▸ Simpler to implement</li>
+            <li>▸ Limited error message customisation</li>
+            <li>▸ Can be bypassed by disabling HTML</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">JavaScript Validation (RegEx + test())</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Uses RegEx patterns with <code>.test()</code></li>
+            <li>▸ Developer controls all validation logic</li>
+            <li>▸ Fully customisable error messages</li>
+            <li>▸ More powerful and flexible</li>
+            <li>▸ Still client-side — server validation also needed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: COMPARISONS & GLOSSARY ===== -->
+  <div class="card" id="comparisons">
+    <h2 class="card-title">⚖️ Master Comparison Tables & Glossary</h2>
+
+    <h3 class="section-sub">enctype Values — Full Reference</h3>
+    <table>
+      <thead><tr><th>Value</th><th>Default?</th><th>Encodes Special Chars?</th><th>File Upload?</th><th>Use When</th></tr></thead>
+      <tbody>
+        <tr><td><code>application/x-www-form-urlencoded</code></td><td>✅ Yes</td><td>✅ Yes</td><td>❌ No</td><td>Standard text forms</td></tr>
+        <tr><td><code>multipart/form-data</code></td><td>❌ No</td><td>✅ Yes</td><td>✅ Yes</td><td>Forms with file uploads</td></tr>
+        <tr><td><code>text/plain</code></td><td>❌ No</td><td>❌ No</td><td>❌ No</td><td>Testing/debugging only</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Encoding Character Reference</h3>
+    <table>
+      <thead><tr><th>Original</th><th>Encoded</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Space</td><td><code>+</code></td><td>In form data encoding specifically</td></tr>
+        <tr><td><code>&amp;</code></td><td><code>%26</code></td><td>ASCII hex = 26</td></tr>
+        <tr><td><code>@</code></td><td><code>%40</code></td><td>ASCII hex = 40</td></tr>
+        <tr><td>Line break</td><td><code>%0D%0A</code></td><td>CR (0D) + LF (0A)</td></tr>
+        <tr><td>Any special char</td><td><code>%HH</code></td><td>HH = ASCII hex value of character</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Validation Pattern Quick Reference</h3>
+    <table>
+      <thead><tr><th>Validation Type</th><th>RegEx Pattern</th><th>HTML Pattern Attr</th><th>Allows</th></tr></thead>
+      <tbody>
+        <tr><td>Numbers only</td><td><code>/^[0-9]+$/</code></td><td><code>pattern="[0-9]+"</code></td><td>Digits 0–9 only</td></tr>
+        <tr><td>Letters only</td><td><code>/^[A-Za-z]+$/</code></td><td><code>pattern="[A-Za-z]+"</code></td><td>A–Z and a–z only</td></tr>
+        <tr><td>Alphanumeric</td><td><code>/^[A-Za-z0-9]+$/</code></td><td><code>pattern="[A-Za-z0-9]+"</code></td><td>Letters and digits</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Key Definitions Glossary</h3>
+
+    <div class="def-block">
+      <div class="def-term">Form Encoding</div>
+      <div class="def-body">The process of converting HTML form data into a safe format for transmission over HTTP. Handles special characters, spaces, and non-ASCII content by replacing them with URL-safe equivalents.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">enctype</div>
+      <div class="def-body">An HTML form attribute (encoding type) that specifies how form data is encoded when submitted. Three values: application/x-www-form-urlencoded (default), multipart/form-data (files), text/plain (testing). Only meaningful for POST requests.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Percent Encoding (%HH)</div>
+      <div class="def-body">A URL encoding scheme where special characters are replaced with % followed by their two-digit hexadecimal ASCII value. For example, @ (ASCII hex 40) becomes %40.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">application/x-www-form-urlencoded</div>
+      <div class="def-body">The default form encoding type. Data is sent as name=value pairs separated by &. Spaces become +. Special characters become percent-encoded (%HH). Used for standard text forms without file uploads.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Form Validation</div>
+      <div class="def-body">The process of verifying that user input is correct, complete, and acceptable before processing. Goals: prevent invalid data, improve UX, reduce server errors, and enforce input rules.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Event Object</div>
+      <div class="def-body">An object automatically created by the browser when an event fires. Passed as a parameter to the event handler. Contains information about the event: which element triggered it, event type, mouse position, key pressed, and default behaviour.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">event.preventDefault()</div>
+      <div class="def-body">A method on the event object that stops the browser from executing its default response to an event. For form submit events, it prevents the form from being sent and the page from reloading — allowing JavaScript validation to run first.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">.trim()</div>
+      <div class="def-body">A JavaScript string method that removes all leading and trailing whitespace from a string. Essential for emptiness validation — ensures a value consisting only of spaces is correctly identified as empty.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Regular Expression (RegEx)</div>
+      <div class="def-body">A pattern used to match character combinations in strings. In JavaScript, written between forward slashes: /pattern/. Used with .test() to validate that input matches a specific format.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">test() method</div>
+      <div class="def-body">A RegEx method in JavaScript that tests whether a string matches a pattern. Returns true if it matches, false if it does not. Syntax: /pattern/.test(value).</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Client-Side Validation</div>
+      <div class="def-body">Validation performed in the browser using HTML attributes or JavaScript before the form is submitted to the server. Fast and responsive but not secure on its own — server-side validation is also required.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">encodeURIComponent()</div>
+      <div class="def-body">A JavaScript built-in function that encodes a string value so it is safe to include in a URL. Converts special characters to percent-encoded format. Example: encodeURIComponent("hello world") → "hello%20world".</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — Form Encoding & Validation · Theory & Concepts Exam Notes · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>
