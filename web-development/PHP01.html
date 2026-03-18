@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – Internet Programming & PHP Introduction: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 8px; font-size: 2.3em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 6px; font-size: 1.05em; }
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white; padding: 12px 20px; border-radius: 10px;
+    margin-bottom: 30px; font-size: 1em; letter-spacing: 0.5px;
+}
+
+.toc { background: white; padding: 22px 28px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+
+.card { background: white; padding: 28px; margin: 22px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.card-title {
+    color: #2c6e6b; border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px; margin-bottom: 18px; font-size: 1.5em;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.section-sub {
+    color: #2c6e6b; font-size: 1.1em; margin: 22px 0 10px 0;
+    font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.section-sub::before {
+    content: ''; display: inline-block; width: 4px; height: 18px;
+    background: #2c6e6b; border-radius: 2px; flex-shrink: 0;
+}
+
+ul { list-style: none; margin-left: 0; line-height: 1.9; }
+ul li { padding: 3px 0 3px 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: #5a9d99; font-size: 0.85em; top: 5px; }
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 14px; }
+.box { background: #f3fbfa; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #2c6e6b; font-size: 0.93em; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight { background: #fff9e6; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 14px 0; font-size: 0.93em; }
+.important { background: #e8f5e9; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 14px 0; font-size: 0.93em; }
+.note      { background: #e3f2fd; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; font-size: 0.93em; }
+.warning   { background: #fce4ec; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 14px 0; font-size: 0.93em; }
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 14px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.88em; color: #c0392b; }
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.91em; }
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td { padding: 9px 13px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS */
+.vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 14px 0; align-items: stretch; }
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head { padding: 8px 14px; font-weight: bold; color: white; font-size: 0.9em; text-align: center; }
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side.orange .vs-head { background: #e67e22; }
+.vs-side .vs-body { background: #f9f9f9; padding: 12px 14px; font-size: 0.88em; line-height: 1.9; height: 100%; border: 1px solid #ddd; border-top: none; }
+.vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: #999; font-size: 1.1em; padding: 0 10px; }
+
+/* def blocks */
+.def-block { border: 1px solid #cfe9e7; border-radius: 10px; margin: 11px 0; overflow: hidden; }
+.def-term { background: #2c6e6b; color: white; padding: 7px 16px; font-weight: bold; font-size: 0.93em; font-family: 'Courier New', monospace; }
+.def-body { background: #f9fefd; padding: 11px 16px; font-size: 0.92em; }
+
+/* architecture diagram */
+.arch-diagram {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin: 18px 0; flex-wrap: wrap;
+}
+.arch-tier {
+    border-radius: 10px; overflow: hidden; min-width: 160px; text-align: center;
+}
+.arch-head { padding: 10px 16px; color: white; font-weight: bold; font-size: 0.92em; }
+.arch-head.t1 { background: #2980b9; }
+.arch-head.t2 { background: #2c6e6b; }
+.arch-head.t3 { background: #8e44ad; }
+.arch-body {
+    background: #f9f9f9; border: 1px solid #ddd; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 10px 14px; font-size: 0.85em; line-height: 1.7;
+}
+.arch-arrow { color: #2c6e6b; font-size: 1.8em; font-weight: bold; padding: 0 10px; }
+
+/* scope cards */
+.scope-card { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.scope-head { padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em; display: flex; justify-content: space-between; align-items: center; }
+.scope-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; }
+.scope-head.global  { background: #2980b9; }
+.scope-head.local   { background: #8e44ad; }
+.scope-head.static  { background: #e67e22; }
+.scope-body { background: #f9fefd; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 16px; font-size: 0.91em; line-height: 1.85; }
+
+/* operator badge */
+.op-badge {
+    display: inline-block; background: #2c6e6b; color: white;
+    padding: 2px 10px; border-radius: 6px; font-family: 'Courier New', monospace;
+    font-size: 0.85em; margin: 2px;
+}
+.op-badge.orange { background: #e67e22; }
+.op-badge.blue   { background: #2980b9; }
+.op-badge.purple { background: #8e44ad; }
+.op-badge.red    { background: #c0392b; }
+
+/* lec badge */
+.lec-badge {
+    display: inline-block; background: #2980b9; color: white;
+    padding: 3px 12px; border-radius: 20px; font-size: 0.75em;
+    font-weight: bold; letter-spacing: 0.5px;
+}
+.lec-badge.lec2 { background: #27ae60; }
+
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .arch-head, .scope-head,
+    .lec-badge, .exam-banner, .op-badge {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .three-column, .vs-grid { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+    .arch-diagram { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🌐 Internet Programming & PHP</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: Internet · Web Applications · Client-Server Architecture · 3-Tier Model · Scripting · PHP Basics · Variables · Scope · Data Types · Operators · Conditionals</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+      <li><a href="#internet">The Internet & Web Applications</a></li>
+      <li><a href="#architecture">Client-Server Architecture & 3-Tier Model</a></li>
+      <li><a href="#scripting">Scripting — Client-Side vs Server-Side</a></li>
+      <li><a href="#xampp">XAMPP Components</a></li>
+      <li><a href="#php">PHP — Introduction & Features</a></li>
+      <li><a href="#variables">PHP Variables — Rules & Scope</a></li>
+      <li><a href="#datatypes">PHP Data Types</a></li>
+      <li><a href="#operators">PHP Operators</a></li>
+      <li><a href="#conditionals">PHP Conditional Statements</a></li>
+      <li><a href="#comparisons">Master Comparison Tables & Glossary</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: INTERNET & WEB APPS ===== -->
+  <div class="card" id="internet">
+    <h2 class="card-title"><span class="lec-badge">LECTURE 1</span> 🌐 The Internet & Web Applications</h2>
+
+    <h3 class="section-sub">What Is the Internet?</h3>
+    <div class="important">
+      The Internet is a <strong>global system of interconnected computer networks</strong> that use the standard Internet protocol suite <strong>(TCP/IP)</strong> to serve billions of users worldwide. Connected computers can exchange text, graphics, voice, video, and programs.
+    </div>
+    <ul>
+      <li>Origins: In the late 1960s, <strong>ARPA</strong> (Advanced Research Projects Agency) developed the <strong>ARPANET</strong>, which eventually evolved into today's Internet</li>
+      <li>Uses <strong>TCP/IP</strong> as the standard communication protocol</li>
+    </ul>
+
+    <h3 class="section-sub">What Is a Web Application?</h3>
+    <div class="important">
+      A <strong>web application</strong> is a computer program that allows website visitors to <strong>view, submit, and retrieve data</strong> to/from a database over the Internet using a web browser.
+    </div>
+    <ul>
+      <li>Uses <strong>server-side scripts</strong> (PHP, ASP) for storage and retrieval of information</li>
+      <li>Uses <strong>client-side scripts</strong> (JavaScript, HTML) to present information to users</li>
+      <li>Example: Google Apps, online banking portals, e-commerce sites</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 2: ARCHITECTURE ===== -->
+  <div class="card" id="architecture">
+    <h2 class="card-title">🏗️ Client-Server Architecture & 3-Tier Model</h2>
+
+    <h3 class="section-sub">Web Client & Web Server</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>🖥️ Web Client</strong>
+        The <strong>browser</strong> running on the user's computer. Makes HTTP requests to the server and displays the response. Examples: Chrome, Firefox, Edge.
+      </div>
+      <div class="box">
+        <strong>🖧 Web Server</strong>
+        Responds to client requests by <strong>providing resources</strong>. Executes server-side scripts (PHP, JSP, ASP). Consists of physical hardware, an OS, and server software.
+      </div>
+    </div>
+    <div class="note" style="margin-top:12px;">
+      Web server and client communicate using <strong>HTTP (Hypertext Transfer Protocol)</strong> — a <strong>platform-independent</strong> protocol.
+    </div>
+
+    <h3 class="section-sub">3-Tier Architecture</h3>
+    <div class="arch-diagram">
+      <div class="arch-tier">
+        <div class="arch-head t1">Tier 1 — Client</div>
+        <div class="arch-body">Web Browser<br>HTML / CSS / JS<br>Presents the UI</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-tier">
+        <div class="arch-head t2">Tier 2 — Application</div>
+        <div class="arch-body">Web Server<br>PHP / ASP / JSP<br>Business logic</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-tier">
+        <div class="arch-head t3">Tier 3 — Data</div>
+        <div class="arch-body">Database Server<br>MySQL / etc.<br>Stores data</div>
+      </div>
+    </div>
+    <ul>
+      <li><strong>Tier 1 (Presentation):</strong> The client — browser displays the user interface</li>
+      <li><strong>Tier 2 (Application/Logic):</strong> The web server — processes requests, runs scripts, applies business logic</li>
+      <li><strong>Tier 3 (Data):</strong> The database server — stores and retrieves persistent data</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 3: SCRIPTING ===== -->
+  <div class="card" id="scripting">
+    <h2 class="card-title">📜 Scripting — Client-Side vs Server-Side</h2>
+
+    <h3 class="section-sub">What Is Scripting?</h3>
+    <div class="important">
+      Scripting is a way to automate getting information to and from computers. A <strong>script</strong> is a computer program (a series of commands in a file) that can be <strong>executed without being compiled</strong>.
+    </div>
+
+    <h3 class="section-sub">Client-Side vs Server-Side Scripting</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Client-Side Scripting</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Runs on the <strong>user's browser</strong></li>
+            <li>▸ Downloaded, interpreted and executed by the browser</li>
+            <li>▸ Enhances functionality and appearance</li>
+            <li>▸ Makes pages <strong>more dynamic and interactive</strong></li>
+            <li>▸ Can <strong>validate user input</strong></li>
+            <li>▸ <strong>Reduces requests</strong> to the server</li>
+            <li>▸ Performance depends on <strong>user's computer speed</strong></li>
+            <li>▸ Example: <strong>JavaScript</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Server-Side Scripting</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Runs on the <strong>web server</strong></li>
+            <li>▸ Interpreted and executed on the server</li>
+            <li>▸ Generates results sent to user as HTML</li>
+            <li>▸ Interacts with <strong>databases and back-end storage</strong></li>
+            <li>▸ Script code is <strong>never seen by the user</strong></li>
+            <li>▸ Wide range of programmatic capabilities</li>
+            <li>▸ Access to server-side software</li>
+            <li>▸ Examples: <strong>PHP, ASP, JSP, Perl, Python</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: XAMPP ===== -->
+  <div class="card" id="xampp">
+    <h2 class="card-title">🛠️ XAMPP Components</h2>
+
+    <h3 class="section-sub">What Is XAMPP?</h3>
+    <div class="important">
+      XAMPP is a <strong>cross-platform</strong> web development environment that bundles Apache, MySQL, and PHP together. Works on Windows, Linux, and Mac.
+    </div>
+
+    <div class="grid">
+      <div class="box">
+        <strong>X — Cross Platform</strong>
+        Runs on Windows, Linux, and Mac operating systems.
+      </div>
+      <div class="box">
+        <strong>A — Apache Web Server</strong>
+        Provides the mechanics for delivering web pages to users. PHP sits inside Apache — they work together to create dynamic pages. <strong>Free, open-source, most popular web server application.</strong>
+      </div>
+      <div class="box">
+        <strong>M — MySQL</strong>
+        The <strong>database component</strong>. Provides data-storage for the web application — all data, products, accounts, etc. reside here. Free and open source. Supports multiple OS.
+      </div>
+      <div class="box">
+        <strong>P — PHP</strong>
+        Server-side scripting language embedded inside Apache. Processes dynamic content, accesses MySQL, generates HTML responses.
+      </div>
+    </div>
+
+    <h3 class="section-sub">Apache — Key Facts</h3>
+    <ul>
+      <li>Most <strong>popular</strong> web server application in the world</li>
+      <li><strong>Free and open-source</strong></li>
+      <li>Platform-independent — supports different operating systems</li>
+      <li>PHP component sits <strong>inside Apache</strong> — they work together</li>
+    </ul>
+
+    <h3 class="section-sub">MySQL — Key Facts</h3>
+    <ul>
+      <li>Provides the <strong>data-storage side</strong> of the web application</li>
+      <li>All data — products, accounts, user information — resides in MySQL</li>
+      <li><strong>Free and open source</strong></li>
+      <li>Supports different operating systems</li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 5: PHP ===== -->
+  <div class="card" id="php">
+    <h2 class="card-title"><span class="lec-badge lec2">LECTURE 2</span> 🐘 PHP — Introduction & Features</h2>
+
+    <h3 class="section-sub">What Is PHP?</h3>
+    <div class="important">
+      <strong>PHP</strong> stands for <strong>"PHP: Hypertext Preprocessor"</strong> (a recursive acronym). It is a widely-used general-purpose scripting language especially suited for web development that can be <strong>embedded directly into HTML</strong>.
+    </div>
+
+    <h3 class="section-sub">Historical Facts</h3>
+    <ul>
+      <li>Conceived in <strong>1994</strong> by <strong>Rasmus Lerdorf</strong></li>
+      <li>PHP pages contain <strong>HTML with embedded PHP code</strong> that does "something"</li>
+      <li>PHP code is enclosed in special start and end tags: <code>&lt;?php ... ?&gt;</code></li>
+      <li>These tags allow you to <strong>jump into and out of PHP mode</strong> within an HTML document</li>
+    </ul>
+
+    <h3 class="section-sub">Features of PHP</h3>
+    <div class="grid">
+      <div class="box"><strong>💰 Free to Download</strong>Available at <code>www.php.net</code> — no cost</div>
+      <div class="box"><strong>🔓 Open Source</strong>Anyone can view, modify, and redistribute the source code. Supported freely by community.</div>
+      <div class="box"><strong>🗄️ Database Support</strong>Supports multiple DBMSs including MySQL, PostgreSQL, SQLite, and more.</div>
+      <div class="box"><strong>🌐 Platform Independent</strong>Runs on Windows, Linux, Mac — code works across platforms without changes.</div>
+      <div class="box"><strong>🔌 Server Compatible</strong>Compatible with almost all servers used today — Apache, IIS, and others.</div>
+      <div class="box"><strong>📝 Embeddable in HTML</strong>PHP code can be mixed directly with HTML in the same file.</div>
+    </div>
+
+    <h3 class="section-sub">Server-Side Scripting — Definition (Lecture 2)</h3>
+    <div class="important">
+      Server-side scripting is a <strong>web server technology</strong> in which a user's request is fulfilled by running a script <strong>directly on the web server</strong> to generate dynamic web pages. Used to provide interactive web sites that interface to databases or other data stores on the server.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: VARIABLES ===== -->
+  <div class="card" id="variables">
+    <h2 class="card-title">📦 PHP Variables — Rules & Scope</h2>
+
+    <h3 class="section-sub">What Is a Variable?</h3>
+    <div class="important">
+      A <strong>variable</strong> is a representation of a particular value. PHP variables can hold values or expressions. PHP has <strong>no command for declaring a variable</strong> — it is created the moment you first assign a value to it.
+    </div>
+
+    <h3 class="section-sub">Rules for PHP Variables</h3>
+    <ul>
+      <li>A variable <strong>starts with the <code>$</code> sign</strong>, followed by the variable name</li>
+      <li>A variable name must start with a <strong>letter or underscore</strong> — never a digit</li>
+      <li>A variable name can only contain <strong>alpha-numeric characters and underscores</strong> (A-z, 0-9, _)</li>
+      <li>Variable names are <strong>case-sensitive</strong> — <code>$age</code> and <code>$AGE</code> are different variables</li>
+      <li>PHP has <strong>no command for declaring</strong> a variable — it is created on first assignment</li>
+    </ul>
+    <div class="highlight">
+      <strong>Examples:</strong> <code>$txt = "Hello world!";</code> &nbsp;|&nbsp; <code>$x = 5;</code> &nbsp;|&nbsp; <code>$_name = "Alice";</code>
+    </div>
+
+    <h3 class="section-sub">Variable Scope</h3>
+    <div class="important">
+      The <strong>scope</strong> of a variable is the part of the script where the variable can be <strong>referenced/used</strong>. PHP has three different variable scopes: <strong>local, global, and static</strong>.
+    </div>
+
+    <div class="scope-card">
+      <div class="scope-head global"><span>Global Scope</span><span class="badge">declared outside functions</span></div>
+      <div class="scope-body">
+        <ul>
+          <li>A variable declared <strong>outside a function</strong> has global scope</li>
+          <li>Can only be accessed <strong>outside functions</strong> by default</li>
+          <li>To use a global variable <strong>inside</strong> a function, use the <code>global</code> keyword</li>
+          <li>Using a global variable inside a function without <code>global</code> keyword generates an <strong>error</strong></li>
+        </ul>
+        <div class="highlight" style="margin-top:8px;">
+          <strong>global keyword syntax:</strong> <code>global $x, $y;</code> — placed inside the function to access global variables
+        </div>
+      </div>
+    </div>
+
+    <div class="scope-card">
+      <div class="scope-head local"><span>Local Scope</span><span class="badge">declared inside functions</span></div>
+      <div class="scope-body">
+        <ul>
+          <li>A variable declared <strong>within a function</strong> has local scope</li>
+          <li>Can only be accessed <strong>within that function</strong></li>
+          <li>Using a local variable <strong>outside</strong> its function generates an <strong>error</strong></li>
+          <li>Local variables are <strong>deleted</strong> when the function finishes executing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="scope-card">
+      <div class="scope-head static"><span>Static Scope</span><span class="badge">static keyword</span></div>
+      <div class="scope-body">
+        <ul>
+          <li>Normally, local variables are <strong>deleted when a function completes</strong></li>
+          <li>Using the <code>static</code> keyword prevents a local variable from being deleted</li>
+          <li>The variable <strong>retains its value</strong> between function calls</li>
+          <li>Still only accessible <strong>within the function</strong> (it remains local in scope)</li>
+          <li>Declared as: <code>static $x = 0;</code> — only initialized once</li>
+        </ul>
+        <div class="highlight" style="margin-top:8px;">
+          <strong>Use case:</strong> Counters that need to remember their value across multiple calls to the same function.
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Scope Rules Summary</h3>
+    <table>
+      <thead><tr><th>Scope Type</th><th>Declared Where</th><th>Accessible Where</th><th>Keyword</th><th>Persists After Function?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Global</strong></td><td>Outside functions</td><td>Outside functions (or inside with <code>global</code>)</td><td><code>global</code></td><td>Yes</td></tr>
+        <tr><td><strong>Local</strong></td><td>Inside a function</td><td>Only within that function</td><td>—</td><td>No — deleted</td></tr>
+        <tr><td><strong>Static</strong></td><td>Inside a function</td><td>Only within that function</td><td><code>static</code></td><td>Yes — value retained</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== SECTION 7: DATA TYPES ===== -->
+  <div class="card" id="datatypes">
+    <h2 class="card-title">🏷️ PHP Data Types</h2>
+
+    <h3 class="section-sub">Classification of PHP Data Types</h3>
+    <div class="three-column">
+      <div class="box">
+        <strong>Scalar Types (single value)</strong>
+        <ul class="plain" style="margin-top:6px;">
+          <li>▸ Boolean</li>
+          <li>▸ Integer</li>
+          <li>▸ Float</li>
+          <li>▸ String</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>Compound Types (collection)</strong>
+        <ul class="plain" style="margin-top:6px;">
+          <li>▸ Array</li>
+          <li>▸ Object</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>Special Types</strong>
+        <ul class="plain" style="margin-top:6px;">
+          <li>▸ Resource</li>
+          <li>▸ NULL</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Scalar Data Types — Definitions</h3>
+    <table>
+      <thead><tr><th>Type</th><th>Definition</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Boolean</strong></td><td>Represents two possible states — true or false. Used in conditions and logical operations.</td><td><code>true</code>, <code>false</code></td></tr>
+        <tr><td><strong>Integer</strong></td><td>A whole number (no decimal point). Can be positive, negative, or zero.</td><td><code>$x = 5;</code></td></tr>
+        <tr><td><strong>Float</strong></td><td>A number with a decimal point. Also called a "double" or "floating-point number".</td><td><code>$x = 3.14;</code></td></tr>
+        <tr><td><strong>String</strong></td><td>A sequence of characters enclosed in single or double quotes.</td><td><code>$s = "Hello";</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Compound & Special Types</h3>
+    <table>
+      <thead><tr><th>Type</th><th>Category</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Array</strong></td><td>Compound</td><td>A collection of multiple values stored under a single variable name. Indexed by numbers or strings.</td></tr>
+        <tr><td><strong>Object</strong></td><td>Compound</td><td>An instance of a class. Combines data (properties) and behaviour (methods).</td></tr>
+        <tr><td><strong>Resource</strong></td><td>Special</td><td>A reference to an external resource such as a database connection or file handle.</td></tr>
+        <tr><td><strong>NULL</strong></td><td>Special</td><td>Represents a variable with no value assigned. A variable is NULL if it has been assigned the constant NULL or has not been set.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Concatenation Operator</h3>
+    <div class="important">
+      PHP uses the <strong>period/dot (<code>.</code>)</strong> operator to concatenate (join) strings. It combines two string values into one.
+    </div>
+    <div class="highlight">
+      <code>$n = 5;</code><br>
+      <code>$s = 'There were ' . $n . ' ducks.';</code><br>
+      Result: <code>'There were 5 ducks.'</code>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: OPERATORS ===== -->
+  <div class="card" id="operators">
+    <h2 class="card-title">⚙️ PHP Operators</h2>
+
+    <h3 class="section-sub">Categories of Operators</h3>
+    <div class="grid">
+      <div class="box"><strong>Arithmetic</strong>Mathematical calculations: <span class="op-badge">+</span> <span class="op-badge">-</span> <span class="op-badge">*</span> <span class="op-badge">/</span> <span class="op-badge">%</span> <span class="op-badge">**</span></div>
+      <div class="box"><strong>Assignment</strong>Set variable values: <span class="op-badge orange">= += -= *= /= %=</span></div>
+      <div class="box"><strong>Comparison</strong>Compare two values, return boolean: <span class="op-badge blue">== === != &lt;&gt; !== &gt; &lt;</span></div>
+      <div class="box"><strong>Increment/Decrement</strong>Increase or decrease by 1: <span class="op-badge purple">++ --</span></div>
+      <div class="box"><strong>Logical</strong>Combine conditions: <span class="op-badge red">and or xor &amp;&amp; || !</span></div>
+      <div class="box"><strong>Concatenation</strong>Join strings: <span class="op-badge">.</span></div>
+    </div>
+
+    <h3 class="section-sub">Arithmetic Operators</h3>
+    <table>
+      <thead><tr><th>Operator</th><th>Name</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>+</code></td><td>Addition</td><td>Sum of operands</td></tr>
+        <tr><td><code>-</code></td><td>Subtraction</td><td>Difference of operands</td></tr>
+        <tr><td><code>*</code></td><td>Multiplication</td><td>Product of operands</td></tr>
+        <tr><td><code>/</code></td><td>Division</td><td>Quotient of operands</td></tr>
+        <tr><td><code>%</code></td><td>Modulus</td><td>Remainder of division</td></tr>
+        <tr><td><code>**</code></td><td>Exponentiation</td><td>Result of raising left operand to the power of right operand</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Comparison Operators — Key Distinctions</h3>
+    <table>
+      <thead><tr><th>Operator</th><th>Name</th><th>Returns true when...</th></tr></thead>
+      <tbody>
+        <tr><td><code>==</code></td><td>Equal</td><td>Values are equal (type may differ)</td></tr>
+        <tr><td><code>===</code></td><td>Identical</td><td>Values <strong>and types</strong> are both equal</td></tr>
+        <tr><td><code>!=</code> or <code>&lt;&gt;</code></td><td>Not equal</td><td>Values are not equal</td></tr>
+        <tr><td><code>!==</code></td><td>Not identical</td><td>Values are not equal <strong>or</strong> types differ</td></tr>
+        <tr><td><code>&gt;</code></td><td>Greater than</td><td>Left is greater than right</td></tr>
+        <tr><td><code>&lt;</code></td><td>Less than</td><td>Left is less than right</td></tr>
+        <tr><td><code>&gt;=</code></td><td>Greater than or equal to</td><td>Left is greater than or equal to right</td></tr>
+        <tr><td><code>&lt;=</code></td><td>Less than or equal to</td><td>Left is less than or equal to right</td></tr>
+        <tr><td><code>&lt;=&gt;</code></td><td>Spaceship (PHP 7+)</td><td>Returns -1, 0, or 1 depending on comparison</td></tr>
+      </tbody>
+    </table>
+    <div class="warning">
+      <strong>⚠️ == vs ===:</strong> <code>==</code> checks value only (loose comparison) — <code>$x == $y</code> returns true for <code>100</code> and <code>"100"</code>. <code>===</code> checks both value AND type (strict) — <code>100 === "100"</code> returns false because one is integer and one is string.
+    </div>
+
+    <h3 class="section-sub">Increment / Decrement Operators</h3>
+    <table>
+      <thead><tr><th>Operator</th><th>Name</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>++$x</code></td><td>Pre-increment</td><td><strong>Increments first</strong>, then returns the new value</td></tr>
+        <tr><td><code>$x++</code></td><td>Post-increment</td><td><strong>Returns current value first</strong>, then increments</td></tr>
+        <tr><td><code>--$x</code></td><td>Pre-decrement</td><td><strong>Decrements first</strong>, then returns the new value</td></tr>
+        <tr><td><code>$x--</code></td><td>Post-decrement</td><td><strong>Returns current value first</strong>, then decrements</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Logical Operators</h3>
+    <table>
+      <thead><tr><th>Operator</th><th>Name</th><th>Returns true when...</th></tr></thead>
+      <tbody>
+        <tr><td><code>and</code> / <code>&amp;&amp;</code></td><td>And</td><td><strong>Both</strong> operands are true</td></tr>
+        <tr><td><code>or</code> / <code>||</code></td><td>Or</td><td><strong>Either</strong> operand is true</td></tr>
+        <tr><td><code>xor</code></td><td>Exclusive Or</td><td>Either is true, but <strong>not both</strong></td></tr>
+        <tr><td><code>!</code></td><td>Not</td><td>The operand is <strong>not</strong> true (negation)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Comments in PHP</h3>
+    <div class="two-column">
+      <div class="box"><strong>Single-Line Comments</strong><code>// comment text</code><br><code># comment text</code></div>
+      <div class="box"><strong>Multi-Line Comments</strong><code>/* comment text that spans multiple lines */</code></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: CONDITIONALS ===== -->
+  <div class="card" id="conditionals">
+    <h2 class="card-title">🔀 PHP Conditional Statements</h2>
+
+    <h3 class="section-sub">What Are Conditional Statements?</h3>
+    <div class="important">
+      Conditional statements are used to <strong>perform different actions for different conditions</strong>. They allow the program to make decisions at runtime based on whether conditions are true or false.
+    </div>
+
+    <h3 class="section-sub">Four Types of Conditional Statements</h3>
+    <table>
+      <thead><tr><th>Statement</th><th>Definition</th><th>Use When</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>if</code></td>
+          <td>Execute code <strong>only if</strong> a specified condition is true</td>
+          <td>One condition, one action if true</td>
+        </tr>
+        <tr>
+          <td><code>if...else</code></td>
+          <td>Execute one block if condition is true, <strong>another block if false</strong></td>
+          <td>Binary choice — true or false path</td>
+        </tr>
+        <tr>
+          <td><code>if...elseif...else</code></td>
+          <td>Select from <strong>multiple conditions</strong> in order; else handles the remaining cases</td>
+          <td>Multiple conditions, evaluated top-down</td>
+        </tr>
+        <tr>
+          <td><code>switch</code></td>
+          <td>Selects one of many blocks based on a <strong>variable's value</strong> matching a case</td>
+          <td>One variable, many possible exact-match values</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">switch Statement — Key Rules</h3>
+    <ul>
+      <li>Evaluates one expression/variable against multiple <strong>case values</strong></li>
+      <li>Each case ends with a <strong><code>break</code></strong> statement — without it, execution "falls through" to the next case</li>
+      <li>The <strong><code>default</code></strong> case runs when no other case matches — equivalent to the final <code>else</code></li>
+      <li>More efficient than many <code>elseif</code> conditions when checking one variable against many values</li>
+    </ul>
+    <div class="highlight">
+      <strong>switch syntax:</strong><br>
+      <code>switch($var) {</code><br>
+      <code>&nbsp;&nbsp;case 'value1': // code; break;</code><br>
+      <code>&nbsp;&nbsp;case 'value2': // code; break;</code><br>
+      <code>&nbsp;&nbsp;default: // code; break;</code><br>
+      <code>}</code>
+    </div>
+
+    <h3 class="section-sub">if...elseif...else — Key Rules</h3>
+    <ul>
+      <li>Conditions are evaluated <strong>from top to bottom</strong></li>
+      <li>The <strong>first matching condition</strong> executes its block — remaining conditions are skipped</li>
+      <li>The final <code>else</code> block runs if <strong>none of the conditions are true</strong></li>
+      <li>Can have multiple <code>elseif</code> blocks between the initial <code>if</code> and final <code>else</code></li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION 10: COMPARISONS & GLOSSARY ===== -->
+  <div class="card" id="comparisons">
+    <h2 class="card-title">⚖️ Master Comparison Tables & Glossary</h2>
+
+    <h3 class="section-sub">Client-Side vs Server-Side Scripting — Full Comparison</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Client-Side</th><th>Server-Side</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Where it runs</strong></td><td>User's browser</td><td>Web server</td></tr>
+        <tr><td><strong>Who executes it</strong></td><td>Browser's JS engine</td><td>Web server software</td></tr>
+        <tr><td><strong>Visible to user?</strong></td><td>Yes — source can be viewed</td><td>No — never seen by user</td></tr>
+        <tr><td><strong>Database access?</strong></td><td>No (directly)</td><td>Yes</td></tr>
+        <tr><td><strong>Server requests?</strong></td><td>Reduces requests</td><td>Generates responses</td></tr>
+        <tr><td><strong>Performance</strong></td><td>Depends on client machine</td><td>Depends on server</td></tr>
+        <tr><td><strong>Languages</strong></td><td>JavaScript</td><td>PHP, ASP, JSP, Python, Perl</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">== vs === (Loose vs Strict Comparison)</h3>
+    <table>
+      <thead><tr><th>Operator</th><th>Type</th><th>Checks Value?</th><th>Checks Type?</th><th>100 == "100"</th><th>100 === "100"</th></tr></thead>
+      <tbody>
+        <tr><td><code>==</code></td><td>Loose (Equal)</td><td>✅</td><td>❌</td><td><code>true</code></td><td>—</td></tr>
+        <tr><td><code>===</code></td><td>Strict (Identical)</td><td>✅</td><td>✅</td><td>—</td><td><code>false</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Pre vs Post Increment/Decrement</h3>
+    <table>
+      <thead><tr><th>Form</th><th>Order of Operations</th><th>Example (x=5)</th><th>Echo result</th><th>x after</th></tr></thead>
+      <tbody>
+        <tr><td><code>++$x</code> (Pre)</td><td>Increment → Return</td><td><code>echo ++$x</code></td><td>6</td><td>6</td></tr>
+        <tr><td><code>$x++</code> (Post)</td><td>Return → Increment</td><td><code>echo $x++</code></td><td>5</td><td>6</td></tr>
+        <tr><td><code>--$x</code> (Pre)</td><td>Decrement → Return</td><td><code>echo --$x</code></td><td>4</td><td>4</td></tr>
+        <tr><td><code>$x--</code> (Post)</td><td>Return → Decrement</td><td><code>echo $x--</code></td><td>5</td><td>4</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Conditional Statements — When to Use Which</h3>
+    <table>
+      <thead><tr><th>Statement</th><th>Best Used When</th></tr></thead>
+      <tbody>
+        <tr><td><code>if</code></td><td>One condition — run code only if it's true</td></tr>
+        <tr><td><code>if...else</code></td><td>Binary decision — one action for true, another for false</td></tr>
+        <tr><td><code>if...elseif...else</code></td><td>Multiple different conditions to check in sequence</td></tr>
+        <tr><td><code>switch</code></td><td>One variable compared to many specific exact values</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Key Definitions Glossary</h3>
+
+    <div class="def-block">
+      <div class="def-term">Internet</div>
+      <div class="def-body">A global system of interconnected computer networks using TCP/IP. Evolved from ARPANET (developed by ARPA in the late 1960s). Enables exchange of text, graphics, voice, video, and programs between connected computers.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Web Application</div>
+      <div class="def-body">A computer program that allows visitors to view, submit, and retrieve data to/from a database over the Internet using a web browser. Combines server-side scripts (PHP/ASP) and client-side scripts (JavaScript/HTML).</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Web Client</div>
+      <div class="def-body">The browser running on the user's computer. Makes HTTP requests to the server and displays the responses. Examples: Chrome, Firefox, Edge.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Web Server</div>
+      <div class="def-body">A physical server running server software that responds to client HTTP requests by providing resources. Executes server-side scripts. Consists of hardware, an OS, and web server software (e.g., Apache).</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">HTTP (Hypertext Transfer Protocol)</div>
+      <div class="def-body">The platform-independent communication protocol used by web servers and clients to exchange data over the web.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">3-Tier Architecture</div>
+      <div class="def-body">A web architecture with three layers: Tier 1 (Client/Presentation — browser), Tier 2 (Application/Logic — web server with scripts), Tier 3 (Data — database server).</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Scripting Language</div>
+      <div class="def-body">A computer language with a series of commands in a file that can be executed without being compiled. Used to automate tasks. Examples: JavaScript (client), PHP (server).</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">PHP</div>
+      <div class="def-body">PHP: Hypertext Preprocessor. A widely-used open-source general-purpose scripting language especially suited for web development. Can be embedded in HTML. Created in 1994 by Rasmus Lerdorf. Platform independent, supports MySQL, compatible with Apache and IIS.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Variable (PHP)</div>
+      <div class="def-body">A named representation of a value. Always starts with $. Created on first assignment — no declaration command needed. Case-sensitive. Name must start with a letter or underscore, cannot start with a digit.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">Variable Scope</div>
+      <div class="def-body">The part of the script where a variable can be referenced. PHP has three scopes: global (outside functions), local (inside functions — deleted when done), and static (inside functions — value persists across calls).</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">static keyword</div>
+      <div class="def-body">Used inside a function to prevent a local variable from being deleted when the function ends. The variable retains its value between calls but remains accessible only within the function.</div>
+    </div>
+    <div class="def-block">
+      <div class="def-term">global keyword</div>
+      <div class="def-body">Used inside a function to access a variable that was declared in the global scope. Without it, a global variable is not accessible inside a function.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — Internet Programming & PHP Introduction · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

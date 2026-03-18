@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – PHP Loops & Arrays: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 8px; font-size: 2.3em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 6px; font-size: 1.05em; }
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white; padding: 12px 20px; border-radius: 10px;
+    margin-bottom: 30px; font-size: 1em; letter-spacing: 0.5px;
+}
+
+.toc { background: white; padding: 22px 28px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+.toc-label { color: #5a9d99; font-weight: 700; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; margin-top: 8px; }
+
+.card { background: white; padding: 28px; margin: 22px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.card-title {
+    color: #2c6e6b; border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px; margin-bottom: 18px; font-size: 1.5em;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.section-sub {
+    color: #2c6e6b; font-size: 1.1em; margin: 22px 0 10px 0;
+    font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.section-sub::before {
+    content: ''; display: inline-block; width: 4px; height: 18px;
+    background: #2c6e6b; border-radius: 2px; flex-shrink: 0;
+}
+
+ul { list-style: none; margin-left: 0; line-height: 1.9; }
+ul li { padding: 3px 0 3px 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: #5a9d99; font-size: 0.85em; top: 5px; }
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 14px; }
+.box { background: #f3fbfa; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #2c6e6b; font-size: 0.93em; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight { background: #fff9e6; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 14px 0; font-size: 0.93em; }
+.important { background: #e8f5e9; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 14px 0; font-size: 0.93em; }
+.note      { background: #e3f2fd; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; font-size: 0.93em; }
+.warning   { background: #fce4ec; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 14px 0; font-size: 0.93em; }
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 14px; }
+
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.88em; color: #c0392b; }
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.91em; }
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td { padding: 9px 13px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS compare */
+.vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 14px 0; align-items: stretch; }
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head { padding: 8px 14px; font-weight: bold; color: white; font-size: 0.9em; text-align: center; }
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side .vs-body { background: #f9f9f9; padding: 12px 14px; font-size: 0.88em; line-height: 1.9; height: 100%; border: 1px solid #ddd; border-top: none; }
+.vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: #999; font-size: 1.1em; padding: 0 10px; }
+
+/* def blocks */
+.def-block { border: 1px solid #cfe9e7; border-radius: 10px; margin: 11px 0; overflow: hidden; }
+.def-term { background: #2c6e6b; color: white; padding: 7px 16px; font-weight: bold; font-size: 0.93em; font-family: 'Courier New', monospace; }
+.def-body { background: #f9fefd; padding: 11px 16px; font-size: 0.92em; }
+
+/* loop anatomy */
+.anatomy {
+    background: #1e1e1e; color: #d4d4d4; padding: 16px 20px;
+    border-radius: 8px; margin: 12px 0; font-family: 'Courier New', monospace;
+    font-size: 0.85em; line-height: 2;
+}
+.anatomy .kw  { color: #569cd6; }
+.anatomy .var { color: #9cdcfe; }
+.anatomy .num { color: #b5cea8; }
+.anatomy .ann {
+    display: inline-block; background: #2c6e6b; color: white;
+    font-family: 'Segoe UI', sans-serif; font-size: 0.72em;
+    padding: 1px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle;
+}
+.anatomy .ann.orange { background: #e67e22; }
+.anatomy .ann.blue   { background: #2980b9; }
+.anatomy .ann.red    { background: #c0392b; }
+.anatomy .ann.purple { background: #8e44ad; }
+
+/* array visual */
+.arr-visual { display: flex; align-items: stretch; margin: 14px 0 4px 0; flex-wrap: wrap; gap: 0; }
+.arr-cell { border: 2px solid #2c6e6b; min-width: 78px; text-align: center; font-family: 'Courier New', monospace; }
+.arr-cell .idx { background: #2c6e6b; color: white; font-size: 0.72em; padding: 2px 4px; font-family: 'Segoe UI', sans-serif; }
+.arr-cell .val { padding: 8px 6px; font-size: 0.88em; background: #f3fbfa; }
+.arr-cell + .arr-cell { border-left: none; }
+
+/* assoc visual */
+.assoc-visual { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+.assoc-row { display: flex; align-items: center; gap: 0; }
+.assoc-key { background: #2c6e6b; color: white; padding: 6px 14px; font-family: 'Courier New', monospace; font-size: 0.85em; border-radius: 6px 0 0 6px; min-width: 100px; text-align: center; }
+.assoc-arrow { background: #cfe9e7; padding: 6px 10px; color: #2c6e6b; font-weight: bold; font-size: 0.9em; }
+.assoc-val { background: #f3fbfa; border: 2px solid #2c6e6b; border-left: none; padding: 6px 14px; font-family: 'Courier New', monospace; font-size: 0.85em; border-radius: 0 6px 6px 0; flex: 1; }
+
+/* matrix */
+.matrix { display: inline-grid; grid-template-columns: repeat(3, 58px); gap: 4px; margin: 14px 0; }
+.matrix-cell { background: #f3fbfa; border: 2px solid #2c6e6b; text-align: center; padding: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; border-radius: 6px; }
+.matrix-cell.head { background: #2c6e6b; color: white; font-size: 0.72em; padding: 5px 0; }
+
+/* divider */
+.topic-divider {
+    text-align: center; margin: 36px 0 28px 0;
+    display: flex; align-items: center; gap: 14px;
+}
+.topic-divider::before, .topic-divider::after {
+    content: ''; flex: 1; height: 2px; background: #cfe9e7;
+}
+.topic-divider span {
+    background: #2c6e6b; color: white; padding: 6px 22px;
+    border-radius: 20px; font-weight: 700; font-size: 1em; white-space: nowrap;
+}
+
+/* func cards */
+.func-card { border: 1px solid #cfe9e7; border-radius: 10px; margin: 12px 0; overflow: hidden; }
+.func-head { background: #e67e22; color: white; padding: 7px 16px; font-family: 'Courier New', monospace; font-weight: bold; font-size: 0.93em; display: flex; justify-content: space-between; align-items: center; }
+.func-head .tag { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; font-family: 'Segoe UI', sans-serif; }
+.func-head.blue   { background: #2980b9; }
+.func-head.purple { background: #8e44ad; }
+.func-head.teal   { background: #2c6e6b; }
+.func-head.red    { background: #c0392b; }
+.func-body { background: #f9fefd; padding: 12px 16px; font-size: 0.92em; line-height: 1.85; }
+
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .func-head, .anatomy,
+    .arr-cell .idx, .assoc-key, .matrix-cell.head, .exam-banner, .topic-divider span {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid, .toc-cols { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🔁 PHP Loops & 🗂️ Arrays</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: while · do-while · for · foreach · Indexed Arrays · Associative Arrays · Multidimensional Arrays · Traversal · Array Functions · Inspection Functions</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <div class="toc-cols">
+      <div>
+        <div class="toc-label">Part 1 — PHP Loops</div>
+        <ol>
+          <li><a href="#loops-intro">What Are Loops?</a></li>
+          <li><a href="#while">while Loop</a></li>
+          <li><a href="#dowhile">do...while Loop</a></li>
+          <li><a href="#for">for Loop</a></li>
+          <li><a href="#foreach">foreach Loop</a></li>
+          <li><a href="#nested">Nested Loops & Modulo</a></li>
+          <li><a href="#loops-compare">Loop Comparison Table</a></li>
+        </ol>
+      </div>
+      <div>
+        <div class="toc-label">Part 2 — PHP Arrays</div>
+        <ol start="8">
+          <li><a href="#arrays-intro">What Is an Array?</a></li>
+          <li><a href="#indexed">Indexed Arrays</a></li>
+          <li><a href="#assoc">Associative Arrays</a></li>
+          <li><a href="#multi">Multidimensional Arrays</a></li>
+          <li><a href="#traversal">Traversing Arrays</a></li>
+          <li><a href="#functions">Array Functions</a></li>
+          <li><a href="#glossary">Glossary & Comparisons</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 1: LOOPS ===================== -->
+  <div class="topic-divider"><span>🔁 PART 1 — PHP Loops</span></div>
+
+  <!-- LOOPS INTRO -->
+  <div class="card" id="loops-intro">
+    <h2 class="card-title">💡 What Are Loops?</h2>
+    <div class="important">
+      Loops execute a block of code a <strong>specified number of times</strong>, or <strong>while a specified condition is true</strong>. They eliminate repetitive code by automating repeated tasks.
+    </div>
+    <p style="margin-top:12px;"><strong>PHP supports four looping statements:</strong></p>
+    <div class="grid" style="margin-top:12px;">
+      <div class="box"><strong>while</strong>Checks condition <em>before</em> each run. May never execute if condition starts false.</div>
+      <div class="box"><strong>do...while</strong>Checks condition <em>after</em> each run. Always executes at least once.</div>
+      <div class="box"><strong>for</strong>Used when the exact number of iterations is known in advance.</div>
+      <div class="box"><strong>foreach</strong>Designed for arrays. Iterates over every element automatically.</div>
+    </div>
+  </div>
+
+  <!-- WHILE -->
+  <div class="card" id="while">
+    <h2 class="card-title">🔄 while Loop</h2>
+    <div class="important">
+      The while loop executes a block of code <strong>repeatedly as long as the condition remains true</strong>. The condition is evaluated <strong>before</strong> each iteration.
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Condition is checked <strong>before</strong> the body executes each time</li>
+      <li>If the condition is false at the start, the body <strong>never runs</strong> (zero iterations)</li>
+      <li>The variable in the condition <strong>must be updated</strong> inside the loop body</li>
+      <li>Failing to update the condition variable causes an <strong>infinite loop</strong></li>
+      <li>Best used when the number of iterations is <strong>not known in advance</strong></li>
+    </ul>
+    <div class="highlight"><strong>Syntax:</strong> <code>while (condition) { // body }</code></div>
+    <h3 class="section-sub">Loop Anatomy</h3>
+    <div class="anatomy">
+<span class="var">$num</span> = <span class="num">1</span>; <span class="ann orange">① initialise before loop</span>
+<span class="kw">while</span> (<span class="var">$num</span> &lt;= <span class="num">5</span>) <span class="ann blue">② condition checked here — BEFORE each run</span>
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">echo</span> <span style="color:#ce9178">"The number is "</span> . <span class="var">$num</span> . <span style="color:#ce9178">"&lt;br&gt;"</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">$num</span>++; <span class="ann red">③ update — prevents infinite loop!</span>
+}
+    </div>
+    <div class="warning">
+      <strong>⚠️ Infinite Loop:</strong> If the condition variable is never updated, the condition never becomes false and the loop runs forever — crashing the server.
+    </div>
+  </div>
+
+  <!-- DO WHILE -->
+  <div class="card" id="dowhile">
+    <h2 class="card-title">🔃 do...while Loop</h2>
+    <div class="important">
+      The do...while loop executes the body <strong>first</strong>, then checks the condition. The body is <strong>guaranteed to run at least once</strong> regardless of the condition.
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Body executes <strong>first</strong> — condition is checked <strong>after</strong> each iteration</li>
+      <li>Guarantees the body runs <strong>at least one time</strong></li>
+      <li>Note the mandatory <strong>semicolon</strong> after the closing while parenthesis: <code>while (condition);</code></li>
+      <li>Useful for menus, prompts, or situations where an initial execution is always required</li>
+    </ul>
+    <div class="highlight"><strong>Syntax:</strong> <code>do { // body } while (condition);</code></div>
+    <h3 class="section-sub">Critical Difference from while</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">while — condition BEFORE</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Condition checked <strong>before</strong> first run</li>
+            <li>▸ If false from start → body <strong>never runs</strong></li>
+            <li>▸ Minimum iterations: <strong>0</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">do...while — condition AFTER</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Body runs <strong>first</strong>, then condition checked</li>
+            <li>▸ Even if false from start → body <strong>always runs once</strong></li>
+            <li>▸ Minimum iterations: <strong>1</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOR -->
+  <div class="card" id="for">
+    <h2 class="card-title">🔢 for Loop</h2>
+    <div class="important">
+      The for loop is used when you <strong>know in advance exactly how many times</strong> the script should run. It combines initialisation, condition, and increment in a single header line.
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Three parts in the header: <strong>initialise ; condition ; increment</strong></li>
+      <li><strong>Initialise</strong> — runs <em>once</em> at the very start</li>
+      <li><strong>Condition</strong> — checked <em>before every</em> iteration; loop stops when false</li>
+      <li><strong>Increment/Decrement</strong> — runs <em>after every</em> iteration</li>
+    </ul>
+    <div class="highlight"><strong>Syntax:</strong> <code>for (init; condition; increment) { // body }</code></div>
+    <h3 class="section-sub">Loop Anatomy — Annotated</h3>
+    <div class="anatomy">
+<span class="kw">for</span> ( <span class="var">$start</span> = <span class="num">0</span> <span class="ann orange">① init — runs once</span> ; <span class="var">$start</span> &lt; <span class="num">11</span> <span class="ann blue">② condition — checked before each run</span> ; <span class="var">$start</span>++ <span class="ann red">③ increment — runs after each run</span> ) {
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">$counter</span> = <span class="var">$counter</span> + <span class="num">1</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">print</span> <span class="var">$counter</span> . <span style="color:#ce9178">"&lt;BR&gt;"</span>;
+}
+    </div>
+  </div>
+
+  <!-- FOREACH -->
+  <div class="card" id="foreach">
+    <h2 class="card-title">📋 foreach Loop</h2>
+    <div class="important">
+      The foreach loop is designed specifically to <strong>iterate over every element of an array</strong>. It loops automatically without needing a counter variable. Elements are processed in their <strong>internal order</strong>.
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Specifically designed for <strong>arrays</strong> — not suitable for non-array values</li>
+      <li>No counter variable needed — PHP manages iteration automatically</li>
+      <li>Two forms: with <strong>key-value pair</strong>, or <strong>value only</strong></li>
+      <li><code>$key</code> holds the index (number) or string key of each element</li>
+      <li><code>$value</code> holds the actual data of each element</li>
+      <li>Elements are processed in their <strong>internal (insertion) order</strong></li>
+    </ul>
+    <div class="two-column">
+      <div class="highlight"><strong>With key:</strong><br><code>foreach ($arr as $key =&gt; $value) { }</code><br>Use when you need both the key and value.</div>
+      <div class="highlight"><strong>Value only:</strong><br><code>foreach ($arr as $value) { }</code><br>Use when you only need the element data.</div>
+    </div>
+  </div>
+
+  <!-- NESTED & MODULO -->
+  <div class="card" id="nested">
+    <h2 class="card-title">🔳 Nested Loops & Modulo Operator</h2>
+
+    <h3 class="section-sub">Nested Loops</h3>
+    <div class="important">
+      A <strong>nested loop</strong> is a loop placed inside another loop. For each single iteration of the <strong>outer loop</strong>, the <strong>inner loop runs through all its iterations completely</strong>.
+    </div>
+    <ul>
+      <li>Total iterations = outer count × inner count (e.g., 10 × 10 = 100)</li>
+      <li>Commonly used for grids, matrices, and multi-dimensional combinations</li>
+      <li>Each loop has its own counter variable (e.g., <code>$a</code> and <code>$b</code>)</li>
+    </ul>
+    <div class="highlight">
+      <strong>Two-digit combinations example:</strong><br>
+      Outer loop controls tens digit (0–9) · Inner loop controls units digit (0–9)<br>
+      Result: 10 × 10 = <strong>100 combinations</strong> (00 to 99)
+    </div>
+
+    <h3 class="section-sub">Modulo Operator <code>%</code></h3>
+    <div class="important">
+      The modulo operator <strong><code>%</code></strong> returns the <strong>remainder</strong> of a division. If <code>$x % $n == 0</code>, then <code>$x</code> is <strong>perfectly divisible</strong> by <code>$n</code> (no remainder).
+    </div>
+    <ul>
+      <li>Used to check divisibility — essential for FizzBuzz-style problems</li>
+      <li><strong>Order of checks matters</strong> in FizzBuzz: always check the combined condition (<code>%3==0 && %5==0</code>) <em>first</em> before individual ones</li>
+    </ul>
+    <table>
+      <thead><tr><th>Expression</th><th>Meaning</th><th>FizzBuzz Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>$i % 3 == 0</code></td><td>Divisible by 3</td><td>Print "Fizz"</td></tr>
+        <tr><td><code>$i % 5 == 0</code></td><td>Divisible by 5</td><td>Print "Buzz"</td></tr>
+        <tr><td><code>$i % 3 == 0 && $i % 5 == 0</code></td><td>Divisible by both</td><td>Print "FizzBuzz" — check <strong>first!</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LOOP COMPARISON -->
+  <div class="card" id="loops-compare">
+    <h2 class="card-title">⚖️ Loop Comparison Table</h2>
+    <table>
+      <thead><tr><th>Loop</th><th>Condition Checked</th><th>Min. Runs</th><th>Counter Needed?</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td><strong>while</strong></td><td>Before each run</td><td>0 (may skip)</td><td>Yes — manual</td><td>Unknown iterations</td></tr>
+        <tr><td><strong>do...while</strong></td><td>After each run</td><td>1 (always once)</td><td>Yes — manual</td><td>Must run at least once</td></tr>
+        <tr><td><strong>for</strong></td><td>Before each run</td><td>0 (may skip)</td><td>Built-in</td><td>Known count of iterations</td></tr>
+        <tr><td><strong>foreach</strong></td><td>Has next element</td><td>0 (empty array)</td><td>None needed</td><td>Arrays — all elements</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===================== PART 2: ARRAYS ===================== -->
+  <div class="topic-divider"><span>🗂️ PART 2 — PHP Arrays</span></div>
+
+  <!-- ARRAYS INTRO -->
+  <div class="card" id="arrays-intro">
+    <h2 class="card-title">💡 What Is an Array?</h2>
+    <div class="important">
+      An array is a <strong>special variable that can hold more than one value at a time</strong>. It is an ordered collection of <strong>key-value pairs</strong> where each stored value is called an <em>element</em>. Arrays can hold <strong>heterogeneous data</strong> — strings, integers, booleans, other arrays simultaneously.
+    </div>
+    <div class="grid" style="margin-top:14px;">
+      <div class="box"><strong>📌 Indexed Array</strong>Keys are auto-assigned numbers starting from 0.</div>
+      <div class="box"><strong>🔑 Associative Array</strong>Keys are custom strings defined by the programmer.</div>
+      <div class="box"><strong>🧮 Multidimensional Array</strong>Arrays that contain other arrays as elements.</div>
+    </div>
+    <div class="note" style="margin-top:14px;">
+      <strong>Heterogeneous data:</strong> An array is not limited to one type. A single array can hold strings, integers, booleans, and other arrays at the same time.
+    </div>
+  </div>
+
+  <!-- INDEXED -->
+  <div class="card" id="indexed">
+    <h2 class="card-title">📌 Indexed Arrays</h2>
+    <div class="important">
+      Indexed arrays store elements with <strong>automatically assigned numeric keys starting from 0</strong>. Elements are accessed by their position (index number).
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Index numbers always begin at <strong>0</strong> and extend to <strong>length − 1</strong></li>
+      <li>Created using <code>array()</code> or by direct assignment: <code>$arr[0] = "value"</code></li>
+      <li>Elements accessed using square brackets: <code>$array[index]</code></li>
+      <li>Can store mixed types — strings and numbers in the same array</li>
+    </ul>
+    <h3 class="section-sub">Visual — Indexed Array Structure</h3>
+    <p style="margin-bottom:10px; font-size:0.92em;">Example: <code>$colors = array("Red", "Green", "Blue")</code></p>
+    <div class="arr-visual">
+      <div class="arr-cell"><div class="idx">Index [0]</div><div class="val">Red</div></div>
+      <div class="arr-cell"><div class="idx">Index [1]</div><div class="val">Green</div></div>
+      <div class="arr-cell"><div class="idx">Index [2]</div><div class="val">Blue</div></div>
+    </div>
+    <p style="font-size:0.84em; color:#666; margin-top:4px;">Length = 3 &nbsp;|&nbsp; First index = 0 &nbsp;|&nbsp; Last index = 2 (length − 1)</p>
+    <h3 class="section-sub">Heterogeneous Example</h3>
+    <div class="arr-visual">
+      <div class="arr-cell"><div class="idx">Index [0]</div><div class="val">"abc"</div></div>
+      <div class="arr-cell"><div class="idx">Index [1]</div><div class="val">'a'</div></div>
+      <div class="arr-cell"><div class="idx">Index [2]</div><div class="val">100</div></div>
+      <div class="arr-cell"><div class="idx">Index [3]</div><div class="val">200</div></div>
+    </div>
+    <p style="font-size:0.84em; color:#666; margin-top:4px;">Mixed types: string, character, integer, integer — all in one array.</p>
+  </div>
+
+  <!-- ASSOCIATIVE -->
+  <div class="card" id="assoc">
+    <h2 class="card-title">🔑 Associative Arrays</h2>
+    <div class="important">
+      Associative arrays use <strong>custom string keys</strong> (instead of auto-numbers) to create a meaningful relationship between key and value — like a dictionary or lookup table. Keys and values are paired using the <code>=&gt;</code> operator.
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Functionally similar to indexed arrays — differ only in <strong>key type</strong></li>
+      <li>Keys are <strong>custom strings</strong> defined by the programmer</li>
+      <li>Creates a <strong>strong association</strong> between a key name and its value</li>
+      <li>Keys can also be integers (including negative integers)</li>
+      <li>Elements accessed using string keys: <code>$array["keyname"]</code></li>
+    </ul>
+    <h3 class="section-sub">Visual — Associative Array Structure</h3>
+    <p style="margin-bottom:10px; font-size:0.92em;">Example: <code>$age = array("Peter" =&gt; 35, "Ben" =&gt; 37, "Joe" =&gt; 43)</code></p>
+    <div class="assoc-visual">
+      <div class="assoc-row"><div class="assoc-key">"Peter"</div><div class="assoc-arrow">=&gt;</div><div class="assoc-val">35</div></div>
+      <div class="assoc-row"><div class="assoc-key">"Ben"</div><div class="assoc-arrow">=&gt;</div><div class="assoc-val">37</div></div>
+      <div class="assoc-row"><div class="assoc-key">"Joe"</div><div class="assoc-arrow">=&gt;</div><div class="assoc-val">43</div></div>
+    </div>
+    <h3 class="section-sub">Indexed vs Associative</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Indexed Array</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Keys: <strong>auto-assigned numbers</strong> (0, 1, 2…)</li>
+            <li>▸ Access: <code>$arr[0]</code></li>
+            <li>▸ Best for: ordered lists</li>
+            <li>▸ Loop with: <code>for</code> + <code>count()</code></li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Associative Array</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ Keys: <strong>custom strings</strong> defined by developer</li>
+            <li>▸ Access: <code>$arr["key"]</code></li>
+            <li>▸ Best for: key-value maps, dictionaries</li>
+            <li>▸ Loop with: <code>foreach</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTIDIMENSIONAL -->
+  <div class="card" id="multi">
+    <h2 class="card-title">🧮 Multidimensional Arrays</h2>
+    <div class="important">
+      A multidimensional array is an <strong>array that contains other arrays as its elements</strong>. The <strong>dimension</strong> equals the number of indices needed to access one element.
+    </div>
+    <h3 class="section-sub">Key Concepts</h3>
+    <ul>
+      <li>Values in an array can themselves <strong>be arrays</strong></li>
+      <li><strong>2D array</strong> — needs <strong>2 indices</strong>: <code>$arr[row][col]</code></li>
+      <li><strong>3D array</strong> — needs <strong>3 indices</strong>: <code>$arr[x][y][z]</code></li>
+      <li>Array elements can be strings, integers, objects, or <strong>other arrays</strong></li>
+      <li>Can combine indexed and associative levels: <code>$products["pens"]["marker"]</code></li>
+    </ul>
+    <div class="two-column" style="margin-top:14px;">
+      <div>
+        <p style="font-weight:600; color:#2c6e6b; margin-bottom:10px;">Visual: 3×3 numeric matrix</p>
+        <div class="matrix">
+          <div class="matrix-cell head">[0][0]</div><div class="matrix-cell head">[0][1]</div><div class="matrix-cell head">[0][2]</div>
+          <div class="matrix-cell">1</div><div class="matrix-cell">2</div><div class="matrix-cell">3</div>
+          <div class="matrix-cell">4</div><div class="matrix-cell">5</div><div class="matrix-cell">6</div>
+          <div class="matrix-cell">7</div><div class="matrix-cell">8</div><div class="matrix-cell">9</div>
+        </div>
+      </div>
+      <div>
+        <div class="note" style="margin-top:0;">
+          <strong>Nested Associative (Arrays of Arrays):</strong><br>
+          Arrays can be nested inside other arrays using string keys at every level.<br><br>
+          <code>$products["pens"]["marker"]</code><br>
+          → accesses the "marker" value inside the "pens" sub-array of $products.<br><br>
+          Array elements can be: strings, integers, objects, or <strong>other arrays</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAVERSAL -->
+  <div class="card" id="traversal">
+    <h2 class="card-title">🔁 Traversing Arrays</h2>
+    <div class="important">
+      The most common task with arrays is to <strong>do something with every element</strong>. The traversal method depends on the array type and the task being performed.
+    </div>
+
+    <h3 class="section-sub">1. for Loop — Indexed Arrays</h3>
+    <ul>
+      <li>Use <code>count()</code> to get the array length as the loop limit</li>
+      <li>The for loop processes elements in <strong>key order</strong></li>
+      <li>Access each element using the loop counter as the index: <code>$array[$x]</code></li>
+    </ul>
+    <div class="highlight"><code>for ($x = 0; $x &lt; count($array); $x++) { echo $array[$x]; }</code></div>
+
+    <h3 class="section-sub">2. foreach — Associative Arrays</h3>
+    <ul>
+      <li>The most common way to loop over associative arrays</li>
+      <li>Elements are processed in their <strong>internal order</strong></li>
+      <li>Gives access to both key and value on each iteration</li>
+    </ul>
+    <div class="highlight"><code>foreach ($marks as $x =&gt; $x_value) { echo $x . ": " . $x_value; }</code></div>
+
+    <h3 class="section-sub">3. Nested for Loops — Multidimensional Arrays</h3>
+    <ul>
+      <li>Outer loop iterates through <strong>rows</strong></li>
+      <li>Inner loop iterates through <strong>columns</strong></li>
+      <li>Access each element using both loop counters: <code>$shop[$row][$col]</code></li>
+    </ul>
+    <div class="highlight">
+      <code>for ($row = 0; $row &lt; 3; $row++) {</code><br>
+      <code>&nbsp;&nbsp;for ($col = 0; $col &lt; 3; $col++) {</code><br>
+      <code>&nbsp;&nbsp;&nbsp;&nbsp;echo $shop[$row][$col];</code><br>
+      <code>&nbsp;&nbsp;}</code><br>
+      <code>}</code>
+    </div>
+
+    <h3 class="section-sub">Traversal Method Summary</h3>
+    <table>
+      <thead><tr><th>Array Type</th><th>Best Loop</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Indexed</td><td><code>for</code> + <code>count()</code></td><td>Numeric indices work naturally with a counter</td></tr>
+        <tr><td>Associative</td><td><code>foreach ($arr as $k =&gt; $v)</code></td><td>Gives access to both key and value</td></tr>
+        <tr><td>Multidimensional</td><td>Nested <code>for</code> loops</td><td>Outer = rows, inner = columns</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ARRAY FUNCTIONS -->
+  <div class="card" id="functions">
+    <h2 class="card-title">🔧 Array Functions</h2>
+
+    <div class="func-card">
+      <div class="func-head teal"><span>count( $array )</span><span class="tag">Get length</span></div>
+      <div class="func-body">Returns the total <strong>number of elements</strong> in an array. Used to control for loop iteration limits.</div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head blue"><span>array_sum( $array )</span><span class="tag">Sum values</span></div>
+      <div class="func-body">Adds up all <strong>numeric values</strong> in an indexed or associative array and returns the total. Syntax: <code>$total = array_sum($array);</code></div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head"><span>array_push( $array, $val1, $val2, ... )</span><span class="tag">Add to end</span></div>
+      <div class="func-body">Inserts one or more elements to the <strong>end</strong> of an array. The array grows dynamically. Returns the new array length.</div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head purple"><span>unset( $array[key] )</span><span class="tag">Delete element</span></div>
+      <div class="func-body">
+        Removes a specific element by its key. The remaining elements keep their <strong>original keys</strong> — indices do NOT re-number automatically after deletion.
+        <div class="warning" style="margin-top:8px;">After <code>unset($arr[0])</code>, index [0] is gone but [1] and [2] remain as-is.</div>
+      </div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head"><span>sort( $array )</span><span class="tag">Sort ascending</span></div>
+      <div class="func-body">Sorts an array in <strong>ascending order</strong>. Modifies the original array directly.</div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head blue"><span>current() · next() · reset()</span><span class="tag">Internal pointer</span></div>
+      <div class="func-body">
+        <ul>
+          <li><code>current($arr)</code> — returns the element at the current internal pointer position</li>
+          <li><code>next($arr)</code> — advances the internal pointer forward by one</li>
+          <li><code>reset($arr)</code> — moves the internal pointer back to the <strong>first element</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Array Inspection Functions</h3>
+
+    <div class="func-card">
+      <div class="func-head red"><span>is_array( $var )</span><span class="tag">Check if array</span></div>
+      <div class="func-body">Takes any variable and returns <code>true</code> if it is an array, <code>false</code> otherwise. Works on strings, numbers, arrays, etc.</div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head purple"><span>in_array( $value, $array )</span><span class="tag">Check if value exists</span></div>
+      <div class="func-body">Checks if a given <strong>value exists</strong> as an element in the array. Returns <code>true</code> if found, <code>false</code> if not.</div>
+    </div>
+
+    <div class="func-card">
+      <div class="func-head blue"><span>isset( $array[$key] )</span><span class="tag">Check if key exists</span></div>
+      <div class="func-body">Returns <code>true</code> if the specified <strong>key exists</strong> in the array AND its value is not NULL. Checks for key existence, not value content.</div>
+    </div>
+
+    <h3 class="section-sub">All Array Functions — Quick Reference</h3>
+    <table>
+      <thead><tr><th>Function</th><th>Definition</th><th>Returns</th></tr></thead>
+      <tbody>
+        <tr><td><code>count($arr)</code></td><td>Number of elements in array</td><td>Integer</td></tr>
+        <tr><td><code>array_sum($arr)</code></td><td>Sum of all numeric values</td><td>Number</td></tr>
+        <tr><td><code>array_push($arr, $v)</code></td><td>Add one or more elements to end</td><td>New length</td></tr>
+        <tr><td><code>unset($arr[key])</code></td><td>Delete element by key (no re-indexing)</td><td>void</td></tr>
+        <tr><td><code>sort($arr)</code></td><td>Sort array ascending (modifies original)</td><td>true</td></tr>
+        <tr><td><code>current($arr)</code></td><td>Return element at current pointer</td><td>Element or false</td></tr>
+        <tr><td><code>next($arr)</code></td><td>Advance pointer forward one step</td><td>Next element</td></tr>
+        <tr><td><code>reset($arr)</code></td><td>Move pointer to first element</td><td>First element</td></tr>
+        <tr><td><code>is_array($var)</code></td><td>Check if variable is an array</td><td>true / false</td></tr>
+        <tr><td><code>in_array($val, $arr)</code></td><td>Check if value exists in array</td><td>true / false</td></tr>
+        <tr><td><code>isset($arr[key])</code></td><td>Check if key exists and is not null</td><td>true / false</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="card" id="glossary">
+    <h2 class="card-title">📌 Glossary & Final Summary</h2>
+
+    <h3 class="section-sub">Key Definitions</h3>
+
+    <div class="def-block"><div class="def-term">Loop</div><div class="def-body">A control structure that executes a block of code repeatedly — either a specified number of times or while a condition is true. Eliminates repetitive code.</div></div>
+    <div class="def-block"><div class="def-term">while Loop</div><div class="def-body">Checks condition before each run. May never execute (0 minimum runs). Update condition variable inside loop or risk infinite loop. Best for unknown iteration counts.</div></div>
+    <div class="def-block"><div class="def-term">do...while Loop</div><div class="def-body">Runs body first, then checks condition. Always executes at least once (1 minimum run). Ends with a semicolon after the while clause.</div></div>
+    <div class="def-block"><div class="def-term">for Loop</div><div class="def-body">Has three parts in header: initialise (runs once); condition (checked before each run); increment (runs after each run). Best when number of iterations is known.</div></div>
+    <div class="def-block"><div class="def-term">foreach Loop</div><div class="def-body">Designed for arrays. Iterates over every element automatically. No counter needed. Two forms: with key=&gt;value pair, or value only. Elements processed in internal order.</div></div>
+    <div class="def-block"><div class="def-term">Infinite Loop</div><div class="def-body">A loop whose condition never becomes false — runs forever and crashes the server. Caused by failing to update the loop condition variable inside the loop body.</div></div>
+    <div class="def-block"><div class="def-term">Nested Loop</div><div class="def-body">A loop placed inside another loop. Inner loop completes all its iterations for every single iteration of the outer loop. Used for grids and multi-dimensional data.</div></div>
+    <div class="def-block"><div class="def-term">Array</div><div class="def-body">A special variable holding more than one value at a time. An ordered collection of key-value pairs. Each stored value is an element. Can hold heterogeneous data types.</div></div>
+    <div class="def-block"><div class="def-term">Element</div><div class="def-body">An individual value stored inside an array. Each element has a key (index) that identifies its position or name within the array.</div></div>
+    <div class="def-block"><div class="def-term">Index</div><div class="def-body">The positional key of an element in an indexed array. Always starts at 0 for the first element and extends to length − 1 for the last.</div></div>
+    <div class="def-block"><div class="def-term">Associative Array</div><div class="def-body">An array whose keys are meaningful custom strings defined by the programmer. Uses =&gt; to pair keys with values. Creates a strong name-value association.</div></div>
+    <div class="def-block"><div class="def-term">Multidimensional Array</div><div class="def-body">An array containing one or more other arrays as elements. The number of dimensions equals the number of indices needed to access one element. 2D needs 2 indices; 3D needs 3.</div></div>
+    <div class="def-block"><div class="def-term">Heterogeneous Array</div><div class="def-body">An array holding values of different data types simultaneously — e.g., strings and integers in the same array. PHP arrays are not restricted to a single type.</div></div>
+    <div class="def-block"><div class="def-term">unset() — No Re-indexing</div><div class="def-body">After deleting an element with unset(), remaining elements keep their original keys — indices do NOT automatically shift. Use array_values() to re-index from 0 if needed.</div></div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — PHP Loops & Arrays · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

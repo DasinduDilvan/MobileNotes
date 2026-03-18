@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICT1232 – PHP Functions & File Handling: Theory & Concepts</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 950px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 8px; font-size: 2.3em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 6px; font-size: 1.05em; }
+.exam-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #2c6e6b, #5a9d99);
+    color: white; padding: 12px 20px; border-radius: 10px;
+    margin-bottom: 30px; font-size: 1em; letter-spacing: 0.5px;
+}
+
+.toc { background: white; padding: 22px 28px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.toc h2 { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 14px; font-size: 1.2em; }
+.toc-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; }
+.toc ol { margin-left: 18px; line-height: 2.1; }
+.toc ol li a { color: #2c6e6b; text-decoration: none; font-size: 0.95em; }
+.toc-label { color: #5a9d99; font-weight: 700; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; margin-top: 8px; }
+
+.card { background: white; padding: 28px; margin: 22px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.card-title {
+    color: #2c6e6b; border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px; margin-bottom: 18px; font-size: 1.5em;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.section-sub {
+    color: #2c6e6b; font-size: 1.1em; margin: 22px 0 10px 0;
+    font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.section-sub::before {
+    content: ''; display: inline-block; width: 4px; height: 18px;
+    background: #2c6e6b; border-radius: 2px; flex-shrink: 0;
+}
+
+ul { list-style: none; margin-left: 0; line-height: 1.9; }
+ul li { padding: 3px 0 3px 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: #5a9d99; font-size: 0.85em; top: 5px; }
+ul.plain li::before { content: none; padding-left: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 14px; }
+.box { background: #f3fbfa; padding: 14px 16px; border-radius: 10px; border-left: 3px solid #2c6e6b; font-size: 0.93em; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; font-size: 1em; }
+
+.highlight { background: #fff9e6; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 14px 0; font-size: 0.93em; }
+.important { background: #e8f5e9; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 14px 0; font-size: 0.93em; }
+.note      { background: #e3f2fd; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; font-size: 0.93em; }
+.warning   { background: #fce4ec; padding: 14px 16px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 14px 0; font-size: 0.93em; }
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 14px; }
+
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.88em; color: #c0392b; }
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.91em; }
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 13px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td { padding: 9px 13px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+tbody td strong { color: #2c6e6b; }
+
+/* VS */
+.vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 14px 0; align-items: stretch; }
+.vs-side { border-radius: 10px; overflow: hidden; }
+.vs-side .vs-head { padding: 8px 14px; font-weight: bold; color: white; font-size: 0.9em; text-align: center; }
+.vs-side.left  .vs-head { background: #2980b9; }
+.vs-side.right .vs-head { background: #8e44ad; }
+.vs-side.green .vs-head { background: #27ae60; }
+.vs-side.orange .vs-head { background: #e67e22; }
+.vs-side .vs-body { background: #f9f9f9; padding: 12px 14px; font-size: 0.88em; line-height: 1.9; height: 100%; border: 1px solid #ddd; border-top: none; }
+.vs-mid { display: flex; align-items: center; justify-content: center; font-weight: 900; color: #999; font-size: 1.1em; padding: 0 10px; }
+
+/* def blocks */
+.def-block { border: 1px solid #cfe9e7; border-radius: 10px; margin: 11px 0; overflow: hidden; }
+.def-term { background: #2c6e6b; color: white; padding: 7px 16px; font-weight: bold; font-size: 0.93em; font-family: 'Courier New', monospace; }
+.def-body { background: #f9fefd; padding: 11px 16px; font-size: 0.92em; }
+
+/* topic divider */
+.topic-divider {
+    text-align: center; margin: 36px 0 28px 0;
+    display: flex; align-items: center; gap: 14px;
+}
+.topic-divider::before, .topic-divider::after { content: ''; flex: 1; height: 2px; background: #cfe9e7; }
+.topic-divider span { background: #2c6e6b; color: white; padding: 6px 22px; border-radius: 20px; font-weight: 700; font-size: 1em; white-space: nowrap; }
+
+/* func category cards */
+.fcat { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.fcat-head { padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em; display: flex; justify-content: space-between; align-items: center; }
+.fcat-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; font-family: 'Segoe UI', sans-serif; }
+.fcat-head.str    { background: #2980b9; }
+.fcat-head.arr    { background: #27ae60; }
+.fcat-head.date   { background: #8e44ad; }
+.fcat-head.mysql  { background: #c0392b; }
+.fcat-head.math   { background: #e67e22; }
+.fcat-head.multi  { background: #2c6e6b; }
+.fcat-body { background: #f9fefd; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 16px; font-size: 0.91em; line-height: 1.85; }
+
+/* scope cards */
+.scope-card { border-radius: 10px; overflow: hidden; margin: 12px 0; }
+.scope-head { padding: 8px 16px; color: white; font-weight: bold; font-size: 0.92em; display: flex; justify-content: space-between; align-items: center; }
+.scope-head .badge { background: rgba(255,255,255,0.25); font-size: 0.75em; padding: 2px 10px; border-radius: 10px; }
+.scope-head.byval { background: #2980b9; }
+.scope-head.byref { background: #8e44ad; }
+.scope-body { background: #f9fefd; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; padding: 12px 16px; font-size: 0.91em; line-height: 1.85; }
+
+/* flow */
+.flow-h { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.flow-step { background: #2c6e6b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.84em; font-weight: 600; text-align: center; }
+.flow-step.orange { background: #e67e22; }
+.flow-step.blue   { background: #2980b9; }
+.flow-step.purple { background: #8e44ad; }
+.flow-step.red    { background: #c0392b; }
+.flow-arrow { color: #2c6e6b; font-size: 1.3em; font-weight: bold; }
+
+/* mode badge */
+.mode-badge { display: inline-block; font-family: 'Courier New', monospace; font-weight: bold; font-size: 0.9em; padding: 3px 10px; border-radius: 6px; color: white; }
+.mode-r  { background: #2980b9; }
+.mode-w  { background: #e67e22; }
+.mode-a  { background: #27ae60; }
+.mode-x  { background: #c0392b; }
+.mode-rw { background: #8e44ad; }
+
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    thead tr, .def-term, .vs-side .vs-head, .fcat-head, .scope-head,
+    .flow-step, .mode-badge, .exam-banner, .topic-divider span {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 620px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.7em; }
+    .two-column, .vs-grid, .toc-cols { grid-template-columns: 1fr; }
+    .vs-mid { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🔧 PHP Functions & 📂 File Handling</h1>
+  <p class="subtitle">ICT1232 · Web Development</p>
+  <div class="exam-banner">📝 Covers: Function Types · Advantages · Arguments · Pass by Value/Reference · Default Args · Variable-Length Args · Built-in Functions · Multi-file Programming · File Modes · File Operations</div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <div class="toc-cols">
+      <div>
+        <div class="toc-label">Part 1 — PHP Functions</div>
+        <ol>
+          <li><a href="#fn-intro">What Is a Function?</a></li>
+          <li><a href="#fn-types">Types & Advantages</a></li>
+          <li><a href="#fn-userdefined">User-Defined Functions</a></li>
+          <li><a href="#fn-args">Arguments & Passing</a></li>
+          <li><a href="#fn-default">Default Argument Values</a></li>
+          <li><a href="#fn-varlen">Variable-Length Arguments</a></li>
+          <li><a href="#fn-builtin">Built-in Functions by Category</a></li>
+          <li><a href="#fn-multifile">Multi-file Programming</a></li>
+        </ol>
+      </div>
+      <div>
+        <div class="toc-label">Part 2 — PHP File Handling</div>
+        <ol start="9">
+          <li><a href="#fh-intro">File Manipulation Types</a></li>
+          <li><a href="#fh-modes">fopen() Modes</a></li>
+          <li><a href="#fh-ops">File Operations</a></li>
+          <li><a href="#fh-read">Reading Functions</a></li>
+          <li><a href="#fh-workflow">Operation Workflow</a></li>
+          <li><a href="#fh-glossary">Glossary & Comparisons</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 1: FUNCTIONS ===================== -->
+  <div class="topic-divider"><span>🔧 PART 1 — PHP Functions</span></div>
+
+  <!-- INTRO -->
+  <div class="card" id="fn-intro">
+    <h2 class="card-title">💡 What Is a Function?</h2>
+    <div class="important">
+      A function is a <strong>named block of code</strong> that performs a specific task. It can accept input values (called <em>parameters</em>), process them, and optionally <strong>return a single value</strong>. Functions are defined once and called (reused) as many times as needed.
+    </div>
+  </div>
+
+  <!-- TYPES & ADVANTAGES -->
+  <div class="card" id="fn-types">
+    <h2 class="card-title">📦 Types & Advantages of Functions</h2>
+
+    <h3 class="section-sub">Two Types of PHP Functions</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>🔧 Built-in Functions</strong>
+        Provided by PHP out-of-the-box. No need to define — just call by name and pass values. Called with all lowercase by convention. Examples: <code>strlen()</code>, <code>date()</code>, <code>sort()</code>
+      </div>
+      <div class="box">
+        <strong>🛠️ User-Defined Functions</strong>
+        Written by the developer to handle specific application requirements. Defined using the <code>function</code> keyword.
+      </div>
+    </div>
+
+    <h3 class="section-sub">Advantages of Using Functions</h3>
+    <div class="grid" style="margin-top:12px;">
+      <div class="box"><strong>⏱️ Saves Time & Space</strong>Write code once, call it as many times as needed — no repetition.</div>
+      <div class="box"><strong>🐛 Improved Reliability</strong>Fix a bug in one place (inside the function) rather than hunting for it everywhere it is used.</div>
+      <div class="box"><strong>📖 Better Readability</strong>Code is isolated into named blocks, making the overall structure easier to understand at a glance.</div>
+    </div>
+  </div>
+
+  <!-- USER-DEFINED -->
+  <div class="card" id="fn-userdefined">
+    <h2 class="card-title">🛠️ User-Defined Functions</h2>
+
+    <div class="important">
+      User-defined functions are functions created by the programmer according to their own requirements. Declaration always starts with the keyword <code>function</code>.
+    </div>
+
+    <h3 class="section-sub">Syntax</h3>
+    <div class="highlight">
+      <code>function functionName() {</code><br>
+      <code>&nbsp;&nbsp;// code to be executed</code><br>
+      <code>}</code>
+    </div>
+
+    <h3 class="section-sub">Naming Guidelines</h3>
+    <ul>
+      <li>Give the function a name that <strong>reflects what it does</strong> (e.g., <code>calculateTotal()</code>)</li>
+      <li>A valid name starts with a <strong>letter or underscore</strong> — never a digit</li>
+      <li>Can contain letters, numbers, and underscores after the first character</li>
+      <li>Function names are <strong>case-sensitive</strong> — <code>myFunc()</code> ≠ <code>MyFunc()</code></li>
+    </ul>
+  </div>
+
+  <!-- ARGUMENTS -->
+  <div class="card" id="fn-args">
+    <h2 class="card-title">📨 Arguments & Passing Methods</h2>
+
+    <h3 class="section-sub">What Are Arguments?</h3>
+    <div class="important">
+      <strong>Arguments</strong> are values sent <em>into</em> a function when it is called. Inside the function, they are received as <strong>parameters</strong>. Multiple arguments are separated by commas and evaluated <strong>left to right</strong>.
+    </div>
+    <div class="highlight"><strong>Syntax:</strong> <code>function MyFunction($arg1, $arg2) { }</code></div>
+
+    <h3 class="section-sub">Pass by Value vs Pass by Reference</h3>
+
+    <div class="scope-card">
+      <div class="scope-head byval"><span>Pass by Value (Default)</span><span class="badge">copy of variable</span></div>
+      <div class="scope-body">
+        <ul>
+          <li>A <strong>copy</strong> of the variable's value is passed to the function</li>
+          <li>Changes made inside the function <strong>do NOT affect</strong> the original variable</li>
+          <li>The original variable remains unchanged after the function completes</li>
+          <li>This is the <strong>default</strong> behaviour in PHP</li>
+          <li>Syntax: normal parameter — <code>function f($x) { }</code></li>
+        </ul>
+        <div class="note" style="margin-top:8px;">Example: <code>$orignum = 10;</code> → after <code>addFive($orignum)</code> → <code>$orignum</code> is still <strong>10</strong></div>
+      </div>
+    </div>
+
+    <div class="scope-card">
+      <div class="scope-head byref"><span>Pass by Reference (&amp;)</span><span class="badge">reference to original</span></div>
+      <div class="scope-body">
+        <ul>
+          <li>A <strong>reference (pointer) to the original variable</strong> is passed</li>
+          <li>Changes made inside the function <strong>DO affect</strong> the original variable</li>
+          <li>The argument must be a <strong>variable</strong> — not a literal value</li>
+          <li>Add an ampersand <strong><code>&amp;</code></strong> before the parameter name in the definition</li>
+          <li>Syntax: <code>function f(&amp;$x) { }</code></li>
+        </ul>
+        <div class="note" style="margin-top:8px;">Example: <code>$orignum = 10;</code> → after <code>addSix($orignum)</code> → <code>$orignum</code> becomes <strong>16</strong></div>
+      </div>
+    </div>
+
+    <h3 class="section-sub">Value vs Reference — Quick Comparison</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Pass by Value</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ A <strong>copy</strong> is used</li>
+            <li>▸ Original <strong>NOT affected</strong></li>
+            <li>▸ Syntax: <code>function f($x)</code></li>
+            <li>▸ Default behaviour</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Pass by Reference (&amp;)</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ A <strong>reference</strong> is used</li>
+            <li>▸ Original <strong>IS changed</strong></li>
+            <li>▸ Syntax: <code>function f(&amp;$x)</code></li>
+            <li>▸ Must explicitly use <code>&amp;</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEFAULT ARGS -->
+  <div class="card" id="fn-default">
+    <h2 class="card-title">⚙️ Default Argument Values</h2>
+
+    <div class="important">
+      A parameter can have a <strong>default (fallback) value</strong> assigned in the function definition. If the caller does not pass a value for that parameter, the default is used automatically.
+    </div>
+
+    <h3 class="section-sub">Key Rules</h3>
+    <ul>
+      <li>Default parameters must come <strong>after</strong> non-default parameters in the definition</li>
+      <li>Only <strong>constant values</strong> (not variables) can be used as default values</li>
+      <li>A function can have a mix of required and optional (default) parameters</li>
+    </ul>
+    <div class="highlight">
+      <strong>Syntax:</strong> <code>function myFunc($required, $optional = "defaultValue") { }</code>
+    </div>
+  </div>
+
+  <!-- VARIABLE LENGTH ARGS -->
+  <div class="card" id="fn-varlen">
+    <h2 class="card-title">📐 Variable-Length Argument Functions</h2>
+
+    <div class="important">
+      A function may need to accept a <strong>flexible or unknown number of arguments</strong>. Declare the function with <em>no parameters at all</em>, then use PHP's three special functions inside to access whatever was passed.
+    </div>
+
+    <h3 class="section-sub">Rules</h3>
+    <ul>
+      <li>The function call can pass <strong>more arguments than defined</strong> in the function header</li>
+      <li>You can pass arguments to a function that has <strong>no parameters defined at all</strong></li>
+    </ul>
+
+    <h3 class="section-sub">Three Special Functions</h3>
+    <table>
+      <thead><tr><th>Function</th><th>What It Returns</th><th>Use When</th></tr></thead>
+      <tbody>
+        <tr><td><code>func_num_args()</code></td><td>Total <strong>count</strong> of arguments passed</td><td>You need to know how many arguments were given</td></tr>
+        <tr><td><code>func_get_arg(index)</code></td><td>Single argument at position <em>index</em> (0-based)</td><td>You need one specific argument by position</td></tr>
+        <tr><td><code>func_get_args()</code></td><td>All arguments as an <strong>indexed array</strong></td><td>You need to loop through or process all arguments</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">Recursion</h3>
+    <div class="important">
+      A function that <strong>calls itself</strong> is called a recursive function. It must have a <strong>base case</strong> — a condition that stops the recursion. Without a base case, the function recurses infinitely and crashes.
+    </div>
+    <div class="highlight">
+      <strong>Factorial example:</strong> Base case = <code>factorial(0) = 1</code>. Recursive case = <code>factorial(n) = n × factorial(n-1)</code>
+    </div>
+  </div>
+
+  <!-- BUILT-IN FUNCTIONS -->
+  <div class="card" id="fn-builtin">
+    <h2 class="card-title">📦 Built-in Functions by Category</h2>
+
+    <div class="fcat">
+      <div class="fcat-head str"><span>String Functions</span><span class="badge">text manipulation</span></div>
+      <div class="fcat-body">
+        <table style="margin:0;">
+          <thead><tr><th>Function</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td><code>echo()</code></td><td>Outputs one or more strings to the browser. A language construct, not technically a function.</td></tr>
+            <tr><td><code>explode(sep, str)</code></td><td>Breaks a string into an <strong>array</strong> by splitting at every occurrence of the separator.</td></tr>
+            <tr><td><code>str_replace(find, replace, str)</code></td><td>Finds all occurrences of <em>find</em> and replaces them with <em>replace</em> within the string.</td></tr>
+            <tr><td><code>strlen(str)</code></td><td>Returns the <strong>number of characters</strong> (length) in a string.</td></tr>
+            <tr><td><code>trim(str)</code></td><td>Strips whitespace (or specified characters) from <strong>both sides</strong> of a string.</td></tr>
+            <tr><td><code>strrev(str)</code></td><td>Returns the string with all characters in <strong>reverse order</strong>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="fcat">
+      <div class="fcat-head arr"><span>Array Functions</span><span class="badge">array manipulation</span></div>
+      <div class="fcat-body">
+        Supports both simple and multi-dimensional arrays. Key functions:
+        <code>array()</code> — create &nbsp;|&nbsp; <code>sort()</code> — sort ascending &nbsp;|&nbsp; <code>current()</code> — current element &nbsp;|&nbsp; <code>next()</code> — advance pointer &nbsp;|&nbsp; <code>reset()</code> — pointer to first element.
+      </div>
+    </div>
+
+    <div class="fcat">
+      <div class="fcat-head date"><span>Date / Time Functions</span><span class="badge">server date & time</span></div>
+      <div class="fcat-body">
+        <div class="note" style="margin-bottom:10px;">
+          <strong>Syntax:</strong> <code>date(format, timestamp)</code> — format is a string of characters; timestamp is optional (defaults to current server time).
+        </div>
+        <table style="margin:0;">
+          <thead><tr><th>Char</th><th>Meaning</th><th>Char</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>d</code></td><td>Day (01–31)</td><td><code>H</code></td><td>Hour 24-hr (00–23)</td></tr>
+            <tr><td><code>D</code></td><td>Short day name</td><td><code>h</code></td><td>Hour 12-hr (01–12)</td></tr>
+            <tr><td><code>m</code></td><td>Month number (01–12)</td><td><code>i</code></td><td>Minutes (00–59)</td></tr>
+            <tr><td><code>M</code></td><td>Short month name</td><td><code>s</code></td><td>Seconds (00–59)</td></tr>
+            <tr><td><code>Y</code></td><td>Year — 4 digits</td><td><code>a</code></td><td>am or pm (lowercase)</td></tr>
+            <tr><td><code>y</code></td><td>Year — 2 digits</td><td><code>z</code></td><td>Day of the year (0–365)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="fcat">
+      <div class="fcat-head mysql"><span>MySQL Functions</span><span class="badge">database access</span></div>
+      <div class="fcat-body">
+        <div class="warning" style="margin-bottom:10px;">
+          <strong>⚠️ Note:</strong> The <code>mysql_*</code> functions shown here are the older procedural style. In modern PHP (7+) these are deprecated — use <code>mysqli_*</code> or PDO instead.
+        </div>
+        <div class="flow-h" style="margin-bottom:12px;">
+          <div class="flow-step" style="font-size:0.78em;">mysql_connect()</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step orange" style="font-size:0.78em;">mysql_select_db()</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step blue" style="font-size:0.78em;">mysql_query()</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step purple" style="font-size:0.78em;">mysql_fetch_*()</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step red" style="font-size:0.78em;">mysql_close()</div>
+        </div>
+        <table style="margin:0;">
+          <thead><tr><th>Function</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td><code>mysql_connect()</code></td><td>Opens a connection to the MySQL server</td></tr>
+            <tr><td><code>mysql_close()</code></td><td>Closes a MySQL connection and frees the resource</td></tr>
+            <tr><td><code>mysql_error()</code></td><td>Returns the error description from the last MySQL operation</td></tr>
+            <tr><td><code>mysql_select_db()</code></td><td>Sets the active MySQL database to use</td></tr>
+            <tr><td><code>mysql_query()</code></td><td>Executes an SQL query on the selected database</td></tr>
+            <tr><td><code>mysql_result()</code></td><td>Returns the value of a specific field in a result set</td></tr>
+            <tr><td><code>mysql_fetch_assoc()</code></td><td>Returns a row as an <strong>associative array</strong> (column name = key)</td></tr>
+            <tr><td><code>mysql_fetch_row()</code></td><td>Returns a row as a <strong>numeric array</strong> (column index = key)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="fcat">
+      <div class="fcat-head math"><span>Math Functions</span><span class="badge">mathematical operations</span></div>
+      <div class="fcat-body">
+        <table style="margin:0;">
+          <thead><tr><th>Function</th><th>Definition</th><th>Example → Result</th></tr></thead>
+          <tbody>
+            <tr><td><code>cos(x)</code></td><td>Cosine of x (radians)</td><td><code>cos(0)</code> → 1</td></tr>
+            <tr><td><code>sin(x)</code></td><td>Sine of x (radians)</td><td><code>sin(PI()/2)</code> → 1</td></tr>
+            <tr><td><code>tan(x)</code></td><td>Tangent of x (radians)</td><td><code>tan(PI()/4)</code> → 1</td></tr>
+            <tr><td><code>exp(x)</code></td><td>e raised to the power of x</td><td><code>exp(1)</code> → 2.718…</td></tr>
+            <tr><td><code>max(a, b)</code></td><td>Returns the highest value</td><td><code>max(7.25, 7.30)</code> → 7.30</td></tr>
+            <tr><td><code>min(a, b)</code></td><td>Returns the lowest value</td><td><code>min(-3, -5)</code> → -5</td></tr>
+            <tr><td><code>pow(base, exp)</code></td><td>Raises base to the power of exp</td><td><code>pow(4, 2)</code> → 16</td></tr>
+            <tr><td><code>round(x)</code></td><td>Rounds to nearest integer</td><td><code>round(-4.40)</code> → -4</td></tr>
+            <tr><td><code>PI()</code></td><td>Returns the value of π</td><td>3.14159…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTI-FILE -->
+  <div class="card" id="fn-multifile">
+    <h2 class="card-title">📂 Programming in Multiple Files</h2>
+
+    <div class="important">
+      When programs grow large, they are split across <strong>multiple files</strong>. Common code (headers, footers, database connections) is written once and <strong>included</strong> in other files. Including a file produces the same result as copy-pasting its code at that location.
+    </div>
+
+    <h3 class="section-sub">Four Include Statements</h3>
+    <table>
+      <thead><tr><th>Statement</th><th>File Not Found?</th><th>Includes Multiple Times?</th><th>Best Used For</th></tr></thead>
+      <tbody>
+        <tr><td><code>include</code></td><td>Warning — script continues</td><td>Yes</td><td>Optional files (e.g., widgets, sidebars)</td></tr>
+        <tr><td><code>require</code></td><td>Fatal error — script stops</td><td>Yes</td><td>Essential files (e.g., DB config)</td></tr>
+        <tr><td><code>include_once</code></td><td>Warning — script continues</td><td>No — only once</td><td>Optional, prevent re-declaration</td></tr>
+        <tr><td><code>require_once</code></td><td>Fatal error — script stops</td><td>No — only once</td><td>Essential, prevent re-declaration</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>_once variants:</strong> If the file has already been included, it will <strong>not be included again</strong> — preventing duplicate function or class declarations that would cause errors.
+    </div>
+
+    <h3 class="section-sub">include vs require — Key Rule</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">include / include_once</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ File not found → <strong>Warning</strong></li>
+            <li>▸ Script <strong>continues</strong> executing</li>
+            <li>▸ File is <strong>optional</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">require / require_once</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ File not found → <strong>Fatal error</strong></li>
+            <li>▸ Script <strong>stops</strong> immediately</li>
+            <li>▸ File is <strong>essential</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 2: FILE HANDLING ===================== -->
+  <div class="topic-divider"><span>📂 PART 2 — PHP File Handling</span></div>
+
+  <!-- FILE INTRO -->
+  <div class="card" id="fh-intro">
+    <h2 class="card-title">💡 File Manipulation Types</h2>
+
+    <div class="two-column">
+      <div class="box"><strong>🔧 Basic Operations</strong>Create · Open · Close</div>
+      <div class="box"><strong>📋 Extended Operations</strong>Read · Write · Append · Truncate · Upload · Delete</div>
+    </div>
+
+    <div class="warning" style="margin-top:14px;">
+      <strong>⚠️ Critical Warning:</strong> When manipulating files you must be very careful — doing something wrong can permanently destroy data. Always verify filenames and modes before executing operations.
+    </div>
+
+    <h3 class="section-sub">Typical File Operation Workflow</h3>
+    <div class="flow-h">
+      <div class="flow-step">1. Open / Create<br><small>fopen()</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step orange">2. Read / Write<br><small>fread() / fwrite()</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">3. Close<br><small>fclose()</small></div>
+    </div>
+  </div>
+
+  <!-- FOPEN MODES -->
+  <div class="card" id="fh-modes">
+    <h2 class="card-title">🔓 fopen() Modes — Complete Reference</h2>
+
+    <div class="important">
+      <strong>fopen(filename, mode)</strong> opens or creates a file and returns a <strong>file pointer resource</strong> on success, or <strong>FALSE</strong> on error. The mode determines how the file can be accessed.
+    </div>
+
+    <table>
+      <thead><tr><th>Mode</th><th>Access Type</th><th>Erases Content?</th><th>Creates if Missing?</th><th>Fails if Exists?</th><th>Pointer</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mode-badge mode-r">r</span></td><td>Read only</td><td>No</td><td>No (must exist)</td><td>No</td><td>Beginning</td></tr>
+        <tr><td><span class="mode-badge mode-w">w</span></td><td>Write only</td><td><strong>Yes</strong></td><td>Yes</td><td>No</td><td>Beginning</td></tr>
+        <tr><td><span class="mode-badge mode-a">a</span></td><td>Write only (append)</td><td>No</td><td>Yes</td><td>No</td><td>End</td></tr>
+        <tr><td><span class="mode-badge mode-x">x</span></td><td>Write only (exclusive new)</td><td>No</td><td>Yes</td><td><strong>Yes → FALSE</strong></td><td>Beginning</td></tr>
+        <tr><td><span class="mode-badge mode-rw">r+</span></td><td>Read &amp; Write</td><td>No</td><td>No (must exist)</td><td>No</td><td>Beginning</td></tr>
+        <tr><td><span class="mode-badge mode-w">w+</span></td><td>Read &amp; Write</td><td><strong>Yes</strong></td><td>Yes</td><td>No</td><td>Beginning</td></tr>
+        <tr><td><span class="mode-badge mode-a">a+</span></td><td>Read &amp; Write (append)</td><td>No</td><td>Yes</td><td>No</td><td>End</td></tr>
+        <tr><td><span class="mode-badge mode-x">x+</span></td><td>Read &amp; Write (exclusive new)</td><td>No</td><td>Yes</td><td><strong>Yes → FALSE</strong></td><td>Beginning</td></tr>
+      </tbody>
+    </table>
+
+    <div class="highlight">
+      <strong>Memory Aid:</strong> &nbsp;
+      <code>r</code> = read &nbsp;|&nbsp;
+      <code>w</code> = write (<strong>wipes!</strong>) &nbsp;|&nbsp;
+      <code>a</code> = append (adds to end) &nbsp;|&nbsp;
+      <code>x</code> = exclusive new file only &nbsp;|&nbsp;
+      Add <code>+</code> to any mode for read/write access
+    </div>
+  </div>
+
+  <!-- FILE OPERATIONS -->
+  <div class="card" id="fh-ops">
+    <h2 class="card-title">📝 File Operation Functions</h2>
+
+    <table>
+      <thead><tr><th>Function</th><th>Definition</th><th>Returns</th></tr></thead>
+      <tbody>
+        <tr><td><code>fopen(file, mode)</code></td><td>Opens or creates a file. Returns a file handle for further operations. Use <code>or die()</code> to handle errors.</td><td>Resource or FALSE</td></tr>
+        <tr><td><code>fclose(handle)</code></td><td>Closes the file resource. <strong>Always call after finishing.</strong> Frees server memory.</td><td>TRUE or FALSE</td></tr>
+        <tr><td><code>fwrite(handle, str)</code></td><td>Writes a string to an open file. First param = handle, second = data string.</td><td>Bytes written or FALSE</td></tr>
+        <tr><td><code>fread(handle, length)</code></td><td>Reads up to <em>length</em> bytes. Stops at EOF or <em>length</em>, whichever comes first. Use <code>filesize()</code> as length to read entire file.</td><td>String or FALSE</td></tr>
+        <tr><td><code>filesize(filename)</code></td><td>Returns the total size of a file in bytes. Used with <code>fread()</code> to read the whole file at once.</td><td>Integer (bytes)</td></tr>
+        <tr><td><code>feof(handle)</code></td><td>Tests whether the file pointer has reached End Of File. Used in while loop conditions for reading files of unknown length.</td><td>TRUE at EOF, else FALSE</td></tr>
+        <tr><td><code>fgets(handle)</code></td><td>Reads one complete line from the file pointer. Returns FALSE at EOF or on error.</td><td>String or FALSE</td></tr>
+        <tr><td><code>fgetc(handle)</code></td><td>Reads exactly one character from the file pointer. Returns FALSE at EOF.</td><td>Single char or FALSE</td></tr>
+        <tr><td><code>unlink(filename)</code></td><td>Permanently deletes a file from the server. No recycle bin — deletion is irreversible.</td><td>TRUE or FALSE</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- READING FUNCTIONS -->
+  <div class="card" id="fh-read">
+    <h2 class="card-title">📖 Reading Functions Compared</h2>
+
+    <h3 class="section-sub">fread() vs fgets() vs fgetc()</h3>
+    <table>
+      <thead><tr><th>Function</th><th>Reads</th><th>Stops At</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td><code>fread(f, len)</code></td><td>Up to <em>len</em> bytes</td><td>EOF or <em>len</em> bytes (whichever first)</td><td>Reading the <strong>whole file</strong> at once</td></tr>
+        <tr><td><code>fgets(f)</code></td><td>One complete line</td><td>Newline character or EOF</td><td><strong>Line-by-line</strong> processing</td></tr>
+        <tr><td><code>fgetc(f)</code></td><td>One character</td><td>EOF</td><td><strong>Character-by-character</strong> parsing</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="section-sub">feof() — Key Points</h3>
+    <ul>
+      <li>Useful for looping through files of <strong>unknown length</strong></li>
+      <li>Returns <strong>TRUE</strong> when the pointer has reached the end of the file</li>
+      <li><strong>Cannot read</strong> from files opened in write-only modes: <code>w</code>, <code>a</code>, <code>x</code></li>
+      <li>Used as the loop condition: <code>while (!feof($file))</code></li>
+    </ul>
+
+    <h3 class="section-sub">write (mode 'w') vs append (mode 'a')</h3>
+    <div class="vs-grid">
+      <div class="vs-side left">
+        <div class="vs-head">Mode 'w' — Write</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ <strong>Erases all existing content</strong></li>
+            <li>▸ Pointer starts at <strong>beginning</strong></li>
+            <li>▸ Creates file if it doesn't exist</li>
+            <li>▸ Use for: creating fresh files</li>
+          </ul>
+        </div>
+      </div>
+      <div class="vs-mid">VS</div>
+      <div class="vs-side right">
+        <div class="vs-head">Mode 'a' — Append</div>
+        <div class="vs-body">
+          <ul class="plain">
+            <li>▸ <strong>Preserves existing content</strong></li>
+            <li>▸ Pointer starts at <strong>end</strong></li>
+            <li>▸ Creates file if it doesn't exist</li>
+            <li>▸ Use for: log files, audit trails</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKFLOW -->
+  <div class="card" id="fh-workflow">
+    <h2 class="card-title">🔄 Complete File Operation Workflow</h2>
+
+    <h3 class="section-sub">All Operations Summary</h3>
+    <table>
+      <thead><tr><th>#</th><th>Operation</th><th>Function</th><th>Key Detail</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Create a File</strong></td><td><code>fopen($f, 'w')</code></td><td>Created implicitly when opened with 'w', 'a', or 'x'</td></tr>
+        <tr><td>2</td><td><strong>Open a File</strong></td><td><code>fopen($f, mode)</code></td><td>Returns a file handle resource for all further operations</td></tr>
+        <tr><td>3</td><td><strong>Write to a File</strong></td><td><code>fwrite($h, $data)</code></td><td>Use mode 'w' — <strong>overwrites</strong> existing content</td></tr>
+        <tr><td>4</td><td><strong>Append to a File</strong></td><td><code>fwrite($h, $data)</code></td><td>Use mode 'a' — <strong>adds to end</strong>, preserves content</td></tr>
+        <tr><td>5</td><td><strong>Read a File</strong></td><td><code>fread($h, $size)</code></td><td>Use <code>filesize()</code> as size to read entire file</td></tr>
+        <tr><td>6</td><td><strong>Read Line by Line</strong></td><td><code>fgets($h)</code></td><td>Use with <code>while(!feof())</code> loop</td></tr>
+        <tr><td>7</td><td><strong>Read Char by Char</strong></td><td><code>fgetc($h)</code></td><td>Use with <code>while(!feof())</code> loop</td></tr>
+        <tr><td>8</td><td><strong>Check End of File</strong></td><td><code>feof($h)</code></td><td>Returns TRUE when pointer reaches end</td></tr>
+        <tr><td>9</td><td><strong>Close a File</strong></td><td><code>fclose($h)</code></td><td><strong>Always close</strong> files to free server resources</td></tr>
+        <tr><td>10</td><td><strong>Delete a File</strong></td><td><code>unlink($filename)</code></td><td><strong>Permanent deletion</strong> — no undo!</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="card" id="fh-glossary">
+    <h2 class="card-title">📌 Glossary & Final Comparisons</h2>
+
+    <h3 class="section-sub">Key Definitions</h3>
+
+    <div class="def-block"><div class="def-term">Function</div><div class="def-body">A named, reusable block of code that performs a specific task. May accept parameters and optionally return a single value. Two types: built-in (provided by PHP) and user-defined (written by the developer).</div></div>
+    <div class="def-block"><div class="def-term">Parameter vs Argument</div><div class="def-body"><strong>Parameter</strong> — variable in the function definition (placeholder). <strong>Argument</strong> — actual value passed at the call site. Same concept, different perspective.</div></div>
+    <div class="def-block"><div class="def-term">Pass by Value</div><div class="def-body">Default passing method. A copy of the variable is used inside the function. Original variable is NOT changed. Changes made inside the function are local only.</div></div>
+    <div class="def-block"><div class="def-term">Pass by Reference (&amp;)</div><div class="def-body">The function receives a reference (pointer) to the original variable. Changes inside the function DO affect the original. Use & before the parameter: function f(&$x).</div></div>
+    <div class="def-block"><div class="def-term">Default Argument Value</div><div class="def-body">A fallback value assigned to a parameter in the function definition. Used when the caller does not pass a value. Must come after non-default parameters.</div></div>
+    <div class="def-block"><div class="def-term">Recursion</div><div class="def-body">A function that calls itself. Must have a base case to stop recursion. Without a base case, the function recurses infinitely and crashes. Classic example: factorial calculation.</div></div>
+    <div class="def-block"><div class="def-term">include vs require</div><div class="def-body">Both include a PHP file at the point of the statement. include shows a Warning and continues if file not found. require shows a Fatal Error and stops. The _once variants prevent re-inclusion.</div></div>
+    <div class="def-block"><div class="def-term">File Handle / Pointer</div><div class="def-body">A resource variable returned by fopen() representing the open file and the current read/write position within it. All file functions (fread, fwrite, fclose, feof etc.) operate on this handle.</div></div>
+    <div class="def-block"><div class="def-term">EOF (End of File)</div><div class="def-body">A marker indicating there is no more data to read in a file. Detected with feof(). Returns TRUE when the file pointer reaches the end. Used in while loops: while(!feof($file)).</div></div>
+    <div class="def-block"><div class="def-term">feof() Restriction</div><div class="def-body">Cannot be used with files opened in write-only modes (w, a, x). Must open with a readable mode (r, r+, a+) before calling feof() or any reading function.</div></div>
+    <div class="def-block"><div class="def-term">unlink()</div><div class="def-body">Permanently deletes a file from the server. Unlike moving to a trash folder, this deletion is irreversible. Always double-check the filename before calling.</div></div>
+    <div class="def-block"><div class="def-term">or die() Pattern</div><div class="def-body">A PHP error-handling idiom: if the left side returns false/null, execute die() to stop the script and display an error message. Used with fopen() to safely handle file-open failures.</div></div>
+  </div>
+
+  <div class="footer">
+    🌱 ICT1232 — PHP Functions & File Handling · BY_#D1
+  </div>
+
+</div>
+</body>
+</html>
