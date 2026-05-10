@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lecture 06 - Shell Programming (Cont.)</title>
+
+<style>
+/* --- SAME BASE STYLING (UNCHANGED) --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+ul li { margin: 8px 0; }
+pre {
+    background: #000;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    overflow-x: auto;
+    margin-bottom: 10px;
+}
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-left: 4px solid #f0ad4e;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+}
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Shell Programming (Cont.)</h1>
+<p class="subtitle">Lecture 06 - System Programming Fundamentals & Linux</p>
+
+<!-- Topics -->
+<div class="card">
+<div class="section-title">Topics</div>
+<ul>
+<li>Functions</li>
+<li>Passing parameters to function</li>
+<li>The shift Command</li>
+<li>/dev/null</li>
+<li>User Interface using dialog utility</li>
+<li>Info Box (infobox)</li>
+<li>Message Box (msgbox)</li>
+<li>Confirmation Box (yes/no)</li>
+<li>Input Box</li>
+</ul>
+</div>
+
+<!-- Functions -->
+<div class="card">
+<div class="section-title">Functions</div>
+
+<div class="box">
+<strong>Definition:</strong>
+Function performs a particular activity in shell scripting.
+</div>
+
+<pre>
+function-name ()
+{
+   command ...
+   return
+}
+</pre>
+
+<pre>
+HelloUsr()
+{
+echo "Hello $LOGNAME, Have a nice day!"
+return
+}
+</pre>
+
+<pre>
+$ HelloUsr
+Hello student, Have a nice day!
+</pre>
+
+</div>
+
+<!-- Parameters -->
+<div class="card">
+<div class="section-title">Passing Parameters to Function</div>
+
+<pre>
+function calc()
+{
+n1=$1
+op=$2
+n2=$3
+
+if [ $# -eq 3 ]; then
+ans=`expr $n1 $op $n2`
+echo "$n1 $op $n2 = $ans"
+return $ans
+else
+echo "Function calc requires at least three args"
+fi
+}
+</pre>
+
+<pre>
+calc 6 + 5
+calc 6 - 5
+calc 6 / 2
+</pre>
+
+<div class="highlight">
+$# → Number of arguments passed
+</div>
+
+</div>
+
+<!-- Shift -->
+<div class="card">
+<div class="section-title">The shift Command</div>
+
+<ul>
+<li>Moves positional parameters to the left</li>
+<li>Used to process command-line arguments</li>
+</ul>
+
+<div class="box">
+Example:
+</div>
+
+<pre>
+$1=one $2=two $3=three
+shift
+
+Now:
+$1=two $2=three
+</pre>
+
+<pre>
+shift 2
+</pre>
+
+</div>
+
+<!-- Bash Files -->
+<div class="card">
+<div class="section-title">Shell Configuration Files</div>
+
+<ul>
+<li><strong>.bashrc</strong> → executed when new shell starts</li>
+<li><strong>.bash_logout</strong> → executed when logging out</li>
+<li><strong>.bash_profile</strong> → contains environment variables</li>
+</ul>
+
+<div class="box">
+Only root can edit <code>/etc/bashrc</code>
+</div>
+
+</div>
+
+<!-- Dev Null -->
+<div class="card">
+<div class="section-title">/dev/null</div>
+
+<div class="box">
+Used to discard unwanted output
+</div>
+
+<pre>
+command &gt; /dev/null
+</pre>
+
+<pre>
+ls &gt; /dev/null
+</pre>
+
+</div>
+
+<!-- Break & Continue -->
+<div class="card">
+<div class="section-title">Break & Continue</div>
+
+<pre>
+for day in Mon Tue Wed Thu Fri
+do
+if [ $i -eq 3 ]; then
+break
+fi
+done
+</pre>
+
+<pre>
+for a in 1 2 3 4 5
+do
+if [ $a == 5 ]; then
+continue
+fi
+done
+</pre>
+
+</div>
+
+<!-- Dialog -->
+<div class="card">
+<div class="section-title">Dialog Utility</div>
+
+<div class="box">
+Dialog allows creating terminal-based UI dialog boxes.
+</div>
+
+<ul>
+<li>yes/no box</li>
+<li>msgbox</li>
+<li>infobox</li>
+<li>inputbox</li>
+<li>textbox</li>
+<li>menu</li>
+</ul>
+
+<pre>
+sudo apt install dialog
+</pre>
+
+</div>
+
+<!-- Dialog Examples -->
+<div class="card">
+<div class="section-title">Dialog Examples</div>
+
+<pre>
+dialog --msgbox "Hello, world!" 5 20
+dialog --yesno "Are you having fun?" 6 25
+dialog --inputbox "Enter your name" 8 40
+dialog --textbox /etc/profile 22 70
+</pre>
+
+</div>
+
+<!-- Menu -->
+<div class="card">
+<div class="section-title">Menu & Checklist</div>
+
+<pre>
+dialog --menu "Choose one:" 10 30 3 \
+1 red 2 green 3 blue
+</pre>
+
+<pre>
+dialog --checklist "Choose toppings:" 10 40 3 \
+1 Cheese on \
+2 "Tomato Sauce" on
+</pre>
+
+</div>
+
+<!-- Confirmation -->
+<div class="card">
+<div class="section-title">Confirmation Box</div>
+
+<div class="highlight">
+Exit Status:
+<ul>
+<li>0 → Yes</li>
+<li>1 → No</li>
+<li>255 → ESC</li>
+</ul>
+</div>
+
+<pre>
+dialog --yesno "Delete file?" 7 50
+</pre>
+
+</div>
+
+<!-- Input -->
+<div class="card">
+<div class="section-title">Input Box</div>
+
+<pre>
+dialog --inputbox "Enter name" 8 60 2&gt;file
+</pre>
+
+</div>
+
+<!-- Time & Calendar -->
+<div class="card">
+<div class="section-title">Time & Calendar Dialogs</div>
+
+<pre>
+dialog --timebox "Set time" 0 0
+dialog --calendar "Select date" 0 0
+</pre>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+🌱 Lecture 06 - Shell Programming • BY_#D1
+</div>
+
+</div>
+
+</body>
+</html>

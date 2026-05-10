@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 09 – Social Responsibility, Ethics, and Culture</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+/* Level pyramid rows */
+.level-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.level-row .level-num {
+    font-size: 1.6em;
+    font-weight: 700;
+    min-width: 36px;
+    text-align: center;
+    line-height: 1.2;
+}
+.level-row .level-content h3 { margin-bottom: 4px; font-size: 1em; }
+.level-row .level-content p  { font-size: 0.9em; margin-bottom: 4px; }
+.level-row .level-content em { font-size: 0.85em; }
+
+.lvl-discrete  { background: #e3f2fd; border-left: 4px solid #1565c0; }
+.lvl-discrete  .level-num { color: #1565c0; }
+.lvl-moral     { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+.lvl-moral     .level-num { color: #2e7d32; }
+.lvl-legal     { background: #fff3e0; border-left: 4px solid #e65100; }
+.lvl-legal     .level-num { color: #e65100; }
+.lvl-economic  { background: #fce4ec; border-left: 4px solid #ad1457; }
+.lvl-economic  .level-num { color: #ad1457; }
+
+/* TBL table */
+.tbl-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
+.tbl-table th { background: #2c6e6b; color: white; padding: 10px 12px; text-align: left; }
+.tbl-table td { padding: 10px 12px; border-bottom: 1px solid #e0f0ee; vertical-align: top; }
+.tbl-table tr:nth-child(even) td { background: #f3fbfa; }
+
+.pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.pill-people  { background: #e8f5e9; color: #2e7d32; }
+.pill-planet  { background: #e3f2fd; color: #1565c0; }
+.pill-profit  { background: #fff3e0; color: #e65100; }
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+.quote-box {
+    text-align: center;
+    font-style: italic;
+    font-size: 1.05em;
+    color: #2c6e6b;
+    background: #f3fbfa;
+    border-radius: 10px;
+    padding: 16px 24px;
+    margin: 15px 0;
+    border: 1px dashed #a0d0cc;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+    .tbl-table { font-size: 0.8em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Social Responsibility, Ethics &amp; Culture</h1>
+  <p class="subtitle">Lecture 09 &nbsp;|&nbsp; Management Studies</p>
+
+  <!-- Learning Outcomes -->
+  <div class="card">
+    <h2 class="section-title">📋 Learning Outcomes</h2>
+    <ul>
+      <li>Identify the foundation of social responsibility.</li>
+      <li>Define the concept of social responsibility.</li>
+      <li>Define the concept of ethics.</li>
+      <li>Define the concept of culture.</li>
+      <li>Describe corporate social responsibilities (CSR).</li>
+    </ul>
+  </div>
+
+  <!-- Values & Policies -->
+  <div class="card">
+    <h2 class="section-title">💎 Values &amp; Policies — The Foundation</h2>
+
+    <h3 style="color:#2c6e6b; margin-bottom:8px;">Values</h3>
+    <p style="margin-bottom:10px;">Values are the <strong>foundation of ethical and responsible behaviour</strong>. They represent basic convictions about what is right and wrong.</p>
+    <div class="note">
+      <strong>Definition:</strong> A value is a type of belief, centrally located within one's total belief system, about how one <em>ought</em> or <em>ought not</em> to behave, or about some end-state of existence worth or not worth attaining.
+    </div>
+    <ul>
+      <li>Strong values encourage ethical conduct and social responsibility.</li>
+      <li><em>"Values tell people what is right."</em></li>
+    </ul>
+    <div class="highlight" style="margin-top:12px;">
+      <strong>Example:</strong> Dilmah Tea's core value — <em>"Business is a matter of human service."</em>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Policies</h3>
+    <p style="margin-bottom:10px;">Policies are <strong>formal guidelines or rules</strong> created by the company to ensure everyone follows its values.</p>
+    <ul>
+      <li>Rules that govern a company's code of conduct.</li>
+      <li>General guidelines that govern the company's behaviour.</li>
+      <li>Ethical values become meaningful only when supported by clear policies.</li>
+      <li><em>"Policies are the rules that make values real."</em></li>
+    </ul>
+    <div class="highlight" style="margin-top:12px;">
+      <strong>Example:</strong> Dilmah has implemented an Anti-Bribery and Corruption (ABC) Policy, Human Rights Policy, and Code of Ethics — fostering a strong sense of responsibility.
+    </div>
+  </div>
+
+  <!-- Social Obligation / Responsiveness / Responsibility -->
+  <div class="card">
+    <h2 class="section-title">🌍 Social Obligation, Responsiveness &amp; Responsibility</h2>
+    <div class="three-column">
+      <div class="box">
+        <strong>Social Obligation</strong>
+        <p style="font-size:0.9em; margin-top:6px;">The obligation of a business is to meet its <strong>economic and legal responsibilities</strong> and nothing more.</p>
+        <p style="margin-top:6px; font-size:0.85em; color:#888;">Minimum level — just follow the law and make profit.</p>
+      </div>
+      <div class="box">
+        <strong>Social Responsiveness</strong>
+        <p style="font-size:0.9em; margin-top:6px;">The capacity of a firm to <strong>adapt to changing societal conditions</strong> through the practical decisions of its managers in responding to important social needs.</p>
+        <p style="margin-top:6px; font-size:0.85em; color:#888;">React to social pressures as they arise.</p>
+      </div>
+      <div class="box">
+        <strong>Social Responsibility</strong>
+        <p style="font-size:0.9em; margin-top:6px;">A firm's obligations as a <strong>moral agent</strong> extend beyond its legal and economic obligations to the pursuit of long-term goals that are good for society.</p>
+        <p style="margin-top:6px; font-size:0.85em; color:#888;">Proactively do good for society.</p>
+      </div>
+    </div>
+    <div class="quote-box" style="margin-top:18px;">"Doing good for society while doing business."</div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:12px;">Two Views of Social Responsibility</h3>
+    <div class="two-column">
+      <div style="background:#fce4ec; border-left:4px solid #e91e63; border-radius:10px; padding:15px;">
+        <h3 style="color:#ad1457; margin-bottom:8px;">Classical View</h3>
+        <ul style="font-size:0.9em;">
+          <li>Management's only social responsibility is to <strong>maximize profits</strong> for stockholders.</li>
+          <li>Expending resources on "social good" unjustifiably increases costs, lowers profits, and raises prices to consumers.</li>
+        </ul>
+      </div>
+      <div style="background:#e8f5e9; border-left:4px solid #4caf50; border-radius:10px; padding:15px;">
+        <h3 style="color:#2e7d32; margin-bottom:8px;">Socioeconomics View</h3>
+        <ul style="font-size:0.9em;">
+          <li>Social responsibility extends beyond profits to <strong>protect and enhance society's welfare</strong>.</li>
+          <li>Corporations are not independent — they have a moral responsibility to the broader society.</li>
+          <li>Firms must engage in social, legal, and political issues.</li>
+          <li><em>"To do the right thing."</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Levels of Organizational Responsibility -->
+  <div class="card">
+    <h2 class="section-title">🏗️ Levels of Organizational Responsibility</h2>
+    <p style="margin-bottom:15px;">From the most fundamental to the most voluntary, organizations operate across four levels of responsibility:</p>
+
+    <div class="level-row lvl-economic">
+      <div class="level-num">04</div>
+      <div class="level-content">
+        <h3>Economic Responsibility <span class="tag red">Base Level</span></h3>
+        <p>The first and most basic duty — a business must be <strong>profitable and financially stable</strong>. Without profits, a business cannot survive, pay employees, or fulfil its other responsibilities.</p>
+        <em>Examples: Dilmah producing high-quality Ceylon tea; MAS being a top global apparel manufacturer.</em>
+      </div>
+    </div>
+
+    <div class="level-row lvl-legal">
+      <div class="level-num">03</div>
+      <div class="level-content">
+        <h3>Legal Responsibility <span class="tag orange">Required</span></h3>
+        <p>The business must <strong>follow the laws and regulations</strong> of the country where it operates.</p>
+        <em>Examples: Pay taxes; Dilmah follows Sri Lankan labor laws — proper wages, working hours, and safety measures.</em>
+      </div>
+    </div>
+
+    <div class="level-row lvl-moral">
+      <div class="level-num">02</div>
+      <div class="level-content">
+        <h3>Moral Responsibility <span class="tag blue">Expected</span></h3>
+        <p>The company's duty to do what is <strong>right, fair, and just</strong> — even if no law forces them to. Acting with honesty, fairness, and care for others even when no one is watching.</p>
+        <em>Example: Dilmah ensures all workers — from tea pluckers to factory staff — are treated fairly, paid decently, and work in safe conditions.</em>
+      </div>
+    </div>
+
+    <div class="level-row lvl-discrete">
+      <div class="level-num">01</div>
+      <div class="level-content">
+        <h3>Discretionary Responsibility <span class="tag">Voluntary</span></h3>
+        <p><strong>Voluntary actions</strong> a business takes to help society, beyond what is legally required or expected for survival. These reflect the company's core values and differentiate it from competitors.</p>
+        <em>Example: MAS runs 'Women Go Beyond' — a program to empower female employees through education, leadership, and health initiatives.</em>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:10px;">
+      <strong>Social Responsibility &amp; Firm Performance:</strong> Studies suggest a <strong>positive relationship</strong> between social involvement and the economic performance of firms. A general conclusion is that a firm's social actions do not harm its long-term performance.
+    </div>
+  </div>
+
+  <!-- Ethics -->
+  <div class="card">
+    <h2 class="section-title">⚖️ Ethics</h2>
+    <div class="note">
+      <strong>Definition:</strong> The rules and principles that define right and wrong conduct. An individual's personal beliefs about whether a behavior, action, or decision is right or wrong.
+    </div>
+    <ul style="margin-top:12px;">
+      <li><strong>Business ethics</strong> refers to the moral principles and values that guide the behavior of individuals and organizations in the business world.</li>
+      <li>It's about doing what is right, fair, and honest — even when no one is watching — not just what is profitable or legal.</li>
+    </ul>
+    <div class="quote-box">"Doing the right thing in business."</div>
+
+    <!-- Ethical vs Unethical -->
+    <div class="two-column" style="margin-top:15px;">
+      <div class="important">
+        <strong>✅ Ethical Behaviour</strong>
+        <p style="margin-top:8px; font-size:0.9em;">Doing the right thing — following moral values like honesty, fairness, and respect. Actions that are good, fair, and beneficial to others.</p>
+        <ul style="margin-top:8px; font-size:0.88em;">
+          <li>Paying employees fair wages</li>
+          <li>Being honest with customers</li>
+          <li>Protecting the environment</li>
+          <li>Respecting laws and company rules</li>
+        </ul>
+        <p style="margin-top:8px; font-size:0.85em;"><em>Example: Dilmah sells only 100% pure Ceylon tea — no mixing or cheating customers.</em></p>
+      </div>
+      <div class="warning">
+        <strong>❌ Unethical Behaviour</strong>
+        <p style="margin-top:8px; font-size:0.9em;">Doing the wrong thing — actions that are unfair, dishonest, or harmful to people or society. Often breaks trust, rules, or moral principles.</p>
+        <ul style="margin-top:8px; font-size:0.88em;">
+          <li>Lying in advertisements</li>
+          <li>Using child labour or underpaying workers</li>
+          <li>Dumping waste into rivers</li>
+          <li>Accepting bribes or cheating in accounts</li>
+        </ul>
+        <p style="margin-top:8px; font-size:0.85em;"><em>Example: A company hides harmful side effects of its product to keep profits high.</em></p>
+      </div>
+    </div>
+
+    <!-- Reasons for Unethical Behaviour -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Reasons for Unethical Behaviour</h3>
+    <div class="grid">
+      <div class="box"><strong>Unawareness</strong> Unaware that the behaviour is questionable.</div>
+      <div class="box"><strong>Lack of Standards</strong> No clear standards of conduct are in place.</div>
+      <div class="box"><strong>Cultural Differences</strong> Different cultural norms and values across regions.</div>
+      <div class="box"><strong>Governance Systems</strong> Behaviour-based or relationship-based governance.</div>
+      <div class="box"><strong>Value Conflicts</strong> Different values between business people and stakeholders.</div>
+    </div>
+
+    <!-- Managerial Ethics -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Managerial Ethics</h3>
+    <div class="note">
+      <strong>Definition:</strong> Standards of behavior that guide individual managers in their work. Moral principles that employees in a leadership position follow to guide their actions and behaviours.
+    </div>
+    <ul>
+      <li>These ethics may be personal or related to the company's beliefs and values.</li>
+      <li>They help managers decide what's wrong and right so they can create a <strong>welcoming, inclusive environment</strong>.</li>
+    </ul>
+
+    <!-- Importance of Business Ethics -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Importance of Business Ethics</h3>
+    <div class="grid">
+      <div class="box"><strong>Trust &amp; Reputation</strong> Builds trust with customers and employees.</div>
+      <div class="box"><strong>Legal Safety</strong> Prevents legal problems and scandals.</div>
+      <div class="box"><strong>Long-Term Success</strong> Encourages growth through fairness and transparency.</div>
+      <div class="box"><strong>Positive Culture</strong> Creates a respectful work environment and social respect.</div>
+    </div>
+  </div>
+
+  <!-- Organizational Culture -->
+  <div class="card">
+    <h2 class="section-title">🏢 Organizational Culture</h2>
+    <div class="note">
+      <strong>Definition:</strong> Organizational culture is a system of <strong>shared assumptions, values, and beliefs</strong> that governs how people behave in organizations.
+    </div>
+    <ul style="margin-top:12px;">
+      <li>Every company has its own unique personality — this is referred to as its <strong>culture</strong>.</li>
+      <li>In groups of people who work together, culture is an <strong>invisible but powerful force</strong> that influences the behaviour of members.</li>
+      <li>Shared values have a strong influence on how people dress and perform their jobs.</li>
+      <li>Every organization maintains a <strong>unique culture</strong> that provides guidelines and boundaries for the behaviour of its members.</li>
+    </ul>
+    <div class="quote-box">"It's the way people think and work together in an organization."</div>
+
+    <!-- Characteristics -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Characteristics of Organizational Culture</h3>
+    <div class="grid">
+      <div class="box"><strong>Innovation</strong> Risk orientation — encourages trying new things.</div>
+      <div class="box"><strong>Attention to Detail</strong> Precision orientation — focus on accuracy and thoroughness.</div>
+      <div class="box"><strong>Emphasis on Outcome</strong> Achievement orientation — results matter.</div>
+      <div class="box"><strong>Emphasis on People</strong> Fairness orientation — treating people well.</div>
+      <div class="box"><strong>Teamwork</strong> Collaboration orientation — working together effectively.</div>
+    </div>
+
+    <!-- Importance -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Importance of Organizational Culture</h3>
+    <ul>
+      <li>Builds a <strong>sense of belonging</strong> among employees.</li>
+      <li>Improves <strong>teamwork and motivation</strong>.</li>
+      <li>Guides <strong>ethical behaviour</strong> and decision-making.</li>
+      <li>Helps maintain a <strong>positive company image</strong>.</li>
+      <li>Influences how the organization <strong>adapts to change</strong>.</li>
+    </ul>
+  </div>
+
+  <!-- CSR -->
+  <div class="card">
+    <h2 class="section-title">🌱 Corporate Social Responsibility (CSR)</h2>
+    <div class="note">
+      <strong>Definition:</strong> The obligation of a business to <strong>maximize its positive impacts and minimize its negative impacts</strong> on society. CSR is a management concept that involves companies integrating social and environmental concerns into their business operations and interactions with stakeholders.
+    </div>
+    <ul style="margin-top:12px;">
+      <li>CSR is concerned with how an organization <strong>exceeds minimum obligations</strong> to stakeholders specified through regulation and corporate governance.</li>
+      <li>CSR can have a positive impact on a company's <strong>reputation</strong>, leading to better stakeholder relations, ability to attract better employees, and possibly charging higher prices.</li>
+    </ul>
+    <div class="quote-box">"Doing good for people and the planet while doing business."</div>
+
+    <!-- TBL -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Triple Bottom Line (TBL)</h3>
+    <p style="margin-bottom:12px;">The TBL is a model that says a company's success should not be measured only by profit, but also by its impact on <strong>people</strong> and the <strong>planet</strong>.</p>
+    <div class="quote-box">"A good business cares for People, Planet, and Profit."</div>
+
+    <table class="tbl-table" style="margin-top:15px;">
+      <thead>
+        <tr>
+          <th>Pillar</th>
+          <th>Focus</th>
+          <th>Simple Meaning</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill pill-people">1. People</span><br><small>Social Responsibility</small></td>
+          <td>Care for employees, customers, and community.</td>
+          <td>Treat people fairly and improve their lives.</td>
+          <td>MAS Holdings — empowers women through the <em>"Women Go Beyond"</em> program.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-planet">2. Planet</span><br><small>Environmental Responsibility</small></td>
+          <td>Protect the environment and use resources wisely.</td>
+          <td>Do business without harming nature.</td>
+          <td>Dilmah Tea — reforestation, sustainable farming, and wildlife conservation through Dilmah Conservation.</td>
+        </tr>
+        <tr>
+          <td><span class="pill pill-profit">3. Profit</span><br><small>Economic Responsibility</small></td>
+          <td>Earn fair and sustainable profits.</td>
+          <td>Make money in an ethical and responsible way.</td>
+          <td>Unilever — grows business through sustainable and ethical practices.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Objectives -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Objectives of CSR</h3>
+    <ul>
+      <li>To improve the <strong>quality of life</strong> of employees and the community.</li>
+      <li>To <strong>protect the environment</strong>.</li>
+      <li>To build a <strong>positive company image</strong>.</li>
+      <li>To support <strong>sustainable development</strong>.</li>
+      <li>To create <strong>long-term business success</strong> through responsible behaviour.</li>
+    </ul>
+
+    <!-- Benefits -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Benefits of CSR</h3>
+    <div class="grid">
+      <div class="box"><strong>Brand Reputation</strong> Builds trust and positive public image.</div>
+      <div class="box"><strong>Employee Loyalty</strong> Improves motivation and retention.</div>
+      <div class="box"><strong>Customer Relations</strong> Strengthens long-term customer loyalty.</div>
+      <div class="box"><strong>Sustainability</strong> Helps ensure long-term business success.</div>
+    </div>
+
+    <!-- CSR not always genuine -->
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Is CSR Always Genuine?</h3>
+    <div class="warning">
+      Not all CSR is authentic. CSR can sometimes be driven by:
+      <ul style="margin-top:8px;">
+        <li><strong>Propaganda</strong> — Building image without real commitment.</li>
+        <li><strong>Politics</strong> — Gaining favor with governments or regulators.</li>
+        <li><strong>New form of exploitation</strong> — Using CSR to mask unethical practices.</li>
+        <li><strong>Social cost</strong> — The cost of CSR is passed on to consumers or employees.</li>
+      </ul>
+      <p style="margin-top:8px;">Genuine CSR requires a <strong>sincere commitment</strong> to people, planet, and profit equally.</p>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="card">
+    <h2 class="section-title">📝 Summary</h2>
+    <div class="important">
+      <p style="margin-bottom:10px;"><strong>"A successful organization is not judged only by profit, but also by how responsibly it acts toward people and the planet."</strong></p>
+      <ul>
+        <li><strong>Social Responsibility</strong> — Doing good for society while doing business.</li>
+        <li><strong>Business Ethics</strong> — Guiding managers and employees to do what is right and fair.</li>
+        <li><strong>Organizational Culture</strong> — Shaping how people think, act, and make ethical decisions.</li>
+        <li><strong>CSR</strong> — Bringing all these ideas together, balancing <em>People, Planet, and Profit</em> through genuine care for society and the environment.</li>
+      </ul>
+    </div>
+    <div class="quote-box" style="margin-top:15px;">"Good business means doing well for the company and doing good for the world."</div>
+  </div>
+
+  <div class="footer">
+    🌱 Lecture 09 - Social Responsibility, Ethics, and Culture &bull; BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

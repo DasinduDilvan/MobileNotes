@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 02 - Introduction to PHP</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li { margin: 8px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+
+        .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+
+        pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #89b4fa; }
+        pre .string  { color: #a6e3a1; }
+        pre .fn      { color: #89dceb; }
+        pre .num     { color: #fab387; }
+        pre .var     { color: #cba6f7; }
+        pre .tag     { color: #f38ba8; }
+        pre .html    { color: #f9e2af; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.93em;
+        }
+
+        th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #e0f0ef;
+        }
+
+        tr:nth-child(even) td { background: #f3fbfa; }
+
+        .tag-badge {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .tag-badge.orange { background: #e67e22; }
+        .tag-badge.blue   { background: #2980b9; }
+        .tag-badge.red    { background: #c0392b; }
+        .tag-badge.purple { background: #8e44ad; }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🐘 Introduction to PHP</h1>
+    <p class="subtitle">Lecture 02 — ICT1232 | Server-Side Scripting</p>
+
+    <!-- ───────── OBJECTIVES ───────── -->
+    <div class="card">
+        <h2 class="section-title">📌 Objectives</h2>
+        <p>After completing this lecture, students should be able to:</p>
+        <ul>
+            <li>Identify what server-side scripting is</li>
+            <li>Compare PHP with other server-side scripting languages and explain the importance of PHP</li>
+            <li>Define valid PHP variables and identify data types used in PHP</li>
+            <li>Apply PHP for developing Web Applications</li>
+        </ul>
+    </div>
+
+    <!-- ───────── SERVER SIDE SCRIPTING ───────── -->
+    <div class="card">
+        <h2 class="section-title">1. Server-Side Scripting</h2>
+        <p>Server-side scripting is a <strong>web server technology</strong> in which a user's request is fulfilled by running a script directly on the web server to generate <strong>dynamic web pages</strong>.</p>
+        <div class="important">
+            Used to provide <strong>interactive web sites</strong> that interface to databases or other data stores on the server.
+        </div>
+    </div>
+
+    <!-- ───────── WHAT IS PHP ───────── -->
+    <div class="card">
+        <h2 class="section-title">2. What is PHP?</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>Origin</strong>
+                Conceived in <strong>1994</strong> by <strong>Rasmus Lerdorf</strong>.
+            </div>
+            <div class="box">
+                <strong>Full Form</strong>
+                <strong>PHP: Hypertext Preprocessor</strong> (recursive acronym).
+            </div>
+            <div class="box">
+                <strong>Nature</strong>
+                PHP pages contain HTML with <strong>embedded code</strong> that performs server-side logic.
+            </div>
+            <div class="box">
+                <strong>Delimiters</strong>
+                PHP code is enclosed in <code>&lt;?php … ?&gt;</code> tags to switch in and out of PHP mode.
+            </div>
+        </div>
+
+        <p style="margin-top:15px;"><strong>Basic PHP in HTML Example:</strong></p>
+        <pre><span class="html">&lt;!DOCTYPE html&gt;</span>
+<span class="html">&lt;html&gt;</span>
+<span class="html">&lt;body&gt;</span>
+<span class="tag">&lt;?php</span>
+    <span class="fn">echo</span> <span class="string">"My first PHP script!"</span>;
+<span class="tag">?&gt;</span>
+<span class="html">&lt;/body&gt;</span>
+<span class="html">&lt;/html&gt;</span></pre>
+    </div>
+
+    <!-- ───────── FEATURES ───────── -->
+    <div class="card">
+        <h2 class="section-title">3. Features of PHP</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>🆓 Free</strong>
+                Free to download from <code>www.php.net</code>
+            </div>
+            <div class="box">
+                <strong>🔓 Open Source</strong>
+                View, modify and redistribute the source code freely.
+            </div>
+            <div class="box">
+                <strong>🗄️ Database Support</strong>
+                Supports different DBMS including <strong>MySQL</strong>.
+            </div>
+            <div class="box">
+                <strong>🖥️ Platform Independent</strong>
+                Runs on Windows, Linux, macOS, etc.
+            </div>
+            <div class="box">
+                <strong>🌐 Server Compatible</strong>
+                Compatible with almost all servers used today — <strong>Apache</strong>, <strong>IIS</strong>, etc.
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────── PHP VARIABLES ───────── -->
+    <div class="card">
+        <h2 class="section-title">4. PHP Variables</h2>
+        <p>A variable is a <strong>representation of a particular value</strong>. PHP variables can hold values or expressions.</p>
+
+        <div class="highlight">
+            PHP has <strong>no command for declaring a variable</strong> — it is created the moment you first assign a value to it.
+        </div>
+
+        <p style="margin-top:12px;"><strong>Examples:</strong></p>
+        <pre><span class="var">$txt</span> = <span class="string">"Hello world!"</span>;
+<span class="var">$x</span>   = <span class="num">5</span>;</pre>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Rules for PHP Variables</h3>
+        <ul>
+            <li>A variable starts with the <code>$</code> sign, followed by the name of the variable.</li>
+            <li>A variable name must start with a <strong>letter</strong> or an <strong>underscore</strong> character.</li>
+            <li>A variable name <strong>cannot start with a number</strong>.</li>
+            <li>A variable name can only contain <strong>alpha-numeric characters and underscores</strong> (A–z, 0–9, and _ ).</li>
+            <li>Variable names are <strong>case-sensitive</strong> — <code>$age</code> and <code>$AGE</code> are two different variables.</li>
+        </ul>
+
+        <p style="margin-top:15px;"><strong>Example — Variables in expressions:</strong></p>
+        <pre><span class="tag">&lt;?php</span>
+<span class="var">$num1</span> = <span class="num">5</span>;
+<span class="var">$num2</span> = <span class="num">6</span>;
+<span class="fn">echo</span> <span class="string">"Number 1 is "</span>.<span class="var">$num1</span>.<span class="string">"&lt;br/&gt;"</span>;
+<span class="fn">echo</span> <span class="string">"Number 2 is "</span>.<span class="var">$num2</span>.<span class="string">"&lt;br/&gt;"</span>;
+<span class="comment">// addition</span>
+<span class="var">$result</span> = <span class="var">$num1</span> + <span class="var">$num2</span>;
+<span class="fn">echo</span> <span class="string">"Result is "</span>.<span class="var">$result</span>; <span class="comment">// holds value of expression</span>
+<span class="tag">?&gt;</span></pre>
+    </div>
+
+    <!-- ───────── VARIABLE SCOPE ───────── -->
+    <div class="card">
+        <h2 class="section-title">5. PHP Variable Scope</h2>
+        <p>The <strong>scope</strong> of a variable is the part of the script where the variable can be referenced or used. PHP has three different variable scopes:</p>
+
+        <div class="three-column">
+            <div class="box">
+                <strong>local</strong>
+                Declared inside a function. Only accessible <em>within</em> that function.
+            </div>
+            <div class="box">
+                <strong>global</strong>
+                Declared outside a function. Only accessible <em>outside</em> functions by default.
+            </div>
+            <div class="box">
+                <strong>static</strong>
+                A local variable that is <em>not deleted</em> after the function finishes executing.
+            </div>
+        </div>
+
+        <div class="two-column" style="margin-top:15px;">
+            <div>
+                <p style="margin-bottom:8px;"><strong>Global Scope Example</strong></p>
+                <pre><span class="tag">&lt;?php</span>
+<span class="var">$x</span> = <span class="num">5</span>; <span class="comment">// global scope</span>
+
+<span class="keyword">function</span> <span class="fn">myTest</span>() {
+  <span class="comment">// $x is NOT accessible here</span>
+  <span class="fn">echo</span> <span class="var">$x</span>; <span class="comment">// generates error</span>
+}
+<span class="fn">myTest</span>();
+<span class="fn">echo</span> <span class="var">$x</span>; <span class="comment">// accessible here → 5</span>
+<span class="tag">?&gt;</span></pre>
+            </div>
+            <div>
+                <p style="margin-bottom:8px;"><strong>Local Scope Example</strong></p>
+                <pre><span class="tag">&lt;?php</span>
+<span class="keyword">function</span> <span class="fn">myTest</span>() {
+  <span class="var">$x</span> = <span class="num">5</span>; <span class="comment">// local scope</span>
+  <span class="fn">echo</span> <span class="var">$x</span>; <span class="comment">// accessible here → 5</span>
+}
+<span class="fn">myTest</span>();
+<span class="comment">// $x NOT accessible here</span>
+<span class="fn">echo</span> <span class="var">$x</span>; <span class="comment">// generates error</span>
+<span class="tag">?&gt;</span></pre>
+            </div>
+        </div>
+
+        <p style="margin-top:15px;"><strong>The <code>global</code> Keyword</strong> — used to access a global variable from within a function:</p>
+        <pre><span class="tag">&lt;?php</span>
+<span class="var">$x</span> = <span class="num">5</span>;
+<span class="var">$y</span> = <span class="num">10</span>;
+
+<span class="keyword">function</span> <span class="fn">myTest</span>() {
+    <span class="keyword">global</span> <span class="var">$x</span>, <span class="var">$y</span>;
+    <span class="var">$y</span> = <span class="var">$x</span> + <span class="var">$y</span>;
+}
+<span class="fn">myTest</span>();
+<span class="fn">echo</span> <span class="var">$y</span>; <span class="comment">// outputs 15</span>
+<span class="tag">?&gt;</span></pre>
+
+        <p style="margin-top:15px;"><strong>The <code>static</code> Keyword</strong> — prevents a local variable from being deleted after function execution:</p>
+        <pre><span class="tag">&lt;?php</span>
+<span class="keyword">function</span> <span class="fn">myTest</span>() {
+    <span class="keyword">static</span> <span class="var">$x</span> = <span class="num">0</span>;
+    <span class="fn">echo</span> <span class="var">$x</span>;
+    <span class="var">$x</span>++;
+}
+<span class="fn">myTest</span>(); <span class="comment">// outputs 0</span>
+<span class="fn">myTest</span>(); <span class="comment">// outputs 1</span>
+<span class="fn">myTest</span>(); <span class="comment">// outputs 2</span>
+<span class="tag">?&gt;</span></pre>
+
+        <div class="in-class">
+            <h3>✏️ Exercise — What is the output?</h3>
+            <pre><span class="keyword">function</span> <span class="fn">updateCounter</span>() {
+    <span class="keyword">static</span> <span class="var">$counter</span> = <span class="num">0</span>;
+    <span class="var">$counter</span>++;
+    <span class="fn">echo</span> <span class="string">"Static counter is now {<span class="var">$counter</span>}&lt;br&gt;"</span>;
+}
+
+<span class="var">$counter</span> = <span class="num">10</span>;
+<span class="fn">updateCounter</span>();  <span class="comment">// Static counter is now 1</span>
+<span class="fn">updateCounter</span>();  <span class="comment">// Static counter is now 2</span>
+<span class="fn">echo</span> <span class="string">"Global counter is {<span class="var">$counter</span>}\n"</span>; <span class="comment">// Global counter is 10</span></pre>
+            <div class="note" style="margin-top:8px; margin-bottom:0;">
+                The static <code>$counter</code> inside the function is <strong>separate</strong> from the global <code>$counter = 10</code>. Static variables retain their value across calls but remain local to the function.
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────── DATA TYPES ───────── -->
+    <div class="card">
+        <h2 class="section-title">6. PHP Data Types</h2>
+        <p>A <strong>data type</strong> is a classification based on the kind of data a variable holds. PHP supports the following:</p>
+
+        <div class="three-column">
+            <div class="box">
+                <strong>Scalar (Single Value)</strong>
+                <ul style="margin-left:0; list-style:none;">
+                    <li>• Boolean</li>
+                    <li>• Integer</li>
+                    <li>• Float</li>
+                    <li>• String</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Compound (Collection)</strong>
+                <ul style="margin-left:0; list-style:none;">
+                    <li>• Array</li>
+                    <li>• Object</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Special</strong>
+                <ul style="margin-left:0; list-style:none;">
+                    <li>• Resource</li>
+                    <li>• NULL</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────── OPERATORS ───────── -->
+    <div class="card">
+        <h2 class="section-title">7. Operators</h2>
+        <p>Operators are used to perform operations on variables and values. An operator takes operands and produces a result. PHP divides operators into the following groups:</p>
+
+        <!-- Arithmetic -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">7.1 Arithmetic Operators</h3>
+        <table>
+            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th></tr></thead>
+            <tbody>
+                <tr><td><code>+</code></td><td>Addition</td><td><code>$x + $y</code></td><td>Sum of $x and $y</td></tr>
+                <tr><td><code>-</code></td><td>Subtraction</td><td><code>$x - $y</code></td><td>Difference of $x and $y</td></tr>
+                <tr><td><code>*</code></td><td>Multiplication</td><td><code>$x * $y</code></td><td>Product of $x and $y</td></tr>
+                <tr><td><code>/</code></td><td>Division</td><td><code>$x / $y</code></td><td>Quotient of $x and $y</td></tr>
+                <tr><td><code>%</code></td><td>Modulus</td><td><code>$x % $y</code></td><td>Remainder of $x divided by $y</td></tr>
+                <tr><td><code>**</code></td><td>Exponentiation</td><td><code>$x ** $y</code></td><td>Result of raising $x to the $y'th power</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Assignment -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">7.2 Assignment Operators</h3>
+        <table>
+            <thead><tr><th>Assignment</th><th>Same as…</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>x = y</code></td><td><code>x = y</code></td><td>Left operand gets the value of the right expression</td></tr>
+                <tr><td><code>x += y</code></td><td><code>x = x + y</code></td><td>Addition</td></tr>
+                <tr><td><code>x -= y</code></td><td><code>x = x - y</code></td><td>Subtraction</td></tr>
+                <tr><td><code>x *= y</code></td><td><code>x = x * y</code></td><td>Multiplication</td></tr>
+                <tr><td><code>x /= y</code></td><td><code>x = x / y</code></td><td>Division</td></tr>
+                <tr><td><code>x %= y</code></td><td><code>x = x % y</code></td><td>Modulus</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Comparison -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">7.3 Comparison Operators</h3>
+        <table>
+            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th></tr></thead>
+            <tbody>
+                <tr><td><code>==</code></td><td>Equal</td><td><code>$x == $y</code></td><td>True if $x is equal to $y</td></tr>
+                <tr><td><code>===</code></td><td>Identical</td><td><code>$x === $y</code></td><td>True if $x is equal to $y <em>and</em> same type</td></tr>
+                <tr><td><code>!=</code></td><td>Not equal</td><td><code>$x != $y</code></td><td>True if $x is not equal to $y</td></tr>
+                <tr><td><code>&lt;&gt;</code></td><td>Not equal</td><td><code>$x &lt;&gt; $y</code></td><td>True if $x is not equal to $y</td></tr>
+                <tr><td><code>!==</code></td><td>Not identical</td><td><code>$x !== $y</code></td><td>True if not equal or not same type</td></tr>
+                <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>$x &gt; $y</code></td><td>True if $x is greater than $y</td></tr>
+                <tr><td><code>&lt;</code></td><td>Less than</td><td><code>$x &lt; $y</code></td><td>True if $x is less than $y</td></tr>
+                <tr><td><code>&gt;=</code></td><td>Greater than or equal to</td><td><code>$x &gt;= $y</code></td><td>True if $x is greater than or equal to $y</td></tr>
+                <tr><td><code>&lt;=</code></td><td>Less than or equal to</td><td><code>$x &lt;= $y</code></td><td>True if $x is less than or equal to $y</td></tr>
+                <tr><td><code>&lt;=&gt;</code></td><td>Spaceship</td><td><code>$x &lt;=&gt; $y</code></td><td>Returns -1, 0, or 1 depending on if $x &lt;, ==, or &gt; $y. (PHP 7+)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Note on == vs ===:</strong><br>
+            <code>$x = 100; $y = "100"; var_dump($x == $y);</code> → <strong>true</strong> (values equal, types ignored)<br>
+            <code>var_dump($x === $y);</code> → <strong>false</strong> (int vs string — different types)
+        </div>
+
+        <!-- Increment / Decrement -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">7.4 Increment / Decrement Operators</h3>
+        <table>
+            <thead><tr><th>Operator</th><th>Name</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>++$x</code></td><td>Pre-increment</td><td>Increments $x by one, then returns $x</td></tr>
+                <tr><td><code>$x++</code></td><td>Post-increment</td><td>Returns $x, then increments $x by one</td></tr>
+                <tr><td><code>--$x</code></td><td>Pre-decrement</td><td>Decrements $x by one, then returns $x</td></tr>
+                <tr><td><code>$x--</code></td><td>Post-decrement</td><td>Returns $x, then decrements $x by one</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Logical -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">7.5 Logical Operators</h3>
+        <table>
+            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th></tr></thead>
+            <tbody>
+                <tr><td><code>and</code></td><td>And</td><td><code>$x and $y</code></td><td>True if both $x and $y are true</td></tr>
+                <tr><td><code>or</code></td><td>Or</td><td><code>$x or $y</code></td><td>True if either $x or $y is true</td></tr>
+                <tr><td><code>xor</code></td><td>Xor</td><td><code>$x xor $y</code></td><td>True if either $x or $y is true, but <em>not both</em></td></tr>
+                <tr><td><code>&amp;&amp;</code></td><td>And</td><td><code>$x &amp;&amp; $y</code></td><td>True if both $x and $y are true</td></tr>
+                <tr><td><code>||</code></td><td>Or</td><td><code>$x || $y</code></td><td>True if either $x or $y is true</td></tr>
+                <tr><td><code>!</code></td><td>Not</td><td><code>!$x</code></td><td>True if $x is not true</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Concatenation -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">7.6 Concatenation Operator</h3>
+        <p>Use <code>.</code> (period) to combine strings — putting two string values together.</p>
+        <pre><span class="var">$n</span> = <span class="num">5</span>;
+<span class="var">$s</span> = <span class="string">'There were '</span> . <span class="var">$n</span> . <span class="string">' ducks.'</span>;
+<span class="comment">// $s is 'There were 5 ducks.'</span></pre>
+    </div>
+
+    <!-- ───────── COMMENTS ───────── -->
+    <div class="card">
+        <h2 class="section-title">8. Comments in PHP</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Single-line Comments</strong>
+                Use <code>//</code> or <code>#</code>
+                <pre style="margin-top:8px;"><span class="comment">// This is a single-line comment
+# This is also a comment</span></pre>
+            </div>
+            <div class="box">
+                <strong>Multi-line Comments</strong>
+                Use <code>/* … */</code>
+                <pre style="margin-top:8px;"><span class="comment">/* This is a
+   multi-line comment */</span></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───────── CONDITIONAL STATEMENTS ───────── -->
+    <div class="card">
+        <h2 class="section-title">9. Conditional Statements</h2>
+        <p>Used to perform <strong>different actions for different conditions</strong>. PHP supports the following conditional statements:</p>
+
+        <div class="grid">
+            <div class="box"><strong>if</strong> — Execute code only if a condition is true</div>
+            <div class="box"><strong>if…else</strong> — One code block if true, another if false</div>
+            <div class="box"><strong>if…elseif…else</strong> — Select one from several blocks</div>
+            <div class="box"><strong>switch</strong> — Select one of many blocks to execute based on a value</div>
+        </div>
+
+        <!-- if -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">9.1 if Statement</h3>
+        <pre><span class="tag">&lt;?php</span>
+<span class="var">$num</span> = <span class="num">0</span>;
+<span class="keyword">if</span> (<span class="var">$num</span> == <span class="num">0</span>) {
+    <span class="fn">echo</span> <span class="string">"Number is equal to 0"</span>;
+}
+<span class="tag">?&gt;</span></pre>
+
+        <!-- if else -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">9.2 if…else Statement</h3>
+        <pre><span class="tag">&lt;?php</span>
+<span class="var">$num</span> = <span class="num">0</span>;
+<span class="keyword">if</span> (<span class="var">$num</span> == <span class="num">0</span>) {
+    <span class="fn">echo</span> <span class="string">"Number is equal to 0"</span>;
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Number is not equal to 0"</span>;
+}
+<span class="tag">?&gt;</span></pre>
+
+        <!-- if elseif -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">9.3 if…elseif…else Statement</h3>
+        <pre><span class="tag">&lt;?php</span>
+<span class="var">$num</span> = <span class="num">0</span>;
+<span class="keyword">if</span> (<span class="var">$num</span> > <span class="num">5</span>) {
+    <span class="fn">echo</span> <span class="string">"Number is greater than 5"</span>;
+} <span class="keyword">elseif</span> (<span class="var">$num</span> > <span class="num">2</span>) {
+    <span class="fn">echo</span> <span class="string">"Number is greater than 2"</span>;
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Number is 0 or less than 0"</span>;
+}
+<span class="tag">?&gt;</span></pre>
+
+        <!-- switch -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">9.4 switch Statement</h3>
+        <pre><span class="keyword">switch</span>(<span class="var">$name</span>) {
+    <span class="keyword">case</span> <span class="string">'John'</span>:
+        <span class="fn">echo</span> <span class="string">"Name is John"</span>;
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'Mary'</span>:
+        <span class="fn">echo</span> <span class="string">"Name is Mary"</span>;
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="fn">echo</span> <span class="string">"No name to display"</span>;
+        <span class="keyword">break</span>;
+}</pre>
+
+        <!-- Exercise -->
+        <div class="in-class">
+            <h3>✏️ Exercise — City Province Check</h3>
+            <p style="margin-bottom:10px;">Initialize <code>$city = "Matara"</code>. Print the province or a default message.</p>
+            <pre><span class="tag">&lt;?php</span>
+<span class="var">$city</span> = <span class="string">"Matara"</span>;
+<span class="keyword">switch</span> (<span class="var">$city</span>) {
+    <span class="keyword">case</span> <span class="string">"Colombo"</span>:
+        <span class="fn">echo</span> <span class="string">"You belong to Western province"</span>;
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">"Matara"</span>:
+        <span class="fn">echo</span> <span class="string">"You belong to Southern province"</span>; <span class="comment">// ← output</span>
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="fn">echo</span> <span class="string">"You are not belong to either Western or Southern province"</span>;
+}
+<span class="tag">?&gt;</span></pre>
+        </div>
+
+        <!-- Homework -->
+        <div class="highlight" style="margin-top:15px;">
+            <strong>📚 Homework Exercise — Marks Grade System</strong><br><br>
+            A student scored <strong>55 marks</strong> in Science. Write a PHP program to print the appropriate comment:
+            <table style="margin-top:10px;">
+                <thead><tr><th>Marks Range</th><th>Comment</th></tr></thead>
+                <tbody>
+                    <tr><td>75 &lt; Marks ≤ 100</td><td>Excellent</td></tr>
+                    <tr><td>50 &lt; Marks ≤ 75</td><td>Good</td></tr>
+                    <tr><td>40 &lt; Marks ≤ 50</td><td>Pass</td></tr>
+                    <tr><td>None of the above</td><td>Improve your knowledge</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ───────── SUMMARY ───────── -->
+    <div class="card">
+        <h2 class="section-title">📋 Summary</h2>
+        <div class="grid">
+            <div class="box"><strong>Features of PHP</strong> Free, open source, platform independent, supports MySQL, compatible with major servers.</div>
+            <div class="box"><strong>Basic Syntax</strong> PHP embedded in HTML using <code>&lt;?php … ?&gt;</code> tags. Statements end with <code>;</code>.</div>
+            <div class="box"><strong>Running PHP</strong> Requires a web server (Apache/IIS) with PHP installed. Accessed via a browser.</div>
+            <div class="box"><strong>PHP Variables</strong> Start with <code>$</code>. No declaration needed. Created on first assignment. Case-sensitive.</div>
+            <div class="box"><strong>Variable Scope</strong> Three scopes: <em>local</em>, <em>global</em>, <em>static</em>. Use <code>global</code> keyword to access globals inside functions.</div>
+            <div class="box"><strong>Data Types</strong> Scalar (bool, int, float, string), Compound (array, object), Special (resource, NULL).</div>
+            <div class="box"><strong>Operators</strong> Arithmetic, Assignment, Comparison, Increment/Decrement, Logical, Concatenation (<code>.</code>).</div>
+            <div class="box"><strong>Conditional Statements</strong> <code>if</code>, <code>if…else</code>, <code>if…elseif…else</code>, <code>switch</code> for decision-making logic.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 02 - Server-Side Scripting: Introduction to PHP • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

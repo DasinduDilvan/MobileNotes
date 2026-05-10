@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Study Notes: Nested Quantifiers | Discrete Mathematics</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #eef6f5;
+      padding: 20px;
+      line-height: 1.6;
+      color: #1a2c2a;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c6e6b;
+      margin-bottom: 8px;
+      font-size: 2.2em;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #5a9d99;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+      font-weight: 500;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+      color: #2c6e6b;
+      border-bottom: 2px solid #cfe9e7;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      font-size: 1.5em;
+    }
+
+    .subsection-title {
+      color: #2c6e6b;
+      font-size: 1.25em;
+      margin: 16px 0 8px 0;
+      font-weight: 600;
+    }
+
+    ul {
+      list-style-position: inside;
+      line-height: 1.8;
+      margin-left: 10px;
+    }
+
+    ul li {
+      margin: 6px 0;
+    }
+
+    ul ul {
+      margin-left: 25px;
+      list-style-type: circle;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    .box {
+      background: #f3fbfa;
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 3px solid #2c6e6b;
+    }
+
+    .box strong {
+      color: #2c6e6b;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .highlight {
+      background: #fff9e6;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #f0ad4e;
+      margin: 18px 0;
+    }
+
+    .important {
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #4caf50;
+      margin: 18px 0;
+    }
+
+    .note {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #2196f3;
+      margin: 18px 0;
+    }
+
+    .warning {
+      background: #fce4ec;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #e91e63;
+      margin: 18px 0;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 15px 0;
+    }
+
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    code {
+      background: #eef2f2;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      color: #c7254e;
+    }
+
+    pre {
+      background: #1e2a2a;
+      color: #e2f0ef;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .truth-table {
+      background: #fafcfc;
+      border-collapse: collapse;
+      width: 100%;
+      margin: 15px 0;
+      font-size: 0.9em;
+    }
+
+    .truth-table th, .truth-table td {
+      border: 1px solid #cbdcd9;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .truth-table th {
+      background: #deeeec;
+      color: #1f5e5a;
+    }
+
+    .footer {
+      text-align: center;
+      color: #5e7e7b;
+      margin-top: 45px;
+      padding: 20px;
+      font-size: 0.95em;
+      border-top: 1px solid #cfe2e0;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+      }
+      .footer {
+        page-break-before: avoid;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .card { padding: 18px; }
+      h1 { font-size: 1.7em; }
+      .two-column { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>📚 Nested Quantifiers</h1>
+  <div class="subtitle">Predicate logic · Quantifier negation · Order matters · Translation &amp; truth</div>
+
+  <!-- 1. Propositional functions & quantifiers intro -->
+  <div class="card">
+    <h2 class="section-title">📖 Predicates &amp; Quantifiers</h2>
+    <p><strong>Propositional function (predicate):</strong> a statement containing variables. Example: <code>P(x) = “x is greater than 3”</code>. The variable is the subject, the predicate expresses a property.</p>
+    <div class="grid">
+      <div class="box"><strong>🌍 Universal quantifier ∀</strong><br>“for all”, “every”<br><code>∀x P(x)</code> : P(x) true for every x in domain.</div>
+      <div class="box"><strong>🔎 Existential quantifier ∃</strong><br>“there exists”, “some”<br><code>∃x P(x)</code> : P(x) true for at least one x.</div>
+    </div>
+    <div class="note">
+      <strong>Charles Peirce (1839–1914)</strong> – Quantifier theory pioneer.<br>
+      Quantifiers <em>bind</em> the variable. Domain of discourse is essential.
+    </div>
+    <div class="highlight">
+      <strong>Translation examples:</strong><br>
+      “Every student in this class has taken Java.”<br>
+      Domain = all students → <code>∀x J(x)</code>.<br>
+      Domain = all people → <code>∀x (S(x) → J(x))</code><br>
+      ❗ <code>∀x (S(x) ∧ J(x))</code> would mean everything is a student <em>and</em> took Java → wrong.
+    </div>
+  </div>
+
+  <!-- 2. Negating quantified expressions + De Morgan laws -->
+  <div class="card">
+    <h2 class="section-title">🚫 Negating Quantified Expressions</h2>
+    <div class="two-column">
+      <div>
+        <strong>✍️ De Morgan’s laws for quantifiers:</strong><br>
+        <code>¬∀x P(x) ≡ ∃x ¬P(x)</code><br>
+        <code>¬∃x P(x) ≡ ∀x ¬P(x)</code>
+      </div>
+      <div class="box">
+        <strong>Intuition:</strong><br>
+        “Not all are” ≡ “Some are not”.<br>
+        “None exist” ≡ “All are not”.
+      </div>
+    </div>
+    <div class="important">
+      <strong>Example 1:</strong> Negation of “Every student passed” → “There is a student who did NOT pass”.<br>
+      <strong>Example 2:</strong> “There is an honest politician” (<code>∃x H(x)</code>) negated → <code>∀x ¬H(x)</code> → “Every politician is dishonest”.
+    </div>
+    <pre>
+¬∀x (x² &gt; x)  ≡  ∃x (x² ≤ x)
+¬∃x (x² = 2)  ≡  ∀x (x² ≠ 2)
+    </pre>
+    <div class="note">
+      <strong>Logical equivalence proof style:</strong> <code>¬∀x P(x)</code> true ↔ <code>∀x P(x)</code> false ↔ there exists x with ¬P(x) ↔ <code>∃x ¬P(x)</code> true.
+    </div>
+    <div class="highlight">
+      <strong>Advanced equivalence:</strong> <code>¬∀x (P(x) → Q(x)) ≡ ∃x (P(x) ∧ ¬Q(x))</code>. Use De Morgan + implication negation.
+    </div>
+  </div>
+
+  <!-- 3. Finite domains & quantifier expansion -->
+  <div class="card">
+    <h2 class="section-title">📌 Quantifiers as Conjunctions / Disjunctions (Finite Domains)</h2>
+    <p>If domain = {1,2,3}:</p>
+    <ul>
+      <li><code>∀x P(x) ≡ P(1) ∧ P(2) ∧ P(3)</code></li>
+      <li><code>∃x P(x) ≡ P(1) ∨ P(2) ∨ P(3)</code></li>
+    </ul>
+    <p>Even for infinite domains, this conceptual view helps understand meaning (infinite conjunction/disjunction).</p>
+  </div>
+
+  <!-- 4. Translation practice (Fruit/Vegetable/Plant) -->
+  <div class="card">
+    <h2 class="section-title">🌱 Translation Practice (English → Logic)</h2>
+    <p>Domain = {Fruit, Vegetable, Plant}; F(x)=“x is fruit”, S(x)=“veg”, T(x)=“plant”.</p>
+    <div class="grid">
+      <div class="box"><strong>“Everything is a fruit”</strong><br><code>∀x F(x)</code></div>
+      <div class="box"><strong>“Nothing is a vegetable”</strong><br><code>¬∃x S(x)</code> ≡ <code>∀x ¬S(x)</code></div>
+      <div class="box"><strong>“All fruits are plants”</strong><br><code>∀x (F(x) → T(x))</code></div>
+      <div class="box"><strong>“Some fruits are plants”</strong><br><code>∃x (F(x) ∧ T(x))</code></div>
+      <div class="box"><strong>“No vegetable is a plant”</strong><br><code>¬∃x (S(x) ∧ T(x))</code> ≡ <code>∀x (¬S(x) ∨ ¬T(x))</code></div>
+      <div class="box"><strong>“If any fruit is a vegetable then it is also a plant”</strong><br><code>∀x ((F(x) ∧ S(x)) → T(x))</code></div>
+    </div>
+  </div>
+
+  <!-- 5. Nested quantifiers core -->
+  <div class="card">
+    <h2 class="section-title">🧩 Nested Quantifiers</h2>
+    <p>Quantifiers inside the scope of other quantifiers. Order matters!</p>
+    <div class="important">
+      <strong>∀x ∃y (x + y = 0)</strong> (over reals) → “Every real number has an additive inverse” → <strong>true</strong>.<br>
+      <strong>∃y ∀x (x + y = 0)</strong> → “There exists a y that works for all x” → <strong>false</strong> (no universal additive constant).
+    </div>
+    <div class="highlight">
+      📖 Translation: <code>∀x∀y ((x &gt; 0) ∧ (y &lt; 0) → (xy &lt; 0))</code><br>
+      → “Product of a positive and a negative real number is always negative”.
+    </div>
+    <div class="note">
+      <strong>Order swapping caution:</strong> <code>∀x∀y P(x,y) ≡ ∀y∀x P(x,y)</code> (always equivalent).<br>
+      <strong>But</strong> <code>∀x∃y P(x,y)</code> is <strong>NOT</strong> equivalent to <code>∃y∀x P(x,y)</code> in general.
+    </div>
+  </div>
+
+  <!-- 6. Truth value examples with order -->
+  <div class="card">
+    <h2 class="section-title">⚖️ Truth Values & Order – Worked Examples</h2>
+    <p><strong>Example 1: Domain = ℝ, P(x,y): x·y = 0</strong></p>
+    <ul>
+      <li><code>∀x∀y P(x,y)</code> → False (not every pair multiplies to 0).</li>
+      <li><code>∀x∃y P(x,y)</code> → True (for each x, choose y=0 → product 0).</li>
+      <li><code>∃x∀y P(x,y)</code> → True (x=0 makes 0·y=0 for all y).</li>
+      <li><code>∃x∃y P(x,y)</code> → True (e.g., x=0, y=5).</li>
+    </ul>
+    <p><strong>Example 2: Domain = ℝ, P(x,y): x / y = 1</strong> (division by zero issues - careful)</p>
+    <ul>
+      <li><code>∀x∀y P(x,y)</code> → False.</li>
+      <li><code>∀x∃y P(x,y)</code> → False (for x=0 no y gives 0/y=1).</li>
+      <li><code>∃x∀y P(x,y)</code> → False (even for fixed x, cannot hold ∀y).</li>
+      <li><code>∃x∃y P(x,y)</code> → True (choose x=5, y=5).</li>
+    </ul>
+    <div class="note">
+      <strong>∀x∀y∃z (x+y=z)</strong> → true (sum exists).<br>
+      <strong>∃z∀x∀y (x+y=z)</strong> → false (no single z works for every x,y).
+    </div>
+  </div>
+
+  <!-- 7. Translating nested statements / mathematical statements -->
+  <div class="card">
+    <h2 class="section-title">🌐 Translating Nested Quantifiers to English</h2>
+    <div class="box">
+      <code>∀x ( C(x) ∨ ∃y (C(y) ∧ F(x,y)) )</code><br>
+      C(x)=“x has computer”, F(x,y)=“x and y are friends”.<br>
+      ➜ “Every student has a computer or has a friend who has a computer.”
+    </div>
+    <div class="important">
+      <strong>Mathematical statement:</strong> “The sum of two positive integers is always positive.”<br>
+      <code>∀x∀y ( (x &gt; 0 ∧ y &gt;
+       0) → (x + y &gt; 0) )</code>, domain = all integers.
+    </div>
+    <div class="highlight">
+      <strong>Complex nested example:</strong> “There is a woman who has taken a flight on every airline in the world.”<br>
+      Let P(w,f)=“w has taken f”, Q(f,a)=“f is a flight on airline a”.<br>
+      <code>∃w ∀a ∃f ( P(w,f) ∧ Q(f,a) )</code>
+    </div>
+  </div>
+
+  <!-- 8. Negating nested quantifiers step-by-step -->
+  <div class="card">
+    <h2 class="section-title">⛔ Negating Nested Quantifiers (Moving ¬ inside)</h2>
+    <p><strong>Rule: successively apply De Morgan for quantifiers.</strong></p>
+    <pre>
+Original:  ∀x ∃y (xy = 1)
+Negation:  ¬∀x ∃y (xy = 1)
+  ≡ ∃x ¬∃y (xy = 1)
+  ≡ ∃x ∀y ¬(xy = 1)
+  ≡ ∃x ∀y (xy ≠ 1)
+    </pre>
+    <div class="important">
+      <strong>Example with women & flights:</strong><br>
+      Original: <code>∃w ∀a ∃f (P(w,f) ∧ Q(f,a))</code><br>
+      Negation: <code>¬∃w ∀a ∃f (P(w,f) ∧ Q(f,a))</code><br>
+      → <code>∀w ¬∀a ∃f (P(w,f) ∧ Q(f,a))</code><br>
+      → <code>∀w ∃a ¬∃f (P(w,f) ∧ Q(f,a))</code><br>
+      → <code>∀w ∃a ∀f ¬(P(w,f) ∧ Q(f,a))</code><br>
+      → <code>∀w ∃a ∀f (¬P(w,f) ∨ ¬Q(f,a))</code><br>
+      English: “For every woman there is an airline such that for all flights, she has not taken that flight or the flight is not on that airline.”
+    </div>
+  </div>
+
+  <!-- 9. Order of quantifiers & distribution pitfalls -->
+  <div class="card">
+    <h2 class="section-title">⚠️ Order & Distribution – Important Non-Equivalences</h2>
+    <div class="two-column">
+      <div class="box">
+        ✅ <strong>∀x∀y P(x,y) ≡ ∀y∀x P(x,y)</strong><br>
+        Swapping universal quantifiers does NOT change meaning.
+      </div>
+      <div class="box">
+        ❌ <strong>∀x∃y P(x,y) ≢ ∃y∀x P(x,y)</strong><br>
+        Counterexample: x+y=0 (first true, second false).
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Distribution over ∧ works:</strong> <code>∀x (P(x) ∧ Q(x)) ≡ ∀x P(x) ∧ ∀x Q(x)</code><br>
+      ❌ <strong>Distribution over → fails:</strong> <code>∀x (P(x) → Q(x))</code> is <strong>not</strong> equivalent to <code>∀x P(x) → ∀x Q(x)</code>.<br>
+      <em>Counterexample:</em> domain animals, P=“x is a fish”, Q=“x has scales”. Left may be false (some fish no scales), right side true vacuously.
+    </div>
+  </div>
+
+  <!-- 10. More translation exercises -->
+  <div class="card">
+    <h2 class="section-title">📝 Additional Translation Drills</h2>
+    <ul>
+      <li><strong>“All real numbers have a square root.”</strong> (over ℝ) → <code>∀x ∃y (y² = x)</code> (false for negative numbers requires domain specification).</li>
+      <li><strong>“Every student has at least one friend who is a CS major.”</strong> → <code>∀s ∃f (Friend(s,f) ∧ CS(f))</code></li>
+      <li><strong>“There is a number that is greater than every other number.”</strong> → false statement; logically <code>∃x ∀y (y ≠ x → y &lt; x)</code>.</li>
+    </ul>
+    <div class="note">
+      <strong>Tip:</strong> When translating “every A is B” use implication: <code>∀x (A(x) → B(x))</code>.<br>
+      For “some A is B” use conjunction: <code>∃x (A(x) ∧ B(x))</code>.
+    </div>
+  </div>
+
+  <!-- 11. Summary: de Morgan table and quick rules -->
+  <div class="card">
+    <h2 class="section-title">📊 De Morgan’s Laws for Quantifiers – Reference</h2>
+    <table class="truth-table">
+      <thead>
+        <tr><th>Negation</th><th>Equivalent Statement</th><th>When True?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>¬∃x P(x)</td><td>∀x ¬P(x)</td><td>P(x) false for every x</td></tr>
+        <tr><td>¬∀x P(x)</td><td>∃x ¬P(x)</td><td>P(x) false for some x</td></tr>
+      </tbody>
+    </table>
+    <div class="important">
+      💡 These equivalences hold for any domain and any propositional function.
+    </div>
+  </div>
+
+  <!-- 12. Examples from the lecture: "some fun with translation" full -->
+  <div class="card">
+    <h2 class="section-title">🎓 Fun with Translation (Fruits & Plants recap)</h2>
+    <div class="box">
+      <ul>
+        <li><strong>“Everything is a fruit”</strong> → <code>∀x F(x)</code></li>
+        <li><strong>“Nothing is a Vegetable”</strong> → <code>¬∃x S(x)</code> ≡ <code>∀x ¬S(x)</code></li>
+        <li><strong>“All fruits are plants”</strong> → <code>∀x (F(x) → T(x))</code></li>
+        <li><strong>“Some fruits are plants”</strong> → <code>∃x (F(x) ∧ T(x))</code></li>
+        <li><strong>“No vegetable is a plant”</strong> → <code>∀x (S(x) → ¬T(x))</code> or <code>¬∃x (S(x) ∧ T(x))</code></li>
+        <li><strong>“If any fruit is a vegetable then it is also a plant”</strong> → <code>∀x ((F(x) ∧ S(x)) → T(x))</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 13. Translation back to English from nested -->
+  <div class="card">
+    <h2 class="section-title">🔁 Translating from Logic to English</h2>
+    <div class="highlight">
+      <code>∀x (C(x) ∨ ∃y (C(y) ∧ F(x,y)))</code> → “Everyone has a computer or knows someone who has a computer.”<br>
+      <code>∃x ∀y (x ≥ y)</code> over integers → “There exists a greatest integer” (false).<br>
+      <code>∀x ∃y (x &lt; y)</code> → “For every integer there is a larger integer.”
+    </div>
+  </div>
+
+  <!-- 14. Important: order and truth values summary -->
+  <div class="card">
+    <h2 class="section-title">📌 Quick Summary: Nested Quantifiers</h2>
+    <ul>
+      <li><strong>∀x ∀y P(x,y)</strong> : true only if P holds for every ordered pair.</li>
+      <li><strong>∃x ∃y P(x,y)</strong> : true if at least one pair satisfies P.</li>
+      <li><strong>∀x ∃y P(x,y)</strong> : for each x, some y works (y may depend on x).</li>
+      <li><strong>∃x ∀y P(x,y)</strong> : there is a single x that works with every y — much stronger.</li>
+    </ul>
+    <div class="note">
+      ★ The meaning changes if quantifiers are swapped: <strong>∀x∃y</strong> ≠ <strong>∃y∀x</strong> in general. Always read from left to right.
+    </div>
+  </div>
+
+  <!-- 15. final footer as required -->
+  <div class="footer">
+    🌱 Lecture XX - Nested Quantifiers • Predicate logic, quantifier laws & applications • BY_#D1
+  </div>
+</div>
+</body>
+</html>

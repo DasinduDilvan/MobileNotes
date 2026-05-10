@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PHP Arrays – ICT1232</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .var     { color: #9cdcfe; }
+pre .num     { color: #b5cea8; }
+pre .op      { color: #d4d4d4; }
+
+.output-box {
+    background: #f0f0f0;
+    border: 1px dashed #aaa;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #333;
+    margin: 8px 0 14px 0;
+}
+.output-box span.label {
+    display: block;
+    font-weight: bold;
+    color: #2c6e6b;
+    margin-bottom: 4px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.85em;
+}
+
+/* Visual array diagrams */
+.arr-visual {
+    display: flex;
+    align-items: stretch;
+    margin: 14px 0 6px 0;
+    flex-wrap: wrap;
+    gap: 0;
+}
+.arr-cell {
+    border: 2px solid #2c6e6b;
+    min-width: 70px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+.arr-cell .idx {
+    background: #2c6e6b;
+    color: white;
+    font-size: 0.72em;
+    padding: 2px 4px;
+    font-family: 'Segoe UI', sans-serif;
+}
+.arr-cell .val {
+    padding: 8px 6px;
+    font-size: 0.88em;
+    background: #f3fbfa;
+}
+.arr-cell + .arr-cell { border-left: none; }
+
+.assoc-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 14px 0;
+}
+.assoc-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+.assoc-key {
+    background: #2c6e6b;
+    color: white;
+    padding: 6px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    border-radius: 6px 0 0 6px;
+    min-width: 100px;
+    text-align: center;
+}
+.assoc-arrow {
+    background: #cfe9e7;
+    padding: 6px 10px;
+    color: #2c6e6b;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.assoc-val {
+    background: #f3fbfa;
+    border: 2px solid #2c6e6b;
+    border-left: none;
+    padding: 6px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    border-radius: 0 6px 6px 0;
+    flex: 1;
+}
+
+/* Multi-dim grid */
+.matrix {
+    display: inline-grid;
+    grid-template-columns: repeat(3, 56px);
+    gap: 4px;
+    margin: 14px 0;
+}
+.matrix-cell {
+    background: #f3fbfa;
+    border: 2px solid #2c6e6b;
+    text-align: center;
+    padding: 10px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    border-radius: 6px;
+}
+.matrix-cell.head {
+    background: #2c6e6b;
+    color: white;
+    font-size: 0.75em;
+    padding: 5px 0;
+    border-radius: 4px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.93em;
+}
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 14px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0f0ee;
+    vertical-align: top;
+}
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+
+.func-header {
+    background: #2c6e6b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px 8px 0 0;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    font-weight: bold;
+}
+.func-body {
+    background: #f3fbfa;
+    border: 1px solid #cfe9e7;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 14px;
+    margin-bottom: 16px;
+    font-size: 0.93em;
+}
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    pre { background: #1e1e1e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead tr, .func-header, .arr-cell .idx, .assoc-key, .matrix-cell.head {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <h1>🗂️ PHP Arrays</h1>
+  <p class="subtitle">ICT1232 · Department of ICT, Faculty of Technology</p>
+
+  <!-- WHAT IS AN ARRAY -->
+  <div class="card">
+    <h2 class="section-title">💡 What Is an Array?</h2>
+    <div class="important">
+      <strong>Definition:</strong> An array is a special variable that can hold <strong>more than one value at a time</strong>. It is an ordered collection of <strong>key-value pairs</strong>, where each value is called an <em>element</em>.
+    </div>
+    <ul style="margin-top:12px;">
+      <li>Stores a <strong>group of related data</strong> under a single variable name</li>
+      <li>Each element is accessed by its <strong>index (key)</strong></li>
+      <li>Can store <strong>heterogeneous data</strong> — strings, integers, booleans, even other arrays</li>
+    </ul>
+
+    <div class="grid" style="margin-top:16px;">
+      <div class="box"><strong>📌 Indexed Array</strong>Keys are auto-assigned numbers starting from 0</div>
+      <div class="box"><strong>🔑 Associative Array</strong>Keys are custom strings you define</div>
+      <div class="box"><strong>🧮 Multidimensional Array</strong>Arrays that contain other arrays (2D, 3D…)</div>
+    </div>
+  </div>
+
+  <!-- INDEXED ARRAYS -->
+  <div class="card">
+    <h2 class="section-title">📌 Indexed Arrays</h2>
+    <p>Elements are stored with <strong>numeric keys starting from 0</strong>. PHP assigns these automatically when you use <code>array()</code>.</p>
+
+    <!-- Visual diagram -->
+    <p style="margin-top:14px; font-weight:600; color:#2c6e6b;">Visual: <code>$colors = array("Red", "Green", "Blue")</code></p>
+    <div class="arr-visual">
+      <div class="arr-cell"><div class="idx">Index [0]</div><div class="val">Red</div></div>
+      <div class="arr-cell"><div class="idx">Index [1]</div><div class="val">Green</div></div>
+      <div class="arr-cell"><div class="idx">Index [2]</div><div class="val">Blue</div></div>
+    </div>
+
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example 1 — Create with array()</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$colors</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Red"</span>, <span class="string">"Green"</span>, <span class="string">"Blue"</span>);
+
+<span class="comment">// Access each element by its index number</span>
+<span class="fn">echo</span> <span class="string">"Colors are "</span> . <span class="var">$colors</span>[<span class="num">0</span>] . <span class="string">", "</span> . <span class="var">$colors</span>[<span class="num">1</span>] . <span class="string">" and "</span> . <span class="var">$colors</span>[<span class="num">2</span>];
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Colors are Red, Green and Blue</div>
+
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example 2 — Assign elements one by one (heterogeneous)</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$array</span>[<span class="num">0</span>] <span class="op">=</span> <span class="string">"abc"</span>;   <span class="comment">// String</span>
+<span class="var">$array</span>[<span class="num">1</span>] <span class="op">=</span> <span class="string">'a'</span>;    <span class="comment">// Character</span>
+<span class="var">$array</span>[<span class="num">2</span>] <span class="op">=</span> <span class="num">100</span>;    <span class="comment">// Integer</span>
+<span class="var">$array</span>[<span class="num">3</span>] <span class="op">=</span> <span class="num">200</span>;    <span class="comment">// Integer</span>
+
+<span class="comment">// Arrays can hold mixed types — strings AND numbers together</span>
+<span class="fn">print</span> <span class="string">"first "</span> . <span class="var">$array</span>[<span class="num">0</span>] . <span class="string">" second "</span> . <span class="var">$array</span>[<span class="num">1</span>]
+    . <span class="string">" third "</span> . <span class="var">$array</span>[<span class="num">2</span>] . <span class="string">" fourth "</span> . <span class="var">$array</span>[<span class="num">3</span>];
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>first abc second a third 100 fourth 200</div>
+  </div>
+
+  <!-- ASSOCIATIVE ARRAYS -->
+  <div class="card">
+    <h2 class="section-title">🔑 Associative Arrays</h2>
+    <p>Associative arrays use <strong>custom string keys</strong> instead of numbers. This lets you create a meaningful relationship between the key and its value — like a dictionary or a lookup table.</p>
+
+    <div class="note">
+      <strong>Syntax:</strong> Use <code>=&gt;</code> to pair a key with its value: <code>"key" =&gt; "value"</code>
+    </div>
+
+    <!-- Visual diagram -->
+    <p style="margin-top:14px; font-weight:600; color:#2c6e6b;">Visual: Age lookup table</p>
+    <div class="assoc-visual">
+      <div class="assoc-row">
+        <div class="assoc-key">"Peter"</div>
+        <div class="assoc-arrow">=&gt;</div>
+        <div class="assoc-val">"35"</div>
+      </div>
+      <div class="assoc-row">
+        <div class="assoc-key">"Ben"</div>
+        <div class="assoc-arrow">=&gt;</div>
+        <div class="assoc-val">"37"</div>
+      </div>
+      <div class="assoc-row">
+        <div class="assoc-key">"Joe"</div>
+        <div class="assoc-arrow">=&gt;</div>
+        <div class="assoc-val">"43"</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example 1 — Mixed key types</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$array</span> <span class="op">=</span> <span class="fn">array</span>(
+    <span class="string">"foo"</span>  <span class="op">=&gt;</span> <span class="string">"bar"</span>,   <span class="comment">// String key → String value</span>
+    <span class="string">"bar"</span>  <span class="op">=&gt;</span> <span class="string">"foo"</span>,   <span class="comment">// String key → String value</span>
+    <span class="num">100</span>    <span class="op">=&gt;</span> <span class="op">-</span><span class="num">100</span>,   <span class="comment">// Integer key → Integer value</span>
+    <span class="op">-</span><span class="num">100</span>   <span class="op">=&gt;</span> <span class="num">100</span>    <span class="comment">// Negative key → Integer value</span>
+);
+
+<span class="fn">print</span> <span class="string">"first "</span>  . <span class="var">$array</span>[<span class="string">'foo'</span>]
+    . <span class="string">" second "</span> . <span class="var">$array</span>[<span class="string">'bar'</span>]
+    . <span class="string">" third "</span>  . <span class="var">$array</span>[<span class="num">100</span>]
+    . <span class="string">" fourth "</span> . <span class="var">$array</span>[<span class="op">-</span><span class="num">100</span>];
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>first bar second foo third -100 fourth 100</div>
+
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example 2 — Assign one by one</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$age</span>[<span class="string">'Peter'</span>] <span class="op">=</span> <span class="string">"35"</span>;
+<span class="var">$age</span>[<span class="string">'Ben'</span>]   <span class="op">=</span> <span class="string">"37"</span>;
+<span class="var">$age</span>[<span class="string">'Joe'</span>]   <span class="op">=</span> <span class="string">"43"</span>;
+
+<span class="fn">echo</span> <span class="string">"Peter is "</span> . <span class="var">$age</span>[<span class="string">'Peter'</span>] . <span class="string">" years old"</span>;
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Peter is 35 years old</div>
+  </div>
+
+  <!-- MULTIDIMENSIONAL ARRAYS -->
+  <div class="card">
+    <h2 class="section-title">🧮 Multidimensional Arrays</h2>
+    <p>A multidimensional array is an <strong>array that contains other arrays</strong> as its elements. To access an element you need multiple indices — one per dimension.</p>
+
+    <div class="two-column" style="margin-top:14px;">
+      <div>
+        <div class="note">
+          <strong>2D Array:</strong> Needs <strong>2 indices</strong> — <code>$array[row][col]</code>
+        </div>
+        <div class="note" style="margin-top:8px;">
+          <strong>3D Array:</strong> Needs <strong>3 indices</strong> — <code>$array[x][y][z]</code>
+        </div>
+      </div>
+      <div>
+        <p style="font-weight:600; color:#2c6e6b; margin-bottom:8px;">Visual: 3×3 matrix</p>
+        <div class="matrix">
+          <div class="matrix-cell head">[0][0]</div><div class="matrix-cell head">[0][1]</div><div class="matrix-cell head">[0][2]</div>
+          <div class="matrix-cell">1</div><div class="matrix-cell">2</div><div class="matrix-cell">3</div>
+          <div class="matrix-cell">4</div><div class="matrix-cell">5</div><div class="matrix-cell">6</div>
+          <div class="matrix-cell">7</div><div class="matrix-cell">8</div><div class="matrix-cell">9</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example 1 — Building a 2D array</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$row0</span> <span class="op">=</span> <span class="fn">array</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>);
+<span class="var">$row1</span> <span class="op">=</span> <span class="fn">array</span>(<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>);
+<span class="var">$row2</span> <span class="op">=</span> <span class="fn">array</span>(<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>);
+
+<span class="var">$multi</span> <span class="op">=</span> <span class="fn">array</span>(<span class="var">$row0</span>, <span class="var">$row1</span>, <span class="var">$row2</span>);
+
+<span class="fn">echo</span> <span class="var">$multi</span>[<span class="num">0</span>][<span class="num">0</span>];   <span class="comment">// → 1 (row 0, col 0)</span>
+<span class="fn">echo</span> <span class="var">$multi</span>[<span class="num">1</span>][<span class="num">2</span>];   <span class="comment">// → 6 (row 1, col 2)</span>
+<span class="fn">echo</span> <span class="var">$multi</span>[<span class="num">2</span>][<span class="num">1</span>];   <span class="comment">// → 8 (row 2, col 1)</span>
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>1 &nbsp; 6 &nbsp; 8</div>
+
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example 2 — Nested Associative Array (Arrays of Arrays)</h3>
+    <p style="margin-bottom:8px; font-size:0.93em;">Array elements can themselves be arrays — useful for structured data like a product catalogue.</p>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$products</span> <span class="op">=</span> <span class="fn">array</span>(
+    <span class="string">'paper'</span> <span class="op">=&gt;</span> <span class="fn">array</span>(
+        <span class="string">'copier'</span> <span class="op">=&gt;</span> <span class="string">"Copier &amp; Multipurpose"</span>,
+        <span class="string">'inkjet'</span> <span class="op">=&gt;</span> <span class="string">"Inkjet Printer"</span>,
+        <span class="string">'laser'</span>  <span class="op">=&gt;</span> <span class="string">"Laser Printer"</span>,
+        <span class="string">'photo'</span>  <span class="op">=&gt;</span> <span class="string">"Photographic Paper"</span>
+    ),
+    <span class="string">'pens'</span> <span class="op">=&gt;</span> <span class="fn">array</span>(
+        <span class="string">'ball'</span>   <span class="op">=&gt;</span> <span class="string">"Ball Point"</span>,
+        <span class="string">'hilite'</span> <span class="op">=&gt;</span> <span class="string">"Highlighters"</span>,
+        <span class="string">'marker'</span> <span class="op">=&gt;</span> <span class="string">"Markers"</span>
+    ),
+    <span class="string">'misc'</span> <span class="op">=&gt;</span> <span class="fn">array</span>(
+        <span class="string">'tape'</span>  <span class="op">=&gt;</span> <span class="string">"Sticky Tape"</span>,
+        <span class="string">'glue'</span>  <span class="op">=&gt;</span> <span class="string">"Adhesives"</span>,
+        <span class="string">'clips'</span> <span class="op">=&gt;</span> <span class="string">"Paperclips"</span>
+    )
+);
+
+<span class="comment">// Access: category → sub-key</span>
+<span class="fn">echo</span> <span class="var">$products</span>[<span class="string">"pens"</span>][<span class="string">"marker"</span>];   <span class="comment">// → Markers</span>
+<span class="fn">echo</span> <span class="var">$products</span>[<span class="string">"paper"</span>][<span class="string">"laser"</span>];   <span class="comment">// → Laser Printer</span>
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Markers<br>Laser Printer</div>
+  </div>
+
+  <!-- TRAVERSING ARRAYS -->
+  <div class="card">
+    <h2 class="section-title">🔁 Traversing Arrays</h2>
+    <p>The most common task with arrays is to <strong>do something with every element</strong> — e.g., display data, send emails, or calculate totals. The method you use depends on the array type.</p>
+
+    <!-- Indexed with for -->
+    <h3 style="margin-top:16px; color:#2c6e6b;">1. Loop Through Indexed Array — <code>for</code> loop</h3>
+    <p style="margin-bottom:8px;">Use <code>count()</code> to get the array length, then loop through each index.</p>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$color</span>     <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Red"</span>, <span class="string">"Blue"</span>, <span class="string">"Green"</span>);
+<span class="var">$arrlength</span> <span class="op">=</span> <span class="fn">count</span>(<span class="var">$color</span>);   <span class="comment">// → 3</span>
+
+<span class="keyword">for</span> (<span class="var">$x</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">$x</span> <span class="op">&lt;</span> <span class="var">$arrlength</span>; <span class="var">$x</span><span class="op">++</span>) {
+    <span class="fn">echo</span> <span class="var">$color</span>[<span class="var">$x</span>] . <span class="string">"&lt;br&gt;"</span>;   <span class="comment">// Access by index each time</span>
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Red<br>Blue<br>Green</div>
+
+    <!-- Associative with foreach -->
+    <h3 style="margin-top:18px; color:#2c6e6b;">2. Loop Through Associative Array — <code>foreach</code> loop</h3>
+    <p style="margin-bottom:8px;"><code>foreach</code> is the most natural way — it gives you both the key and value on each iteration.</p>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$marks</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Ruwan"</span> <span class="op">=&gt;</span> <span class="num">35</span>, <span class="string">"Saman"</span> <span class="op">=&gt;</span> <span class="num">37</span>, <span class="string">"Ravi"</span> <span class="op">=&gt;</span> <span class="num">43</span>);
+
+<span class="keyword">foreach</span> (<span class="var">$marks</span> <span class="keyword">as</span> <span class="var">$x</span> <span class="op">=&gt;</span> <span class="var">$x_value</span>) {
+    <span class="fn">echo</span> <span class="string">"Student Name = "</span> . <span class="var">$x</span> . <span class="string">", Marks = "</span> . <span class="var">$x_value</span> . <span class="string">"&lt;br&gt;"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Student Name = Ruwan, Marks = 35<br>Student Name = Saman, Marks = 37<br>Student Name = Ravi, Marks = 43</div>
+
+    <!-- Multidimensional with nested for -->
+    <h3 style="margin-top:18px; color:#2c6e6b;">3. Loop Through Multidimensional Array — Nested <code>for</code> loop</h3>
+    <p style="margin-bottom:8px;">Use an outer loop for rows and an inner loop for columns.</p>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$shop</span> <span class="op">=</span> <span class="fn">array</span>(
+    <span class="fn">array</span>(<span class="string">"rose"</span>,   <span class="num">1.25</span>, <span class="num">15</span>),
+    <span class="fn">array</span>(<span class="string">"daisy"</span>,  <span class="num">0.75</span>, <span class="num">25</span>),
+    <span class="fn">array</span>(<span class="string">"orchid"</span>, <span class="num">1.15</span>,  <span class="num">7</span>)
+);
+
+<span class="keyword">for</span> (<span class="var">$row</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">$row</span> <span class="op">&lt;</span> <span class="num">3</span>; <span class="var">$row</span><span class="op">++</span>) {      <span class="comment">// Outer loop = rows</span>
+    <span class="fn">echo</span> <span class="string">"&lt;b&gt;Row $row:&lt;/b&gt;&lt;ul&gt;"</span>;
+    <span class="keyword">for</span> (<span class="var">$col</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">$col</span> <span class="op">&lt;</span> <span class="num">3</span>; <span class="var">$col</span><span class="op">++</span>) {   <span class="comment">// Inner loop = columns</span>
+        <span class="fn">echo</span> <span class="string">"&lt;li&gt;"</span> . <span class="var">$shop</span>[<span class="var">$row</span>][<span class="var">$col</span>] . <span class="string">"&lt;/li&gt;"</span>;
+    }
+    <span class="fn">echo</span> <span class="string">"&lt;/ul&gt;"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">Output:</span>
+      <strong>Row 0:</strong> rose · 1.25 · 15<br>
+      <strong>Row 1:</strong> daisy · 0.75 · 25<br>
+      <strong>Row 2:</strong> orchid · 1.15 · 7
+    </div>
+  </div>
+
+  <!-- ARRAY FUNCTIONS -->
+  <div class="card">
+    <h2 class="section-title">🔧 Array Functions</h2>
+
+    <!-- count -->
+    <div class="func-header">count( $array ) — Get Length</div>
+    <div class="func-body">
+      Returns the total <strong>number of elements</strong> in an array.
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$cars</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Volvo"</span>, <span class="string">"BMW"</span>, <span class="string">"Toyota"</span>);
+<span class="fn">echo</span> <span class="fn">count</span>(<span class="var">$cars</span>);   <span class="comment">// → 3</span>
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>3</div>
+    </div>
+
+    <!-- array_sum -->
+    <div class="func-header">array_sum( $array ) — Sum All Values</div>
+    <div class="func-body">
+      Adds up all <strong>numeric values</strong> in an indexed or associative array and returns the total.
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$scores</span> <span class="op">=</span> <span class="fn">array</span>(<span class="num">98</span>, <span class="num">76</span>, <span class="num">56</span>, <span class="num">80</span>);
+<span class="var">$total</span>  <span class="op">=</span> <span class="fn">array_sum</span>(<span class="var">$scores</span>);   <span class="comment">// 98 + 76 + 56 + 80</span>
+<span class="fn">echo</span> <span class="string">"Total: $total"</span>;
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>Total: 310</div>
+    </div>
+
+    <!-- array_push -->
+    <div class="func-header">array_push( $array, $val1, $val2, ... ) — Add to End</div>
+    <div class="func-body">
+      Inserts <strong>one or more elements to the end</strong> of an array. The array grows dynamically.
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$a</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"red"</span>, <span class="string">"green"</span>);
+<span class="fn">array_push</span>(<span class="var">$a</span>, <span class="string">"blue"</span>, <span class="string">"yellow"</span>);   <span class="comment">// Add 2 elements at once</span>
+<span class="fn">print_r</span>(<span class="var">$a</span>);
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>Array ( [0] =&gt; red [1] =&gt; green [2] =&gt; blue [3] =&gt; yellow )</div>
+    </div>
+
+    <!-- unset -->
+    <div class="func-header">unset( $array[key] ) — Delete an Element</div>
+    <div class="func-body">
+      Removes a specific element from an array by its key. The remaining elements keep their original keys (indices do <strong>not</strong> re-number automatically).
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$anArray</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"X"</span>, <span class="string">"Y"</span>, <span class="string">"Z"</span>);
+
+<span class="fn">unset</span>(<span class="var">$anArray</span>[<span class="num">0</span>]);   <span class="comment">// Remove element at index 0 ("X")</span>
+<span class="fn">print_r</span>(<span class="var">$anArray</span>);     <span class="comment">// Index 0 is gone; 1 and 2 remain</span>
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>Array ( [1] =&gt; Y [2] =&gt; Z )</div>
+      <div class="warning" style="margin-top:8px;">
+        <strong>⚠️ Note:</strong> After <code>unset()</code>, the array indices do <strong>not</strong> shift. Index [1] and [2] stay as-is. Use <code>array_values($array)</code> afterwards if you need to re-index from 0.
+      </div>
+    </div>
+
+    <!-- sort -->
+    <div class="func-header">sort( $array ) — Sort Array</div>
+    <div class="func-body">
+      Sorts an array in <strong>ascending order</strong>. Modifies the original array directly.
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$nums</span> <span class="op">=</span> <span class="fn">array</span>(<span class="num">5</span>, <span class="num">2</span>, <span class="num">8</span>, <span class="num">1</span>, <span class="num">4</span>);
+<span class="fn">sort</span>(<span class="var">$nums</span>);
+<span class="fn">print_r</span>(<span class="var">$nums</span>);
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>Array ( [0] =&gt; 1 [1] =&gt; 2 [2] =&gt; 4 [3] =&gt; 5 [4] =&gt; 8 )</div>
+    </div>
+  </div>
+
+  <!-- INSPECTING ARRAYS -->
+  <div class="card">
+    <h2 class="section-title">🔍 Inspecting Arrays</h2>
+    <p>PHP provides functions to check properties of arrays — whether a variable is an array, or whether a specific value exists inside one.</p>
+
+    <table>
+      <thead>
+        <tr><th>Function</th><th>What It Does</th><th>Returns</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>is_array($var)</code></td>
+          <td>Checks if a variable is an array</td>
+          <td><code>true</code> or <code>false</code></td>
+        </tr>
+        <tr>
+          <td><code>in_array($val, $arr)</code></td>
+          <td>Checks if a value exists in an array</td>
+          <td><code>true</code> or <code>false</code></td>
+        </tr>
+        <tr>
+          <td><code>isset($array[$key])</code></td>
+          <td>Checks if a specific key exists in an array</td>
+          <td><code>true</code> or <code>false</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- is_array -->
+    <h3 style="margin-top:20px; color:#2c6e6b;">📝 Example — is_array()</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$a</span> <span class="op">=</span> <span class="string">"Hello"</span>;
+<span class="fn">echo</span> <span class="string">"a is array: "</span> . (<span class="fn">is_array</span>(<span class="var">$a</span>) ? <span class="string">"Yes"</span> : <span class="string">"No"</span>) . <span class="string">"&lt;br&gt;"</span>;   <span class="comment">// No</span>
+
+<span class="var">$b</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>);
+<span class="fn">echo</span> <span class="string">"b is array: "</span> . (<span class="fn">is_array</span>(<span class="var">$b</span>) ? <span class="string">"Yes"</span> : <span class="string">"No"</span>) . <span class="string">"&lt;br&gt;"</span>;   <span class="comment">// Yes</span>
+
+<span class="var">$c</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Peter"</span> <span class="op">=&gt;</span> <span class="string">"35"</span>, <span class="string">"Ben"</span> <span class="op">=&gt;</span> <span class="string">"37"</span>);
+<span class="fn">echo</span> <span class="string">"c is array: "</span> . (<span class="fn">is_array</span>(<span class="var">$c</span>) ? <span class="string">"Yes"</span> : <span class="string">"No"</span>) . <span class="string">"&lt;br&gt;"</span>;   <span class="comment">// Yes</span>
+
+<span class="var">$d</span> <span class="op">=</span> <span class="string">"red, green, blue"</span>;   <span class="comment">// Just a string, not an array</span>
+<span class="fn">echo</span> <span class="string">"d is array: "</span> . (<span class="fn">is_array</span>(<span class="var">$d</span>) ? <span class="string">"Yes"</span> : <span class="string">"No"</span>) . <span class="string">"&lt;br&gt;"</span>;   <span class="comment">// No</span>
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">Output:</span>
+      a is array: No<br>
+      b is array: Yes<br>
+      c is array: Yes<br>
+      d is array: No
+    </div>
+
+    <!-- in_array -->
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example — in_array()</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$people</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Peter"</span>, <span class="string">"Joe"</span>, <span class="string">"Glenn"</span>, <span class="string">"Cleveland"</span>);
+
+<span class="keyword">if</span> (<span class="fn">in_array</span>(<span class="string">"Glenn"</span>, <span class="var">$people</span>)) {
+    <span class="fn">echo</span> <span class="string">"Match found"</span>;        <span class="comment">// "Glenn" exists → this runs</span>
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Match not found"</span>;
+}
+
+<span class="fn">echo</span> <span class="string">"&lt;br&gt;"</span>;
+
+<span class="keyword">if</span> (<span class="fn">in_array</span>(<span class="string">"Alice"</span>, <span class="var">$people</span>)) {
+    <span class="fn">echo</span> <span class="string">"Match found"</span>;
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Match not found"</span>;    <span class="comment">// "Alice" doesn't exist → this runs</span>
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Match found<br>Match not found</div>
+
+    <!-- isset -->
+    <h3 style="margin-top:18px; color:#2c6e6b;">📝 Example — isset()</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$age</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Peter"</span> <span class="op">=&gt;</span> <span class="num">35</span>, <span class="string">"Ben"</span> <span class="op">=&gt;</span> <span class="num">37</span>);
+
+<span class="keyword">if</span> (<span class="fn">isset</span>(<span class="var">$age</span>[<span class="string">"Peter"</span>])) {
+    <span class="fn">echo</span> <span class="string">"Peter key exists: "</span> . <span class="var">$age</span>[<span class="string">"Peter"</span>];   <span class="comment">// Key found → prints 35</span>
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Peter key not found"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Peter key exists: 35</div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div class="card">
+    <h2 class="section-title">📌 Quick Reference Summary</h2>
+
+    <table>
+      <thead>
+        <tr><th>Topic</th><th>Key Point</th><th>Example Syntax</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Indexed Array</strong></td><td>Numeric keys from 0</td><td><code>$a = array("x","y","z")</code></td></tr>
+        <tr><td><strong>Associative Array</strong></td><td>String keys with <code>=&gt;</code></td><td><code>$a = array("k"=&gt;"v")</code></td></tr>
+        <tr><td><strong>Multidimensional</strong></td><td>Arrays inside arrays</td><td><code>$a[0][1]</code></td></tr>
+        <tr><td><strong>Access element</strong></td><td>Use square brackets</td><td><code>$a[0]</code> or <code>$a["key"]</code></td></tr>
+        <tr><td><strong>Loop indexed</strong></td><td>for + count()</td><td><code>for($i=0;$i&lt;count($a);$i++)</code></td></tr>
+        <tr><td><strong>Loop associative</strong></td><td>foreach with key =&gt; value</td><td><code>foreach($a as $k=&gt;$v)</code></td></tr>
+        <tr><td><strong>count()</strong></td><td>Number of elements</td><td><code>count($arr)</code></td></tr>
+        <tr><td><strong>array_sum()</strong></td><td>Sum all values</td><td><code>array_sum($arr)</code></td></tr>
+        <tr><td><strong>array_push()</strong></td><td>Add to end</td><td><code>array_push($arr, "val")</code></td></tr>
+        <tr><td><strong>unset()</strong></td><td>Delete by key</td><td><code>unset($arr[0])</code></td></tr>
+        <tr><td><strong>sort()</strong></td><td>Sort ascending</td><td><code>sort($arr)</code></td></tr>
+        <tr><td><strong>is_array()</strong></td><td>Check if variable is array</td><td><code>is_array($var)</code></td></tr>
+        <tr><td><strong>in_array()</strong></td><td>Check if value exists</td><td><code>in_array("val", $arr)</code></td></tr>
+        <tr><td><strong>isset()</strong></td><td>Check if key exists</td><td><code>isset($arr["key"])</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer">
+    🌱 PHP Arrays - ICT1232 • BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

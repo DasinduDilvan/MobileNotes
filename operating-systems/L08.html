@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, print-scale: 1.0">
+    <title>Study Notes: Main Memory Management — Operating Systems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #1e3a3a;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 16px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.1s ease;
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        ul {
+            list-style-position: outside;
+            line-height: 1.7;
+            margin-left: 1.4rem;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 1.8rem;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 16px;
+            border-radius: 14px;
+            border-left: 4px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #f0ad4e;
+            margin: 18px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #4caf50;
+            margin: 18px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #2196f3;
+            margin: 18px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #e91e63;
+            margin: 18px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 16px 0;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin: 16px 0;
+        }
+
+        code {
+            background: #edf2f1;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #b9493c;
+        }
+
+        pre {
+            background: #1e2a2a;
+            color: #e2e8e8;
+            padding: 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .model-diagram {
+            text-align: center;
+            padding: 18px;
+            background: #fafcfb;
+            border-radius: 16px;
+            margin: 16px 0;
+            font-size: 0.95em;
+            border: 1px solid #dcebe9;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .footer {
+            text-align: center;
+            color: #62807e;
+            margin-top: 50px;
+            padding: 20px 10px;
+            font-size: 0.9em;
+            border-top: 1px solid #cde3e0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0.2in;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #cfdfdd;
+                page-break-inside: avoid;
+            }
+            .footer {
+                page-break-before: avoid;
+            }
+            h1, .section-title {
+                color: black;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .card { padding: 18px; }
+            h1 { font-size: 1.8em; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+        hr.dashed {
+            border: none;
+            border-top: 1px dashed #cde0dd;
+            margin: 12px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📖 Main Memory Management</h1>
+    <div class="subtitle">Address binding · Contiguous allocation · Paging · Dynamic loading</div>
+
+    <!-- Introduction & Background -->
+    <div class="card">
+        <div class="section-title">🎯 Background & Memory Hierarchy</div>
+        <p>Programs (instructions + data) must be in <strong>main memory</strong> (at least partially) to execute. CPU fetches instructions/data from memory according to the program counter. Memory hierarchy:</p>
+        <ul>
+            <li><strong>Registers:</strong> access in ≤ 1 CPU clock cycle</li>
+            <li><strong>Cache:</strong> few cycles; sits between main memory and registers</li>
+            <li><strong>Main memory:</strong> many cycles; large array of bytes each with its own address</li>
+        </ul>
+        <div class="important">
+            📌 <strong>Multiprogramming requirement:</strong> keep several processes in memory to improve CPU utilization and response. Each process has a <strong>separate memory space</strong> to protect processes from each other.
+        </div>
+    </div>
+
+    <!-- Base and Limit Registers / Hardware Protection -->
+    <div class="card">
+        <div class="section-title">🛡️ Hardware Protection: Base & Limit Registers</div>
+        <p>Legal logical address space defined by a pair of <strong>base</strong> and <strong>limit</strong> registers:</p>
+        <ul>
+            <li><strong>Base register:</strong> holds the smallest legal physical memory address.</li>
+            <li><strong>Limit register:</strong> specifies the size of the range.</li>
+        </ul>
+        <div class="note">
+            ✅ CPU checks every memory access in user mode: if address ≥ base + limit → trap to OS (fatal error). Prevents user programs from accessing OS or other processes' memory.
+        </div>
+        <div class="model-diagram">
+            🖥️ Hardware address protection: any illegal access → trap → OS handles as fatal error.
+        </div>
+    </div>
+
+    <!-- Address Binding (compile, load, execution time) -->
+    <div class="card">
+        <div class="section-title">🔗 Address Binding</div>
+        <p>Process may move between disk and memory → mapping from one address space to another. Binding can happen at three stages:</p>
+        <div class="three-column">
+            <div class="box"><strong>⌛ Compile time</strong><br>Absolute code generated. If memory location changes, recompile.</div>
+            <div class="box"><strong>⏳ Load time</strong><br>Relocatable code; binding at load time by loader.</div>
+            <div class="box"><strong>⚙️ Execution time</strong><br>Binding delayed until run-time; requires MMU. Most modern OS use this.</div>
+        </div>
+        <div class="highlight">
+            <strong>Multistep program processing:</strong> source code → compiler/assembler → object module → linker → load module → loader → memory image.
+        </div>
+    </div>
+
+    <!-- Logical vs Physical + MMU -->
+    <div class="card">
+        <div class="section-title">🧠 Logical vs. Physical Address & MMU</div>
+        <div class="two-column">
+            <div>
+                <strong>Logical address (virtual):</strong> generated by CPU; relative address.<br>
+                <strong>Physical address:</strong> address seen by memory unit; absolute address.
+            </div>
+            <div>
+                <strong>Memory-Management Unit (MMU):</strong> hardware that maps logical → physical at run-time. User program deals only with logical addresses.
+            </div>
+        </div>
+        <div class="important">
+            💡 Dynamic relocation using <strong>relocation register (base register)</strong>: logical address + relocation register = physical address.<br>
+            Example: logical address 5, base = 45 → physical address 50.
+        </div>
+        <pre>
+CPU ----&gt; logical address ----&gt; MMU (add relocation register) ----&gt; physical address ----&gt; memory
+        </pre>
+    </div>
+
+    <!-- Dynamic Loading -->
+    <div class="card">
+        <div class="section-title">📦 Dynamic Loading</div>
+        <p><strong>Motivation:</strong> entire program does not need to be in memory at once. Routine loaded only when called.</p>
+        <ul>
+            <li>Main program loaded first; when a routine calls another, calling routine checks if target is loaded.</li>
+            <li>If not loaded, relocatable linking loader loads the routine, updates address tables.</li>
+            <li><strong>Advantage:</strong> unused routines never loaded → saves memory, better memory utilization.</li>
+            <li>No special OS support required; users can implement with library routines.</li>
+        </ul>
+        <div class="note">
+            📘 Dynamic loading does <em>not</em> require OS support, but OS may provide helper libraries.
+        </div>
+    </div>
+
+    <!-- Contiguous Allocation (fixed & variable partitions) -->
+    <div class="card">
+        <div class="section-title">📐 Contiguous Memory Allocation</div>
+        <p>Each process contained in a single contiguous section of memory. Two common partitioning schemes:</p>
+        <div class="two-column">
+            <div class="box"><strong>Fixed-size partitions</strong><br>Memory divided into static partitions. Degree of multiprogramming bounded by number of partitions. Simple but suffers from internal fragmentation.</div>
+            <div class="box"><strong>Variable partitions (dynamic)</strong><br>Hole table: initially one large hole. Allocate exactly needed size. When process terminates, merge adjacent holes. More flexible but external fragmentation appears.</div>
+        </div>
+        <div class="highlight">
+            <strong>Hole management:</strong> OS keeps list of free blocks. When process arrives, search for hole large enough.
+        </div>
+    </div>
+
+    <!-- Dynamic storage allocation: first-fit, best-fit, worst-fit -->
+    <div class="card">
+        <div class="section-title">⚙️ Dynamic Storage-Allocation Strategies</div>
+        <p>Given a request of size <code>n</code>, three popular algorithms to select a hole:</p>
+        <div class="grid">
+            <div class="box"><b>🔹 First-fit</b><br>Allocate the <em>first</em> hole big enough. Fast.</div>
+            <div class="box"><b>🔸 Best-fit</b><br>Allocate the <em>smallest</em> hole that is big enough. Minimizes leftover, but must search entire list.</div>
+            <div class="box"><b>🔹 Worst-fit</b><br>Allocate the <em>largest</em> hole. Leaves largest leftover.</div>
+        </div>
+        <p>📊 <strong>Performance:</strong> First-fit and best-fit are better than worst-fit in speed and storage utilization.</p>
+    </div>
+
+    <!-- Fragmentation (external + internal) and Compaction -->
+    <div class="card">
+        <div class="section-title">🧩 Fragmentation & Compaction</div>
+        <div class="two-column">
+            <div>
+                <strong>External fragmentation:</strong> total free memory exists but not contiguous; holes scattered.<br>
+                <strong>Internal fragmentation:</strong> allocated memory slightly larger than requested; unused space inside allocated region.<br>
+                <em>Example:</em> 18,464 B hole, process requests 18,462 B → 2 B hole (external). If partition-based, internal fragmentation occurs.
+            </div>
+            <div>
+                <strong>Compaction (to reduce external fragmentation):</strong> shuffle memory contents to combine free blocks into one large hole.<br>
+                ⚠️ Possible only if relocation is <strong>dynamic (execution-time binding)</strong>. Requires updating base registers.
+            </div>
+        </div>
+        <div class="warning">
+            🔁 Alternative: allow non‑contiguous logical address space → <strong>Paging</strong> and <strong>Segmentation</strong>.
+        </div>
+    </div>
+
+    <!-- Paging: core concept, frames, pages -->
+    <div class="card">
+        <div class="section-title">📄 Paging – Non‑contiguous Memory Management</div>
+        <p><strong>Basic idea:</strong> break physical memory into fixed-size blocks called <strong>frames</strong>; break logical memory into same-size blocks called <strong>pages</strong>.</p>
+        <ul>
+            <li>Frame size = power of 2 (512 B – 16 MB).</li>
+            <li>To run a program of size N pages, find N free frames and load program pages into them.</li>
+            <li><strong>Page table</strong> (per process) maps logical page number to physical frame number. OS sets up page table; address translation done by hardware (MMU).</li>
+        </ul>
+        <div class="important">
+            ✅ <strong>Advantages of paging:</strong> No external fragmentation; efficient memory use; solves contiguous allocation problems. Most modern OS use paging.
+        </div>
+        <div class="note">
+            ⚠️ <strong>Drawbacks:</strong> Longer memory access time due to page table lookups; <em>internal fragmentation</em> possible on last page (not fully filled).
+        </div>
+        <div class="model-diagram">
+            📌 Example: logical address space divided into pages 0,1,2,... ; page 0 mapped to frame 1, page 1 → frame 4, etc.
+        </div>
+        <pre>
+Logical address = [page number | page offset]
+Physical address = frame number × frame size + offset
+        </pre>
+    </div>
+
+    <!-- Address translation example (4-bit logical address) -->
+    <div class="card">
+        <div class="section-title">🧮 Paging Address Translation – Example</div>
+        <p>Given logical address <strong>LA = 5</strong> (4-bit address). Suppose page size = 4 bytes, page table: page 0 → frame 6, page 1 → frame 2, ...</p>
+        <div class="highlight">
+            <strong>Translation exercise:</strong> Logical address 11 (binary 1011). If page size 4 → page number = 11/4 = 2, offset = 3. Use page table mapping (example: page 2 → frame 7). Physical address = frame×4 + offset = 7×4+3=31.<br>
+            Practice builds understanding of paging arithmetic.
+        </div>
+        <div class="note">
+            💡 MMU splits logical address into page number (p) and offset (d). Page number indexes into page table → frame number; physical address = (frame &lt;&lt; shift) + offset.
+        </div>
+    </div>
+
+    <!-- Free frames management -->
+    <div class="card">
+        <div class="section-title">📌 Free Frames & Page Table Management</div>
+        <p>OS maintains a <strong>free-frame list</strong> – all frames currently unused. When a process requests memory:</p>
+        <ul>
+            <li>Allocate required number of frames from free list.</li>
+            <li>Page table entries are set to point to the allocated frames.</li>
+            <li>When process terminates, frames are returned to free-frame list.</li>
+        </ul>
+        <div class="important">
+            Page table size depends on logical address space. Each process has own page table; context switch requires reloading page table base register.
+        </div>
+    </div>
+
+    <!-- Extra: dynamic loading VS paging / summary table -->
+    <div class="card">
+        <div class="section-title">📊 Comparison & Important Concepts</div>
+        <div class="two-column">
+            <div>
+                <strong>⚡ Contiguous allocation</strong><br>
+                • Fixed/variable partitions<br>
+                • External fragmentation<br>
+                • Compaction possible (requires dynamic relocation)
+            </div>
+            <div>
+                <strong>📇 Paging</strong><br>
+                • No external fragmentation<br>
+                • Internal fragmentation (last page)<br>
+                • Hardware support (MMU + page table)<br>
+                • Supports virtual memory foundation
+            </div>
+        </div>
+        <div class="highlight">
+            🧠 <strong>Key takeaway:</strong> Execution-time address binding (via relocation register / MMU) is essential for modern OS: enables swapping, dynamic loading, and paging. Protection via base/limit or page-level protection bits.
+        </div>
+    </div>
+
+    <!-- Exercise / practice overview -->
+    <div class="card">
+        <div class="section-title">✏️ Practice Exercises</div>
+        <ul>
+            <li>Given logical address 11, page size = 4, page table: page 2 → frame 7. Compute physical address.</li>
+            <li>Differentiate between internal & external fragmentation with examples.</li>
+            <li>Explain why compaction is only possible with dynamic relocation.</li>
+            <li>Use first-fit, best-fit, worst-fit on a hole list (e.g., holes: 100, 500, 200, 300; request 212 → which strategy gives which leftover?)</li>
+            <li>How does dynamic loading differ from paging?</li>
+        </ul>
+        <div class="note">
+            🧪 Understanding address binding stages (compile, load, execution) is fundamental for memory management interviews.
+        </div>
+    </div>
+
+    <!-- Summary: main memory management goals -->
+    <div class="card">
+        <div class="section-title">📖 Core Summary – Main Memory</div>
+        <ul>
+            <li><strong>Base & limit registers</strong> provide simple hardware protection for logical address spaces.</li>
+            <li><strong>Address binding</strong> can happen at compile-time, load-time, or execution-time. Execution-time binding requires MMU and relocation registers.</li>
+            <li><strong>Dynamic loading</strong> loads routines only when called → reduces memory footprint.</li>
+            <li><strong>Contiguous allocation</strong> (fixed/variable partitions) suffers from external fragmentation; compaction resolves it but needs dynamic relocation.</li>
+            <li><strong>First-fit, best-fit, worst-fit</strong> are hole-selection strategies. First-fit and best-fit generally outperform worst-fit.</li>
+            <li><strong>Paging</strong> eliminates external fragmentation, uses frames and pages, introduces internal fragmentation and page table overhead. Fundamental for virtual memory.</li>
+            <li>Fragmentation types: <em>external</em> (scattered holes) and <em>internal</em> (unused space inside allocated block).</li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        🌱 Lecture 08 - Main Memory: Address Binding, Contiguous Allocation, Fragmentation, Paging • BY_#D1
+    </div>
+</div>
+</body>
+</html>

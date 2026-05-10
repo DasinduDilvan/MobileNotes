@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 6 – Form Handling | ICT1232</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .type    { color: #4ec9b0; }
+pre .num     { color: #b5cea8; }
+pre .tag-html { color: #4ec9b0; }
+pre .attr    { color: #9cdcfe; }
+pre .val     { color: #ce9178; }
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+.tag-pill {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag-pill.orange { background: #e67e22; }
+.tag-pill.blue   { background: #2980b9; }
+.tag-pill.red    { background: #c0392b; }
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <h1>Lecture 6 – Form Handling</h1>
+    <p class="subtitle">ICT1232 &nbsp;|&nbsp; Department of ICT, Faculty of Technology</p>
+
+    <!-- OBJECTIVES -->
+    <div class="card">
+        <h2 class="section-title">🎯 Objectives</h2>
+        <p>After the successful completion of this lecture, students should be able to:</p>
+        <ul>
+            <li>Manage form data using PHP</li>
+        </ul>
+    </div>
+
+    <!-- HTML FORMS BASICS -->
+    <div class="card">
+        <h2 class="section-title">📋 HTML Forms – Basic Structure</h2>
+        <p>An HTML form is used to collect user input and send it to a server-side script for processing.</p>
+        <pre><span class="tag-html">&lt;html&gt;</span>
+<span class="tag-html">&lt;head&gt;</span>
+  <span class="tag-html">&lt;title&gt;</span><span class="string">A BASIC HTML FORM</span><span class="tag-html">&lt;/title&gt;</span>
+<span class="tag-html">&lt;/head&gt;</span>
+<span class="tag-html">&lt;body&gt;</span>
+  <span class="tag-html">&lt;FORM</span> <span class="attr">NAME</span>=<span class="val">"form1"</span> <span class="attr">METHOD</span>=<span class="val">" "</span> <span class="attr">ACTION</span>=<span class="val">""</span><span class="tag-html">&gt;</span>
+    <span class="tag-html">&lt;INPUT</span> <span class="attr">TYPE</span>=<span class="val">"TEXT"</span> <span class="attr">NAME</span>=<span class="val">"Name"</span> <span class="attr">VALUE</span>=<span class="val">"username"</span><span class="tag-html">&gt;</span>
+    <span class="tag-html">&lt;INPUT</span> <span class="attr">TYPE</span>=<span class="val">"Submit"</span> <span class="attr">NAME</span>=<span class="val">"Submit1"</span> <span class="attr">VALUE</span>=<span class="val">"Login"</span><span class="tag-html">&gt;</span>
+  <span class="tag-html">&lt;/FORM&gt;</span>
+<span class="tag-html">&lt;/body&gt;</span>
+<span class="tag-html">&lt;/html&gt;</span></pre>
+
+        <h3 style="color:#2c6e6b; margin-top:18px; margin-bottom:8px;">Key Form Attributes</h3>
+        <div class="three-column">
+            <div class="box">
+                <strong>METHOD</strong>
+                Tells the browser <em>how</em> the form information should be sent. Most common values: <code>GET</code> and <code>POST</code>.
+            </div>
+            <div class="box">
+                <strong>ACTION</strong>
+                Specifies <em>where</em> to send the form data (the URL of the script to process it).
+            </div>
+            <div class="box">
+                <strong>NAME</strong>
+                Identifies the form. Every input element also needs a <code>NAME</code> attribute so PHP can retrieve its value.
+            </div>
+        </div>
+
+        <div class="note" style="margin-top:15px;">
+            <strong>Syntax examples:</strong><br>
+            <code>&lt;FORM NAME="form1" METHOD="GET" ACTION=""&gt;</code><br>
+            <code>&lt;FORM NAME="form1" METHOD="POST" ACTION=""&gt;</code>
+        </div>
+    </div>
+
+    <!-- GET vs POST -->
+    <div class="card">
+        <h2 class="section-title">🔄 GET vs. POST Methods</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>GET Method</strong>
+                <ul>
+                    <li>Data is <b>visible to everyone</b> (appended to the URL)</li>
+                    <li>Use when data is <b>not sensitive</b></li>
+                    <li>Has <b>limits</b> on the amount of data that can be sent</li>
+                    <li>PHP variable: <code>$_GET</code></li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>POST Method</strong>
+                <ul>
+                    <li>Data is <b>invisible to others</b> (sent in request body)</li>
+                    <li><b>No limits</b> on the amount of data being sent</li>
+                    <li>Preferred for sensitive data (passwords, personal info)</li>
+                    <li>PHP variable: <code>$_POST</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight" style="margin-top:15px;">
+            <strong>How both work:</strong> Both GET and POST create an <strong>array</strong> of <code>key =&gt; value</code> pairs, where <strong>keys</strong> are the names of the form controls and <strong>values</strong> are the input data entered by the user.<br><br>
+            <code>array( key =&gt; value, key2 =&gt; value2, key3 =&gt; value3, ... )</code>
+        </div>
+
+        <div class="note">
+            <strong>$_GET</strong> – an array of variables passed to the current script via the URL parameters.<br>
+            <strong>$_POST</strong> – an array of variables passed to the current script via the HTTP POST method.
+        </div>
+    </div>
+
+    <!-- SUPERGLOBAL ARRAYS -->
+    <div class="card">
+        <h2 class="section-title">🌐 Superglobal Arrays</h2>
+        <p>Superglobals are <strong>built-in PHP variables</strong> that are always available in all scopes — there is no need to use <code>global $variable</code> to access them within functions.</p>
+
+        <div class="grid" style="margin-top:15px;">
+            <div class="box">
+                <strong>$_SERVER</strong>
+                Stores data about the currently running server (headers, paths, script locations).
+            </div>
+            <div class="box">
+                <strong>$_ENV</strong>
+                Stores data about the current client's environment.
+            </div>
+            <div class="box">
+                <strong>$_GET</strong>
+                Stores data sent to the server using HTTP method GET.
+            </div>
+            <div class="box">
+                <strong>$_POST</strong>
+                Stores data sent to the server using HTTP method POST.
+            </div>
+            <div class="box">
+                <strong>$_REQUEST</strong>
+                A super global widely used to collect data after submitting HTML forms. Can be used instead of <code>$_GET</code> or <code>$_POST</code>.
+            </div>
+        </div>
+
+        <div class="important" style="margin-top:15px;">
+            <strong>Processing Form Data – Key Questions:</strong>
+            <ul>
+                <li>How does a PHP script get information from a client? → <strong>Superglobal arrays</strong></li>
+                <li>How does PHP get information from the server? → <strong>$_SERVER</strong></li>
+                <li>How does PHP save information from a session? → <strong>Session superglobals</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- $_REQUEST -->
+    <div class="card">
+        <h2 class="section-title">📦 $_REQUEST</h2>
+        <p><code>$_REQUEST</code> is a superglobal variable widely used to collect data after submitting HTML forms. Instead of using <code>$_GET</code> and <code>$_POST</code> arrays separately, you can use <code>$_REQUEST</code>.</p>
+        <pre><span class="keyword">&lt;?php</span>
+  <span class="type">$name</span> = <span class="type">$_REQUEST</span>[<span class="string">'name'</span>];
+  <span class="fn">echo</span> <span class="type">$name</span>;
+<span class="keyword">?&gt;</span></pre>
+    </div>
+
+    <!-- $_SERVER -->
+    <div class="card">
+        <h2 class="section-title">🖥️ $_SERVER</h2>
+        <p><code>$_SERVER</code> holds information about <strong>headers, paths, and script locations</strong>.</p>
+        <pre><span class="keyword">&lt;?php</span>
+  <span class="fn">echo</span> <span class="type">$_SERVER</span>[<span class="string">'PHP_SELF'</span>];      <span class="comment">// Output: /myFile.php</span>
+  <span class="fn">echo</span> <span class="string">"&lt;br&gt;"</span>;
+  <span class="fn">echo</span> <span class="type">$_SERVER</span>[<span class="string">'SERVER_NAME'</span>];   <span class="comment">// Output: localhost</span>
+  <span class="fn">echo</span> <span class="string">"&lt;br&gt;"</span>;
+  <span class="fn">echo</span> <span class="type">$_SERVER</span>[<span class="string">'SCRIPT_NAME'</span>];   <span class="comment">// Output: /myFile.php</span>
+<span class="keyword">?&gt;</span></pre>
+
+        <h3 style="color:#2c6e6b; margin-top:16px; margin-bottom:8px;">Using PHP_SELF in the Action Field</h3>
+        <p><code>PHP_SELF</code> is a variable that returns the name and path of the <strong>current script being executed</strong>. Using it in the form action allows you to write more generic, reusable code.</p>
+        <pre><span class="tag-html">&lt;form</span> <span class="attr">name</span>=<span class="val">"form1"</span> <span class="attr">method</span>=<span class="val">"post"</span>
+      <span class="attr">action</span>=<span class="val">"&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;"</span><span class="tag-html">&gt;</span></pre>
+        <div class="note">Using <code>$_SERVER['PHP_SELF']</code> means the form submits to the same page it is on, making the script reusable across multiple pages.</div>
+    </div>
+
+    <!-- HANDLING FORM CONTROLS -->
+    <div class="card">
+        <h2 class="section-title">🎛️ Handling Form Controls</h2>
+
+        <h3 style="color:#2c6e6b; margin-bottom:8px;">Text Box</h3>
+        <p>To get the text that a user entered into a text box, the input element must have a <code>NAME</code> attribute.</p>
+        <pre><span class="tag-html">&lt;INPUT</span> <span class="attr">TYPE</span>=<span class="val">"Text"</span> <span class="attr">VALUE</span>=<span class="val">"username"</span> <span class="attr">NAME</span>=<span class="val">"uname"</span><span class="tag-html">&gt;</span></pre>
+        <p>Then, in PHP retrieve the value using:</p>
+        <pre><span class="type">$username</span> = <span class="type">$_POST</span>[<span class="string">'uname'</span>];   <span class="comment">// using POST</span>
+<span class="type">$username</span> = <span class="type">$_GET</span>[<span class="string">'uname'</span>];    <span class="comment">// using GET</span></pre>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Radio Buttons</h3>
+        <p>All radio buttons in a group share the <strong>same NAME attribute</strong>. Each has a unique <code>value</code>. PHP reads whichever was selected.</p>
+        <pre><span class="comment">&lt;!-- HTML Form --&gt;</span>
+<span class="tag-html">&lt;FORM</span> <span class="attr">name</span>=<span class="val">"form1"</span> <span class="attr">method</span>=<span class="val">"post"</span> <span class="attr">action</span>=<span class="val">"radioButton.php"</span><span class="tag-html">&gt;</span>
+  <span class="tag-html">&lt;Input</span> <span class="attr">type</span>=<span class="val">'Radio'</span> <span class="attr">Name</span>=<span class="val">'gender'</span> <span class="attr">value</span>=<span class="val">'male'</span><span class="tag-html">&gt;</span>Male
+  <span class="tag-html">&lt;Input</span> <span class="attr">type</span>=<span class="val">'Radio'</span> <span class="attr">Name</span>=<span class="val">'gender'</span> <span class="attr">value</span>=<span class="val">'female'</span><span class="tag-html">&gt;</span>Female
+  <span class="tag-html">&lt;Input</span> <span class="attr">type</span>=<span class="val">"Submit"</span> <span class="attr">Name</span>=<span class="val">"Submit1"</span> <span class="attr">VALUE</span>=<span class="val">"Select a Radio Button"</span><span class="tag-html">&gt;</span>
+<span class="tag-html">&lt;/FORM&gt;</span></pre>
+
+        <pre><span class="comment">&lt;!-- PHP Processing --&gt;</span>
+<span class="keyword">&lt;?PHP</span>
+  <span class="type">$male_status</span>   = <span class="string">'unchecked'</span>;
+  <span class="type">$female_status</span> = <span class="string">'unchecked'</span>;
+
+  <span class="keyword">if</span> (<span class="fn">isset</span>(<span class="type">$_POST</span>[<span class="string">'Submit1'</span>])) {
+    <span class="type">$selected_radio</span> = <span class="type">$_POST</span>[<span class="string">'gender'</span>];
+
+    <span class="keyword">if</span> (<span class="type">$selected_radio</span> == <span class="string">'male'</span>) {
+      <span class="type">$male_status</span> = <span class="string">'checked'</span>;
+      <span class="fn">echo</span> <span class="string">"Male Selected"</span>;
+    }
+    <span class="keyword">else if</span> (<span class="type">$selected_radio</span> == <span class="string">'female'</span>) {
+      <span class="type">$female_status</span> = <span class="string">'checked'</span>;
+      <span class="fn">echo</span> <span class="string">"Female Selected"</span>;
+    }
+  }
+<span class="keyword">?&gt;</span></pre>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Dropdown List (Select)</h3>
+        <p>Use <code>&lt;select&gt;</code> with a <code>name</code> attribute. PHP reads the selected option's <code>value</code>.</p>
+        <pre><span class="comment">&lt;!-- HTML Form --&gt;</span>
+<span class="tag-html">&lt;form</span> <span class="attr">action</span>=<span class="val">""</span> <span class="attr">method</span>=<span class="val">"post"</span><span class="tag-html">&gt;</span>
+  <span class="tag-html">&lt;select</span> <span class="attr">name</span>=<span class="val">"clr"</span><span class="tag-html">&gt;</span>
+    <span class="tag-html">&lt;option</span> <span class="attr">value</span>=<span class="val">"Red"</span><span class="tag-html">&gt;</span>Red<span class="tag-html">&lt;/option&gt;</span>
+    <span class="tag-html">&lt;option</span> <span class="attr">value</span>=<span class="val">"Green"</span><span class="tag-html">&gt;</span>Green<span class="tag-html">&lt;/option&gt;</span>
+  <span class="tag-html">&lt;/select&gt;</span>
+  <span class="tag-html">&lt;input</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">name</span>=<span class="val">"btnsubmit"</span><span class="tag-html">/&gt;</span>
+<span class="tag-html">&lt;/form&gt;</span>
+
+<span class="comment">&lt;!-- PHP Processing --&gt;</span>
+<span class="keyword">&lt;?php</span>
+  <span class="keyword">if</span> (<span class="fn">isset</span>(<span class="type">$_POST</span>[<span class="string">'btnsubmit'</span>]))
+    <span class="fn">echo</span> <span class="string">"Selected color is : "</span> . <span class="type">$_POST</span>[<span class="string">'clr'</span>];
+<span class="keyword">?&gt;</span></pre>
+    </div>
+
+    <!-- EXERCISE & ANSWER -->
+    <div class="card">
+        <h2 class="section-title">📝 Exercise – Radio Button Selection</h2>
+        <div class="in-class">
+            <h3>📌 Exercise</h3>
+            <p>Write PHP code that displays three radio buttons (Radio 1, Radio 2, Radio 3) and a submit button. When the user selects a radio button and presses the button, the page should display: <strong>"You have selected: Radio X"</strong> (where X is the number of the selected button).</p>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:16px; margin-bottom:8px;">Answer</h3>
+        <pre><span class="tag-html">&lt;html&gt;</span>
+<span class="tag-html">&lt;body&gt;</span>
+  <span class="tag-html">&lt;form</span> <span class="attr">action</span>=<span class="val">""</span> <span class="attr">method</span>=<span class="val">"post"</span><span class="tag-html">&gt;</span>
+    <span class="tag-html">&lt;input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"radio"</span> <span class="attr">value</span>=<span class="val">"Radio 1"</span><span class="tag-html">&gt;</span>Radio 1
+    <span class="tag-html">&lt;input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"radio"</span> <span class="attr">value</span>=<span class="val">"Radio 2"</span><span class="tag-html">&gt;</span>Radio 2
+    <span class="tag-html">&lt;input</span> <span class="attr">type</span>=<span class="val">"radio"</span> <span class="attr">name</span>=<span class="val">"radio"</span> <span class="attr">value</span>=<span class="val">"Radio 3"</span><span class="tag-html">&gt;</span>Radio 3
+    <span class="tag-html">&lt;br&gt;&lt;br&gt;</span>
+    <span class="tag-html">&lt;input</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">name</span>=<span class="val">"submit"</span> <span class="attr">value</span>=<span class="val">"Get Selected Values"</span><span class="tag-html">/&gt;</span>
+  <span class="tag-html">&lt;/form&gt;</span>
+<span class="tag-html">&lt;/body&gt;</span>
+<span class="tag-html">&lt;/html&gt;</span>
+
+<span class="keyword">&lt;?php</span>
+  <span class="keyword">if</span> (<span class="fn">isset</span>(<span class="type">$_POST</span>[<span class="string">'submit'</span>])) {
+    <span class="keyword">if</span> (<span class="fn">isset</span>(<span class="type">$_POST</span>[<span class="string">'radio'</span>])) {
+      <span class="fn">echo</span> <span class="string">"You have selected: "</span> . <span class="type">$_POST</span>[<span class="string">'radio'</span>];
+    }
+  }
+<span class="keyword">?&gt;</span></pre>
+    </div>
+
+    <!-- FORM VALIDATION -->
+    <div class="card">
+        <h2 class="section-title">✅ Form Validation</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Client-Side Validation</strong>
+                User input validated in the browser using <b>JavaScript</b> before submitting to the server. Fast but can be bypassed.
+            </div>
+            <div class="box">
+                <strong>Server-Side Validation</strong>
+                Used when data will be inserted into a database. Performed using PHP. More secure and reliable.
+            </div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Key Validation Functions</h3>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>empty()</strong>
+                Determines whether a variable is empty.<br>
+                <code>if (empty($_POST["name"]))</code>
+            </div>
+            <div class="box">
+                <strong>isset()</strong>
+                Determines if a variable is set and is not NULL.<br>
+                <code>if (isset($_POST['submit']))</code>
+            </div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Form Processing Tips</h3>
+        <ul>
+            <li>Always confirm that valid information was entered before processing.</li>
+            <li><strong>extract() function</strong> – creates variables corresponding to each key-value pair in an array, making it easy to retrieve all POST values. <span style="color:#c0392b;">⚠ Do NOT use extract() on untrusted data like user input with $_GET.</span></li>
+            <li><strong>Regular expressions</strong> are very helpful for validating formats (phone numbers, emails, etc.).</li>
+            <li><strong>die() function</strong> – terminates script execution. Remember to close all HTML tags before calling it.</li>
+        </ul>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Validating Text (Letters Only)</h3>
+        <p>Check if the name field only contains letters and whitespace using <code>preg_match()</code>. This function searches a string for a pattern and returns <code>true</code> if the pattern exists, <code>false</code> otherwise.</p>
+        <pre><span class="type">$name</span> = <span class="type">$_POST</span>[<span class="string">"name"</span>];
+
+<span class="keyword">if</span> (!<span class="fn">preg_match</span>(<span class="string">"/^[a-zA-Z ]*$/"</span>, <span class="type">$name</span>)) {
+  <span class="type">$nameErr</span> = <span class="string">"Only letters and white space allowed"</span>;
+}</pre>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Validating Email Format</h3>
+        <p>Use PHP's <code>filter_var()</code> function with the <code>FILTER_VALIDATE_EMAIL</code> filter to check whether an email address is well-formed.</p>
+        <ul style="margin-bottom:10px;">
+            <li><strong>filter_var()</strong> – Filters a variable with a specified filter.</li>
+            <li><strong>FILTER_VALIDATE_EMAIL</strong> – Validates an email address format.</li>
+        </ul>
+        <pre><span class="type">$email</span> = <span class="type">$_POST</span>[<span class="string">"email"</span>];
+
+<span class="keyword">if</span> (!<span class="fn">filter_var</span>(<span class="type">$email</span>, FILTER_VALIDATE_EMAIL)) {
+  <span class="type">$emailErr</span> = <span class="string">"Invalid email format"</span>;
+}</pre>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Validating Phone Number with Regular Expression</h3>
+        <pre><span class="keyword">&lt;?php</span>
+<span class="fn">extract</span>(<span class="type">$_POST</span>);
+
+<span class="keyword">if</span> (<span class="fn">isset</span>(<span class="type">$_POST</span>[<span class="string">'submit'</span>])) {
+  <span class="comment">// ... form processing ...</span>
+}
+
+<span class="comment">// Check if phone number is valid using regex</span>
+<span class="keyword">if</span> (!<span class="fn">preg_match</span>(<span class="string">"/^(\(\+[0-9]{2}\)[0-9]{9})$/"</span>, <span class="string">"412278456"</span>)) {
+  <span class="fn">print</span>(<span class="string">"&lt;p&gt;INVALID PHONE NUMBER&lt;br /&gt;
+    A valid phone number must be in the form
+    &lt;strong&gt;(+94)412278456&lt;/strong&gt;
+  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"</span>);
+  <span class="fn">die</span>(); <span class="comment">// terminate script execution</span>
+} <span class="keyword">else</span> {
+  <span class="fn">echo</span> <span class="string">"Valid phone no"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+    </div>
+
+    <!-- VAR_DUMP -->
+    <div class="card">
+        <h2 class="section-title">🔍 var_dump() Function</h2>
+        <p><code>var_dump()</code> displays <strong>structured information (type and value)</strong> about one or more variables. Arrays and objects are explored recursively with values indented to show structure. All public, private, and protected properties of objects are included in the output.</p>
+
+        <div class="highlight">
+            <strong>Syntax:</strong><br>
+            <code>var_dump(variable1, variable2, ....variableN)</code>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:16px; margin-bottom:8px;">Example</h3>
+        <div class="two-column">
+            <div>
+                <strong style="color:#2c6e6b;">Code:</strong>
+                <pre><span class="keyword">&lt;?php</span>
+<span class="type">$a</span> = <span class="fn">array</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="fn">array</span>(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>));
+<span class="fn">var_dump</span>(<span class="type">$a</span>);
+<span class="keyword">?&gt;</span></pre>
+            </div>
+            <div>
+                <strong style="color:#2c6e6b;">Output:</strong>
+                <pre style="font-size:0.78em;">array(3) {
+  [0]=&gt;
+  int(1)
+  [1]=&gt;
+  int(2)
+  [2]=&gt;
+  array(3) {
+    [0]=&gt;
+    string(1) "a"
+    [1]=&gt;
+    string(1) "b"
+    [2]=&gt;
+    string(1) "c"
+  }
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="card">
+        <h2 class="section-title">📌 Summary</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>HTML Forms</strong>
+                METHOD, ACTION, SUBMIT — the three core form concepts.
+            </div>
+            <div class="box">
+                <strong>Superglobal Arrays</strong>
+                <code>$_GET</code>, <code>$_POST</code>, <code>$_REQUEST</code>, <code>$_SERVER</code> — used to capture and handle user input.
+            </div>
+            <div class="box">
+                <strong>Form Validation</strong>
+                Using <code>empty()</code>, <code>isset()</code>, <code>preg_match()</code>, <code>filter_var()</code>, and <code>die()</code> to validate and control form processing.
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 6 - Form Handling • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

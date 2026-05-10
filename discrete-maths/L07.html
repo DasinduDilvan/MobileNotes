@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Rules of Inference · TMS1223 Discrete Mathematics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .subsection-title {
+            color: #2c6e6b;
+            font-size: 1.25em;
+            margin: 20px 0 12px 0;
+            padding-left: 4px;
+            border-left: 3px solid #80c0bc;
+        }
+
+        ul, .styled-list {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li, .styled-list li {
+            margin: 8px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong, .law-box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .truth-table {
+            background: #fefaf5;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: monospace;
+            border: 1px solid #dce8e6;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .truth-table table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .truth-table th, .truth-table td {
+            border: 1px solid #cbdcd9;
+            padding: 8px 10px;
+        }
+
+        .truth-table th {
+            background: #e0f0ed;
+            color: #1d5a56;
+        }
+
+        .inference-card {
+            background: #f9fefd;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #d9e8e5;
+        }
+
+        .inference-formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            background: #f4f9f8;
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 500;
+            color: #1e4e4b;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+
+        pre {
+            background: #1e1e2f;
+            color: #d4d4d4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .step-reason {
+            background: #faf6f0;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⚙️ Rules of Inference</h1>
+    <div class="subtitle">TMS1223 Discrete Mathematics — Building Valid Arguments & Proofs</div>
+
+    <!-- Section 1: Introduction & Definitions -->
+    <div class="card">
+        <div class="section-title">📘 Valid Arguments & Proofs</div>
+        <p><strong>Argument:</strong> A sequence of statements that ends with a <strong>conclusion</strong>. The preceding statements are <strong>premises</strong> (hypotheses).</p>
+        <p><strong>Valid argument</strong> (propositional logic): If all premises are true, then the conclusion must be true. Equivalently, the implication <code>(p₁ ∧ p₂ ∧ ... ∧ pₙ) → q</code> is a <strong>tautology</strong>.</p>
+        <div class="important">⭐ <strong>Core idea:</strong> Rules of inference are templates for constructing valid arguments. They are the building blocks of mathematical proofs.</div>
+        <div class="note">📌 Instead of huge truth tables (e.g., 1024 rows for 10 variables), we use inference rules to reason step‑by‑step.</div>
+    </div>
+
+    <!-- Section 2: Rules of Inference for Propositional Logic (table format) -->
+    <div class="card">
+        <div class="section-title">📋 Rules of Inference – Propositional Logic</div>
+        <div class="two-column">
+            <div class="inference-card">
+                <div class="inference-formula">Modus Ponens (MP)</div>
+                <code>p → q<br>p<br>∴ q</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>(p ∧ (p→q)) → q</code></div>
+                <p><em>Example:</em> “If it snows, I study. It snows → I study.”</p>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Modus Tollens (MT)</div>
+                <code>p → q<br>¬q<br>∴ ¬p</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>(¬q ∧ (p→q)) → ¬p</code></div>
+                <p><em>Example:</em> “If snow, study. Not study → not snow.”</p>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Hypothetical Syllogism (HS)</div>
+                <code>p → q<br>q → r<br>∴ p → r</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>((p→q) ∧ (q→r)) → (p→r)</code></div>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Disjunctive Syllogism (DS)</div>
+                <code>p ∨ q<br>¬p<br>∴ q</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>((p∨q) ∧ ¬p) → q</code></div>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Addition (Add)</div>
+                <code>p<br>∴ p ∨ q</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>p → (p∨q)</code></div>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Simplification (Simp)</div>
+                <code>p ∧ q<br>∴ p</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>(p∧q) → p</code></div>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Conjunction (Conj)</div>
+                <code>p<br>q<br>∴ p ∧ q</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>(p ∧ q) → (p∧q)</code></div>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Resolution (Res)</div>
+                <code>¬p ∨ r<br>p ∨ q<br>∴ q ∨ r</code>
+                <div class="note" style="margin-top:6px;">Tautology: <code>((¬p∨r) ∧ (p∨q)) → (q∨r)</code></div>
+            </div>
+        </div>
+        <div class="highlight">💡 To identify the rule, match the pattern of premises and conclusion. For example: <code>p, p→q ⇒ q</code> = Modus Ponens.</div>
+    </div>
+
+    <!-- Section 3: Recognizing inference rules (examples) -->
+    <div class="card">
+        <div class="section-title">🔍 Recognizing Rules of Inference – Examples</div>
+        <div class="grid">
+            <div class="box"><strong>Example 1</strong><br>“It is below freezing. Therefore, it is below freezing or raining.”<br>Rule: <strong>Addition</strong> (p → p∨q)</div>
+            <div class="box"><strong>Example 2</strong><br>“It is below freezing and raining. Therefore, it is below freezing.”<br>Rule: <strong>Simplification</strong> (p∧q ⇒ p)</div>
+            <div class="box"><strong>Example 3</strong><br>“If it rains, no barbecue today. If no barbecue today, then barbecue tomorrow. ∴ If it rains, barbecue tomorrow.”<br>Rule: <strong>Hypothetical Syllogism</strong></div>
+        </div>
+    </div>
+
+    <!-- Section 4: Building Valid Arguments (complex example step-by-step) -->
+    <div class="card">
+        <div class="section-title">🏗️ Building Valid Arguments – Step by Step</div>
+        <div class="important"><strong>Example (from premises to conclusion):</strong><br>
+        Premises: “It is not sunny this afternoon and it is colder than yesterday.”<br>
+        “We will go swimming only if it is sunny.”<br>
+        “If we do not go swimming, then we will take a canoe trip.”<br>
+        “If we take a canoe trip, then we will be home by sunset.”<br>
+        Conclusion: “We will be home by sunset.”</div>
+        <div class="step-reason">
+            <strong>Solution:</strong><br>
+            Let p: “It is sunny this afternoon”, q: “It is colder than yesterday”, r: “We will go swimming”, s: “We will take a canoe trip”, t: “We will be home by sunset”.<br>
+            Hypotheses: <code>¬p ∧ q,  r → p,  ¬r → s,  s → t</code>   Conclusion: <code>t</code>.
+            <ul style="margin-top:10px;">
+                <li>1. ¬p ∧ q &nbsp;&nbsp;&nbsp;&nbsp; (Premise)</li>
+                <li>2. ¬p &nbsp;&nbsp;&nbsp;&nbsp; (Simplification, 1)</li>
+                <li>3. r → p &nbsp;&nbsp;&nbsp;&nbsp; (Premise)</li>
+                <li>4. ¬r &nbsp;&nbsp;&nbsp;&nbsp; (Modus tollens, 2,3)</li>
+                <li>5. ¬r → s &nbsp;&nbsp;&nbsp;&nbsp; (Premise)</li>
+                <li>6. s &nbsp;&nbsp;&nbsp;&nbsp; (Modus ponens, 4,5)</li>
+                <li>7. s → t &nbsp;&nbsp;&nbsp;&nbsp; (Premise)</li>
+                <li>8. t &nbsp;&nbsp;&nbsp;&nbsp; (Modus ponens, 6,7) ✓</li>
+            </ul>
+        </div>
+        <div class="note" style="margin-top:12px;"><strong>Another short example:</strong> “Randy works hard. If Randy works hard then he is a dull boy. If Randy is a dull boy then he will not get the job. ∴ Randy will not get the job.”<br>
+        w → d, d → ¬j ⇒ using modus ponens twice gives ¬j.</div>
+    </div>
+
+    <!-- Section 5: Rules of Inference for Quantified Statements -->
+    <div class="card">
+        <div class="section-title">🌍 Rules of Inference for Quantified Statements (Predicate Logic)</div>
+        <div class="two-column">
+            <div class="inference-card">
+                <div class="inference-formula">Universal Instantiation (UI)</div>
+                <code>∀x P(x)<br>∴ P(c) for any c</code>
+                <p>If everything has property P, then a specific instance has it.</p>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Universal Generalization (UG)</div>
+                <code>P(c) for arbitrary c<br>∴ ∀x P(x)</code>
+                <p>If any arbitrary element satisfies P, then all do.</p>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Existential Instantiation (EI)</div>
+                <code>∃x P(x)<br>∴ P(c) for some c</code>
+                <p>Introduce a new constant symbol for the witness.</p>
+            </div>
+            <div class="inference-card">
+                <div class="inference-formula">Existential Generalization (EG)</div>
+                <code>P(c) for some c<br>∴ ∃x P(x)</code>
+                <p>From a specific instance, conclude existence.</p>
+            </div>
+        </div>
+        <div class="highlight"><strong>Example (UI + Modus Ponens):</strong> “Everyone in this class has taken CS. Marla is in this class. Therefore Marla has taken CS.”<br>
+        ∀x (D(x)→C(x)), D(Marla) ⇒ C(Marla).</div>
+    </div>
+
+    <!-- Section 6: Building arguments with quantifiers (detailed proofs) -->
+    <div class="card">
+        <div class="section-title">📐 Quantified Arguments – Detailed Proofs</div>
+        <div class="important">
+            <strong>Example 1:</strong> Premises: “A student in this class has not read the book.” ”Everyone in this class passed the first exam.” Conclusion: “Someone who passed the first exam has not read the book.”
+        </div>
+        <div class="step-reason">
+            Let C(x): “x is in this class”, B(x): “x has read the book”, P(x): “x passed the first exam”.<br>
+            Premises: ∃x (C(x) ∧ ¬B(x)) , ∀x (C(x) → P(x)) . Conclusion: ∃x (P(x) ∧ ¬B(x)).<br><br>
+            <strong>Proof:</strong>
+            <ol style="margin-left: 20px;">
+                <li>∃x (C(x) ∧ ¬B(x)) &nbsp;&nbsp; (Premise)</li>
+                <li>C(a) ∧ ¬B(a) &nbsp;&nbsp; (Existential instantiation, 1)</li>
+                <li>C(a) &nbsp;&nbsp; (Simplification, 2)</li>
+                <li>∀x (C(x) → P(x)) &nbsp;&nbsp; (Premise)</li>
+                <li>C(a) → P(a) &nbsp;&nbsp; (Universal instantiation, 4)</li>
+                <li>P(a) &nbsp;&nbsp; (Modus ponens, 3,5)</li>
+                <li>¬B(a) &nbsp;&nbsp; (Simplification, 2)</li>
+                <li>P(a) ∧ ¬B(a) &nbsp;&nbsp; (Conjunction, 6,7)</li>
+                <li>∃x (P(x) ∧ ¬B(x)) &nbsp;&nbsp; (Existential generalization, 8) ✓</li>
+            </ol>
+        </div>
+        <div class="note">
+            💡 <strong>Note:</strong> Universal generalization requires that the element be <strong>arbitrary</strong> (no special assumptions). Existential instantiation introduces a new constant that hasn't been used before.
+        </div>
+    </div>
+
+    <!-- Section 7: Use of truth tables vs inference rules -->
+    <div class="card">
+        <div class="section-title">⚖️ Truth Tables vs. Inference Rules</div>
+        <p>A truth table can always verify validity, but for arguments with many variables it becomes impractical (e.g., 2<sup>10</sup> = 1024 rows). <strong>Rules of inference</strong> give an efficient, step‑by‑step method to derive conclusions from premises — the foundation of mathematical proofs.</p>
+        <div class="highlight">
+            <strong>Takeaway:</strong> A valid argument guarantees that <strong>if all premises are true, the conclusion cannot be false</strong>. Using inference rules, we build chains of reasoning: each step is justified by a rule applied to previous statements or premises.
+        </div>
+    </div>
+
+    <!-- Section 8: Quick reference summary table -->
+    <div class="card">
+        <div class="section-title">📌 Quick Reference: Inference Rules Summary</div>
+        <div class="two-column">
+            <div class="box">
+                <strong>Propositional Rules</strong>
+                <ul>
+                    <li>Modus Ponens: p→q, p ⇒ q</li>
+                    <li>Modus Tollens: p→q, ¬q ⇒ ¬p</li>
+                    <li>Hypothetical Syllogism: p→q, q→r ⇒ p→r</li>
+                    <li>Disjunctive Syllogism: p∨q, ¬p ⇒ q</li>
+                    <li>Addition: p ⇒ p∨q</li>
+                    <li>Simplification: p∧q ⇒ p</li>
+                    <li>Conjunction: p, q ⇒ p∧q</li>
+                    <li>Resolution: ¬p∨r, p∨q ⇒ q∨r</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Quantified Rules</strong>
+                <ul>
+                    <li>∀xP(x) ⇒ P(c) &nbsp;&nbsp; (UI)</li>
+                    <li>P(c) for arbitrary c ⇒ ∀xP(x) (UG)</li>
+                    <li>∃xP(x) ⇒ P(c) (new c) (EI)</li>
+                    <li>P(c) ⇒ ∃xP(x) &nbsp;&nbsp; (EG)</li>
+                </ul>
+                <strong style="display:block; margin-top:10px;">Validity condition</strong>
+                <p>An argument is valid iff (premise₁ ∧ … ∧ premiseₙ) → conclusion is a tautology.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 9: Additional illustrative examples -->
+    <div class="card">
+        <div class="section-title">🧩 Worked Examples – Identify the Rule</div>
+        <div class="grid">
+            <div class="box">
+                <strong>Example A:</strong> “If it is raining, then the ground is wet. The ground is not wet. Therefore, it is not raining.”<br>
+                <span class="tag" style="display:inline-block; background:#2c6e6b; color:white; padding:2px 8px; border-radius:20px;">Modus Tollens</span>
+            </div>
+            <div class="box">
+                <strong>Example B:</strong> “I will study or I will sleep. I will not study. Therefore, I will sleep.”<br>
+                <span class="tag" style="background:#2c6e6b; color:white;">Disjunctive Syllogism</span>
+            </div>
+            <div class="box">
+                <strong>Example C:</strong> “All humans are mortal. Socrates is human. Therefore, Socrates is mortal.”<br>
+                <span class="tag" style="background:#2c6e6b;">UI + Modus Ponens</span>
+            </div>
+            <div class="box">
+                <strong>Example D:</strong> “p ∧ q. Therefore p.”<br>
+                <span class="tag" style="background:#2c6e6b;">Simplification</span>
+            </div>
+        </div>
+        <div class="important" style="margin-top: 15px;">✅ In any valid argument, the conclusion is a logical consequence of the premises. Inference rules are the tools that make this consequence explicit.</div>
+    </div>
+
+    <!-- Section 10: Conclusion and real-world significance -->
+    <div class="card">
+        <div class="section-title">🎯 Why Rules of Inference Matter</div>
+        <p>Rules of inference are not only for mathematics: they form the logical core of artificial intelligence, program verification, hardware design, and theorem provers. By mastering these rules, you learn to reason rigorously — from simple propositional steps to complex quantified arguments.</p>
+        <div class="note">📘 <strong>Next steps:</strong> Use these inference rules to build proofs in predicate logic, apply them to set theory arguments, and design logical circuits with validated behavior.</div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 07 - Rules of Inference · TMS1223 Discrete Mathematics · BY_#D1
+    </div>
+</div>
+</body>
+</html>
