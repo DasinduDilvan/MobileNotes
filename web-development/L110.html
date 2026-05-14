@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 11 - Object Oriented PHP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 25px;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        pre .comment {
+            color: #6a9955;
+        }
+
+        pre .keyword {
+            color: #569cd6;
+        }
+
+        pre .string {
+            color: #ce9178;
+        }
+
+        pre .fn {
+            color: #dcdcaa;
+        }
+
+        pre .type {
+            color: #4ec9b0;
+        }
+
+        pre .num {
+            color: #b5cea8;
+        }
+
+        pre .var {
+            color: #9cdcfe;
+        }
+
+        pre .op {
+            color: #d4d4d4;
+        }
+
+        .model-diagram {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .tag.orange {
+            background: #e67e22;
+        }
+
+        .tag.blue {
+            background: #2980b9;
+        }
+
+        .tag.red {
+            background: #c0392b;
+        }
+
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+
+        .in-class h3 {
+            color: #7b1fa2;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        /* Comparison table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        thead tr {
+            background: #2c6e6b;
+            color: white;
+        }
+
+        thead th {
+            padding: 10px 15px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f3fbfa;
+        }
+
+        tbody td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #cfe9e7;
+        }
+
+        /* Pillar cards */
+        .pillar-card {
+            background: #f3fbfa;
+            border-radius: 10px;
+            border-left: 4px solid #2c6e6b;
+            padding: 15px;
+        }
+
+        .pillar-card h3 {
+            color: #2c6e6b;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .pillar-card.orange {
+            border-left-color: #e67e22;
+        }
+
+        .pillar-card.orange h3 {
+            color: #e67e22;
+        }
+
+        .pillar-card.blue {
+            border-left-color: #2980b9;
+        }
+
+        .pillar-card.blue h3 {
+            color: #2980b9;
+        }
+
+        .pillar-card.red {
+            border-left-color: #c0392b;
+        }
+
+        .pillar-card.red h3 {
+            color: #c0392b;
+        }
+
+        /* MVC flow */
+        .mvc-flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            justify-content: center;
+            font-size: 0.92em;
+        }
+
+        .mvc-step {
+            background: #2c6e6b;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .mvc-step.model {
+            background: #2980b9;
+        }
+
+        .mvc-step.view {
+            background: #8e44ad;
+        }
+
+        .mvc-arrow {
+            color: #2c6e6b;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* folder tree */
+        .folder-tree {
+            background: #1e1e1e;
+            color: #a8d8a8;
+            padding: 18px 22px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88em;
+            line-height: 2;
+            margin-top: 12px;
+        }
+
+        .folder-tree .dir {
+            color: #81b4ea;
+        }
+
+        .folder-tree .file {
+            color: #d4d4d4;
+        }
+
+        .folder-tree .entry {
+            color: #f0ad4e;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            .footer {
+                page-break-before: avoid;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .two-column,
+            .three-column {
+                grid-template-columns: 1fr;
+            }
+
+            .mvc-flow {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Object Oriented PHP</h1>
+        <p class="subtitle">Lecture 11 &nbsp;|&nbsp; Department of ICT &nbsp;|&nbsp; Faculty of Technology</p>
+
+        <!-- OBJECTIVES -->
+        <div class="card">
+            <h2 class="section-title">🎯 Objectives</h2>
+            <p>After the successful completion of this lecture, students should be able to:</p>
+            <ul>
+                <li>Identify the basics of object oriented programming in PHP</li>
+                <li>Develop PHP scripts using basic OOP concepts</li>
+            </ul>
+        </div>
+
+        <!-- INTRODUCTION TO OOP -->
+        <div class="card">
+            <h2 class="section-title">📖 Introduction to OOP</h2>
+            <ul>
+                <li><strong>Object Oriented Programming (OOP)</strong> is a programming concept that assumes any system
+                    as a set of interacting &amp; interrelated objects.</li>
+                <li>PHP supports OOP to build <strong>modular, reusable, and maintainable</strong> code.</li>
+                <li>OOP helps organize large applications efficiently.</li>
+            </ul>
+            <div class="important">
+                <strong>Core Advantage:</strong> OOP promotes <strong>DRY (Don't Repeat Yourself)</strong> code and
+                makes large systems easier to manage.
+            </div>
+        </div>
+
+        <!-- CLASS & OBJECT -->
+        <div class="card">
+            <h2 class="section-title">🧱 Class &amp; Object</h2>
+            <div class="two-column">
+                <div class="box">
+                    <strong>Class</strong>
+                    <ul>
+                        <li>A programmer-defined data type</li>
+                        <li>Includes both <em>functions</em> and <em>data</em></li>
+                        <li>Acts as a <strong>template</strong> used to define objects</li>
+                        <li>Defined using the <code>class</code> keyword followed by the class name</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <strong>Object</strong>
+                    <ul>
+                        <li>An individual <strong>instance</strong> of the data structure defined by a class</li>
+                        <li>Objects are also known as <em>instances</em></li>
+                        <li>Define a class once and create <strong>many objects</strong> from it</li>
+                        <li>Created using the <code>new</code> keyword</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="note" style="margin-top:15px;">
+                <strong>Analogy:</strong> A <em>class</em> is like a blueprint for a car. The actual cars — polo, mini,
+                beetle — are the <em>objects</em> (instances).
+            </div>
+        </div>
+
+        <!-- MEMBER VARIABLES & FUNCTIONS -->
+        <div class="card">
+            <h2 class="section-title">🔧 Member Variables &amp; Member Functions</h2>
+            <div class="two-column">
+                <div class="box">
+                    <strong>Member Variable</strong>
+                    <ul>
+                        <li>Variables defined <em>inside</em> a class</li>
+                        <li>Declared with <code>var</code>, <code>private</code>, or <code>protected</code> keywords
+                        </li>
+                        <li>Accessed via member functions</li>
+                        <li>Called <strong>attributes</strong> of the object once an object is created</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <strong>Member Function</strong>
+                    <ul>
+                        <li>Functions defined <em>inside</em> a class</li>
+                        <li>Used to <strong>access and manipulate</strong> object data</li>
+                        <li>Also called <em>methods</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- $this VARIABLE -->
+        <div class="card">
+            <h2 class="section-title">🔗 The <code>$this</code> Variable</h2>
+            <ul>
+                <li><code>$this</code> is a <strong>built-in variable</strong> available inside all objects which points
+                    to the <em>current object</em>.</li>
+                <li>Represents an instance of the class or object.</li>
+                <li>Used to access properties and call other methods of the current class.</li>
+                <li>Always begins with the <code>$</code> sign.</li>
+                <li>Is followed by the <code>-&gt;</code> (arrow) operator.</li>
+                <li>The property name after <code>-&gt;</code> does <strong>not</strong> take a <code>$</code> sign —
+                    e.g., <code>$this-&gt;property</code></li>
+            </ul>
+            <div class="highlight">
+                <strong>How it works:</strong> PHP uses <code>$this</code> as a placeholder until a real object is
+                created. When a member function is running, the value of <code>$this</code> is substituted with the
+                actual object the function is called on.
+            </div>
+        </div>
+
+        <!-- new KEYWORD -->
+        <div class="card">
+            <h2 class="section-title">🆕 The <code>new</code> Keyword</h2>
+            <ul>
+                <li>To create an <strong>instance</strong> of a class, the <code>new</code> keyword must be used.</li>
+                <li>Classes should be <strong>defined before</strong> instantiation.</li>
+                <li>If a string containing the name of a class is used with <code>new</code>, a new instance of that
+                    class will be created.</li>
+                <li>When creating a class, you can optionally add <strong>brackets</strong> to the class name.</li>
+            </ul>
+        </div>
+
+        <!-- CONSTRUCTORS -->
+        <div class="card">
+            <h2 class="section-title">🏗️ Constructors</h2>
+            <ul>
+                <li>All objects can have a special built-in method called a <strong>constructor</strong>.</li>
+                <li>Used to pass parameters <em>at the time of object creation</em>.</li>
+                <li>Called <strong>automatically</strong> whenever an object is created from a class.</li>
+                <li>PHP provides a special function <code>__construct()</code> to define a constructor.</li>
+                <li>You can pass as many arguments as you like into the constructor.</li>
+            </ul>
+            <div class="highlight">
+                <strong>Syntax:</strong>
+                <code>public function __construct($param1, $param2 = defaultValue) { ... }</code>
+            </div>
+            <pre><span class="keyword">class</span> <span class="type">Player</span> {
+    <span class="keyword">public</span> <span class="var">$name</span>;
+    <span class="keyword">public</span> <span class="var">$health</span>;
+
+    <span class="comment">// The Constructor — called automatically on object creation</span>
+    <span class="keyword">public function</span> <span class="fn">__construct</span>(<span class="var">$name</span>, <span class="var">$startingHealth</span> = <span class="num">100</span>) {
+        <span class="var">$this</span>-&gt;name   = <span class="var">$name</span>;
+        <span class="var">$this</span>-&gt;health = <span class="var">$startingHealth</span>;
+        <span class="keyword">echo</span> <span class="string">"New player '$name' has entered the game!\n"</span>;
+    }
+
+    <span class="keyword">public function</span> <span class="fn">status</span>() {
+        <span class="keyword">return</span> <span class="string">"{$this-&gt;name} has {$this-&gt;health} HP."</span>;
+    }
+}
+
+<span class="comment">// Creating objects triggers __construct() automatically</span>
+<span class="var">$hero</span> = <span class="keyword">new</span> <span class="type">Player</span>(<span class="string">"Aragorn"</span>, <span class="num">150</span>);
+<span class="var">$npc</span>  = <span class="keyword">new</span> <span class="type">Player</span>(<span class="string">"Villager"</span>); <span class="comment">// Uses default health of 100</span>
+<span class="keyword">echo</span> <span class="var">$hero</span>-&gt;<span class="fn">status</span>(); <span class="comment">// Output: Aragorn has 150 HP.</span></pre>
+        </div>
+
+        <!-- FOUR PILLARS -->
+        <div class="card">
+            <h2 class="section-title">🏛️ Four Pillars of OOP</h2>
+            <div class="two-column">
+                <div class="pillar-card">
+                    <h3>1. Encapsulation</h3>
+                    <p>Hiding internal states using <code>public</code> / <code>private</code> access modifiers. Bundles
+                        data and methods into a single unit (class) and restricts direct access.</p>
+                </div>
+                <div class="pillar-card orange">
+                    <h3>2. Inheritance</h3>
+                    <p>Reusing code from parent classes using the <code>extends</code> keyword. A "child" class derives
+                        properties and methods from a "parent" class.</p>
+                </div>
+                <div class="pillar-card blue">
+                    <h3>3. Polymorphism</h3>
+                    <p>Different classes sharing the same interface. The same method name behaves differently depending
+                        on the object calling it ("many shapes").</p>
+                </div>
+                <div class="pillar-card red">
+                    <h3>4. Abstraction</h3>
+                    <p>Focusing on <em>what</em> an object does, not <em>how</em>. Hides complex implementation details
+                        and exposes only the necessary features.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENCAPSULATION -->
+        <div class="card">
+            <h2 class="section-title">🔒 Encapsulation &amp; Visibility</h2>
+            <p>Encapsulation is the practice of bundling data (properties) and methods into a single unit (a class) and
+                <strong>restricting direct access</strong> to some components. This prevents outside code from
+                accidentally corrupting internal state.
+            </p>
+            <p style="margin-top:10px;"><strong>Access Control Modifiers</strong> determine the scope in which a class
+                member can be accessed:</p>
+            <div class="three-column" style="margin-top:12px;">
+                <div class="box">
+                    <strong style="color:#4caf50;">public</strong>
+                    <p>No access restrictions. Can be accessed via instances <em>anywhere</em>.</p>
+                </div>
+                <div class="box">
+                    <strong style="color:#f0ad4e;">protected</strong>
+                    <p>Accessible within the class definition and by <em>extending (child) classes</em>.</p>
+                </div>
+                <div class="box">
+                    <strong style="color:#e91e63;">private</strong>
+                    <p>Can be accessed and modified <em>only within the defining class</em>.</p>
+                </div>
+            </div>
+            <pre><span class="keyword">class</span> <span class="type">BankAccount</span> {
+    <span class="keyword">private</span> <span class="var">$balance</span> = <span class="num">0</span>; <span class="comment">// Cannot be accessed directly outside the class</span>
+
+    <span class="keyword">public function</span> <span class="fn">deposit</span>(<span class="var">$amount</span>) {
+        <span class="keyword">if</span> (<span class="var">$amount</span> &gt; <span class="num">0</span>) {
+            <span class="var">$this</span>-&gt;balance += <span class="var">$amount</span>;
+        }
+    }
+
+    <span class="keyword">public function</span> <span class="fn">getBalance</span>() {
+        <span class="keyword">return</span> <span class="string">"Your balance is: $"</span> . <span class="var">$this</span>-&gt;balance;
+    }
+}
+
+<span class="var">$myAccount</span> = <span class="keyword">new</span> <span class="type">BankAccount</span>();
+<span class="var">$myAccount</span>-&gt;<span class="fn">deposit</span>(<span class="num">100</span>);
+<span class="keyword">echo</span> <span class="var">$myAccount</span>-&gt;<span class="fn">getBalance</span>(); <span class="comment">// Output: Your balance is: $100</span></pre>
+        </div>
+
+        <!-- INHERITANCE -->
+        <div class="card">
+            <h2 class="section-title">🧬 Inheritance</h2>
+            <p>Inheritance allows a <strong>"child" class</strong> to derive properties and methods from a
+                <strong>"parent" class</strong>. This promotes <em>code reusability</em> — you don't have to rewrite
+                common logic for similar objects. Uses the <code>extends</code> keyword.
+            </p>
+            <pre><span class="keyword">class</span> <span class="type">Vehicle</span> {
+    <span class="keyword">public</span> <span class="var">$brand</span>;
+    <span class="keyword">public function</span> <span class="fn">honk</span>() {
+        <span class="keyword">return</span> <span class="string">"Beep beep!"</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Car</span> <span class="keyword">extends</span> <span class="type">Vehicle</span> { <span class="comment">// Car inherits from Vehicle</span>
+    <span class="keyword">public</span> <span class="var">$model</span> = <span class="string">"Mustang"</span>;
+}
+
+<span class="var">$myCar</span>        = <span class="keyword">new</span> <span class="type">Car</span>();
+<span class="var">$myCar</span>-&gt;brand = <span class="string">"Ford"</span>;
+<span class="keyword">echo</span> <span class="var">$myCar</span>-&gt;<span class="fn">honk</span>(); <span class="comment">// Inherited from Vehicle → "Beep beep!"</span></pre>
+        </div>
+
+        <!-- POLYMORPHISM -->
+        <div class="card">
+            <h2 class="section-title">🔀 Polymorphism</h2>
+            <p>Polymorphism (meaning <strong>"many shapes"</strong>) allows different classes to be treated as instances
+                of the same parent class or interface. It ensures that the same method name can <em>behave
+                    differently</em> depending on the object calling it.</p>
+            <pre><span class="keyword">interface</span> <span class="type">Shape</span> {
+    <span class="keyword">public function</span> <span class="fn">calculateArea</span>();
+}
+
+<span class="keyword">class</span> <span class="type">Circle</span> <span class="keyword">implements</span> <span class="type">Shape</span> {
+    <span class="keyword">public function</span> <span class="fn">calculateArea</span>() {
+        <span class="keyword">return</span> <span class="string">"Calculating circle area (πr²)."</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Square</span> <span class="keyword">implements</span> <span class="type">Shape</span> {
+    <span class="keyword">public function</span> <span class="fn">calculateArea</span>() {
+        <span class="keyword">return</span> <span class="string">"Calculating square area (side²)."</span>;
+    }
+}
+
+<span class="comment">// Both are treated as 'Shape' but behave differently</span>
+<span class="var">$shapes</span> = [<span class="keyword">new</span> <span class="type">Circle</span>(), <span class="keyword">new</span> <span class="type">Square</span>()];
+<span class="keyword">foreach</span> (<span class="var">$shapes</span> <span class="keyword">as</span> <span class="var">$shape</span>) {
+    <span class="keyword">echo</span> <span class="var">$shape</span>-&gt;<span class="fn">calculateArea</span>() . <span class="string">"\n"</span>;
+}</pre>
+        </div>
+
+        <!-- ABSTRACTION -->
+        <div class="card">
+            <h2 class="section-title">🎭 Abstraction</h2>
+            <p>Abstraction involves <strong>hiding complex implementation details</strong> and showing only the
+                necessary features of an object.</p>
+            <div class="note">
+                <strong>Real-world analogy:</strong> A coffee machine — you press a button (the interface), and you
+                don't need to know how the internal boiler or grinder works.
+            </div>
+            <pre><span class="keyword">abstract class</span> <span class="type">Mailer</span> {
+    <span class="comment">// The user just calls this — simple interface</span>
+    <span class="keyword">public function</span> <span class="fn">sendEmail</span>(<span class="var">$address</span>) {
+        <span class="var">$this</span>-&gt;<span class="fn">connectToServer</span>();
+        <span class="keyword">echo</span> <span class="string">"Email sent to $address"</span>;
+    }
+
+    <span class="comment">// Complex internal logic hidden from the user</span>
+    <span class="keyword">abstract protected function</span> <span class="fn">connectToServer</span>();
+}
+
+<span class="keyword">class</span> <span class="type">Gmail</span> <span class="keyword">extends</span> <span class="type">Mailer</span> {
+    <span class="keyword">protected function</span> <span class="fn">connectToServer</span>() {
+        <span class="keyword">echo</span> <span class="string">"Connecting to Google SMTP...\n"</span>;
+    }
+}
+
+<span class="var">$mail</span> = <span class="keyword">new</span> <span class="type">Gmail</span>();
+<span class="var">$mail</span>-&gt;<span class="fn">sendEmail</span>(<span class="string">"hello@example.com"</span>);</pre>
+        </div>
+
+        <!-- STATIC METHODS & PROPERTIES -->
+        <div class="card">
+            <h2 class="section-title">📌 Static Methods and Properties</h2>
+            <ul>
+                <li>Declaring class properties or methods as <code>static</code> makes them accessible <strong>without
+                        needing an instantiation</strong> of the class.</li>
+                <li>Static variables <strong>belong to the class itself</strong>, not to any object of that class.</li>
+                <li>To access static methods and static properties from <em>within</em> the class, use <code>self</code>
+                    instead of <code>$this</code>.</li>
+            </ul>
+
+            <h3 style="color:#2c6e6b; margin-top:18px; margin-bottom:10px;">The <code>self</code> Keyword</h3>
+            <ul>
+                <li>Represents the <strong>class itself</strong> (not an instance).</li>
+                <li><strong>Never</strong> begins with a <code>$</code> dollar sign.</li>
+                <li>Is followed by the <code>::</code> operator (scope resolution operator).</li>
+                <li>The property name after <code>::</code> <strong>always takes</strong> the <code>$</code> dollar sign
+                    — e.g., <code>self::$property</code></li>
+            </ul>
+
+            <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Comparison: <code>$this</code> vs
+                <code>self</code>
+            </h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th><code>$this</code></th>
+                        <th><code>self</code></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Refers to</strong></td>
+                        <td>The current <em>object instance</em></td>
+                        <td>The current <em>class</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Accesses</strong></td>
+                        <td>Non-static properties/methods</td>
+                        <td>Static properties, methods, and constants</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Operator</strong></td>
+                        <td><code>-&gt;</code> (Arrow operator)</td>
+                        <td><code>::</code> (Scope Resolution operator)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Context</strong></td>
+                        <td>Only inside non-static methods</td>
+                        <td>Inside both static and non-static methods</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ADVANTAGES -->
+        <div class="card">
+            <h2 class="section-title">✅ Advantages of Object Oriented PHP</h2>
+            <div class="grid">
+                <div class="box">
+                    <strong>Code Reusability</strong>
+                    Write once, use many times through inheritance and object reuse.
+                </div>
+                <div class="box">
+                    <strong>Easy Maintenance</strong>
+                    Changes in one class have limited effects on the rest of the codebase.
+                </div>
+                <div class="box">
+                    <strong>Better Organization</strong>
+                    Code is grouped logically by class and responsibility.
+                </div>
+                <div class="box">
+                    <strong>Scalability</strong>
+                    Applications can grow without becoming unmanageable.
+                </div>
+                <div class="box">
+                    <strong>Security</strong>
+                    Encapsulation hides internal state and prevents unwanted access.
+                </div>
+            </div>
+        </div>
+
+        <!-- MVC INTRODUCTION -->
+        <div class="card">
+            <h2 class="section-title">🏗️ Introduction to MVC</h2>
+            <p><strong>Model-View-Controller (MVC)</strong> is a structural pattern that separates an application into
+                three main logical components:</p>
+            <div class="three-column" style="margin-top:15px;">
+                <div class="box">
+                    <strong>Model</strong>
+                    Handles <em>Data &amp; Business Logic</em>. Queries the database and processes data.
+                </div>
+                <div class="box" style="border-left-color:#8e44ad;">
+                    <strong style="color:#8e44ad;">View</strong>
+                    Handles <em>Presentation &amp; HTML</em>. Displays data to the user.
+                </div>
+                <div class="box" style="border-left-color:#e67e22;">
+                    <strong style="color:#e67e22;">Controller</strong>
+                    Handles <em>Request Handling &amp; Glue</em>. Coordinates Model and View.
+                </div>
+            </div>
+        </div>
+
+        <!-- MVC WORKFLOW -->
+        <div class="card">
+            <h2 class="section-title">🔄 The MVC Workflow</h2>
+            <p>How a request flows through the system:</p>
+            <ol style="margin-top:12px; margin-left:20px; line-height:2.2;">
+                <li><strong>User</strong> requests a page.</li>
+                <li><strong>Controller</strong> intercepts the request.</li>
+                <li><strong>Controller</strong> asks the <strong>Model</strong> for data.</li>
+                <li><strong>Model</strong> queries the Database.</li>
+                <li><strong>Controller</strong> gives data to the <strong>View</strong>.</li>
+                <li><strong>View</strong> sends HTML back to the User.</li>
+            </ol>
+            <div class="mvc-flow">
+                <span class="mvc-step">USER</span>
+                <span class="mvc-arrow">→</span>
+                <span class="mvc-step" style="background:#e67e22;">CONTROLLER</span>
+                <span class="mvc-arrow">→</span>
+                <span class="mvc-step model">MODEL</span>
+                <span class="mvc-arrow">→</span>
+                <span class="mvc-step" style="background:#2980b9;">DATABASE</span>
+                <span class="mvc-arrow">→</span>
+                <span class="mvc-step" style="background:#e67e22;">CONTROLLER</span>
+                <span class="mvc-arrow">→</span>
+                <span class="mvc-step view">VIEW</span>
+                <span class="mvc-arrow">→</span>
+                <span class="mvc-step">USER</span>
+            </div>
+
+            <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Recommended Folder Structure</h3>
+            <div class="folder-tree">
+                <span class="dir">/project</span>
+                ├── <span class="dir">/app</span>
+                │ ├── <span class="dir">/Controllers</span>
+                │ ├── <span class="dir">/Models</span>
+                │ └── <span class="dir">/Views</span>
+                ├── <span class="dir">/public</span>
+                │ └── <span class="file">index.php</span> <span style="color:#6a9955;">← Entry Point</span>
+                └── <span class="dir">/vendor</span> <span style="color:#6a9955;">← Libraries</span>
+            </div>
+        </div>
+
+        <!-- MVC BENEFITS -->
+        <div class="card">
+            <h2 class="section-title">🌟 Benefits of MVC</h2>
+            <div class="grid">
+                <div class="box">
+                    <strong>Parallel Development</strong>
+                    Frontend and Backend teams can work simultaneously without conflict.
+                </div>
+                <div class="box">
+                    <strong>Maintainability</strong>
+                    Easy to locate and fix bugs in specific layers of the application.
+                </div>
+                <div class="box">
+                    <strong>Reusability</strong>
+                    Models can be reused across multiple controllers without duplication.
+                </div>
+                <div class="box">
+                    <strong>SEO Friendly</strong>
+                    Easy to implement clean, readable URLs for search engine optimization.
+                </div>
+            </div>
+        </div>
+
+        <!-- FRAMEWORKS -->
+        <div class="card">
+            <h2 class="section-title">🚀 Frameworks &amp; Beyond</h2>
+            <p>Modern PHP development rarely happens from scratch. Frameworks implement OOP and MVC for you:</p>
+            <div class="three-column" style="margin-top:15px;">
+                <div class="box" style="text-align:center;">
+                    <strong>Laravel</strong>
+                    <p style="font-size:0.9em; margin-top:5px;">Full-featured, expressive framework. Most popular
+                        choice.</p>
+                </div>
+                <div class="box" style="text-align:center;">
+                    <strong>Symfony</strong>
+                    <p style="font-size:0.9em; margin-top:5px;">Enterprise-level, highly flexible component framework.
+                    </p>
+                </div>
+                <div class="box" style="text-align:center;">
+                    <strong>CodeIgniter</strong>
+                    <p style="font-size:0.9em; margin-top:5px;">Lightweight, fast, beginner-friendly framework.</p>
+                </div>
+            </div>
+            <div class="important" style="margin-top:15px;">
+                <strong>Key Takeaway:</strong> Learning these core OOP and MVC concepts is the <em>first step</em> to
+                mastering these industry-standard tools.
+            </div>
+        </div>
+
+        <div class="footer">
+            🌱 Lecture 11 - Object Oriented PHP &nbsp;•&nbsp; BY_#D1
+        </div>
+
+    </div>
+</body>
+
+</html>

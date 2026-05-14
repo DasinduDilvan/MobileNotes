@@ -332,9 +332,11 @@
                 <div class="box"><strong>Neutralizing Metacharacters</strong>Escape mechanisms: <code>\</code>, single
                     quotes, double quotes</div>
                 <div class="box"><strong>Positional Parameters</strong><code>$0</code>, <code>$1</code>,
-                    <code>$#</code>, <code>$*</code>, <code>$@</code></div>
+                    <code>$#</code>, <code>$*</code>, <code>$@</code>
+                </div>
                 <div class="box"><strong>Special Shell Variables</strong><code>$?</code>, <code>$$</code>,
-                    <code>$!</code></div>
+                    <code>$!</code>
+                </div>
                 <div class="box"><strong>Debugging Shell Scripts</strong><code>-x</code> and <code>-v</code> options
                 </div>
                 <div class="box"><strong>Language Constructs</strong>Decision making &amp; looping structures in bash
@@ -388,7 +390,8 @@
         <div class="card">
             <h2 class="section-title">Neutralizing Metacharacters</h2>
             <p>Unix supports escape mechanisms to print messages with metacharacters (special characters like
-                <code>*</code>, <code>$</code>, <code>?</code>, <code>#</code>).</p>
+                <code>*</code>, <code>$</code>, <code>?</code>, <code>#</code>).
+            </p>
 
             <table>
                 <tr>
@@ -411,7 +414,8 @@
                 <tr>
                     <td><code>" "</code> (double quotes)</td>
                     <td>Negates special properties of all enclosed characters <strong>except</strong> <code>$</code>,
-                        <code>`</code>, and <code>\</code> — variable substitution still works.</td>
+                        <code>`</code>, and <code>\</code> — variable substitution still works.
+                    </td>
                     <td><code>"The value of rent is $rent"</code></td>
                 </tr>
             </table>
@@ -453,7 +457,8 @@
                 <tr>
                     <td><code>$@</code></td>
                     <td>List of <strong>all arguments</strong>; when enclosed in double quotes, yields each argument
-                        <em>separately</em></td>
+                        <em>separately</em>
+                    </td>
                 </tr>
             </table>
 
