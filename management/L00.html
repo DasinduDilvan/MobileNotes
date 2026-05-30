@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Management — All Lectures</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ── Theme Variables ── */
+        [data-theme="light"] {
+            --bg-page: #eef6f5;
+            --bg-card: #ffffff;
+            --bg-box: #f3fbfa;
+            --bg-highlight: #fff9e6;
+            --bg-important: #e8f5e9;
+            --bg-note: #e3f2fd;
+            --bg-warning: #fce4ec;
+            --bg-inclass: #f3e5f5;
+            --bg-pre: #1e1e1e;
+            --bg-code: #eee;
+            --color-primary: #2c6e6b;
+            --color-primary-light: #5a9d99;
+            --color-border: #cfe9e7;
+            --color-text: #333333;
+            --color-text-muted: #555555;
+            --color-tag-bg: #2c6e6b;
+            --color-shadow: rgba(0, 0, 0, 0.08);
+            --color-tab-bar: #d4eceb;
+            --color-tab-inactive: #5a8e8b;
+            --color-tab-active-bg: #ffffff;
+            --color-tab-hover: #e8f5f4;
+            --color-toggle-bg: #2c6e6b;
+            --color-toggle-text: #fff;
+            --color-code-text: #c0392b;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0f1a19;
+            --bg-card: #1a2b2a;
+            --bg-box: #1e3432;
+            --bg-highlight: #2a2410;
+            --bg-important: #132a14;
+            --bg-note: #0f1e2d;
+            --bg-warning: #2d1020;
+            --bg-inclass: #1e1228;
+            --bg-pre: #0a0a0a;
+            --bg-code: #2a2a2a;
+            --color-primary: #5fcac6;
+            --color-primary-light: #82d8d5;
+            --color-border: #2a4a48;
+            --color-text: #d4e8e7;
+            --color-text-muted: #8ab8b6;
+            --color-tag-bg: #2a6e6b;
+            --color-shadow: rgba(0, 0, 0, 0.3);
+            --color-tab-bar: #132322;
+            --color-tab-inactive: #5a8e8b;
+            --color-tab-active-bg: #1a2b2a;
+            --color-tab-hover: #1e3432;
+            --color-toggle-bg: #5fcac6;
+            --color-toggle-text: #0f1a19;
+            --color-code-text: #ff8a65;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-page);
+            padding: 20px;
+            line-height: 1.7;
+            color: var(--color-text);
+            transition: background .3s, color .3s;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-header-text h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--color-primary);
+            font-size: 2em;
+            letter-spacing: -.01em;
+        }
+
+        .page-header-text p {
+            color: var(--color-primary-light);
+            font-size: .95em;
+            margin-top: 4px;
+        }
+
+        /* ── Dark/Light Toggle ── */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-toggle-bg);
+            color: var(--color-toggle-text);
+            border: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .85em;
+            font-weight: 600;
+            transition: all .25s;
+            white-space: nowrap;
+        }
+
+        .theme-toggle:hover {
+            opacity: .85;
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle .icon {
+            font-size: 1.1em;
+        }
+
+        /* ── Browser Tab Strip ── */
+        .tab-browser {
+            background: var(--bg-card);
+            border-radius: 14px 14px 0 0;
+            box-shadow: 0 4px 18px var(--color-shadow);
+            overflow: hidden;
+        }
+
+        .tab-bar-wrapper {
+            background: var(--color-tab-bar);
+            padding: 3px 12px 3px;
+            border-bottom: 2px solid var(--color-border);
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-primary) transparent;
+        }
+
+        .tab-bar-wrapper::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tab-bar-wrapper::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            min-width: max-content;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            background: transparent;
+            color: var(--color-tab-inactive);
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .8em;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all .2s;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .tab-btn:hover {
+            background: var(--color-tab-hover);
+            color: var(--color-text);
+        }
+
+        .tab-btn.active {
+            background: var(--color-tab-active-bg);
+            border-color: var(--color-border);
+            color: var(--color-primary);
+            font-weight: 600;
+            box-shadow: 0 -2px 0 var(--color-primary) inset;
+        }
+
+        .tab-btn .lnum {
+            background: var(--color-primary);
+            color: #fff;
+            font-size: .7em;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .tab-btn.active .lnum {
+            background: var(--color-primary);
+        }
+
+        /* ── Lesson Panel ── */
+        .lesson-panel {
+            display: none;
+            padding: 30px;
+        }
+
+        .lesson-panel.active {
+            display: block;
+        }
+
+        /* ── Card (inherited + refined) ── */
+        .card {
+            background: var(--bg-card);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px var(--color-shadow);
+            border: 1px solid var(--color-border);
+            transition: background .3s;
+        }
+
+        .section-title {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-family: 'DM Serif Display', serif;
+        }
+
+        .lesson-headline {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.7em;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        .lesson-desc {
+            color: var(--color-text-muted);
+            font-size: .95em;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.9;
+            margin-left: 10px;
+        }
+
+        ul li {
+            margin: 6px 0;
+        }
+
+        ul ul {
+            margin-left: 22px;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: var(--bg-box);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--color-primary);
+            transition: background .3s;
+        }
+
+        .box strong {
+            color: var(--color-primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: var(--bg-highlight);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: var(--bg-important);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: var(--bg-note);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: var(--bg-warning);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+
+        .in-class {
+            background: var(--bg-inclass);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+
+        .in-class h3 {
+            color: #9c27b0;
+            margin-bottom: 10px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .four-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        code {
+            background: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: .9em;
+            color: var(--color-code-text);
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+
+        .flow-box {
+            background: var(--bg-box);
+            border: 1px solid var(--color-border);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: .88em;
+            font-weight: 600;
+            color: var(--color-primary);
+            white-space: nowrap;
+        }
+
+        .flow-arrow {
+            color: var(--color-primary-light);
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--color-tag-bg);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: .78em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .tag.orange {
+            background: #e67e22;
+        }
+
+        .tag.blue {
+            background: #2980b9;
+        }
+
+        .tag.red {
+            background: #c0392b;
+        }
+
+        .tag.teal {
+            background: #1a8a86;
+        }
+
+        .tag.purple {
+            background: #7b1fa2;
+        }
+
+        .tag.amber {
+            background: #e67e22;
+        }
+
+        .tag.green {
+            background: #2e7d32;
+        }
+
+        .tag.pink {
+            background: #c2185b;
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--color-primary);
+            color: #fff;
+            border-radius: 20px;
+            padding: 2px 12px;
+            font-size: .78em;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: .9em;
+        }
+
+        th {
+            background: var(--bg-box);
+            color: var(--color-primary);
+            padding: 10px;
+            border: 1px solid var(--color-border);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 9px 10px;
+            border: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) td {
+            background: var(--bg-box);
+        }
+
+        /* Maslow pyramid hack */
+        .pyramid {
+            margin: 16px auto;
+            max-width: 520px;
+        }
+
+        .pyr-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 3px auto;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            font-size: .85em;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Bottom bar (lesson browser-like) */
+        .bottom-nav {
+            background: var(--bg-card);
+            border-top: 2px solid var(--color-border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 0 14px 14px;
+            box-shadow: 0 4px 18px var(--color-shadow);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-primary);
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .85em;
+            font-weight: 600;
+            transition: all .2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-box);
+        }
+
+        .nav-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+        }
+
+        .nav-label {
+            font-size: .85em;
+            color: var(--color-text-muted);
+        }
+
+        @media(max-width:640px) {
+            body {
+                padding: 10px;
+            }
+
+            .two-column,
+            .three-column,
+            .four-column {
+                grid-template-columns: 1fr;
+            }
+
+            .lesson-panel {
+                padding: 16px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="page-header">
+            <div class="page-header-text">
+                <h1>📘 Fundamentals of Management</h1>
+                <p>All 11 Lectures · Complete Study Notes</p>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+                <span class="icon">🌙</span> Dark Mode
+            </button>
+        </div>
+
+        <div class="tab-browser">
+            <!-- Tab Bar -->
+            <div class="tab-bar-wrapper">
+                <div class="tab-bar" id="tabBar">
+                    <button class="tab-btn active" onclick="showTab(0)"><span class="lnum">01</span> Intro to
+                        Mgmt</button>
+                    <button class="tab-btn" onclick="showTab(1)"><span class="lnum">02</span> Evolution</button>
+                    <button class="tab-btn" onclick="showTab(2)"><span class="lnum">03</span> Business Env</button>
+                    <button class="tab-btn" onclick="showTab(3)"><span class="lnum">04</span> Planning</button>
+                    <button class="tab-btn" onclick="showTab(4)"><span class="lnum">05</span> Organizing</button>
+                    <button class="tab-btn" onclick="showTab(5)"><span class="lnum">06</span> Leading</button>
+                    <button class="tab-btn" onclick="showTab(6)"><span class="lnum">07</span> Controlling</button>
+                    <button class="tab-btn" onclick="showTab(7)"><span class="lnum">08</span> Decision Making</button>
+                    <button class="tab-btn" onclick="showTab(8)"><span class="lnum">09</span> Ethics & CSR</button>
+                    <button class="tab-btn" onclick="showTab(9)"><span class="lnum">10</span> Current Issues</button>
+                    <button class="tab-btn" onclick="showTab(10)"><span class="lnum">11</span> Contemporary</button>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 01 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel active" id="panel0">
+                <h2 class="lesson-headline">Lesson 01 — Introduction to Management</h2>
+                <p class="lesson-desc">Nature of management, key components, management functions, and types of
+                    managers.</p>
+
+                <div class="card">
+                    <div class="section-title">What is an Organization?</div>
+                    <div class="important">
+                        <strong>Definition:</strong> A group of people working together in a structured and coordinated
+                        fashion to achieve a set of goals.
+                    </div>
+                    <div class="grid">
+                        <div class="box"><strong>👥 Human Resources</strong>People, skills, talents, knowledge,
+                            abilities</div>
+                        <div class="box"><strong>💰 Financial Resources</strong>Money, capital, investments, budgets
+                        </div>
+                        <div class="box"><strong>🏗️ Physical Resources</strong>Buildings, equipment, machinery,
+                            technology</div>
+                        <div class="box"><strong>📊 Information Resources</strong>Data, knowledge, market intelligence
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">What is Management?</div>
+                    <div class="highlight">
+                        <strong>Ricky W. Griffin:</strong> "A set of activities (including planning and decision making,
+                        organizing, leading, and controlling) directed at an organization's resources (human, financial,
+                        physical, and information), with the aim of achieving organizational goals in an efficient and
+                        effective manner."
+                    </div>
+                    <div class="highlight">
+                        <strong>Mary Parker Follett:</strong> "Management is the art of getting things done through
+                        others."<br>
+                        <strong>F.W. Taylor:</strong> "Management is knowing exactly what you want to do and then seeing
+                        that they do it the best and cheapest way."
+                    </div>
+                    <div class="two-column" style="margin-top:15px;">
+                        <div class="box"><strong>⚡ Efficiency</strong>"Doing things right" — Getting the most output for
+                            the least input. Focus on resources and minimizing waste.</div>
+                        <div class="box"><strong>🎯 Effectiveness</strong>"Doing the right thing" — Attaining
+                            organizational goals. Focus on outcomes and achieving objectives.</div>
+                    </div>
+                    <div class="note" style="margin-top:15px;">Good management requires <strong>both</strong> efficiency
+                        and effectiveness.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">The 5 Management Functions</div>
+                    <div class="flow-row">
+                        <div class="flow-box">📋 Planning</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">🏗️ Organizing</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">👥 Staffing</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">🎯 Directing</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">📊 Controlling</div>
+                    </div>
+                    <div class="grid" style="margin-top:15px;">
+                        <div class="box"><strong>1. Planning</strong>Deciding in advance: what to do, how, when, and
+                            who. Base of all other functions. "Thinking before action."</div>
+                        <div class="box"><strong>2. Organizing</strong>Setting up structure: departments, units,
+                            authority, responsibility after plans are set.</div>
+                        <div class="box"><strong>3. Staffing</strong>Right person, right job, right time. Recruit,
+                            select, train, evaluate, remunerate.</div>
+                        <div class="box"><strong>4. Directing</strong>Guiding subordinates. Motivating, supervising,
+                            communicating, leading.</div>
+                        <div class="box"><strong>5. Controlling</strong>Match actual vs planned performance. Find
+                            deviations, suggest corrective measures.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">3 Levels of Managers</div>
+                    <div class="three-column">
+                        <div class="box"><strong>🔝 Top Managers</strong>CEO, CFO, President, VP. Set overall goals,
+                            strategy, policies. Represent org externally. High <span class="tag">Conceptual</span>
+                            skills needed.</div>
+                        <div class="box"><strong>🔷 Middle Managers</strong>Plant/dept managers. Implement top-level
+                            plans. Supervise lower managers. Balanced mix of all 3 skills.</div>
+                        <div class="box"><strong>🔹 First-Line Managers</strong>Supervisors, foremen. Supervise
+                            operating employees. High <span class="tag">Technical</span> skills needed.</div>
+                    </div>
+                    <h3 style="margin-top:20px;color:var(--color-primary);">3 Types of Managerial Skills</h3>
+                    <div class="three-column" style="margin-top:10px;">
+                        <div class="box"><strong>💡 Conceptual</strong>Think abstractly, analyze forces, creative and
+                            innovative ability. Critical for Top Managers.</div>
+                        <div class="box"><strong>🤝 Human Relations</strong>Interact effectively with people at all
+                            levels. Interpersonal communication and teamwork.</div>
+                        <div class="box"><strong>🔧 Technical</strong>Understanding job nature, knowledge of tasks
+                            subordinates perform. Critical for First-line Managers.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Types of Managers by Functional Area</div>
+                    <div class="grid">
+                        <div class="box"><strong>📣 Marketing</strong>Product development, promotion, sales,
+                            distribution</div>
+                        <div class="box"><strong>💵 Financial</strong>Accounting, cash management, investments</div>
+                        <div class="box"><strong>⚙️ Operations</strong>Production, quality control, inventory control
+                        </div>
+                        <div class="box"><strong>👩‍💼 Human Resources</strong>Planning, selection, recruiting, training
+                        </div>
+                        <div class="box"><strong>🏢 Administrative</strong>All managerial activities; familiar with all
+                            functional areas</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Nature & Characteristics of Management</div>
+                    <div class="two-column">
+                        <ul>
+                            <li><strong>Universal Process</strong> — applied in all institutions</li>
+                            <li><strong>Goal-Oriented</strong> — toward efficiency and effectiveness</li>
+                            <li><strong>Social Process</strong> — deals with human beings</li>
+                            <li><strong>Coordinating Force</strong> — avoids duplication</li>
+                            <li><strong>Intangible</strong> — unseen force</li>
+                        </ul>
+                        <ul>
+                            <li><strong>Multidisciplinary</strong> — draws from psychology, sociology</li>
+                            <li><strong>Dynamic</strong> — ongoing, continuous process</li>
+                            <li><strong>Creative Activity</strong> — encourages innovation</li>
+                            <li><strong>Decision-Making</strong> — continuous critical decisions</li>
+                            <li><strong>Profession</strong> — requires specialized knowledge</li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!-- /panel0 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 02 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel1">
+                <h2 class="lesson-headline">Lesson 02 — Evolution in Management</h2>
+                <p class="lesson-desc">Early ideas, classical theories, behavioural approach, quantitative methods, and
+                    contemporary ideas.</p>
+
+                <div class="card">
+                    <div class="section-title">Early Management Ideas (Pre-1900)</div>
+                    <div class="three-column">
+                        <div class="box"><strong>Robert Owen (1771–1858)</strong>Identified importance of working and
+                            social conditions for employees.</div>
+                        <div class="box"><strong>Charles Babbage (1792–1871)</strong>Ideas on work specialization,
+                            production efficiency, incentive and profit-sharing plans.</div>
+                        <div class="box"><strong>Henry R. Towne (1844–1924)</strong>Called for a "management science"
+                            that would establish principles of management.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Classical Approaches</div>
+                    <div class="three-column">
+                        <div class="box"><strong>1. Scientific (Taylor)</strong>
+                            <ul>
+                                <li>Select and train best workers</li>
+                                <li>Determine most efficient work methods</li>
+                                <li>Cooperate with workers</li>
+                                <li>Divide work between workers and managers</li>
+                                <li>+ Gilbreth: time/motion studies</li>
+                                <li>+ Gantt: pay incentives, Gantt chart</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>2. Administrative (Fayol)</strong>Focused on functions of management
+                            and principles to coordinate internal activities.
+                            <ul style="margin-top:8px;">
+                                <li>14 Principles of Management</li>
+                                <li>5 Functions: Plan, Organize, Command, Coordinate, Control</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>3. Bureaucratic (Weber)</strong>Org should operate rationally, not on
+                            arbitrary whims.
+                            <ul style="margin-top:8px;">
+                                <li>Specialization of labour</li>
+                                <li>Formal rules & procedures</li>
+                                <li>Impersonality</li>
+                                <li>Well-defined hierarchy</li>
+                                <li>Advancement on merit</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight" style="margin-top:15px;">
+                        <strong>Fayol's Key 14 Principles (exam favourites):</strong> Division of Work · Authority ·
+                        Discipline · Unity of Command · Unity of Direction · Primacy of General Interest · Remuneration
+                        · Esprit de Corps · Centralization · Scalar Chain · Order · Equity · Low Turnover · Initiative
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Behavioural Approach</div>
+                    <div class="important">Emphasizes the need to understand the effect of different factors on
+                        <strong>human behaviour</strong> in organizations.
+                    </div>
+
+                    <h3 style="color:var(--color-primary);margin:15px 0 10px;">Maslow's Hierarchy of Needs</h3>
+                    <div class="pyramid">
+                        <div class="pyr-row" style="width:40%;background:#7b1fa2;">5. Self-Actualization — finding one's
+                            potential</div>
+                        <div class="pyr-row" style="width:56%;background:#3949ab;">4. Esteem — status, confidence,
+                            reputation</div>
+                        <div class="pyr-row" style="width:68%;background:#1565c0;">3. Belonging & Love — relationships,
+                            acceptance</div>
+                        <div class="pyr-row" style="width:80%;background:#0277bd;">2. Safety — security, stability,
+                            freedom from fear</div>
+                        <div class="pyr-row" style="width:100%;background:#01579b;">1. Physiological — food, drink,
+                            basic well-being</div>
+                    </div>
+
+                    <h3 style="color:var(--color-primary);margin:15px 0 10px;">McGregor's Theory X vs. Theory Y</h3>
+                    <div class="two-column">
+                        <div class="box"><strong>Theory X (Scientific approach)</strong>
+                            <ul>
+                                <li>Worker is lazy, dislikes work</li>
+                                <li>Will do as little as possible</li>
+                                <li>Managers must supervise closely</li>
+                                <li>Use reward and punishment</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Theory Y (Behavioural approach)</strong>
+                            <ul>
+                                <li>Workers are not inherently lazy</li>
+                                <li>Want to do a good job</li>
+                                <li>Job itself determines attitude</li>
+                                <li>Managers allow great latitude</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Quantitative Approach (1940–Present)</div>
+                    <div class="three-column">
+                        <div class="box"><strong>Management Science</strong>Sophisticated mathematical models and
+                            statistical methods for decision-making.</div>
+                        <div class="box"><strong>Operations Management</strong>Managing production and delivery of
+                            products and services.</div>
+                        <div class="box"><strong>MIS</strong>Designing and implementing computer-based information
+                            systems for management use.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Contemporary Ideas</div>
+                    <div class="grid">
+                        <div class="box"><strong>Systems Theory</strong>Organizations visualized as systems with
+                            interdependent parts.</div>
+                        <div class="box"><strong>Contingency Theory</strong>Appropriate managerial action depends on the
+                            particular situation.</div>
+                        <div class="box"><strong>Theory Z</strong>Combines positive aspects of American and Japanese
+                            management.</div>
+                        <div class="box"><strong>TQM</strong>Collective responsibility for product/service quality;
+                            everyone participates in improvement.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Evolution Timeline Summary</div>
+                    <div class="flow-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="flow-box">Pre-1900</div><span>Early Ideas — Owen, Babbage, Towne</span>
+                        </div>
+                        <div style="padding-left:20px;color:var(--color-primary-light);">↓</div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="flow-box">1900–1930</div><span>Classical — Scientific, Administrative,
+                                Bureaucratic</span>
+                        </div>
+                        <div style="padding-left:20px;color:var(--color-primary-light);">↓</div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="flow-box">1930–1960</div><span>Behavioural — Maslow, McGregor, Hawthorne</span>
+                        </div>
+                        <div style="padding-left:20px;color:var(--color-primary-light);">↓</div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="flow-box">1940–Present</div><span>Quantitative — Maths, statistics, MIS</span>
+                        </div>
+                        <div style="padding-left:20px;color:var(--color-primary-light);">↓</div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="flow-box">1960–Present</div><span>Contemporary — Systems, Contingency, Theory Z,
+                                TQM</span>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /panel1 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 03 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel2">
+                <h2 class="lesson-headline">Lesson 03 — Business Environment</h2>
+                <p class="lesson-desc">Internal and external organizational environments, PESTLE, Porter's Five Forces,
+                    and adaptation strategies.</p>
+
+                <div class="card">
+                    <div class="section-title">What is Business Environment?</div>
+                    <div class="important">"The business environment is the aggregate of all the conditions, events, and
+                        influences that surround and affect it." — Keith Davis</div>
+                    <div class="two-column">
+                        <div class="box"><strong>🏠 Internal Environment</strong>Conditions within the organization:
+                            Owners, Board of Directors, Employees, Resources, Policies, Vision/Mission, R&D, Work
+                            Environment.</div>
+                        <div class="box"><strong>🌍 External Environment</strong>Everything outside the organization
+                            that might affect it. Two sub-layers: General Environment and Task Environment.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">PESTLE Analysis — General Environment</div>
+                    <div class="grid">
+                        <div class="box" style="border-left-color:#c0392b;"><strong style="color:#c0392b;">🏛️ P —
+                                Political</strong>Government policies, election results, legislation, trade agreements.
+                        </div>
+                        <div class="box" style="border-left-color:#2980b9;"><strong style="color:#2980b9;">📈 E —
+                                Economic</strong>Inflation, growth rate, exchange rates, unemployment, interest rates.
+                        </div>
+                        <div class="box" style="border-left-color:#27ae60;"><strong style="color:#27ae60;">👥 S —
+                                Social</strong>Demographics, cultural trends, lifestyle changes, consumer behaviour.
+                        </div>
+                        <div class="box" style="border-left-color:#8e44ad;"><strong style="color:#8e44ad;">💻 T —
+                                Technological</strong>AI, automation, digital advancement, computer-assisted systems,
+                            Big Data.</div>
+                        <div class="box" style="border-left-color:#e67e22;"><strong style="color:#e67e22;">⚖️ L —
+                                Legal</strong>Regulatory compliance, laws at local, national, and international levels.
+                        </div>
+                        <div class="box" style="border-left-color:#16a085;"><strong style="color:#16a085;">🌱 E —
+                                Environmental</strong>Climate change, sustainable practices, ecological impact.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Task Environment — 5 Specific Stakeholders</div>
+                    <div class="grid">
+                        <div class="box"><strong>⚔️ Competitors</strong>Organizations competing for same resources or
+                            customers.</div>
+                        <div class="box"><strong>🛍️ Customers</strong>Individuals who pay money to acquire the
+                            organization's products/services.</div>
+                        <div class="box"><strong>🔗 Suppliers</strong>Organizations that provide resources for other
+                            organizations.</div>
+                        <div class="box"><strong>🤝 Strategic Allies</strong>Partners in joint ventures or similar
+                            arrangements.</div>
+                        <div class="box"><strong>📋 Regulators</strong>Units that can control, legislate, or influence
+                            the organization's practices.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Porter's Five Competitive Forces</div>
+                    <div class="grid">
+                        <div class="box"><strong>🆕 New Entrants</strong>Ease of entering a market segment — threat of
+                            new competition.</div>
+                        <div class="box"><strong>⚔️ Competitive Rivalry</strong>Intensity of competition between
+                            existing firms in the industry.</div>
+                        <div class="box"><strong>🔄 Substitute Products</strong>Extent to which competing products may
+                            replace existing ones.</div>
+                        <div class="box"><strong>🛒 Buyer Power</strong>The extent to which buyers can influence market
+                            rivals.</div>
+                        <div class="box"><strong>📦 Supplier Power</strong>The extent to which suppliers can influence
+                            market rivals.</div>
+                    </div>
+                    <div class="note" style="margin-top:15px;">Simple/stable environment = <strong>least
+                            uncertainty</strong>. Complex/dynamic environment = <strong>most uncertainty</strong>.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">How Organizations Adapt to Their Environment</div>
+                    <div class="grid">
+                        <div class="box"><strong>📡 Information Management</strong>Appoint boundary spanner,
+                            environmental scanning, establish MIS.</div>
+                        <div class="box"><strong>♟️ Strategic Response</strong>Alter or adopt a new strategy to align
+                            with changes.</div>
+                        <div class="box"><strong>🤝 Mergers & Alliances</strong>Combine, purchase, or form partnerships
+                            with other firms.</div>
+                        <div class="box"><strong>🏗️ Org Design Flexibility</strong>Incorporate flexibility in
+                            structural design to respond to conditions.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Nature of Business Environment</div>
+                    <div class="flow-row">
+                        <span class="tag">Complex</span>
+                        <span class="tag">Interdependent</span>
+                        <span class="tag">Dynamic</span>
+                        <span class="tag">Uncertain</span>
+                        <span class="tag">Relative</span>
+                    </div>
+                </div>
+            </div><!-- /panel2 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 04 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel3">
+                <h2 class="lesson-headline">Lesson 04 — Planning & Decision Making</h2>
+                <p class="lesson-desc">The planning process, organizational goals, SMART framework, types of decisions,
+                    and MBO.</p>
+
+                <div class="card">
+                    <div class="section-title">What is Planning?</div>
+                    <div class="important">Planning is the primary function of management. It decides in advance:
+                        <strong>What to do · When to do it · How to do it · Who is to do what.</strong>
+                    </div>
+                    <h3 style="color:var(--color-primary);margin:15px 0 10px;">7-Step Planning Process</h3>
+                    <div class="flow-row">
+                        <div class="flow-box">1. Need Assessment</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">2. Establish Objectives</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">3. Develop Premises</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">4. Generate Alternatives</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">5. Select Alternatives</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">6. Derivative Plans</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">7. Implement & Control</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Types of Planning</div>
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Strategic</th>
+                            <th>Tactical</th>
+                            <th>Operational</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Time Frame</strong></td>
+                            <td>3+ years</td>
+                            <td>1–3 years</td>
+                            <td>Under 1 year</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Responsibility</strong></td>
+                            <td>Top Management</td>
+                            <td>Middle Management</td>
+                            <td>Lower-level Management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Focus</strong></td>
+                            <td>Objectives, policies</td>
+                            <td>Procedures, projects</td>
+                            <td>Schedules, methods</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scope</strong></td>
+                            <td>Overall company</td>
+                            <td>Dept integration</td>
+                            <td>Day-to-day ops</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Organizational Goals by Level</div>
+                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+                        <div class="box" style="border-left-color:#7b1fa2;"><strong>Mission Statement</strong> —
+                            Fundamental purpose. Set by Board of Directors & Top Managers.</div>
+                        <div class="box" style="border-left-color:#1565c0;"><strong>Strategic Goals</strong> —
+                            Long-term, comprehensive direction. Set by top management.</div>
+                        <div class="box" style="border-left-color:#0277bd;"><strong>Tactical Goals</strong> —
+                            Medium-term, linking strategic to operational. Middle management.</div>
+                        <div class="box" style="border-left-color:#01579b;"><strong>Operational Goals</strong> —
+                            Short-term, day-to-day. Set by lower-level managers.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">SMART Goals Framework</div>
+                    <div class="grid">
+                        <div class="box"><strong>S — Specific</strong>Concrete and tangible; everyone knows what success
+                            looks like.</div>
+                        <div class="box"><strong>M — Measurable</strong>Has an objective measure of success everyone
+                            understands.</div>
+                        <div class="box"><strong>A — Attainable</strong>Challenging but achievable with available
+                            resources.</div>
+                        <div class="box"><strong>R — Relevant</strong>Meaningfully contributes to larger objectives and
+                            mission.</div>
+                        <div class="box"><strong>T — Timely</strong>Has a deadline or timeline of progress milestones.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Decision Making</div>
+                    <div class="important">Decision making is the <strong>core of planning</strong> — the catalyst that
+                        drives the planning process.</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Programmed Decisions</strong>
+                            <ul>
+                                <li>Structured, routine, recurring problems</li>
+                                <li>Uses established criteria / precedent</li>
+                                <li>Lower risk involved</li>
+                                <li>More common at lower management levels</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Non-Programmed Decisions</strong>
+                            <ul>
+                                <li>Unstructured, novel, non-recurring</li>
+                                <li>Relies on subjective judgment</li>
+                                <li>Greater risk involved</li>
+                                <li>More common at top management level</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Management by Objectives (MBO)</div>
+                    <div class="highlight">Process of collaborative goal setting by manager and subordinate. Extent of
+                        goal accomplishment = major factor in evaluation and reward.</div>
+                    <h3 style="color:var(--color-primary);margin:12px 0 8px;">Key Elements of MBO</h3>
+                    <div class="flow-row">
+                        <span class="tag">Goal Specificity</span>
+                        <span class="tag">Participative Decision Making</span>
+                        <span class="tag">Explicit Evaluation Period</span>
+                        <span class="tag">Feedback</span>
+                    </div>
+                </div>
+            </div><!-- /panel3 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 05 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel4">
+                <h2 class="lesson-headline">Lesson 05 — Organizing</h2>
+                <p class="lesson-desc">Organizational structure, span of control, delegation, departmentalization, and
+                    new trends.</p>
+
+                <div class="card">
+                    <div class="section-title">What is Organizing?</div>
+                    <div class="important">"Organizing is the process of identifying and grouping the work to be
+                        performed, defining and delegating responsibility and authority, and establishing relationships
+                        for the purpose of enabling people to work most efficiently."</div>
+                    <div class="two-column" style="margin-top:15px;">
+                        <div class="box"><strong>Differentiation</strong>Units work on specialized tasks using different
+                            methods and employees with unique competencies.</div>
+                        <div class="box"><strong>Integration</strong>Various units must be put back together so work is
+                            coordinated across the organization.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Process of Organizing</div>
+                    <div class="flow-row">
+                        <div class="flow-box">Identify Activities</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Group Activities</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Delegate Authority</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">Assign Duties</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Span of Control</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Narrow Span ✅</strong>
+                            <ul>
+                                <li>Close supervision and control</li>
+                                <li>Fast communication</li>
+                            </ul>
+                            <br><strong>Narrow Span ❌</strong>
+                            <ul>
+                                <li>Many levels = high cost</li>
+                                <li>Managers over-involved in subordinates' work</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Wide Span ✅</strong>
+                            <ul>
+                                <li>Forces delegation</li>
+                                <li>Requires clear policies</li>
+                            </ul>
+                            <br><strong>Wide Span ❌</strong>
+                            <ul>
+                                <li>Managers become decision bottlenecks</li>
+                                <li>Risk of losing control</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="note" style="margin-top:12px;"><strong>Tall organization</strong> = many levels (narrow
+                        span). <strong>Flat organization</strong> = few levels (wide span).</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Delegation — 3 Core Elements</div>
+                    <div class="three-column">
+                        <div class="box"><strong>Authority</strong>Power/right to make decisions and give orders. <span
+                                class="tag">Flows Top Down ↓</span></div>
+                        <div class="box"><strong>Responsibility</strong>Duty to perform a task assigned by a manager.
+                            <span class="tag">Flows Bottom Up ↑</span>
+                        </div>
+                        <div class="box"><strong>Accountability</strong>Obligation to report back on task performance.
+                            Ensures authority and responsibility are exercised properly.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Departmentalization Bases</div>
+                    <div class="grid">
+                        <div class="box"><strong>Functional</strong>Grouped by function performed (HR, Finance,
+                            Marketing).</div>
+                        <div class="box"><strong>Product</strong>Grouped by product produced.</div>
+                        <div class="box"><strong>Customer</strong>Grouped by common customers served.</div>
+                        <div class="box"><strong>Geographic</strong>Grouped by territory or region.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Job Design Alternatives to Specialization</div>
+                    <table>
+                        <tr>
+                            <th>Alternative</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Job Rotation</strong></td>
+                            <td>Systematically moving employees from one job to another.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Job Enlargement</strong></td>
+                            <td>Giving the employee more tasks to perform.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Job Enrichment</strong></td>
+                            <td>More tasks + more control the worker has over the job.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Work Team</strong></td>
+                            <td>Entire group designs the work system for interrelated tasks.</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Centralization vs Decentralization</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Centralization</strong>Retaining power and authority in the hands of
+                            higher-level managers. Decisions made at the top.</div>
+                        <div class="box"><strong>Decentralization</strong>Systematically delegating power and authority
+                            throughout the organization to middle and lower-level managers.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">New Trends in Organizing</div>
+                    <div class="grid">
+                        <div class="box"><strong>Team-Based Org</strong>Work structured around collaborative teams, not
+                            hierarchy.</div>
+                        <div class="box"><strong>Network Org</strong>Loosely connected firms linked to share expertise
+                            and resources.</div>
+                        <div class="box"><strong>Virtual Org</strong>Exists primarily through digital connections; no
+                            central physical location.</div>
+                        <div class="box"><strong>Learning Org</strong>Continuously learns, adapts, and improves through
+                            shared knowledge.</div>
+                    </div>
+                </div>
+            </div><!-- /panel4 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 06 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel5">
+                <h2 class="lesson-headline">Lesson 06 — Leading</h2>
+                <p class="lesson-desc">Leadership styles, bases of power, leadership theories, and the difference
+                    between a boss and a leader.</p>
+
+                <div class="card">
+                    <div class="section-title">What is Leading?</div>
+                    <div class="important">Leading = influencing, motivating, and guiding people to achieve
+                        organizational goals.<br><strong>Leading</strong> refers to the Function;
+                        <strong>Leadership</strong> refers to the Process.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">5 Bases of Power</div>
+                    <div class="grid">
+                        <div class="box"><strong>1. Legitimate Power</strong>From official position in the
+                            organizational hierarchy.</div>
+                        <div class="box"><strong>2. Reward Power</strong>Ability to give material rewards (money) or
+                            psychic rewards (recognition, praise).</div>
+                        <div class="box"><strong>3. Coercive Power</strong>Compels compliance through threats or
+                            punishments.</div>
+                        <div class="box"><strong>4. Referent Power</strong>Based on admiration, respect, charisma, or
+                            reputation.</div>
+                        <div class="box"><strong>5. Expert Power</strong>Comes from a person's specialized knowledge,
+                            skills, or expertise.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">4 Leadership Styles</div>
+                    <div class="grid">
+                        <div class="box"><strong>Autocratic / Authoritarian</strong>Centralizes power. Gives orders
+                            without consulting employees. Full authority and full responsibility.</div>
+                        <div class="box"><strong>Democratic / Participative</strong>Decentralizes authority. Consults
+                            subordinates. Encourages participation in decision-making.</div>
+                        <div class="box"><strong>Laissez-Faire / Free Rein</strong>Avoids power and responsibility.
+                            Passes decision-making to subordinates. Minimum initiative from leader.</div>
+                        <div class="box"><strong>Paternalistic</strong>"Papa knows best." Leader acts like head of a
+                            family — guides and protects subordinates like family members.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">6 Leadership Theories</div>
+                    <div class="grid">
+                        <div class="box"><strong>1. Great Man Theory</strong>Excellent leaders are born, not developed.
+                            Traits: intelligence, courage, confidence, intuition, charm.</div>
+                        <div class="box"><strong>2. Trait Theory</strong>Certain natural qualities tend to create good
+                            leaders — not every quality makes a leader.</div>
+                        <div class="box"><strong>3. Behavioural Theory</strong>Environment (not natural ability) shapes
+                            leadership. Style results from responses to environment.</div>
+                        <div class="box"><strong>4. Situational Theory</strong>A leader adapts style based on the
+                            current situation.</div>
+                        <div class="box"><strong>5. Transactional Theory</strong>Leadership is a system of rewards and
+                            penalties.</div>
+                        <div class="box"><strong>6. Transformational Theory</strong>Leadership results from a positive
+                            relationship between leaders and team members.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">3 Leadership Skills</div>
+                    <div class="three-column">
+                        <div class="box"><strong>Technical Skills</strong>Understanding work processes, activities, and
+                            technology. Specialized knowledge to perform the job.</div>
+                        <div class="box"><strong>Human Skills</strong>Dealing with people inside and outside the org.
+                            Getting along with, motivating, and inspiring people.</div>
+                        <div class="box"><strong>Conceptual Skills</strong>"Thinking in abstract terms — seeing how
+                            parts fit to form the whole."</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Boss vs. Leader</div>
+                    <div class="two-column">
+                        <div class="box" style="border-left-color:#c0392b;"><strong>😤 Boss</strong>
+                            <ul>
+                                <li>Drives employees</li>
+                                <li>Depends on authority</li>
+                                <li>Inspires fear</li>
+                                <li>Says "I"</li>
+                                <li>Places blame for breakdowns</li>
+                                <li>Knows how it's done</li>
+                                <li>Uses people</li>
+                                <li>Says "Go"</li>
+                            </ul>
+                        </div>
+                        <div class="box" style="border-left-color:#27ae60;"><strong>🌟 Leader</strong>
+                            <ul>
+                                <li>Coaches employees</li>
+                                <li>Based on goodwill</li>
+                                <li>Generates enthusiasm</li>
+                                <li>Says "We"</li>
+                                <li>Fixes the breakdowns</li>
+                                <li>Shows how it's done</li>
+                                <li>Develops people</li>
+                                <li>Says "Let's go"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /panel5 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 07 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel6">
+                <h2 class="lesson-headline">Lesson 07 — Controlling</h2>
+                <p class="lesson-desc">Purpose of control, the control process, types of control, and characteristics of
+                    effective control systems.</p>
+
+                <div class="card">
+                    <div class="section-title">What is Controlling?</div>
+                    <div class="important">"The management function of control is the measurement and correction of the
+                        performance of subordinates in order to make sure that enterprise objectives and plans devised
+                        to attain them are accomplished." — Koontz &amp; O'Donnell</div>
+                    <div class="highlight" style="margin-top:12px;"><strong>Planning–Controlling Link:</strong> Planning
+                        and controlling are <em>inseparable twins of management</em>. Planning without control is
+                        meaningless. Control provides feedback for better future planning.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">The 4-Step Control Process</div>
+                    <div class="flow-row">
+                        <div class="flow-box">1. Establish Standards</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">2. Measure Performance</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">3. Compare vs Standard</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">4. Take Action</div>
+                    </div>
+                    <div class="three-column" style="margin-top:15px;">
+                        <div class="box" style="border-left-color:#27ae60;"><strong>Do Nothing</strong>Performance is
+                            within the acceptable range.</div>
+                        <div class="box" style="border-left-color:#e67e22;"><strong>Correct Actual
+                                Performance</strong>Bring performance back in line with standards.</div>
+                        <div class="box" style="border-left-color:#c0392b;"><strong>Revise the Standards</strong>If
+                            standards were unrealistic or outdated.</div>
+                    </div>
+                    <div class="note" style="margin-top:12px;"><strong>Need for action</strong> = Desired performance −
+                        Actual performance</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Types of Control by Timing</div>
+                    <div class="three-column">
+                        <div class="box" style="border-left-color:#2980b9;"><strong>Feedforward
+                                Control</strong>(Predictive / Input Stage)<br>Anticipates problems before they occur.
+                            Preventive in nature.</div>
+                        <div class="box" style="border-left-color:#27ae60;"><strong>Concurrent Control</strong>(During
+                            Process)<br>Corrects problems as they happen. Real-time monitoring.</div>
+                        <div class="box" style="border-left-color:#e67e22;"><strong>Feedback Control</strong>(Output
+                            Stage / Historical)<br>Corrects problems after they occur. Evaluates past performance.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">4 Levels of Control</div>
+                    <div class="grid">
+                        <div class="box"><strong>Strategic Control</strong>How effectively strategies help the org meet
+                            its goals. Focuses on structure, leadership, technology, HR, information systems.</div>
+                        <div class="box"><strong>Structural Control</strong>How the org's structural building blocks are
+                            functioning. Types: Bureaucratic (formal) vs Decentralized (informal).</div>
+                        <div class="box"><strong>Financial Control</strong>Budget, financial statements (balance sheet,
+                            income statement), ratio analysis (liquidity, profitability, activity, debt), audits.</div>
+                        <div class="box"><strong>Operational Control</strong>Day-to-day output relative to schedules,
+                            specs, and costs. Controls flow of inputs through conversion to outputs.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Characteristics of an Effective Control System</div>
+                    <div class="flow-row">
+                        <span class="tag">Linked to Planning</span>
+                        <span class="tag">Flexible</span>
+                        <span class="tag">Accurate</span>
+                        <span class="tag">Timely</span>
+                        <span class="tag">Objective</span>
+                        <span class="tag">Forward-Looking</span>
+                        <span class="tag">Economical</span>
+                        <span class="tag">Motivating</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Resistance to Control — Causes & Solutions</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Common Causes</strong>
+                            <ul>
+                                <li>Overcontrol</li>
+                                <li>Inappropriate focus</li>
+                                <li>Rewards for inefficiency</li>
+                                <li>Too much accountability</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Ways to Overcome</strong>
+                            <ul>
+                                <li>Explain the need for controls</li>
+                                <li>Set reasonable standards</li>
+                                <li>Maintain flexible controls</li>
+                                <li>Encourage employee participation</li>
+                                <li>Associate controls with reward systems</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /panel6 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 08 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel7">
+                <h2 class="lesson-headline">Lesson 08 — Managerial Decision Making</h2>
+                <p class="lesson-desc">The decision-making process, types, conditions, styles, and group vs individual
+                    decisions.</p>
+
+                <div class="card">
+                    <div class="section-title">Core Definitions</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Decision</strong>A choice made from available alternatives.</div>
+                        <div class="box"><strong>Decision Making</strong>The process of identifying problems and
+                            opportunities, and resolving them.</div>
+                    </div>
+                    <div class="important" style="margin-top:12px;">Decision-making is the <strong>one truly distinctive
+                            characteristic of managers</strong>. It is embedded across all four management functions.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">6-Step Decision-Making Process</div>
+                    <div class="flow-row">
+                        <div class="flow-box">1. Identify Problem</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">2. Set Objectives</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">3. List Alternatives</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">4. Evaluate & Compare</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">5. Implement</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box">6. Follow-Up & Control</div>
+                    </div>
+                    <div class="note" style="margin-top:12px;"><strong>One alternative is always to do nothing.</strong>
+                        Alternatives are evaluated using criteria derived from the objective.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Decision-Making Conditions</div>
+                    <div class="three-column">
+                        <div class="box" style="border-left-color:#27ae60;"><strong>🟢 Certainty</strong>Alternatives
+                            and outcomes are known. Low ambiguity. Example: Purchasing a machine.</div>
+                        <div class="box" style="border-left-color:#e67e22;"><strong>🟡 Risk</strong>Probabilities can be
+                            estimated. Moderate ambiguity. Example: Labor offer before a strike.</div>
+                        <div class="box" style="border-left-color:#c0392b;"><strong>🔴 Uncertainty</strong>Alternatives
+                            and consequences unknown. High ambiguity. Example: Customer demand for new product.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">4 Decision-Making Styles</div>
+                    <table>
+                        <tr>
+                            <th>Style</th>
+                            <th>Ambiguity Tolerance</th>
+                            <th>Way of Thinking</th>
+                            <th>Focus</th>
+                            <th>Characteristics</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Directive</strong></td>
+                            <td>Low</td>
+                            <td>Rational</td>
+                            <td>Task</td>
+                            <td>Decides quickly with limited info. Efficient but may miss nuance.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analytical</strong></td>
+                            <td>High</td>
+                            <td>Rational</td>
+                            <td>Task</td>
+                            <td>Gathers lots of info, very thorough and data-driven.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conceptual</strong></td>
+                            <td>High</td>
+                            <td>Intuitive</td>
+                            <td>Social</td>
+                            <td>Creative, broad outlook, strong long-term vision.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Behavioural</strong></td>
+                            <td>Low</td>
+                            <td>Intuitive</td>
+                            <td>Social</td>
+                            <td>Highly people-oriented, concerned with others' wellbeing, avoids conflict.</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">4 Criteria for Evaluating Alternatives</div>
+                    <div class="four-column">
+                        <div class="box"><strong>Practical</strong>Can it realistically be done?</div>
+                        <div class="box"><strong>Economical</strong>Is it cost-effective?</div>
+                        <div class="box"><strong>Ethical</strong>Is it morally acceptable?</div>
+                        <div class="box"><strong>Legal</strong>Does it comply with the law?</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Group vs Individual Decision Making</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Group DM — Advantages ✅</strong>
+                            <ul>
+                                <li>Less victim to individual bias</li>
+                                <li>More alternatives generated</li>
+                                <li>Combined skills of team members</li>
+                                <li>Greater acceptance of the decision</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Group DM — Disadvantages ❌</strong>
+                            <ul>
+                                <li>Takes longer than individual</li>
+                                <li>Therefore more costly</li>
+                                <li>One person may dominate the group</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /panel7 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 09 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel8">
+                <h2 class="lesson-headline">Lesson 09 — Social Responsibility, Ethics & Culture</h2>
+                <p class="lesson-desc">Foundations of social responsibility, business ethics, organizational culture,
+                    and CSR.</p>
+
+                <div class="card">
+                    <div class="section-title">Social Obligation vs Responsiveness vs Responsibility</div>
+                    <div class="three-column">
+                        <div class="box" style="border-left-color:#e67e22;"><strong>Social Obligation</strong>Meet only
+                            economic and legal responsibilities — nothing more. Minimum level.</div>
+                        <div class="box" style="border-left-color:#2980b9;"><strong>Social Responsiveness</strong>Adapt
+                            to changing societal conditions. React to social pressures as they arise.</div>
+                        <div class="box" style="border-left-color:#27ae60;"><strong>Social
+                                Responsibility</strong>Proactively do good for society. A firm's moral obligations
+                            extend beyond legal and economic duties.</div>
+                    </div>
+                    <div class="two-column" style="margin-top:15px;">
+                        <div class="box"><strong>Classical View</strong>Management's only social responsibility is to
+                            maximize profits for stockholders. Spending on "social good" raises costs and prices.</div>
+                        <div class="box"><strong>Socioeconomic View</strong>Responsibility extends beyond profits to
+                            protect and enhance society's welfare. Firms have a moral responsibility to broader society.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">4 Levels of Organizational Responsibility</div>
+                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+                        <div class="box" style="border-left-color:#7b1fa2;"><strong>1. Discretionary
+                                (Voluntary)</strong> — Programs to help society beyond what is required. Example: MAS
+                            "Women Go Beyond."</div>
+                        <div class="box" style="border-left-color:#1565c0;"><strong>2. Moral/Ethical (Expected)</strong>
+                            — Do what is right, fair, and just even when no law forces it. Example: Fair wages for tea
+                            pluckers.</div>
+                        <div class="box" style="border-left-color:#0277bd;"><strong>3. Legal (Required)</strong> —
+                            Follow all laws and regulations. Pay taxes, comply with labour laws.</div>
+                        <div class="box" style="border-left-color:#01579b;"><strong>4. Economic (Base)</strong> — Be
+                            profitable and financially stable. Without profit, a business cannot survive.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Business Ethics</div>
+                    <div class="important">"Doing the right thing in business — following moral values like honesty,
+                        fairness, and respect, even when no one is watching."</div>
+                    <div class="two-column" style="margin-top:12px;">
+                        <div class="box" style="border-left-color:#27ae60;"><strong>Ethical Behaviour ✓</strong>
+                            <ul>
+                                <li>Paying fair wages</li>
+                                <li>Being honest with customers</li>
+                                <li>Protecting the environment</li>
+                                <li>Respecting laws and rules</li>
+                            </ul>
+                        </div>
+                        <div class="box" style="border-left-color:#c0392b;"><strong>Unethical Behaviour ✗</strong>
+                            <ul>
+                                <li>Lying in advertisements</li>
+                                <li>Using child labour</li>
+                                <li>Dumping waste into rivers</li>
+                                <li>Accepting bribes</li>
+                                <li>Hiding product side effects</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">CSR — Triple Bottom Line (TBL)</div>
+                    <div class="three-column">
+                        <div class="box" style="border-left-color:#2980b9;"><strong>👥 People</strong>Social
+                            Responsibility. Care for employees, customers, and community. Treat people fairly and
+                            improve their lives.</div>
+                        <div class="box" style="border-left-color:#27ae60;"><strong>🌱 Planet</strong>Environmental
+                            Responsibility. Protect the environment. Do business without harming nature.</div>
+                        <div class="box" style="border-left-color:#e67e22;"><strong>💰 Profit</strong>Economic
+                            Responsibility. Earn fair, sustainable profits. Make money in an ethical and responsible
+                            way.</div>
+                    </div>
+                    <div class="warning" style="margin-top:15px;"><strong>Is CSR Always Genuine?</strong> Not always.
+                        CSR can sometimes be driven by propaganda, politics, or used to mask unethical practices.
+                        Genuine CSR requires a sincere commitment to all three pillars.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Organizational Culture</div>
+                    <div class="important">A system of shared assumptions, values, and beliefs that governs how people
+                        behave in organizations. An invisible but powerful force.</div>
+                    <h3 style="color:var(--color-primary);margin:12px 0 8px;">Key Characteristics</h3>
+                    <div class="flow-row">
+                        <span class="tag">Innovation</span>
+                        <span class="tag">Attention to Detail</span>
+                        <span class="tag">Emphasis on Outcome</span>
+                        <span class="tag">Emphasis on People</span>
+                        <span class="tag">Teamwork</span>
+                    </div>
+                </div>
+            </div><!-- /panel8 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 10 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel9">
+                <h2 class="lesson-headline">Lesson 10 — Current Issues in the Business World</h2>
+                <p class="lesson-desc">Industrial revolutions, 8 key business issues, their importance, and how to
+                    overcome them.</p>
+
+                <div class="card">
+                    <div class="section-title">Industrial Revolution Timeline</div>
+                    <table>
+                        <tr>
+                            <th>Revolution</th>
+                            <th>Year</th>
+                            <th>Main Focus</th>
+                            <th>Key Technology</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Industry 1.0</strong></td>
+                            <td>1780</td>
+                            <td>Mechanization</td>
+                            <td>Steam power, water power, machinery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Industry 2.0</strong></td>
+                            <td>1900</td>
+                            <td>Mass Production</td>
+                            <td>Electricity, assembly line</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Industry 3.0</strong></td>
+                            <td>1970</td>
+                            <td>Automation</td>
+                            <td>Computers, IT systems</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Industry 4.0</strong></td>
+                            <td>2000</td>
+                            <td>Digitalization</td>
+                            <td>Internet, robotics, cyber-physical systems</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Industry 5.0</strong></td>
+                            <td>2020</td>
+                            <td>Human-Tech Balance</td>
+                            <td>AI, Robotics, HCPS</td>
+                        </tr>
+                    </table>
+                    <div class="note" style="margin-top:10px;">Industry 1.0 → 2.0 took 120 years. Industry 4.0 → 5.0
+                        took only <strong>20 years</strong>. The pace of change is accelerating!</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">The 8 Key Issues in Today's Business World</div>
+                    <div class="grid">
+                        <div class="box"><strong>1. 🌐 Globalization</strong>Interconnectedness of economies, cultures,
+                            and technology on a global scale. Movement of goods, services, and capital across borders.
+                        </div>
+                        <div class="box"><strong>2. 📉 Economic Crisis</strong>Severe disruption in financial
+                            well-being. Sharp decline in activity → job losses, reduced spending. Triggered by crashes,
+                            pandemics, or external shocks.</div>
+                        <div class="box"><strong>3. 🔗 Supply Chain Security</strong>COVID backlogs, Russia-Ukraine war,
+                            Great Resignation labor shortages, geopolitical conflicts. Harder to get parts, pushing
+                            prices up.</div>
+                        <div class="box"><strong>4. 🧩 Customer Expectation</strong>Digital age + social media + COVID →
+                            demand for convenient, personalized, safe experiences. Vital for reputation and market
+                            share.</div>
+                        <div class="box"><strong>5. 💻 Digital Transformation</strong>Integrating data analytics, cloud
+                            computing, AI, and automation into all business aspects. Enhance efficiency, agility, and
+                            customer experiences.</div>
+                        <div class="box"><strong>6. 💡 War for Talent</strong>Fierce competition to attract and retain
+                            top employees with specialized skills. Especially in technology, data, and leadership roles.
+                        </div>
+                        <div class="box"><strong>7. 🔐 Data Security</strong>Protect sensitive information from
+                            unauthorized access. Measures: encryption, access controls, firewalls, data backups, privacy
+                            regulation compliance.</div>
+                        <div class="box"><strong>8. 🌱 Sustainability</strong>Growing pressure to reduce carbon
+                            footprint, minimize waste, promote responsible sourcing. Aligned with UN's 17 SDGs.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">How to Overcome Current Issues</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Proactive Strategies</strong>
+                            <ul>
+                                <li>Stay informed — monitor trends</li>
+                                <li>Strategic planning for uncertainty</li>
+                                <li>Innovation and adaptation</li>
+                                <li>Sustainability initiatives</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Operational Strategies</strong>
+                            <ul>
+                                <li>Regulatory compliance</li>
+                                <li>Customer-oriented approach</li>
+                                <li>Financial planning and reserves</li>
+                                <li>Effective communication</li>
+                                <li>Continuous feedback and evaluation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /panel9 -->
+
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- LESSON 11 -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="lesson-panel" id="panel10">
+                <h2 class="lesson-headline">Lesson 11 — Contemporary Management Challenges</h2>
+                <p class="lesson-desc">8 key challenges facing modern managers, their causes, importance, and potential
+                    solutions.</p>
+
+                <div class="card">
+                    <div class="section-title">Why Study Contemporary Challenges?</div>
+                    <div class="important">The changing social and business environment gives rise to emerging
+                        management issues. Managers must continuously acquire knowledge to modify and adjust themselves
+                        to work efficiently in dynamic conditions.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">1. 🌍 Globalization of Business</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Key Competencies Required</strong>
+                            <ul>
+                                <li>Understand foreign cultures</li>
+                                <li>Penetrate new markets</li>
+                                <li>Design products for new customers</li>
+                                <li>Recognize global competitors</li>
+                                <li>Understand government intervention</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Key Trends</strong>
+                            <ul>
+                                <li>Countries opening borders to foreign producers</li>
+                                <li>Licensing and franchising expanding globally</li>
+                                <li>Executives from host countries leading subsidiaries</li>
+                                <li>Managers trained to think globally</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">2. 🌱 Environmentalism</div>
+                    <div class="note">Green movements have spread globally. Present managers face the challenge of
+                        developing their enterprise <strong>creatively, but without harming the environment</strong>.
+                        May not always be primary concern in developing countries.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">3. ✅ Quality and Productivity — TQM</div>
+                    <div class="important">Quality has become one of the most competitive points in business today.
+                        <strong>Enhancing quality lowers overall cost and improves productivity.</strong>
+                    </div>
+                    <h3 style="color:var(--color-primary);margin:12px 0 8px;">Key TQM Principles</h3>
+                    <div class="grid">
+                        <div class="box"><strong>Beyond Production</strong>Quality improvement requires purchasing,
+                            marketing, after-sales service — not just production.</div>
+                        <div class="box"><strong>Coordinated Effort</strong>Total quality through coordination of
+                            purchase, production, sales, and more.</div>
+                        <div class="box"><strong>Organization-Wide</strong>Everyone and every function participates. No
+                            exceptions.</div>
+                    </div>
+                    <div class="three-column" style="margin-top:12px;">
+                        <div class="box"><strong>Result 1</strong>Low return of defects from customers</div>
+                        <div class="box"><strong>Result 2</strong>Minimized wastage of resources</div>
+                        <div class="box"><strong>Result 3</strong>Reduces the need for inspectors</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">4. ⚖️ Ethics and Social Responsibility</div>
+                    <div class="two-column">
+                        <div class="box"><strong>Code of Ethics</strong>Formal, written statement of the values and
+                            ethical standards that guide a firm's actions. Must start from <strong>top
+                                management</strong>. Covers how employees treat suppliers, customers, competitors.</div>
+                        <div class="box"><strong>Social Responsibility</strong>The set of obligations an organization
+                            has to protect and enhance the societal context. Government shapes it through: direct
+                            influence (regulations) and indirect influence (taxation policies).</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">5. 👥 Workforce Diversity</div>
+                    <div class="important">Diversity exists when members differ along dimensions like age, gender,
+                        ethnicity. Brings a broad range of viewpoints, improves problem-solving, provides competitive
+                        advantage.</div>
+                    <div class="two-column" style="margin-top:12px;">
+                        <div class="box"><strong>Causes of Increased Diversity</strong>
+                            <ul>
+                                <li>Globalization movements</li>
+                                <li>Increased awareness</li>
+                                <li>Legislation and legal action</li>
+                                <li>Changing demographics</li>
+                            </ul>
+                        </div>
+                        <div class="box"><strong>Contingent Workers</strong>Part-time, temporary, or freelance
+                            employees. Estimated 13–30% of workforce. Companies downsizing permanent workforce;
+                            percentage increasing daily.</div>
+                    </div>
+                    <div class="highlight" style="margin-top:12px;"><strong>Management Shift:</strong> From treating
+                        everyone alike → recognizing differences and responding to them to ensure retention and greater
+                        productivity.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">6. 🔄 Change</div>
+                    <div class="grid">
+                        <div class="box"><strong>Managing Change</strong>Organizational change must be systematic and
+                            logical. Managers must understand steps of effective change and counter resistance.</div>
+                        <div class="box"><strong>Resistance Methods</strong>Participation, Education, Communication,
+                            Facilitation, Support resources.</div>
+                        <div class="box"><strong>Downsizing</strong>Major trend. Restructuring organizations. Important:
+                            work is NOT reduced — smaller workforce must complete the same workload.</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">7. 💪 Empowerment and Teams</div>
+                    <div class="important"><strong>Employee Empowerment:</strong> Redesigning jobs and letting
+                        individual workers and work teams make job-related decisions to improve quality, productivity,
+                        and employee commitment.</div>
+                    <div class="note" style="margin-top:12px;">Workers are considered more knowledgeable now.
+                        Over-specialization of employees stifles their capabilities. Many organizations achieve better
+                        results by empowering employees to plan and execute their own work.</div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">8. 🏪 Shift Towards a Service Economy</div>
+                    <div class="highlight">The service sector has become increasingly important. There is a
+                        <strong>significant difference</strong> between managing manufacturing organizations and service
+                        organizations — managers must adapt their approach accordingly.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-title">Potential Solutions to Management Challenges</div>
+                    <div class="grid">
+                        <div class="box"><strong>📅 Planning</strong>Proactive and strategic planning to anticipate and
+                            respond to challenges.</div>
+                        <div class="box"><strong>⏱️ Time Management</strong>Effective allocation and prioritization of
+                            managerial time.</div>
+                        <div class="box"><strong>🤝 A Good Team</strong>Building a skilled, collaborative, and diverse
+                            team.</div>
+                        <div class="box"><strong>💰 Cash Flow</strong>Maintaining healthy financial operations under
+                            pressure.</div>
+                        <div class="box"><strong>🔍 Competition Analysis</strong>Continuous study of the competitive
+                            environment.</div>
+                    </div>
+                </div>
+            </div><!-- /panel10 -->
+
+            <!-- Bottom Nav -->
+            <div class="bottom-nav">
+                <button class="nav-btn" id="prevBtn" onclick="changeTab(-1)" disabled>← Previous</button>
+                <span class="nav-label" id="navLabel">Lesson 1 of 11</span>
+                <button class="nav-btn" id="nextBtn" onclick="changeTab(1)">Next →</button>
+            </div>
+        </div><!-- /tab-browser -->
+
+    </div><!-- /container -->
+
+    <script>
+        let current = 0;
+        const total = 11;
+
+        function showTab(i) {
+            document.querySelectorAll('.lesson-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+            document.querySelectorAll('.tab-btn').forEach((t, j) => t.classList.toggle('active', j === i));
+            current = i;
+            document.getElementById('navLabel').textContent = 'Lesson ' + (i + 1) + ' of ' + total;
+            document.getElementById('prevBtn').disabled = i === 0;
+            document.getElementById('nextBtn').disabled = i === total - 1;
+            // Scroll active tab into view
+            const activeTab = document.querySelectorAll('.tab-btn')[i];
+            activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            // Scroll panel to top
+            document.querySelector('.tab-browser').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function changeTab(dir) {
+            const next = current + dir;
+            if (next >= 0 && next < total) showTab(next);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            const btn = document.getElementById('themeBtn');
+            btn.innerHTML = isDark ? '<span class="icon">🌙</span> Dark Mode' : '<span class="icon">☀️</span> Light Mode';
+        }
+    </script>
+</body>
+
+</html>
