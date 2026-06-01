@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS — Exam-Ready Summary | ICT1212</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2535;
+    --bg4: #252d40;
+    --border: #2e3a52;
+    --text: #e8edf5;
+    --text2: #9baac7;
+    --text3: #6b7a9a;
+    --accent: #4f8ef7;
+    --accent2: #7bc8f9;
+    --accent3: #a78bfa;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --orange: #fb923c;
+    --pink: #f472b6;
+    --teal: #2dd4bf;
+    --tab-active-bg: #1e2535;
+    --tab-hover-bg: #1a2030;
+    --scrollbar: #2e3a52;
+    --scrollbar-thumb: #4f8ef7;
+    --shadow: 0 4px 32px rgba(0,0,0,0.5);
+    --card-bg: #1a2030;
+    --code-bg: #0d1219;
+    --highlight: rgba(79,142,247,0.12);
+    --table-head: #252d40;
+    --table-row: #1a2030;
+    --table-alt: #1e2535;
+    --tag-bg: rgba(79,142,247,0.15);
+    --badge-bg: rgba(74,222,128,0.12);
+  }
+  [data-theme="light"] {
+    --bg: #f0f4fc;
+    --bg2: #ffffff;
+    --bg3: #e8eef8;
+    --bg4: #d8e3f5;
+    --border: #c5d3e8;
+    --text: #1a2035;
+    --text2: #3d5070;
+    --text3: #7080a0;
+    --accent: #2563eb;
+    --accent2: #1d9bf0;
+    --accent3: #7c3aed;
+    --green: #16a34a;
+    --yellow: #d97706;
+    --red: #dc2626;
+    --orange: #ea580c;
+    --pink: #db2777;
+    --teal: #0d9488;
+    --tab-active-bg: #ffffff;
+    --tab-hover-bg: #eef2fb;
+    --scrollbar: #c5d3e8;
+    --scrollbar-thumb: #2563eb;
+    --shadow: 0 4px 32px rgba(0,0,0,0.12);
+    --card-bg: #ffffff;
+    --code-bg: #f0f4fc;
+    --highlight: rgba(37,99,235,0.08);
+    --table-head: #e0e8f5;
+    --table-row: #ffffff;
+    --table-alt: #f4f7fd;
+    --tag-bg: rgba(37,99,235,0.1);
+    --badge-bg: rgba(22,163,74,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--scrollbar); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 56px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-pill {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .header-title span { color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .course-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .theme-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .theme-btn:hover { background: var(--bg4); color: var(--accent); }
+
+  /* ── LAYOUT ── */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .main-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR TABS ── */
+  .sidebar {
+    width: 220px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    flex-shrink: 0;
+    padding: 8px 0;
+  }
+  .sidebar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 8px 16px 4px;
+  }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 16px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text2);
+    font-family: 'Syne', sans-serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    line-height: 1.3;
+  }
+  .tab-btn:hover { background: var(--tab-hover-bg); color: var(--text); }
+  .tab-btn.active {
+    background: var(--tab-active-bg);
+    color: var(--accent);
+    font-weight: 600;
+    border-left-color: var(--accent);
+  }
+  .tab-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg4);
+    border-radius: 4px;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+  .tab-btn.active .tab-num {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 36px;
+    background: var(--bg);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── TYPOGRAPHY ── */
+  .panel-header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lec-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--tag-bg);
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .panel-header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .panel-header .subtitle {
+    font-size: 14px;
+    color: var(--text3);
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  h2::before {
+    content: '';
+    width: 3px; height: 16px;
+    background: var(--accent2);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 20px 0 8px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  li {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  li strong { color: var(--text); font-weight: 600; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--code-bg);
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 12.5px;
+    color: var(--text2);
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .card-icon {
+    width: 22px; height: 22px;
+    background: var(--tag-bg);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .card p, .card li { font-size: 13px; }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 14px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--table-head);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--border);
+    text-align: left;
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:nth-child(even) td { background: var(--table-alt); }
+  tr:hover td { background: var(--highlight); }
+  td strong { color: var(--text); }
+  td code { font-size: 11.5px; }
+
+  /* ── KEY BOXES ── */
+  .key-box {
+    background: var(--highlight);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .key-box .kb-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .key-box p, .key-box li { font-size: 13px; }
+
+  .warn-box {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid var(--yellow);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .kb-label { color: var(--yellow); }
+  .warn-box p, .warn-box li { font-size: 13px; }
+
+  .tip-box {
+    background: rgba(74,222,128,0.08);
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .kb-label { color: var(--green); }
+  .tip-box p, .tip-box li { font-size: 13px; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px 3px 2px 0;
+  }
+  .badge-blue { background: rgba(79,142,247,0.15); color: var(--accent); }
+  .badge-green { background: rgba(74,222,128,0.12); color: var(--green); }
+  .badge-yellow { background: rgba(251,191,36,0.12); color: var(--yellow); }
+  .badge-red { background: rgba(248,113,113,0.12); color: var(--red); }
+  .badge-purple { background: rgba(167,139,250,0.12); color: var(--accent3); }
+  .badge-teal { background: rgba(45,212,191,0.12); color: var(--teal); }
+  .badge-orange { background: rgba(251,146,60,0.12); color: var(--orange); }
+
+  /* ── FLOW / STEPS ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 12px 0;
+  }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: var(--text2);
+  }
+  .flow-step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--tag-bg);
+    min-width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .flow-step-content strong { color: var(--text); }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--text3);
+    font-size: 14px;
+  }
+
+  /* ── DEFINITION LIST ── */
+  .def-list { margin: 12px 0; }
+  .def-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .def-term {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--accent3);
+    align-self: start;
+    padding-top: 2px;
+  }
+  .def-desc { color: var(--text2); line-height: 1.6; }
+
+  /* ── COLUMNS ── */
+  .col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+  .col3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0; }
+  @media (max-width: 900px) { .col2, .col3 { grid-template-columns: 1fr; } }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    color: var(--pink);
+    margin: 8px 0;
+    display: inline-block;
+  }
+
+  /* ── SEPARATOR ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  /* ── ANIMATIONS ── */
+  .panel.active {
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .tab-btn { position: relative; }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 4px; height: 20px;
+    background: var(--accent);
+    border-radius: 2px 0 0 2px;
+  }
+
+  strong { color: var(--text); }
+  em { color: var(--accent3); font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-pill">DBMS</div>
+      <div class="header-title">Database Management Systems — <span>Exam Summary</span></div>
+    </div>
+    <div class="header-right">
+      <div class="course-badge">ICT1212</div>
+      <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-label">Lectures</div>
+      <button class="tab-btn active" onclick="showTab(0)">
+        <span class="tab-num">01</span> Intro to Databases
+      </button>
+      <button class="tab-btn" onclick="showTab(1)">
+        <span class="tab-num">02</span> System Concepts
+      </button>
+      <button class="tab-btn" onclick="showTab(2)">
+        <span class="tab-num">03</span> Dev Life Cycle
+      </button>
+      <button class="tab-btn" onclick="showTab(3)">
+        <span class="tab-num">04</span> ER Modeling
+      </button>
+      <button class="tab-btn" onclick="showTab(4)">
+        <span class="tab-num">05</span> Enhanced ER
+      </button>
+      <button class="tab-btn" onclick="showTab(5)">
+        <span class="tab-num">06</span> ER to Relational
+      </button>
+      <button class="tab-btn" onclick="showTab(6)">
+        <span class="tab-num">07</span> Relational Algebra
+      </button>
+      <button class="tab-btn" onclick="showTab(7)">
+        <span class="tab-num">08</span> Relational Calculus
+      </button>
+      <button class="tab-btn" onclick="showTab(8)">
+        <span class="tab-num">09</span> Basic SQL
+      </button>
+      <button class="tab-btn" onclick="showTab(9)">
+        <span class="tab-num">10</span> Disk Storage
+      </button>
+      <button class="tab-btn" onclick="showTab(10)">
+        <span class="tab-num">11</span> Normalization
+      </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-area">
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 01
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel active" id="panel-0">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 01</div>
+          <h1>Introduction to Databases &amp; Database Users</h1>
+          <div class="subtitle">Foundations, DBMS concepts, actors, and advantages</div>
+        </div>
+
+        <h2>Data vs Information</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title"><span class="card-icon">📊</span> Data</div>
+            <p>Raw facts, figures and symbols that may be processed. By itself, data has no meaning.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="card-icon">💡</span> Information</div>
+            <p>Processed data shaped into a meaningful, useful form for human beings.</p>
+          </div>
+        </div>
+        <div class="formula">Data → Processing → Information</div>
+
+        <h2>Key Definitions</h2>
+        <div class="def-list">
+          <div class="def-item"><div class="def-term">Database</div><div class="def-desc">A collection of related data, designed for a specific purpose, with an intended group of users.</div></div>
+          <div class="def-item"><div class="def-term">DBMS</div><div class="def-desc">A collection of programs that enables users to create and maintain a database. Facilitates <strong>Defining, Constructing, Manipulating, and Sharing</strong> data.</div></div>
+          <div class="def-item"><div class="def-term">RDBMS</div><div class="def-desc">Organizes data as tables (relations), presents data in tabular form, and provides relational operators to manipulate data.</div></div>
+          <div class="def-item"><div class="def-term">Database System</div><div class="def-desc">The DBMS software together with the data itself (sometimes including applications).</div></div>
+        </div>
+
+        <h2>RDBMS Examples</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">Open Source</div><p><span class="badge badge-green">MySQL</span><span class="badge badge-green">PostgreSQL</span><span class="badge badge-green">SQLite</span></p></div>
+          <div class="card"><div class="card-title">Enterprise</div><p><span class="badge badge-blue">Oracle</span><span class="badge badge-blue">MS SQL Server</span><span class="badge badge-blue">IBM DB2</span></p></div>
+        </div>
+
+        <h2>Why Not File Systems?</h2>
+        <ul>
+          <li><strong>Redundancy:</strong> Same data stored in multiple files → wasted space, inconsistency on update</li>
+          <li><strong>Update anomalies:</strong> Must update same data in multiple locations — error-prone</li>
+          <li><strong>No sharing:</strong> Multiple users cannot access concurrently</li>
+          <li><strong>No security:</strong> Limited access control mechanisms</li>
+        </ul>
+
+        <h2>4 Characteristics of the Database Approach</h2>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">1️⃣ Self-Describing</div>
+            <p>System catalog (metadata) stores complete description of the database structure and constraints. DBMS uses catalog to understand any database it manages.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">2️⃣ Program-Data Independence</div>
+            <p>Application programs are independent of physical data structure. Changes to data structure don't require changing programs.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">3️⃣ Multiple Views</div>
+            <p>Different users see different subsets or perspectives of the same database (e.g., HR sees employee data, Accounting sees financial data).</p>
+          </div>
+          <div class="card">
+            <div class="card-title">4️⃣ Data Sharing</div>
+            <p>Multiple users access simultaneously. OLTP (Online Transaction Processing) with concurrency control ensures data integrity.</p>
+          </div>
+        </div>
+
+        <h2>Actors on the Scene</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Actor</th><th>Role</th><th>Key Responsibilities</th></tr>
+            <tr><td><strong>DBA</strong></td><td>Database Administrator</td><td>Authorize access, monitor use, acquire resources, handle security & performance issues</td></tr>
+            <tr><td><strong>DB Designer</strong></td><td>Database Designer</td><td>Identify data to store, choose structures, communicate with users, develop views</td></tr>
+            <tr><td><strong>Casual Users</strong></td><td>Occasional End Users</td><td>Use sophisticated query language, middle/high-level managers</td></tr>
+            <tr><td><strong>Naive Users</strong></td><td>Parametric End Users</td><td>Use pre-programmed transactions, main job revolves around querying/updating</td></tr>
+            <tr><td><strong>Sophisticated Users</strong></td><td>Power Users</td><td>Engineers, scientists — implement complex custom applications</td></tr>
+            <tr><td><strong>System Analysts</strong></td><td>Bridge Users↔Programmers</td><td>Determine requirements, develop canned transaction specs</td></tr>
+            <tr><td><strong>App Programmers</strong></td><td>Software Developers</td><td>Implement, test, debug, document transactions</td></tr>
+          </table>
+        </div>
+
+        <h2>Advantages of DBMS</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">✅ Redundancy Control</div><p>Minimizes data duplication, saves storage, prevents inconsistency.</p></div>
+          <div class="card"><div class="card-title">🔒 Access Control</div><p>Restricts unauthorized access; centralized security management.</p></div>
+          <div class="card"><div class="card-title">💾 Persistent Storage</div><p>Data persists across program executions; objects and data structures maintained.</p></div>
+          <div class="card"><div class="card-title">⚡ Query Processing</div><p>Storage structures and indexes for efficient data retrieval.</p></div>
+          <div class="card"><div class="card-title">🔗 Complex Relationships</div><p>Represents and enforces complex relationships between data entities.</p></div>
+          <div class="card"><div class="card-title">🛡️ Backup & Recovery</div><p>Protection against hardware/software failures; transaction recovery.</p></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Remember the <strong>4 characteristics</strong> of database approach and be able to explain each. The difference between a <em>DBMS</em> and a <em>file system</em> is a common exam question. Know all <strong>actor types</strong> and their roles.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 02
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-1">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 02</div>
+          <h1>Database System Concepts &amp; Architectures</h1>
+          <div class="subtitle">Data models, schemas, three-schema architecture, DBMS languages</div>
+        </div>
+
+        <h2>Data Models</h2>
+        <p>A <strong>data model</strong> is a set of concepts to describe the <em>structure</em> of a database, the <em>operations</em> for manipulating these structures, and the <em>constraints</em> that must be obeyed.</p>
+
+        <div class="table-wrap">
+          <table>
+            <tr><th>Category</th><th>Also Called</th><th>Description</th><th>Examples</th></tr>
+            <tr><td><strong>Conceptual / High-Level</strong></td><td>Entity-based, Object-based</td><td>Close to user perception; entities, attributes, relationships</td><td>ER Model, EER Model</td></tr>
+            <tr><td><strong>Physical / Low-Level</strong></td><td>—</td><td>How data is stored on disk; for computer specialists</td><td>Record formats, orderings, access paths</td></tr>
+            <tr><td><strong>Implementation / Representational</strong></td><td>Record-based</td><td>Understood by users; hides storage details; directly implementable</td><td>Relational Model</td></tr>
+            <tr><td><strong>Self-Describing</strong></td><td>—</td><td>Data description mixed with data values</td><td>XML, Key-Value, NoSQL</td></tr>
+          </table>
+        </div>
+
+        <h2>Schema vs State</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">📐 Schema (Intension)</div>
+            <ul>
+              <li>The <strong>design/structure</strong> of the database</li>
+              <li>Changes <em>very infrequently</em></li>
+              <li>Defined at design time</li>
+              <li>Analogy: House blueprint</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">📋 State (Extension)</div>
+            <ul>
+              <li>The <strong>actual data</strong> at a point in time</li>
+              <li>Changes every time DB is updated</li>
+              <li>Also called: <em>snapshot</em>, <em>instance</em></li>
+              <li>Analogy: Furniture in the house</li>
+            </ul>
+          </div>
+        </div>
+        <div class="formula">Empty State → Initial State → Current State (all must be Valid States)</div>
+
+        <h2>Three-Schema Architecture</h2>
+        <div class="key-box">
+          <div class="kb-label">Purpose</div>
+          <p>Separate user applications from the physical database. Supports <strong>program-data independence</strong> and <strong>multiple views</strong>.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Level</th><th>Schema</th><th>What It Describes</th><th>Who Uses It</th></tr>
+            <tr><td><strong>External</strong></td><td>External / View Schema</td><td>Individual user views — subset of database each user group needs</td><td>End users, application programs</td></tr>
+            <tr><td><strong>Conceptual</strong></td><td>Conceptual Schema</td><td>Logical structure of entire database — entities, attributes, relationships, constraints</td><td>DBA, DB designers</td></tr>
+            <tr><td><strong>Internal</strong></td><td>Internal Schema</td><td>Physical storage structures, file organizations, indexes, access paths</td><td>DBMS internals, storage experts</td></tr>
+          </table>
+        </div>
+
+        <h2>Data Independence</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">🔄 Logical Data Independence</div>
+            <p>Change the <strong>conceptual schema</strong> without changing external schemas or application programs.</p>
+            <p>e.g., Adding a new attribute to a table without breaking existing views.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">💿 Physical Data Independence</div>
+            <p>Change the <strong>internal schema</strong> (storage) without changing the conceptual schema.</p>
+            <p>e.g., Changing file organization or adding an index without affecting logical design.</p>
+          </div>
+        </div>
+
+        <h2>DBMS Languages</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Language</th><th>Full Name</th><th>Purpose</th><th>Examples</th></tr>
+            <tr><td><strong>DDL</strong></td><td>Data Definition Language</td><td>Define schema, data types, structures, constraints</td><td>CREATE, DROP, ALTER</td></tr>
+            <tr><td><strong>DML</strong></td><td>Data Manipulation Language</td><td>Query, insert, update, delete data</td><td>SELECT, INSERT, UPDATE, DELETE</td></tr>
+            <tr><td><strong>SDL</strong></td><td>Storage Definition Language</td><td>Define internal/physical schema</td><td>DBMS-specific commands</td></tr>
+            <tr><td><strong>VDL</strong></td><td>View Definition Language</td><td>Define external views and their mappings</td><td>CREATE VIEW in SQL</td></tr>
+          </table>
+        </div>
+
+        <h3>DML Types</h3>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">High-Level (Non-Procedural)</div>
+            <ul>
+              <li>SQL — specifies <em>WHAT</em> not HOW</li>
+              <li>Set-oriented: retrieves many records at once</li>
+              <li>Can be standalone or embedded</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Low-Level (Procedural)</div>
+            <ul>
+              <li>One record at a time</li>
+              <li>Must be embedded in a host language (C, Java, COBOL)</li>
+              <li>More control but more complex</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Client-Server Architectures</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">Two-Tier</div>
+            <ul>
+              <li>Client (UI + App Logic) ↔ Database Server</li>
+              <li>Uses ODBC / JDBC interfaces</li>
+              <li>Simple but less secure</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Three-Tier</div>
+            <ul>
+              <li>Client (UI) ↔ App Server (Business Logic) ↔ DB Server</li>
+              <li>Common for web apps</li>
+              <li>Enhanced security — clients cannot directly access DB</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Evolution of Data Models</h2>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-content"><strong>Hierarchical & Network (1960s–70s):</strong> IMS, CODASYL — navigational, procedural access</div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-content"><strong>Relational (1970s–present):</strong> Proposed by E.F. Codd (1970) — SQL, DB2, Oracle, MySQL</div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-content"><strong>Object-Oriented (1980s–90s):</strong> ODMG standard — complex data types</div></div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-content"><strong>Object-Relational (1990s):</strong> Oracle, DB2 with OO extensions</div></div>
+          <div class="flow-step"><div class="flow-step-num">5</div><div class="flow-step-content"><strong>NoSQL / Big Data (2000s–present):</strong> Document, Column, Graph, Key-Value stores</div></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Draw the <strong>Three-Schema Architecture</strong> diagram and explain mappings. Distinguish <strong>logical vs physical data independence</strong>. Know that schema = design (rarely changes), state = current data (always changes).</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 03
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-2">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 03</div>
+          <h1>Database Development Life Cycle</h1>
+          <div class="subtitle">DDLC phases, desirable properties, schema levels, testing</div>
+        </div>
+
+        <h2>5 Desirable Properties of a Database</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">✅ Completeness</div><p>Users can access all the data they need, including ad hoc queries not explicitly anticipated.</p></div>
+          <div class="card"><div class="card-title">🔗 Integrity</div><p>Data is consistent (no contradictions) and correct (no invalid values). Users trust the database.</p></div>
+          <div class="card"><div class="card-title">🔄 Flexibility</div><p>Database can evolve without excessive effort as requirements change.</p></div>
+          <div class="card"><div class="card-title">⚡ Efficiency</div><p>Users do not have unduly long response times when accessing data.</p></div>
+          <div class="card"><div class="card-title">👤 Usability</div><p>Data can be accessed and manipulated in ways matching user requirements.</p></div>
+        </div>
+
+        <h2>Database Development Life Cycle</h2>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-content"><strong>Requirements Gathering → Data Requirements Document (DRD)</strong><br>Consult all users; identify data items, attributes, constraints, relationships. Says <em>what</em> data is needed, not how to process it.</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-content"><strong>Data Analysis → Conceptual Data Model</strong><br>Focuses on meaning and structure of data. Not used by any DBMS. Answers "What is required?" not "How is it achieved?"</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-content"><strong>Database Design → Logical Schema</strong><br>Determine DB type (relational, OO, etc.). Define tables, constraints, primary/foreign keys. Choose design that best satisfies prioritized properties.</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-content"><strong>Implementation → Storage schema + Security + External schema</strong><br>Construct DB per logical schema. Heavily influenced by specific DBMS capabilities. Activities: Release design, Populate DB, Support users, Data management strategies.</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-step-num">5</div><div class="flow-step-content"><strong>Testing → Acceptance or Bug List</strong><br>Uncover errors in design and implementation. Validation (right database?) + Verification (built correctly?).</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-step-num">6</div><div class="flow-step-content"><strong>Maintenance</strong><br>Operational monitoring, porting/implementation changes, requirements changes, bug fixing.</div></div>
+        </div>
+
+        <h2>Three Schema Levels</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Schema Level</th><th>Focus</th><th>Properties</th><th>Audience</th></tr>
+            <tr><td><strong>Conceptual</strong></td><td>Business world view</td><td>Suppresses non-critical details; only significant entities with business meaning; many-to-many relationships acceptable</td><td>Business analysts, all users</td></tr>
+            <tr><td><strong>Logical</strong></td><td>Mathematical/relational theory</td><td>Fully normalized entities; conforms to relational theory; may include logical domains (not necessarily physical tables)</td><td>DB designers, developers</td></tr>
+            <tr><td><strong>Physical</strong></td><td>Specific DBMS product</td><td>Single logical model instantiated in specific DBMS; includes implementation details, configuration choices</td><td>DBAs, system engineers</td></tr>
+          </table>
+        </div>
+
+        <h2>DRD — Data Requirements Document</h2>
+        <div class="key-box">
+          <div class="kb-label">Key Characteristics</div>
+          <ul>
+            <li>Describes <strong>what</strong> data is needed — not how it is processed</li>
+            <li>States: what data items exist, their attributes, constraints, and relationships</li>
+            <li>Used to <strong>agree requirements</strong> with users</li>
+            <li>Should be easily understood — not overly formal</li>
+            <li>Concise summary of <em>all</em> users' requirements (not just individuals')</li>
+          </ul>
+        </div>
+
+        <h2>Testing: Validation vs Verification</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">✔️ Validation</div>
+            <p><em>"Are we building the RIGHT database?"</em></p>
+            <ul>
+              <li>Data stored and retrieved correctly</li>
+              <li>Queries return correct, meaningful results</li>
+              <li>Transactions behave correctly (commit/rollback)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🔧 Verification</div>
+            <p><em>"Are we building the database CORRECTLY?"</em></p>
+            <ul>
+              <li>Schema matches requirements</li>
+              <li>Correct data types and attribute names</li>
+              <li>Primary keys and foreign keys defined properly</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Maintenance Types</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Type</th><th>Description</th></tr>
+            <tr><td><strong>Operational</strong></td><td>Monitoring database performance continuously</td></tr>
+            <tr><td><strong>Porting & Implementation</strong></td><td>DBMS, user processes, or computer system changes that require DB revision</td></tr>
+            <tr><td><strong>Requirements Change</strong></td><td>Original requirements specification changes — revisits entire DDLC</td></tr>
+          </table>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Know all <strong>5 desirable properties</strong> with explanations. Be clear on what a DRD contains. The <strong>three assumptions</strong> behind mapping to database development are important. Distinguish between validation and verification.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 04
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-3">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 04</div>
+          <h1>Data Modeling — Entity-Relationship Model</h1>
+          <div class="subtitle">Entity types, attributes, keys, relationships, constraints, weak entities</div>
+        </div>
+
+        <h2>Core ER Concepts</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">🧱 Entity</div>
+            <p>A specific object or thing in the miniworld with independent existence. E.g., student, car, department, employee.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">📌 Attribute</div>
+            <p>Properties that describe an entity. E.g., an employee has name, age, address, salary.</p>
+          </div>
+        </div>
+
+        <h2>Types of Attributes</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+            <tr><td><strong>Simple (Atomic)</strong></td><td>Cannot be divided further</td><td>Sex, Age</td></tr>
+            <tr><td><strong>Composite</strong></td><td>Made of sub-components; forms a hierarchy</td><td>Address (Street, City, State, Zip)</td></tr>
+            <tr><td><strong>Single-Valued</strong></td><td>One value per entity</td><td>National ID Number</td></tr>
+            <tr><td><strong>Multi-Valued</strong></td><td>Set of values for same entity</td><td>Colors of a car, Degrees held</td></tr>
+            <tr><td><strong>Stored</strong></td><td>Must be stored directly; cannot be derived</td><td>Date of Birth</td></tr>
+            <tr><td><strong>Derived</strong></td><td>Computed from other attributes</td><td>Age (from Date of Birth)</td></tr>
+          </table>
+        </div>
+
+        <h2>NULL Values</h2>
+        <div class="col2">
+          <div class="card"><div class="card-title">Not Applicable</div><p>Attribute doesn't apply to this entity. E.g., Apartment Number for a house.</p></div>
+          <div class="card"><div class="card-title">Unknown</div><p>Value may exist but is missing, or we don't know if it exists. E.g., Home Phone.</p></div>
+        </div>
+
+        <h2>Entity Types vs Entity Sets</h2>
+        <div class="def-list">
+          <div class="def-item"><div class="def-term">Entity Type</div><div class="def-desc">The <strong>schema</strong> (intension) — defines a collection of entities with same attributes. E.g., EMPLOYEE (Name, Age, Salary).</div></div>
+          <div class="def-item"><div class="def-term">Entity Set</div><div class="def-desc">The <strong>extension</strong> — all entity instances at a point in time. E.g., {(John Smith, 55, 80k), (Fred Brown, 40, 30k), ...}.</div></div>
+          <div class="def-item"><div class="def-term">Key Attribute</div><div class="def-desc">Attribute(s) whose values uniquely identify each entity in the set. Shown with <strong>underline</strong> in ER diagrams.</div></div>
+          <div class="def-item"><div class="def-term">Value Set (Domain)</div><div class="def-desc">All possible values an attribute can hold. E.g., Age: integers 16–70.</div></div>
+        </div>
+
+        <h2>ER Diagram Notation</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Symbol</th><th>Meaning</th></tr>
+            <tr><td><strong>Rectangle</strong></td><td>Entity type</td></tr>
+            <tr><td><strong>Double Rectangle</strong></td><td>Weak entity type</td></tr>
+            <tr><td><strong>Diamond</strong></td><td>Relationship type</td></tr>
+            <tr><td><strong>Double Diamond</strong></td><td>Identifying relationship (for weak entity)</td></tr>
+            <tr><td><strong>Ellipse</strong></td><td>Attribute</td></tr>
+            <tr><td><strong>Underlined Ellipse</strong></td><td>Key attribute</td></tr>
+            <tr><td><strong>Double Ellipse</strong></td><td>Multivalued attribute</td></tr>
+            <tr><td><strong>Dashed Ellipse</strong></td><td>Derived attribute</td></tr>
+            <tr><td><strong>Double Line to Entity</strong></td><td>Total participation</td></tr>
+            <tr><td><strong>1 and N labels</strong></td><td>Cardinality ratio</td></tr>
+            <tr><td><strong>(min, max) notation</strong></td><td>Structural constraint on participation</td></tr>
+          </table>
+        </div>
+
+        <h2>Relationships &amp; Degree</h2>
+        <p>A relationship connects two or more distinct entities with a specific meaning. The <strong>degree</strong> = number of participating entity types.</p>
+        <ul>
+          <li><strong>Binary (degree 2):</strong> Most common — WORKS_FOR, MANAGES, CONTROLS, WORKS_ON, SUPERVISION, DEPENDENTS_OF</li>
+          <li><strong>Ternary (degree 3):</strong> SUPPLY (SUPPLIER, PROJECT, PART)</li>
+        </ul>
+
+        <h2>Relationship Constraints</h2>
+        <h3>Cardinality Ratios (Maximum)</h3>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">1:1</div><p>One-to-One — each entity in A relates to at most one in B and vice versa. E.g., MANAGES.</p></div>
+          <div class="card"><div class="card-title">1:N</div><p>One-to-Many — one entity in A relates to many in B. E.g., WORKS_FOR (Dept → Employees).</p></div>
+          <div class="card"><div class="card-title">M:N</div><p>Many-to-Many — many in A to many in B. E.g., WORKS_ON (Employee ↔ Project).</p></div>
+        </div>
+
+        <h3>Participation Constraints (Minimum)</h3>
+        <div class="col2">
+          <div class="card"><div class="card-title">Total Participation (double line)</div><p>Every entity MUST participate. E.g., every EMPLOYEE must work FOR a DEPARTMENT.</p></div>
+          <div class="card"><div class="card-title">Partial Participation (single line)</div><p>Some entities may not participate. E.g., not every EMPLOYEE manages a DEPARTMENT.</p></div>
+        </div>
+
+        <h2>COMPANY Database Relationships</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Relationship</th><th>Entities</th><th>Cardinality</th><th>Participation</th></tr>
+            <tr><td><strong>MANAGES</strong></td><td>EMPLOYEE ↔ DEPARTMENT</td><td>1:1</td><td>EMP: Partial | DEPT: Total</td></tr>
+            <tr><td><strong>WORKS_FOR</strong></td><td>EMPLOYEE ↔ DEPARTMENT</td><td>1:N</td><td>Both: Total</td></tr>
+            <tr><td><strong>CONTROLS</strong></td><td>DEPARTMENT ↔ PROJECT</td><td>1:N</td><td>PROJECT: Total | DEPT: Partial</td></tr>
+            <tr><td><strong>SUPERVISION</strong></td><td>EMPLOYEE ↔ EMPLOYEE</td><td>1:N</td><td>Both: Partial</td></tr>
+            <tr><td><strong>WORKS_ON</strong></td><td>EMPLOYEE ↔ PROJECT</td><td>M:N</td><td>Both: Total</td></tr>
+            <tr><td><strong>DEPENDENTS_OF</strong></td><td>EMPLOYEE ↔ DEPENDENT</td><td>1:N</td><td>EMP: Partial | DEP: Total</td></tr>
+          </table>
+        </div>
+
+        <h2>Weak Entity Types</h2>
+        <div class="key-box">
+          <div class="kb-label">Definition</div>
+          <p>An entity type with <strong>no key attribute of its own</strong>. Identified by being related to an <strong>owner entity</strong> + its own <strong>partial key</strong>.</p>
+          <ul>
+            <li>Shown as <strong>double rectangle</strong></li>
+            <li>Identifying relationship shown as <strong>double diamond</strong></li>
+            <li><strong>Example:</strong> DEPENDENT — identified by (Dependent_name + Birthdate) + linked EMPLOYEE (Essn)</li>
+            <li>EMPLOYEE is the <em>identifying entity type</em>; DEPENDENTS_OF is the <em>identifying relationship</em></li>
+          </ul>
+        </div>
+
+        <h2>(min, max) Notation</h2>
+        <p>Specifies that each entity <em>e</em> in E participates in <em>at least</em> <code>min</code> and <em>at most</em> <code>max</code> relationship instances.</p>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Relationship</th><th>Entity</th><th>(min, max)</th><th>Meaning</th></tr>
+            <tr><td>MANAGES</td><td>EMPLOYEE</td><td>(0, 1)</td><td>An employee manages 0 or 1 departments</td></tr>
+            <tr><td>MANAGES</td><td>DEPARTMENT</td><td>(1, 1)</td><td>Every department has exactly 1 manager</td></tr>
+            <tr><td>WORKS_FOR</td><td>EMPLOYEE</td><td>(1, 1)</td><td>Every employee works for exactly 1 department</td></tr>
+            <tr><td>WORKS_FOR</td><td>DEPARTMENT</td><td>(1, N)</td><td>A department has 1 or more employees</td></tr>
+          </table>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Practice drawing ER diagrams with all 6 COMPANY relationships. Be able to identify cardinality ratios and participation constraints. Explain what makes an entity <strong>weak</strong> and how it's identified. The (min, max) notation is critical — min=0 means partial, min≥1 means total.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 05
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-4">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 05</div>
+          <h1>Enhanced Entity-Relationship (EER) Model</h1>
+          <div class="subtitle">Subclasses, superclasses, specialization, generalization, categories, inheritance</div>
+        </div>
+
+        <h2>Superclasses &amp; Subclasses</h2>
+        <p>EER adds meaningful subgroupings of entities. A <strong>subclass</strong> is a subset of entities from a superclass, each in a distinct specific role.</p>
+        <div class="key-box">
+          <div class="kb-label">IS-A Rule</div>
+          <ul>
+            <li>A subclass member is the same entity as in the superclass — just in a specific role</li>
+            <li>An entity <strong>cannot exist</strong> in the DB merely as a subclass member — must also be in superclass</li>
+            <li>A superclass member <strong>may or may not</strong> belong to any subclass</li>
+            <li>One entity can belong to <strong>multiple subclasses</strong> simultaneously</li>
+          </ul>
+        </div>
+        <p><strong>Example (EMPLOYEE subclasses):</strong></p>
+        <p><span class="badge badge-blue">SECRETARY</span><span class="badge badge-blue">ENGINEER</span><span class="badge badge-blue">TECHNICIAN</span> — by job type</p>
+        <p><span class="badge badge-purple">MANAGER</span> — by management role</p>
+        <p><span class="badge badge-green">HOURLY_EMPLOYEE</span><span class="badge badge-green">SALARIED_EMPLOYEE</span> — by pay method</p>
+
+        <h2>Attribute Inheritance</h2>
+        <div class="key-box">
+          <div class="kb-label">Inheritance Rule</div>
+          <p>A subclass member inherits <strong>ALL attributes</strong> and <strong>ALL relationship participations</strong> of the superclass.</p>
+          <p>Example: SECRETARY inherits Name, SSN, Birth_date, Address, etc. from EMPLOYEE, plus has its own Typing_speed attribute.</p>
+        </div>
+
+        <h2>Specialization vs Generalization</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">🔽 Specialization (Top-Down)</div>
+            <p>Start with a superclass, define subclasses by distinguishing characteristics.</p>
+            <ul>
+              <li>Conceptual <strong>refinement</strong> process</li>
+              <li>Specific attributes added to subclasses</li>
+              <li>Specific relationships for subclasses only</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">🔼 Generalization (Bottom-Up)</div>
+            <p>Start with multiple classes having common features, create a superclass.</p>
+            <ul>
+              <li>Conceptual <strong>synthesis</strong> process</li>
+              <li>Common attributes moved to superclass</li>
+              <li>Specific attributes remain in subclasses</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tip-box"><div class="kb-label">Note</div><p>Both approaches produce the same end-result structure. In practice, a combination is used.</p></div>
+
+        <h2>Constraints on Specialization</h2>
+        <h3>1. Membership Condition</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Type</th><th>Description</th><th>How to Identify</th></tr>
+            <tr><td><strong>Predicate-Defined</strong></td><td>Membership determined by condition on superclass attribute</td><td>Condition written next to line in EER diagram</td></tr>
+            <tr><td><strong>Attribute-Defined</strong></td><td>All subclasses use the same defining attribute for membership</td><td>job_type = 'SECRETARY' / 'ENGINEER' etc.</td></tr>
+            <tr><td><strong>User-Defined</strong></td><td>No condition; membership specified individually for each entity</td><td>No condition shown in diagram</td></tr>
+          </table>
+        </div>
+
+        <h3>2. Disjointness Constraint</h3>
+        <div class="col2">
+          <div class="card"><div class="card-title">Disjoint "d"</div><p>Entity belongs to <strong>at most one</strong> subclass. E.g., cannot be both SECRETARY and ENGINEER.</p></div>
+          <div class="card"><div class="card-title">Overlapping "o"</div><p>Entity can belong to <strong>more than one</strong> subclass. E.g., MANAGER and ENGINEER simultaneously.</p></div>
+        </div>
+
+        <h3>3. Completeness Constraint</h3>
+        <div class="col2">
+          <div class="card"><div class="card-title">Total (double line)</div><p>Every superclass entity <strong>must</strong> belong to at least one subclass.</p></div>
+          <div class="card"><div class="card-title">Partial (single line)</div><p>Superclass entity is <strong>allowed not</strong> to belong to any subclass.</p></div>
+        </div>
+
+        <h3>4 Combinations</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Combination</th><th>Meaning</th></tr>
+            <tr><td><strong>Disjoint + Total</strong></td><td>Each entity belongs to exactly ONE subclass</td></tr>
+            <tr><td><strong>Disjoint + Partial</strong></td><td>Each entity belongs to at most one subclass (or none)</td></tr>
+            <tr><td><strong>Overlapping + Total</strong></td><td>Each entity belongs to at least one subclass (possibly many)</td></tr>
+            <tr><td><strong>Overlapping + Partial</strong></td><td>Each entity may belong to multiple or no subclasses</td></tr>
+          </table>
+        </div>
+
+        <h2>Hierarchies vs Lattices</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">Specialization Hierarchy</div>
+            <ul>
+              <li>Each subclass has <strong>only one superclass</strong></li>
+              <li>Single inheritance — tree structure</li>
+              <li>Inherits from one path only</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Specialization Lattice</div>
+            <ul>
+              <li>Subclass can have <strong>more than one superclass</strong></li>
+              <li>Multiple inheritance — allows shared subclasses</li>
+              <li><strong>Shared Subclass:</strong> subclass with multiple superclasses</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Categories (UNION Types)</h2>
+        <div class="key-box">
+          <div class="kb-label">Definition</div>
+          <p>A category is a subclass representing a <strong>subset of the UNION</strong> of multiple superclasses from <em>different entity types</em>.</p>
+          <p><strong>Example:</strong> OWNER = subset of (PERSON ∪ BANK ∪ COMPANY) — a vehicle owner can be any of these entity types.</p>
+          <p>Shown with <strong>"U"</strong> in EER diagram.</p>
+        </div>
+
+        <h3>Category vs Shared Subclass</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th></th><th>Category (UNION Type)</th><th>Shared Subclass</th></tr>
+            <tr><td><strong>Based on</strong></td><td>Union of superclasses</td><td>Intersection of superclasses</td></tr>
+            <tr><td><strong>Member must exist in</strong></td><td>At least ONE superclass</td><td>ALL superclasses</td></tr>
+            <tr><td><strong>Superclasses</strong></td><td>Can be different entity types</td><td>Must share same key</td></tr>
+            <tr><td><strong>Inheritance</strong></td><td>From one superclass at a time</td><td>Multiple inheritance</td></tr>
+            <tr><td><strong>Diagram symbol</strong></td><td>"U" circle</td><td>Multiple lines to subclass</td></tr>
+          </table>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Know the <strong>4 constraint combinations</strong> for specialization. Be able to distinguish category (UNION type "U") from shared subclass (multiple inheritance). The <strong>IS-A relationship</strong> rules and attribute inheritance are commonly tested.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 06
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-5">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 06</div>
+          <h1>ER &amp; EER to Relational Mapping</h1>
+          <div class="subtitle">9-step algorithm for converting conceptual schemas to relational tables</div>
+        </div>
+
+        <h2>Mapping Algorithm Overview</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Step</th><th>Construct</th><th>Action</th></tr>
+            <tr><td><strong>1</strong></td><td>Regular (strong) entity</td><td>Create relation R with all simple attributes; choose primary key</td></tr>
+            <tr><td><strong>2</strong></td><td>Weak entity</td><td>Create relation R; add owner PK as FK; PK = owner PK + partial key</td></tr>
+            <tr><td><strong>3</strong></td><td>Binary 1:1 relationship</td><td>Use Foreign Key, Merged, or Cross-Reference approach</td></tr>
+            <tr><td><strong>4</strong></td><td>Binary 1:N relationship</td><td>Add 1-side PK as FK in N-side relation; add relationship attrs</td></tr>
+            <tr><td><strong>5</strong></td><td>Binary M:N relationship</td><td>Create new relationship relation; PK = combination of both FKs</td></tr>
+            <tr><td><strong>6</strong></td><td>Multivalued attribute</td><td>Create new relation; PK = attribute value + owner PK (FK)</td></tr>
+            <tr><td><strong>7</strong></td><td>N-ary relationship (n > 2)</td><td>Create new relation; all participating PKs as FKs</td></tr>
+            <tr><td><strong>8</strong></td><td>Specialization / Generalization</td><td>Choose Option 8A, 8B, 8C, or 8D</td></tr>
+            <tr><td><strong>9</strong></td><td>Category (Union type)</td><td>Create category relation; use surrogate key if superclasses have different keys</td></tr>
+          </table>
+        </div>
+
+        <h2>Steps 1–7 Details</h2>
+
+        <h3>Step 3 — Binary 1:1 (Three approaches)</h3>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">A: Foreign Key (Preferred)</div>
+            <p>Add PK of one relation as FK in the other. Choose the <strong>total participation side</strong> as the FK holder. Add relationship attributes here too.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">B: Merged Relation</div>
+            <p>Merge both entity types and relationship into one. Only suitable when <strong>both participations are total</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">C: Cross-Reference</div>
+            <p>Create a 3rd relation with both PKs as FKs. PK = one FK, other FK = unique. <em>Requires extra JOIN — least preferred.</em></p>
+          </div>
+        </div>
+
+        <h3>Step 8 — Specialization Mapping Options</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Option</th><th>Relations Created</th><th>Works For</th><th>Key Trade-off</th></tr>
+            <tr><td><strong>8A</strong></td><td>Superclass + one per subclass</td><td>Any (total/partial, disjoint/overlapping)</td><td>Most general; requires JOIN for full entity data</td></tr>
+            <tr><td><strong>8B</strong></td><td>One per subclass only (includes superclass attrs)</td><td><strong>Total + Disjoint ONLY</strong></td><td>No superclass table; duplication if overlapping</td></tr>
+            <tr><td><strong>8C</strong></td><td>Single relation + ONE type attribute (discriminator)</td><td><strong>Disjoint ONLY</strong></td><td>Simple; many NULLs for subclass-specific attrs</td></tr>
+            <tr><td><strong>8D</strong></td><td>Single relation + multiple Boolean flags</td><td>Overlapping (also disjoint)</td><td>One Boolean per subclass; NULLs for specific attrs</td></tr>
+          </table>
+        </div>
+
+        <h3>Step 9 — Category (Union Type)</h3>
+        <div class="key-box">
+          <div class="kb-label">Surrogate Key</div>
+          <p>When category superclasses have <strong>different keys</strong>, create a new artificial <strong>surrogate key</strong> as the PK for the category relation. Add this surrogate key to each superclass relation as a FK reference to the category.</p>
+          <p><strong>Example:</strong> OWNER category: PERSON(Ssn), BANK(Bname), COMPANY(Cname) all have different keys → create Owner_id as surrogate key.</p>
+        </div>
+
+        <h2>ER → Relational Correspondence</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>ER Construct</th><th>Relational Equivalent</th></tr>
+            <tr><td>Entity type</td><td>Entity relation (table)</td></tr>
+            <tr><td>1:1 or 1:N relationship</td><td>Foreign key (or relationship relation)</td></tr>
+            <tr><td>M:N relationship</td><td>New relationship relation + two foreign keys</td></tr>
+            <tr><td>N-ary relationship</td><td>New relationship relation + n foreign keys</td></tr>
+            <tr><td>Simple attribute</td><td>Column (attribute)</td></tr>
+            <tr><td>Composite attribute</td><td>Set of simple component columns</td></tr>
+            <tr><td>Multivalued attribute</td><td>New relation + foreign key</td></tr>
+            <tr><td>Key attribute</td><td>Primary (or secondary) key</td></tr>
+            <tr><td>Value set</td><td>Domain</td></tr>
+          </table>
+        </div>
+
+        <h2>COMPANY Mapping Result</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">EMPLOYEE</div><p><code>Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, <strong>Super_ssn (FK→EMP), Dno (FK→DEPT)</strong></code></p></div>
+          <div class="card"><div class="card-title">DEPARTMENT</div><p><code>Dname, Dnumber, <strong>Mgr_ssn (FK→EMP)</strong>, Mgr_start_date</code></p></div>
+          <div class="card"><div class="card-title">DEPT_LOCATIONS</div><p><code><strong>Dnumber (FK→DEPT)</strong>, Dlocation</code> — Step 6 (multivalued)</p></div>
+          <div class="card"><div class="card-title">PROJECT</div><p><code>Pname, Pnumber, Plocation, <strong>Dnum (FK→DEPT)</strong></code></p></div>
+          <div class="card"><div class="card-title">WORKS_ON</div><p><code><strong>Essn (FK→EMP), Pno (FK→PROJ)</strong>, Hours</code> — Step 5 (M:N)</p></div>
+          <div class="card"><div class="card-title">DEPENDENT</div><p><code><strong>Essn (FK→EMP)</strong>, Dependent_name, Sex, Bdate, Relationship</code> — Step 2 (weak entity)</p></div>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Be able to apply all 9 steps from scratch. Know <strong>when to use 8A vs 8B vs 8C vs 8D</strong>. Understand why M:N always needs a new relation (step 5) while 1:N only needs a FK. The surrogate key concept for categories is important.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 07
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-6">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 07</div>
+          <h1>Relational Algebra</h1>
+          <div class="subtitle">Unary, set theory, binary operations — the formal query language</div>
+        </div>
+
+        <h2>Overview</h2>
+        <p>Relational algebra is a <strong>procedural</strong> formal query language. Operations on relations produce new relations (the algebra is <em>closed</em>). It is the theoretical foundation for SQL.</p>
+
+        <h2>Unary Operations</h2>
+
+        <h3>SELECT — σ (sigma)</h3>
+        <div class="key-box">
+          <div class="kb-label">Syntax</div>
+          <div class="formula">σ &lt;condition&gt;(R)</div>
+          <ul>
+            <li>Filters rows; result has <strong>same schema</strong> as R</li>
+            <li>Result tuple count ≤ R tuple count</li>
+            <li><strong>Commutative:</strong> σ<sub>c1</sub>(σ<sub>c2</sub>(R)) = σ<sub>c2</sub>(σ<sub>c1</sub>(R))</li>
+            <li>Cascade → single SELECT with AND: σ<sub>c1</sub>(σ<sub>c2</sub>(σ<sub>c3</sub>(R))) = σ<sub>c1 AND c2 AND c3</sub>(R)</li>
+          </ul>
+        </div>
+        <p><strong>Examples:</strong> <code>σ DNO=4(EMPLOYEE)</code> &nbsp;&nbsp; <code>σ SALARY>30000(EMPLOYEE)</code></p>
+
+        <h3>PROJECT — π (pi)</h3>
+        <div class="key-box">
+          <div class="kb-label">Syntax</div>
+          <div class="formula">π &lt;attribute list&gt;(R)</div>
+          <ul>
+            <li>Keeps specified columns; removes duplicates (result is a set)</li>
+            <li><strong>NOT commutative</strong></li>
+            <li>π<sub>L1</sub>(π<sub>L2</sub>(R)) = π<sub>L1</sub>(R) if L2 ⊇ L1</li>
+          </ul>
+        </div>
+        <p><strong>Example:</strong> <code>π LNAME, FNAME, SALARY(EMPLOYEE)</code></p>
+
+        <h3>RENAME — ρ (rho)</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Form</th><th>Effect</th></tr>
+            <tr><td><code>ρS(B1,...,Bn)(R)</code></td><td>Rename relation to S AND attributes to B1...Bn</td></tr>
+            <tr><td><code>ρS(R)</code></td><td>Rename relation name only to S</td></tr>
+            <tr><td><code>ρ(B1,...,Bn)(R)</code></td><td>Rename attribute names only</td></tr>
+          </table>
+        </div>
+
+        <h2>Set Theory Operations</h2>
+        <div class="warn-box">
+          <div class="kb-label">⚠️ Type Compatibility Required</div>
+          <p>UNION, INTERSECTION, and SET DIFFERENCE require <strong>union-compatible</strong> (same number of attributes, compatible domains). Result attribute names taken from first operand.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Operation</th><th>Symbol</th><th>Result</th><th>Properties</th></tr>
+            <tr><td><strong>UNION</strong></td><td>R ∪ S</td><td>All tuples in R OR S (no duplicates)</td><td>Commutative, Associative</td></tr>
+            <tr><td><strong>INTERSECTION</strong></td><td>R ∩ S</td><td>Only tuples in BOTH R and S</td><td>Commutative, Associative</td></tr>
+            <tr><td><strong>DIFFERENCE</strong></td><td>R − S</td><td>Tuples in R but NOT in S</td><td>NOT commutative</td></tr>
+            <tr><td><strong>CARTESIAN PRODUCT</strong></td><td>R × S</td><td>All combinations (nR × nS tuples); degree n+m</td><td>No type compat. needed; rarely useful alone</td></tr>
+          </table>
+        </div>
+
+        <h2>Binary Join Operations</h2>
+
+        <h3>THETA JOIN (⋈)</h3>
+        <div class="formula">R ⋈&lt;condition&gt; S = σ&lt;condition&gt;(R × S)</div>
+        <p>Result degree = n + m. Only related tuples appear. Generally result has &lt; nR × nS tuples.</p>
+
+        <h3>EQUIJOIN</h3>
+        <p>Theta join where the <strong>only comparison is equality (=)</strong>. Most common in practice. The COMPANY example: <code>DEPARTMENT ⋈ MGRSSN=SSN EMPLOYEE</code></p>
+
+        <h3>NATURAL JOIN (*)</h3>
+        <p>EQUIJOIN that <strong>eliminates the duplicate join attribute</strong>. Automatically joins on attributes with the same name.</p>
+        <div class="formula">Q ← R(A,B,C,D) * S(C,D,E) → implicit: R.C=S.C AND R.D=S.D → result Q(A,B,C,D,E)</div>
+
+        <h2>DIVISION (÷)</h2>
+        <div class="key-box">
+          <div class="kb-label">Definition</div>
+          <p><code>R(Z) ÷ S(X)</code> where X ⊆ Z. Let Y = Z − X. Result T(Y) contains tuple t if t appears in R combined with <strong>every tuple in S</strong>.</p>
+          <p><strong>Use case:</strong> "Find employees who work on ALL projects in S."</p>
+        </div>
+
+        <h2>Aggregate Functions — ℱ</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Function</th><th>Purpose</th><th>Example</th></tr>
+            <tr><td><code>SUM</code></td><td>Sum of numeric values</td><td>ℱ SUM Salary(EMPLOYEE)</td></tr>
+            <tr><td><code>AVG</code></td><td>Average value</td><td>ℱ AVG Salary(EMPLOYEE)</td></tr>
+            <tr><td><code>MAX</code></td><td>Highest value</td><td>ℱ MAX Salary(EMPLOYEE)</td></tr>
+            <tr><td><code>MIN</code></td><td>Lowest value</td><td>ℱ MIN Salary(EMPLOYEE)</td></tr>
+            <tr><td><code>COUNT</code></td><td>Count tuples (no dedup)</td><td>ℱ COUNT SSN(EMPLOYEE)</td></tr>
+          </table>
+        </div>
+        <p><strong>Grouping syntax:</strong> <code>DNO ℱ COUNT SSN, AVG Salary(EMPLOYEE)</code> — groups by DNO then applies aggregate per group.</p>
+
+        <h2>Outer Joins</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Type</th><th>Symbol</th><th>Keeps</th></tr>
+            <tr><td><strong>LEFT OUTER JOIN</strong></td><td>R ⟕ S</td><td>All tuples in R; unmatched S attributes → NULL</td></tr>
+            <tr><td><strong>RIGHT OUTER JOIN</strong></td><td>R ⟖ S</td><td>All tuples in S; unmatched R attributes → NULL</td></tr>
+            <tr><td><strong>FULL OUTER JOIN</strong></td><td>R ⟗ S</td><td>All tuples in both; unmatched → NULL on either side</td></tr>
+          </table>
+        </div>
+
+        <h2>Complete Set of Operations</h2>
+        <div class="key-box">
+          <div class="kb-label">The Complete Set</div>
+          <p><code>σ, π, ∪, −, ρ, ×</code> — any other relational algebra expression can be derived from these six operations.</p>
+          <p>R ∩ S = (R ∪ S) − ((R − S) ∪ (S − R))</p>
+          <p>R ⋈&lt;cond&gt; S = σ&lt;cond&gt;(R × S)</p>
+        </div>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Know all operation symbols (σ, π, ρ, ∪, ∩, −, ×, ⋈, *, ÷). Understand which operations require type compatibility. CARTESIAN PRODUCT alone is meaningless — combine with SELECT. The <strong>complete set</strong> of 6 operations is commonly tested.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 08
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-7">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 08</div>
+          <h1>Relational Calculus</h1>
+          <div class="subtitle">Tuple calculus, domain calculus, QBE overview — declarative query formalism</div>
+        </div>
+
+        <h2>Algebra vs Calculus</h2>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">⚙️ Relational Algebra</div>
+            <p><strong>Procedural</strong> — specifies a sequence of operations describing <em>how</em> to retrieve results.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">📝 Relational Calculus</div>
+            <p><strong>Nonprocedural / Declarative</strong> — specifies <em>what</em> the result should contain, not how to find it.</p>
+          </div>
+        </div>
+        <div class="key-box">
+          <div class="kb-label">Equivalence</div>
+          <p>Relational Algebra, Tuple Calculus, and Domain Calculus are all <strong>expressively equivalent</strong>. Any query in one can be expressed in the others.</p>
+        </div>
+
+        <h2>Tuple Relational Calculus (TRC)</h2>
+        <div class="key-box">
+          <div class="kb-label">General Form</div>
+          <div class="formula">{ t | COND(t) }</div>
+          <p><code>t</code> = tuple variable. Returns all tuples t satisfying COND(t). Range relation specified as EMPLOYEE(t) etc.</p>
+        </div>
+
+        <p><strong>Simple Example</strong> — employees with salary > 50,000:</p>
+        <pre><code>{ t.FNAME, t.LNAME | EMPLOYEE(t) AND t.SALARY > 50000 }</code></pre>
+
+        <h3>Quantifiers</h3>
+        <div class="col2">
+          <div class="card">
+            <div class="card-title">∃ — Existential ("there exists")</div>
+            <p>(∃t)(F) is true if F is true for <strong>at least one</strong> tuple assigned to t.</p>
+            <p><em>Use:</em> "there exists a department named Research"</p>
+          </div>
+          <div class="card">
+            <div class="card-title">∀ — Universal ("for all")</div>
+            <p>(∀t)(F) is true if F is true for <strong>every</strong> tuple in the universe assigned to t.</p>
+            <p><em>Use:</em> "works on ALL projects in dept 5"</p>
+          </div>
+        </div>
+
+        <div class="def-list">
+          <div class="def-item"><div class="def-term">Bound variable</div><div class="def-desc">A tuple variable that appears in a (∀t) or (∃t) quantifier clause.</div></div>
+          <div class="def-item"><div class="def-term">Free variable</div><div class="def-desc">A tuple variable NOT quantified. <strong>Only free variables</strong> should appear to the left of the bar ( | ).</div></div>
+        </div>
+
+        <h3>Example Queries</h3>
+        <p><strong>Research dept employees (using ∃):</strong></p>
+        <pre><code>{ t.FNAME, t.LNAME, t.ADDRESS |
+  EMPLOYEE(t) AND
+  (∃d)(DEPARTMENT(d) AND d.DNAME = 'Research' AND d.DNUMBER = t.DNO) }</code></pre>
+
+        <p><strong>Employees with no dependents (∃ and ∀ equivalents):</strong></p>
+        <pre><code>-- Using ∃:
+{ e.Fname, e.Lname | EMPLOYEE(e) AND
+  (NOT(∃d)(DEPENDENT(d) AND e.Ssn = d.Essn)) }
+
+-- Using ∀ (equivalent):
+{ e.Fname, e.Lname | EMPLOYEE(e) AND
+  ((∀d)(NOT(DEPENDENT(d)) OR NOT(e.Ssn = d.Essn))) }</code></pre>
+
+        <h3>Strategy for ∀ Queries</h3>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-content"><strong>Exclude non-relation tuples:</strong> NOT(PROJECT(x)) → true for all non-project tuples</div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-content"><strong>Exclude irrelevant relation tuples:</strong> NOT(x.DNUM = 5) → true for projects not in dept 5</div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-content"><strong>Specify condition on remaining tuples:</strong> Employee must work on each remaining project (∃w)(WORKS_ON(w) ...)</div></div>
+        </div>
+
+        <h2>Domain Relational Calculus (DRC)</h2>
+        <div class="key-box">
+          <div class="kb-label">Key Difference from TRC</div>
+          <p>Variables range over <strong>single attribute values (columns)</strong> rather than entire tuples (rows). Need <strong>n domain variables</strong> for a relation of degree n.</p>
+          <div class="formula">{ x1, x2, ..., xn | COND(x1, ..., xn, ..., xn+m) }</div>
+        </div>
+
+        <h3>Example — Birthdate and address of 'John B. Smith':</h3>
+        <pre><code>{ u, v | (∃q)(∃r)(∃s)(∃t)(∃w)(∃x)(∃y)(∃z)
+  (EMPLOYEE(q,r,s,t,u,v,w,x,y,z) AND
+   q = 'John' AND r = 'B' AND s = 'Smith') }</code></pre>
+        <p>10 variables for 10 EMPLOYEE attributes. <code>u</code> = BDATE, <code>v</code> = ADDRESS (free). All others bound by ∃.</p>
+
+        <h3>Condition Types in DRC</h3>
+        <div class="col2">
+          <div class="card"><div class="card-title">Selection Condition</div><p>Relates domain variable to a constant. e.g., <code>l = 'Research'</code></p></div>
+          <div class="card"><div class="card-title">Join Condition</div><p>Relates two domain variables from different relations. e.g., <code>m = z</code> (DEPT.Dnumber = EMP.Dno)</p></div>
+        </div>
+
+        <h2>SQL vs Relational Calculus</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>SQL Clause</th><th>Calculus Equivalent</th><th>RA Equivalent</th></tr>
+            <tr><td><code>SELECT</code></td><td>Free variables (left of bar)</td><td>PROJECT (π)</td></tr>
+            <tr><td><code>FROM</code></td><td>Range relations for tuple variables</td><td>Specifies relations</td></tr>
+            <tr><td><code>WHERE</code></td><td>Conditions in COND(t)</td><td>SELECT (σ) + JOIN (⋈)</td></tr>
+          </table>
+        </div>
+
+        <h2>QBE — Query By Example</h2>
+        <p>Based on <strong>domain relational calculus</strong>. Developed at IBM Research alongside SQL. Provides a visual, table-based interface where users fill in example values to express queries. More user-friendly than formula syntax.</p>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Understand bound vs free variables. Be able to write TRC expressions using both ∃ and ∀ and convert between them. Know the <strong>strategy for universal quantification</strong>. Distinguish TRC (row variables) from DRC (column variables). SQL is based on TRC.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 09
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-8">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 09</div>
+          <h1>Basic SQL</h1>
+          <div class="subtitle">DDL, DML, constraints, queries, aggregation, INSERT/UPDATE/DELETE</div>
+        </div>
+
+        <h2>Data Definition Language (DDL)</h2>
+
+        <h3>Common Data Types</h3>
+        <p><code>INTEGER</code> &nbsp; <code>FLOAT</code> &nbsp; <code>DECIMAL(i,j)</code> &nbsp; <code>CHAR(n)</code> &nbsp; <code>VARCHAR(n)</code> &nbsp; <code>DATE</code></p>
+
+        <h3>CREATE TABLE with Keys &amp; FKs</h3>
+        <pre><code>CREATE TABLE EMP (
+  ENAME    VARCHAR(30) NOT NULL,
+  ESSN     CHAR(9),
+  BDATE    DATE,
+  DNO      INTEGER DEFAULT 1,
+  SUPERSSN CHAR(9),
+  PRIMARY KEY (ESSN),
+  FOREIGN KEY (DNO) REFERENCES DEPT
+    ON DELETE SET DEFAULT ON UPDATE CASCADE,
+  FOREIGN KEY (SUPERSSN) REFERENCES EMP
+    ON DELETE SET NULL ON UPDATE CASCADE
+);</code></pre>
+
+        <h3>Referential Integrity Options</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Option</th><th>On DELETE/UPDATE of Referenced Tuple</th></tr>
+            <tr><td><strong>RESTRICT</strong></td><td>Prevents the delete/update if referencing tuple exists</td></tr>
+            <tr><td><strong>CASCADE</strong></td><td>Automatically propagates delete/update to referencing tuples</td></tr>
+            <tr><td><strong>SET NULL</strong></td><td>Sets the FK attribute to NULL in referencing tuples</td></tr>
+            <tr><td><strong>SET DEFAULT</strong></td><td>Sets the FK attribute to its default value</td></tr>
+          </table>
+        </div>
+
+        <h3>ALTER and DROP</h3>
+        <pre><code>ALTER TABLE EMPLOYEE ADD JOB VARCHAR(12);  -- Adds column (new col = NULL for all existing rows)
+DROP TABLE DEPENDENT;                       -- Removes entire table</code></pre>
+
+        <h2>SELECT-FROM-WHERE Block</h2>
+        <pre><code>SELECT &lt;attribute list&gt;
+FROM   &lt;table list&gt;
+[WHERE &lt;condition&gt;]
+[GROUP BY &lt;grouping attrs&gt;]
+[HAVING &lt;group condition&gt;]
+[ORDER BY &lt;attribute list&gt;]</code></pre>
+
+        <div class="key-box">
+          <div class="kb-label">Evaluation Order</div>
+          <p>WHERE → GROUP BY → HAVING → SELECT → ORDER BY</p>
+        </div>
+
+        <h3>Key Query Examples</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Query</th><th>SQL</th><th>Notes</th></tr>
+            <tr><td>All attrs, filter by dept</td><td><code>SELECT * FROM EMPLOYEE WHERE DNO=5</code></td><td>SELECT * = all attributes</td></tr>
+            <tr><td>Multi-table join</td><td><code>SELECT FNAME, LNAME, ADDRESS FROM EMPLOYEE, DEPARTMENT WHERE DNAME='Research' AND DNUMBER=DNO</code></td><td>Join condition: DNUMBER=DNO</td></tr>
+            <tr><td>Self-join with aliases</td><td><code>SELECT E.FNAME, S.FNAME FROM EMPLOYEE E, EMPLOYEE S WHERE E.SUPERSSN=S.SSN</code></td><td>E=supervisee, S=supervisor</td></tr>
+          </table>
+        </div>
+
+        <h3>DISTINCT, NULL, LIKE</h3>
+        <pre><code>SELECT DISTINCT SALARY FROM EMPLOYEE;              -- Remove duplicates
+SELECT FNAME, LNAME FROM EMPLOYEE WHERE SUPERSSN IS NULL; -- NULL check
+SELECT FNAME FROM EMPLOYEE WHERE ADDRESS LIKE '%Houston%'; -- Pattern match</code></pre>
+
+        <p>LIKE wildcards: <code>%</code> = any string (0+), <code>_</code> = exactly one character</p>
+
+        <h2>Set Operations</h2>
+        <pre><code>(SELECT PNAME FROM PROJECT, DEPT, EMP WHERE ...)
+UNION
+(SELECT PNAME FROM PROJECT, WORKS_ON, EMP WHERE ...);</code></pre>
+        <p>UNION eliminates duplicates automatically. Also: <code>INTERSECT</code>, <code>MINUS</code> / <code>EXCEPT</code>.</p>
+
+        <h2>Nested Queries (Subqueries)</h2>
+        <pre><code>-- Non-correlated (inner runs once)
+SELECT FNAME, LNAME FROM EMPLOYEE
+WHERE DNO IN (SELECT DNUMBER FROM DEPARTMENT WHERE DNAME='Research');
+
+-- Correlated (inner re-runs for each outer tuple)
+SELECT E.FNAME, E.LNAME FROM EMPLOYEE E
+WHERE E.SSN IN (SELECT ESSN FROM DEPENDENT
+                WHERE ESSN=E.SSN AND E.FNAME=DEPENDENT_NAME);</code></pre>
+
+        <h2>Aggregate Functions</h2>
+        <pre><code>SELECT MAX(SALARY), MIN(SALARY), AVG(SALARY) FROM EMPLOYEE;
+SELECT COUNT(*) FROM EMPLOYEE WHERE DNO=5;</code></pre>
+
+        <h3>GROUP BY &amp; HAVING</h3>
+        <pre><code>-- Per department: count and average salary
+SELECT DNO, COUNT(*), AVG(SALARY) FROM EMPLOYEE GROUP BY DNO;
+
+-- Projects with more than 2 employees
+SELECT PNUMBER, PNAME, COUNT(*)
+FROM PROJECT, WORKS_ON WHERE PNUMBER=PNO
+GROUP BY PNUMBER, PNAME HAVING COUNT(*) > 2;</code></pre>
+
+        <h3>Grouping attributes must also appear in SELECT!</h3>
+
+        <h2>JOIN Syntax (SQL2)</h2>
+        <pre><code>-- INNER JOIN
+SELECT FNAME, LNAME, ADDRESS
+FROM (EMPLOYEE JOIN DEPARTMENT ON DNUMBER=DNO) WHERE DNAME='Research';
+
+-- LEFT OUTER JOIN
+SELECT E.FNAME, S.FNAME
+FROM (EMPLOYEE E LEFT OUTER JOIN EMPLOYEE S ON E.SUPERSSN=S.SSN);</code></pre>
+
+        <h2>DML — INSERT, UPDATE, DELETE</h2>
+        <pre><code>-- INSERT full tuple
+INSERT INTO EMPLOYEE VALUES ('Richard','K','Marini','653298653',
+  '1962-12-30','98 Oak Forest,TX','M',37000,'987654321',4);
+
+-- INSERT partial
+INSERT INTO EMPLOYEE (FNAME, LNAME, SSN) VALUES ('Richard','Marini','653298653');
+
+-- UPDATE
+UPDATE PROJECT SET PLOCATION='Bellaire', DNUM=5 WHERE PNUMBER=10;
+UPDATE EMPLOYEE SET SALARY=SALARY*1.1
+  WHERE DNO IN (SELECT DNUMBER FROM DEPARTMENT WHERE DNAME='Research');
+
+-- DELETE
+DELETE FROM EMPLOYEE WHERE LNAME='Brown';
+DELETE FROM EMPLOYEE WHERE DNO IN (SELECT DNUMBER FROM DEPARTMENT WHERE DNAME='Research');
+DELETE FROM EMPLOYEE;  -- Deletes ALL tuples!</code></pre>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Know the <strong>evaluation order</strong> (WHERE → GROUP BY → HAVING → SELECT). Understand correlated vs non-correlated subqueries. Know all FK options (CASCADE, SET NULL, etc.). GROUP BY attribute must appear in SELECT. HAVING filters groups, WHERE filters tuples.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 10
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-9">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 10</div>
+          <h1>Disk Storage &amp; File Structures</h1>
+          <div class="subtitle">Storage media, RAID, file organization, buffer management, data dictionary</div>
+        </div>
+
+        <h2>Storage Hierarchy</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Level</th><th>Type</th><th>Volatile?</th><th>Speed</th><th>Cost</th><th>Examples</th></tr>
+            <tr><td><strong>Primary</strong></td><td>Cache, Main Memory</td><td>Yes (Volatile)</td><td>Fastest</td><td>Highest</td><td>DRAM, SRAM cache</td></tr>
+            <tr><td><strong>Secondary</strong></td><td>Flash, Magnetic Disk</td><td>No</td><td>Medium</td><td>Medium</td><td>SSD, HDD</td></tr>
+            <tr><td><strong>Tertiary</strong></td><td>Optical, Tape</td><td>No</td><td>Slowest</td><td>Cheapest</td><td>Blu-ray, Magnetic Tape</td></tr>
+          </table>
+        </div>
+
+        <h2>Magnetic Disk Structure</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">🔵 Track</div><p>Circular ring on platter surface. Divided into sectors.</p></div>
+          <div class="card"><div class="card-title">📐 Sector</div><p>Smallest unit of data read/written on disk.</p></div>
+          <div class="card"><div class="card-title">🏢 Cylinder i</div><p>All i-th tracks across all platters (same arm position).</p></div>
+          <div class="card"><div class="card-title">🎮 Disk Controller</div><p>Interface between computer and disk. Computes checksums, verifies writes, remaps bad sectors.</p></div>
+        </div>
+
+        <h2>Performance Measures</h2>
+        <div class="def-list">
+          <div class="def-item"><div class="def-term">Access Time</div><div class="def-desc">= Seek Time + Rotational Latency. Time from request issued to transfer start.</div></div>
+          <div class="def-item"><div class="def-term">Seek Time</div><div class="def-desc">Time for disk arm to move to correct track.</div></div>
+          <div class="def-item"><div class="def-term">Rotational Latency</div><div class="def-desc">Time for desired sector to rotate under the read-write head.</div></div>
+          <div class="def-item"><div class="def-term">Transfer Rate</div><div class="def-desc">Rate at which data is read from or written to disk.</div></div>
+          <div class="def-item"><div class="def-term">MTTF</div><div class="def-desc">Mean Time to Failure — typically 3–5 years. Failure probability increases with age.</div></div>
+        </div>
+
+        <h2>RAID Levels</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Level</th><th>Name</th><th>Description</th><th>Used?</th></tr>
+            <tr><td><strong>RAID 0</strong></td><td>Striping (No Fault Tolerance)</td><td>Data striped across disks; no redundancy</td><td>Only when data safety unimportant</td></tr>
+            <tr><td><strong>RAID 1</strong></td><td>Mirroring & Duplexing</td><td>Each disk has exact copy (mirror)</td><td>✅ Widely used; high availability</td></tr>
+            <tr><td><strong>RAID 2</strong></td><td>ECC</td><td>Memory-style error-correcting coding across disks</td><td>❌ Never used (subsumed by RAID 3)</td></tr>
+            <tr><td><strong>RAID 3</strong></td><td>Bit-Interleaved Parity</td><td>Parity on dedicated disk</td><td>❌ Not used anymore</td></tr>
+            <tr><td><strong>RAID 4</strong></td><td>Dedicated Parity Drive</td><td>Block-interleaved parity on one disk</td><td>❌ Never used (subsumed by RAID 5)</td></tr>
+            <tr><td><strong>RAID 5</strong></td><td>Distributed Parity</td><td>Parity distributed across all disks</td><td>✅ Most common; good balance</td></tr>
+            <tr><td><strong>RAID 6</strong></td><td>Double Parity (P+Q)</td><td>Two independent parity blocks; survives 2 disk failures</td><td>⚠️ Rarely used</td></tr>
+          </table>
+        </div>
+        <div class="key-box">
+          <div class="kb-label">RAID Key Concepts</div>
+          <ul>
+            <li><strong>Latent Failures:</strong> Previously written data silently damaged — can cause data loss even when only one disk fails</li>
+            <li><strong>Data Scrubbing:</strong> Continuously scans for latent failures</li>
+            <li><strong>Hot Swapping:</strong> Replace failed disk without powering down</li>
+            <li>Software RAID = no special hardware; Hardware RAID = uses NV-RAM to log writes</li>
+          </ul>
+        </div>
+
+        <h2>File Organization</h2>
+
+        <h3>Fixed-Length Records</h3>
+        <p>Simple; when a record is deleted:</p>
+        <ul>
+          <li><strong>Compact:</strong> Move all subsequent records up — expensive</li>
+          <li><strong>Move last record:</strong> Copy last record into deleted slot — faster</li>
+          <li><strong>Free List (best):</strong> Linked list of free slots in header — new records inserted at first free slot</li>
+        </ul>
+
+        <h3>Variable-Length Records</h3>
+        <p>Arise when: multiple record types in one file, VARCHAR fields, or repeating fields. Represented by <strong>(offset, length)</strong> pairs + null-value bitmap.</p>
+
+        <h3>Slotted Page Structure</h3>
+        <p>Header contains: number of records, end of free space, location+size of each record. Records can be moved within page to remove gaps; header updated. <strong>Pointers → header entry</strong>, not directly to record.</p>
+
+        <h2>File Organization Types</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">Heap Organization</div><p>Records placed anywhere there's free space. No ordering. Simple but slow for search.</p></div>
+          <div class="card"><div class="card-title">Sequential Organization</div><p>Ordered by search key. Efficient for range queries and sorted output.</p></div>
+          <div class="card"><div class="card-title">Hashing Organization</div><p>Hash function on attribute determines block placement. Fast point queries.</p></div>
+        </div>
+
+        <h2>Blocking &amp; Buffer Management</h2>
+        <div class="def-list">
+          <div class="def-item"><div class="def-term">Block</div><div class="def-desc">Contiguous sectors from one track; unit of storage allocation and transfer. Typical size: 4–16 KB. Smaller = more transfers; larger = more wasted space.</div></div>
+          <div class="def-item"><div class="def-term">Blocking Factor (bfr)</div><div class="def-desc">Number of records per block.</div></div>
+          <div class="def-item"><div class="def-term">Spanned Records</div><div class="def-desc">Records larger than block size that span multiple blocks.</div></div>
+          <div class="def-item"><div class="def-term">Buffer</div><div class="def-desc">Portion of main memory storing copies of disk blocks. Reduces disk accesses.</div></div>
+          <div class="def-item"><div class="def-term">Buffer Manager</div><div class="def-desc">Subsystem allocating buffer space; aims to minimize disk block transfers.</div></div>
+        </div>
+
+        <h2>Data Dictionary (System Catalog)</h2>
+        <p>Stores <strong>metadata</strong> — stored as a set of relations itself. Contains:</p>
+        <ul>
+          <li>Relation metadata: names, attributes, types, storage</li>
+          <li>Index metadata: index names, types, attributes</li>
+          <li>View metadata: view names and definitions</li>
+          <li>User metadata: accounts, encrypted passwords, permissions</li>
+          <li>Physical organization info</li>
+          <li>Statistical data (tuple counts, etc.)</li>
+        </ul>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Know RAID 0, 1, 5 well — which are commonly used and why. The <strong>three performance measures</strong> formula (Access Time = Seek + Rotational Latency). Understand free list for fixed records and slotted pages for variable records. Know what the data dictionary stores.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           LECTURE 11
+      ════════════════════════════════════════════════════════════ -->
+      <div class="panel" id="panel-10">
+        <div class="panel-header">
+          <div class="lec-tag">LECTURE 11</div>
+          <h1>Introduction to Normalization</h1>
+          <div class="subtitle">Functional dependencies, 1NF → 2NF → 3NF → BCNF → 4NF → 5NF</div>
+        </div>
+
+        <h2>4 Informal Design Guidelines</h2>
+        <div class="card-grid">
+          <div class="card"><div class="card-title">G1: Clear Semantics</div><p>Each tuple represents <strong>one entity or relationship instance</strong>. Don't mix attributes of different entities. Use FKs to reference other entities.</p></div>
+          <div class="card"><div class="card-title">G2: Avoid Update Anomalies</div><p>Avoid <strong>insertion, deletion, and modification anomalies</strong> caused by redundancy. Document unavoidable anomalies.</p></div>
+          <div class="card"><div class="card-title">G3: Minimize NULLs</div><p>NULLs are ambiguous (not applicable? unknown? known but absent?). Place frequently NULL attributes in separate relations.</p></div>
+          <div class="card"><div class="card-title">G4: No Spurious Tuples</div><p>Design for <strong>lossless join</strong> property. Avoid decompositions that generate invalid tuples when joined back.</p></div>
+        </div>
+
+        <h2>Update Anomalies</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Anomaly</th><th>Description</th><th>Example (EMP_DEPT)</th></tr>
+            <tr><td><strong>Insertion</strong></td><td>Cannot insert without providing unrequired data, or cannot add entity without another</td><td>Can't insert new department without an employee; must supply dept data for new employee</td></tr>
+            <tr><td><strong>Deletion</strong></td><td>Deleting a record causes unintended loss of other data</td><td>Deleting last employee in a dept → lose dept's info</td></tr>
+            <tr><td><strong>Modification</strong></td><td>Must update multiple tuples for one logical change → inconsistency risk</td><td>Changing dept manager SSN requires updating many employee rows</td></tr>
+          </table>
+        </div>
+
+        <h2>Functional Dependencies (FDs)</h2>
+        <div class="key-box">
+          <div class="kb-label">Definition: X → Y</div>
+          <p>For any two tuples t1, t2 in R: if <code>t1[X] = t2[X]</code>, then <code>t1[Y] = t2[Y]</code>.<br>
+          "X <em>functionally determines</em> Y" — values of X uniquely identify values of Y.</p>
+        </div>
+
+        <h3>Example FDs in EMP_PROJ(Ssn, Pnumber, Hours, Ename, Pname, Plocation)</h3>
+        <div class="formula">Ssn → Ename (FD2)</div>
+        <div class="formula">Pnumber → {Pname, Plocation} (FD3)</div>
+        <div class="formula">{Ssn, Pnumber} → Hours (FD1)</div>
+
+        <h3>Armstrong's Inference Rules</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Rule</th><th>Name</th><th>Statement</th></tr>
+            <tr><td><strong>IR1</strong></td><td>Reflexive</td><td>If Y ⊆ X, then X → Y</td></tr>
+            <tr><td><strong>IR2</strong></td><td>Augmentation</td><td>If X → Y, then XZ → YZ</td></tr>
+            <tr><td><strong>IR3</strong></td><td>Transitive</td><td>If X → Y and Y → Z, then X → Z</td></tr>
+          </table>
+        </div>
+        <p><strong>Derived rules:</strong> Decomposition (X→YZ ⟹ X→Y, X→Z), Union (X→Y &amp; X→Z ⟹ X→YZ), Pseudo-Transitivity.</p>
+
+        <h2>Key Definitions</h2>
+        <div class="def-list">
+          <div class="def-item"><div class="def-term">Superkey</div><div class="def-desc">Set of attributes S where no two tuples have the same combination of S values.</div></div>
+          <div class="def-item"><div class="def-term">Key (Candidate Key)</div><div class="def-desc">Minimal superkey — removing any attribute causes it to no longer be a superkey.</div></div>
+          <div class="def-item"><div class="def-term">Primary Key</div><div class="def-desc">One designated candidate key.</div></div>
+          <div class="def-item"><div class="def-term">Prime Attribute</div><div class="def-desc">Member of at least one candidate key.</div></div>
+          <div class="def-item"><div class="def-term">Nonprime Attribute</div><div class="def-desc">Not a member of any candidate key.</div></div>
+        </div>
+
+        <h2>Normal Forms</h2>
+
+        <div class="card">
+          <div class="card-title">1️⃣ First Normal Form (1NF)</div>
+          <p><strong>Requirements:</strong> All attributes are <em>atomic</em> (indivisible). No composite or multi-valued attributes. No nested relations.</p>
+          <p><strong>Fix:</strong> Split multi-valued attributes into separate rows; propagate primary key to nested relations.</p>
+        </div>
+
+        <hr>
+
+        <div class="card">
+          <div class="card-title">2️⃣ Second Normal Form (2NF)</div>
+          <p><strong>Requirements:</strong> In 1NF + every nonprime attribute is <em>fully functionally dependent</em> on the primary key (no partial dependencies).</p>
+          <div class="key-box">
+            <div class="kb-label">Partial Dependency</div>
+            <p>A nonprime attribute depends on ONLY PART of a composite primary key.</p>
+          </div>
+          <p><strong>Example violation in EMP_PROJ({Ssn, Pnumber}, Hours, Ename, Pname, Plocation):</strong></p>
+          <ul>
+            <li><code>Ssn → Ename</code> — partial dependency (Ename depends only on Ssn, not full key)</li>
+            <li><code>Pnumber → {Pname, Plocation}</code> — partial dependency</li>
+          </ul>
+          <p><strong>2NF Decomposition:</strong> EP1(Ssn, Pnumber, Hours) | EP2(Ssn, Ename) | EP3(Pnumber, Pname, Plocation)</p>
+        </div>
+
+        <hr>
+
+        <div class="card">
+          <div class="card-title">3️⃣ Third Normal Form (3NF)</div>
+          <p><strong>Requirements:</strong> In 2NF + no nonprime attribute is <em>transitively dependent</em> on the primary key.</p>
+          <div class="key-box">
+            <div class="kb-label">Transitive Dependency</div>
+            <p>X → Z via an intermediate nonprime attribute Y: X → Y and Y → Z (Y is nonprime).</p>
+          </div>
+          <p><strong>Example violation in EMP_DEPT(Ssn, Ename, Bdate, Address, Dnumber, Dname, Dmgr_ssn):</strong></p>
+          <ul>
+            <li><code>Ssn → Dnumber</code> and <code>Dnumber → Dmgr_ssn</code> → so <code>Ssn → Dmgr_ssn</code> is <em>transitive</em></li>
+          </ul>
+          <p><strong>3NF Decomposition:</strong> ED1(Ename, Ssn, Bdate, Address, Dnumber) | ED2(Dnumber, Dname, Dmgr_ssn)</p>
+        </div>
+
+        <hr>
+
+        <div class="card">
+          <div class="card-title">✦ BCNF — Boyce-Codd Normal Form</div>
+          <p><strong>Requirements:</strong> For EVERY non-trivial FD X → A in R, <em>X must be a superkey</em>. Stronger than 3NF — a relation can be in 3NF but NOT BCNF.</p>
+          <p><strong>Example violation — TEACH(Student, Course, Instructor):</strong></p>
+          <ul>
+            <li>fd1: {Student, Course} → Instructor ✓</li>
+            <li>fd2: <code>Instructor → Course</code> ✗ (Instructor is NOT a superkey)</li>
+          </ul>
+          <p><strong>BCNF Decompositions:</strong> {Student, Instructor} &amp; {Student, Course} | or {Course, Instructor} &amp; {Course, Student}</p>
+        </div>
+
+        <hr>
+
+        <div class="card">
+          <div class="card-title">4️⃣ Fourth Normal Form (4NF)</div>
+          <p><strong>Requirements:</strong> In BCNF + no Multi-Valued Dependencies (MVDs).</p>
+          <div class="key-box">
+            <div class="kb-label">MVD: X →→ Y</div>
+            <p>One value of X is associated with multiple values of Y, where Y and Z are independent. Requires at least 3 columns.</p>
+          </div>
+          <p><strong>Example:</strong> STUDENT(reg_no, course, club) — courses and clubs are independent MVDs.</p>
+          <p><strong>Decompose:</strong> STUDENT_COURSE(reg_no, course) | STUDENT_CLUB(reg_no, club)</p>
+        </div>
+
+        <hr>
+
+        <div class="card">
+          <div class="card-title">5️⃣ Fifth Normal Form (5NF)</div>
+          <p><strong>Requirements:</strong> In 4NF + no Join Dependencies (JDs). A generalization of MVD.</p>
+          <div class="key-box">
+            <div class="kb-label">Join Dependency</div>
+            <p>Table can be losslessly decomposed into multiple tables (each with a subset of attributes) and recreated via JOIN.</p>
+          </div>
+          <p><strong>Example:</strong> SUPPLY(Sname, Part_name, Proj_name) → decomposes into R1(Sname, Part_name), R2(Sname, Proj_name), R3(Part_name, Proj_name).</p>
+        </div>
+
+        <h2>Quick Reference: Normal Forms</h2>
+        <div class="table-wrap">
+          <table>
+            <tr><th>NF</th><th>Based On</th><th>Key Requirement</th><th>Eliminates</th></tr>
+            <tr><td><strong>1NF</strong></td><td>Atomicity</td><td>All attributes atomic; no repeating groups</td><td>Multi-valued & composite attrs, nested relations</td></tr>
+            <tr><td><strong>2NF</strong></td><td>Keys & FDs</td><td>1NF + no partial dependencies on PK</td><td>Partial functional dependencies</td></tr>
+            <tr><td><strong>3NF</strong></td><td>Keys & FDs</td><td>2NF + no transitive dependencies</td><td>Transitive functional dependencies</td></tr>
+            <tr><td><strong>BCNF</strong></td><td>Keys & FDs</td><td>3NF + every FD determinant is a superkey</td><td>FDs where LHS is not a superkey</td></tr>
+            <tr><td><strong>4NF</strong></td><td>Keys & MVDs</td><td>BCNF + no multi-valued dependencies</td><td>Multi-valued dependencies</td></tr>
+            <tr><td><strong>5NF</strong></td><td>Keys & JDs</td><td>4NF + no join dependencies</td><td>Join dependencies</td></tr>
+          </table>
+        </div>
+
+        <h3>Hierarchy</h3>
+        <div class="formula">1NF ⊃ 2NF ⊃ 3NF ⊃ BCNF ⊃ 4NF ⊃ 5NF</div>
+        <p>Every BCNF relation is in 3NF, but <strong>not every 3NF relation is in BCNF</strong>.</p>
+
+        <div class="tip-box">
+          <div class="kb-label">📝 Exam Tip</div>
+          <p>Be able to identify all 3 anomaly types with examples. Write and verify FDs using Armstrong's rules. For normalization: identify the primary key, check for partial (2NF) and transitive (3NF) dependencies, and decompose accordingly. Know that <strong>BCNF is stricter than 3NF</strong> (3NF can have non-superkey LHS if RHS is prime). Practice decomposing relations step by step.</p>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /main-area -->
+</div><!-- /app -->
+
+<script>
+  function showTab(index) {
+    document.querySelectorAll('.panel').forEach((p, i) => {
+      p.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === index);
+    });
+    document.querySelector('.content-area').scrollTop = 0;
+  }
+
+  const themeBtn = document.getElementById('themeBtn');
+  const html = document.documentElement;
+
+  themeBtn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    themeBtn.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+</body>
+</html>
