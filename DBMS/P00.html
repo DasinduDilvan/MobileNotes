@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MySQL Master Vault · Full Query & Feature Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ── Theme Variables ── */
+        [data-theme="light"] {
+            --bg-page: #eef6f5;
+            --bg-card: #ffffff;
+            --bg-box: #f3fbfa;
+            --bg-highlight: #fff9e6;
+            --bg-important: #e8f5e9;
+            --bg-note: #e3f2fd;
+            --bg-warning: #fce4ec;
+            --bg-inclass: #f3e5f5;
+            --bg-pre: #1e1e1e;
+            --bg-code: #eee;
+            --color-primary: #2c6e6b;
+            --color-primary-light: #5a9d99;
+            --color-border: #cfe9e7;
+            --color-text: #333333;
+            --color-text-muted: #555555;
+            --color-tag-bg: #2c6e6b;
+            --color-shadow: rgba(0, 0, 0, 0.08);
+            --color-tab-bar: #d4eceb;
+            --color-tab-inactive: #5a8e8b;
+            --color-tab-active-bg: #ffffff;
+            --color-tab-hover: #e8f5f4;
+            --color-toggle-bg: #2c6e6b;
+            --color-toggle-text: #fff;
+            --color-code-text: #c0392b;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0f1a19;
+            --bg-card: #1a2b2a;
+            --bg-box: #1e3432;
+            --bg-highlight: #2a2410;
+            --bg-important: #132a14;
+            --bg-note: #0f1e2d;
+            --bg-warning: #2d1020;
+            --bg-inclass: #1e1228;
+            --bg-pre: #0a0a0a;
+            --bg-code: #2a2a2a;
+            --color-primary: #5fcac6;
+            --color-primary-light: #82d8d5;
+            --color-border: #2a4a48;
+            --color-text: #d4e8e7;
+            --color-text-muted: #8ab8b6;
+            --color-tag-bg: #2a6e6b;
+            --color-shadow: rgba(0, 0, 0, 0.3);
+            --color-tab-bar: #132322;
+            --color-tab-inactive: #5a8e8b;
+            --color-tab-active-bg: #1a2b2a;
+            --color-tab-hover: #1e3432;
+            --color-toggle-bg: #5fcac6;
+            --color-toggle-text: #0f1a19;
+            --color-code-text: #ff8a65;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-page);
+            padding: 20px;
+            line-height: 1.7;
+            color: var(--color-text);
+            transition: background .3s, color .3s;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* header & toggle */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-header-text h1 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--color-primary);
+            font-size: 2em;
+            letter-spacing: -.01em;
+        }
+
+        .page-header-text p {
+            color: var(--color-primary-light);
+            font-size: .95em;
+            margin-top: 4px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-toggle-bg);
+            color: var(--color-toggle-text);
+            border: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .85em;
+            font-weight: 600;
+            transition: all .25s;
+            white-space: nowrap;
+        }
+
+        .theme-toggle:hover {
+            opacity: .85;
+            transform: translateY(-1px);
+        }
+
+        /* tab component */
+        .tab-browser {
+            background: var(--bg-card);
+            border-radius: 14px 14px 0 0;
+            box-shadow: 0 4px 18px var(--color-shadow);
+            overflow: hidden;
+        }
+
+        .tab-bar-wrapper {
+            background: var(--color-tab-bar);
+            padding: 3px 12px 0;
+            border-bottom: 2px solid var(--color-border);
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            min-width: max-content;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            background: transparent;
+            color: var(--color-tab-inactive);
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .8em;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all .2s;
+        }
+
+        .tab-btn:hover {
+            background: var(--color-tab-hover);
+            color: var(--color-text);
+        }
+
+        .tab-btn.active {
+            background: var(--color-tab-active-bg);
+            border-color: var(--color-border);
+            color: var(--color-primary);
+            font-weight: 600;
+            box-shadow: 0 -2px 0 var(--color-primary) inset;
+        }
+
+        .tab-btn .lnum {
+            background: var(--color-primary);
+            color: #fff;
+            font-size: .7em;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .lesson-panel {
+            display: none;
+            padding: 30px;
+        }
+
+        .lesson-panel.active {
+            display: block;
+        }
+
+        /* card & layout */
+        .card {
+            background: var(--bg-card);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px var(--color-shadow);
+            border: 1px solid var(--color-border);
+        }
+
+        .section-title {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-family: 'DM Serif Display', serif;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: var(--bg-box);
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 3px solid var(--color-primary);
+            transition: background .2s;
+        }
+
+        .box strong {
+            color: var(--color-primary);
+            display: block;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+
+        .box p {
+            font-size: .9em;
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background: var(--bg-pre);
+            padding: 12px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: .85em;
+            margin: 10px 0 5px;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            color: #dcdcaa;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: var(--color-code-text);
+        }
+
+        .note, .important, .warning {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .note { background: var(--bg-note); border-left: 4px solid #2196f3; }
+        .important { background: var(--bg-important); border-left: 4px solid #4caf50; }
+        
+        .bottom-nav {
+            background: var(--bg-card);
+            border-top: 2px solid var(--color-border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 0 14px 14px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-primary);
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <div class="page-header-text">
+            <h1>🧠 MySQL Full Vault</h1>
+            <p>every clause • every object • copy‑ready examples</p>
+        </div>
+        <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()"><span class="icon">🌙</span> Dark Mode</button>
+    </div>
+
+    <div class="tab-browser">
+        <div class="tab-bar-wrapper">
+            <div class="tab-bar" id="tabBar"></div>
+        </div>
+        <div id="panelsContainer"></div>
+        <div class="bottom-nav">
+            <button class="nav-btn" id="prevBtn" onclick="changeTab(-1)">◀ PREV</button>
+            <span class="nav-label" id="navLabel">Lesson 1 of 11</span>
+            <button class="nav-btn" id="nextBtn" onclick="changeTab(1)">NEXT ▶</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- CONTENT DEFINITION (11 TABS) ----------
+    const tabsData = [
+        { name: "SELECT & DQL", badge: "🔍", desc: "Core query building blocks" },
+        { name: "DDL + SCHEMA", badge: "🏗️", desc: "Database, tables, views, indexes" },
+        { name: "DML · DCL · TCL", badge: "✍️🔐", desc: "Data manip, security, transactions" },
+        { name: "JOINS & SET OPS", badge: "🔗📦", desc: "Combine data across relations" },
+        { name: "COND & EXPR", badge: "🎯", desc: "Powerful conditions & logic" },
+        { name: "AGG & STRING", badge: "📊🧾", desc: "Aggregations + text functions" },
+        { name: "DATE & MISC", badge: "📅", desc: "DateTime & utilities" },
+        { name: "STORED PROGRAMS", badge: "⚙️", desc: "Procedures, triggers, events" },
+        { name: "PERF & INDEX", badge: "📈", desc: "Optimization, EXPLAIN, partitioning" },
+        { name: "ADMIN + SEC", badge: "🔐🧰", desc: "Users, privileges, processlist" },
+        { name: "BACKUP & UTILS", badge: "💾", desc: "mysqldump, logs, restore" }
+    ];
+
+    // each panel content built with dynamic grid/cards per feature group
+    const panelsHTML = [
+        // TAB 0 : SELECT & DQL
+        `<div class="card"><h2 class="section-title">📘 DQL · SELECT & Clauses</h2><div class="grid">
+        ${makeCard("SELECT", "Retrieve rows from tables.", "SELECT first_name, salary FROM employees WHERE salary > 50000;")}
+        ${makeCard("DISTINCT", "Remove duplicate rows.", "SELECT DISTINCT department_id FROM employees;")}
+        ${makeCard("WHERE", "Filter rows based on condition.", "SELECT * FROM orders WHERE total > 100;")}
+        ${makeCard("ORDER BY", "Sort result set.", "SELECT name, price FROM products ORDER BY price DESC;")}
+        ${makeCard("GROUP BY", "Group rows for aggregation.", "SELECT department, COUNT(*) FROM employees GROUP BY department;")}
+        ${makeCard("HAVING", "Filter groups (after GROUP BY).", "SELECT department, AVG(salary) avg_sal FROM employees GROUP BY department HAVING avg_sal > 60000;")}
+        ${makeCard("LIMIT & OFFSET", "Limit rows & pagination.", "SELECT * FROM users LIMIT 10 OFFSET 20;")}
+        ${makeCard("WITH (CTE)", "Common Table Expression for complex queries.", "WITH high_sal AS (SELECT * FROM employees WHERE salary > 70000) SELECT * FROM high_sal WHERE dept_id=2;")}
+        </div></div><div class="note">💡 <strong>Example ready</strong> — run directly on any MySQL instance (adjust table names)</div>`,
+        
+        // TAB 1 : DDL + SCHEMA OBJECTS
+        `<div class="card"><h2 class="section-title">🏗️ Data Definition Language & Schema</h2><div class="grid">
+        ${makeCard("CREATE DATABASE", "Create new database.", "CREATE DATABASE ecommerce;")}
+        ${makeCard("CREATE TABLE", "Define new table.", "CREATE TABLE users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100));")}
+        ${makeCard("ALTER TABLE", "Modify existing table.", "ALTER TABLE users ADD COLUMN email VARCHAR(255);")}
+        ${makeCard("DROP / TRUNCATE", "Remove table / delete all rows.", "DROP TABLE old_data; TRUNCATE logs;")}
+        ${makeCard("RENAME TABLE", "Rename a table.", "RENAME TABLE employees TO staff;")}
+        ${makeCard("COMMENT", "Add documentation.", "ALTER TABLE products COMMENT 'Main inventory';")}
+        ${makeCard("CREATE INDEX", "Improve query speed.", "CREATE INDEX idx_name ON customers(last_name);")}
+        ${makeCard("CREATE VIEW", "Virtual table based on query.", "CREATE VIEW active_users AS SELECT * FROM users WHERE status='active';")}
+        ${makeCard("TEMPORARY TABLE", "Session-only table.", "CREATE TEMPORARY TABLE temp AS SELECT * FROM orders WHERE date=CURDATE();")}
+        ${makeCard("SEQUENCE (emulated)", "Auto increment simulation.", "CREATE TABLE seq (id INT AUTO_INCREMENT PRIMARY KEY); INSERT INTO seq VALUES(); SELECT LAST_INSERT_ID();")}
+        </div></div><div class="important">📌 <strong>SEQUENCE emulation</strong> uses AUTO_INCREMENT or a dedicated table.</div>`,
+        
+        // TAB 2 : DML · DCL · TCL
+        `<div class="card"><h2 class="section-title">✍️ DML + 🔐 DCL + 🔁 TCL</h2><div class="grid">
+        ${makeCard("INSERT", "Add rows.", "INSERT INTO products (name, price) VALUES ('Laptop', 1200);")}
+        ${makeCard("UPDATE", "Modify existing data.", "UPDATE employees SET salary = salary * 1.1 WHERE department='IT';")}
+        ${makeCard("DELETE", "Remove rows.", "DELETE FROM logs WHERE created_at < '2023-01-01';")}
+        ${makeCard("REPLACE", "Insert or replace if PK exists.", "REPLACE INTO users (id, name) VALUES (1, 'John Doe');")}
+        ${makeCard("LOAD DATA", "Bulk import from file.", "LOAD DATA INFILE '/data/users.csv' INTO TABLE users FIELDS TERMINATED BY ',';")}
+        ${makeCard("GRANT / REVOKE", "Manage privileges.", "GRANT SELECT, INSERT ON mydb.* TO 'app_user'@'localhost'; REVOKE DELETE ON mydb.* FROM 'app_user'@'localhost';")}
+        ${makeCard("START TRANSACTION", "Begin a transaction.", "START TRANSACTION; UPDATE accounts SET balance = balance - 100 WHERE id=1;")}
+        ${makeCard("COMMIT / ROLLBACK", "Save or undo transaction.", "COMMIT; -- or ROLLBACK;")}
+        ${makeCard("SAVEPOINT", "Partial rollback point.", "SAVEPOINT sp1; DELETE FROM temp; ROLLBACK TO SAVEPOINT sp1;")}
+        ${makeCard("SET TRANSACTION", "Set isolation level.", "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;")}
+        </div></div><div class="warning">⚠️ LOAD DATA requires FILE privilege and secure-file-priv settings.</div>`,
+        
+        // TAB 3 : JOINS & SET OPS
+        `<div class="card"><h2 class="section-title">🔗 JOIN + 📦 Set Operations</h2><div class="grid">
+        ${makeCard("INNER JOIN", "Matching rows both tables.", "SELECT orders.id, customers.name FROM orders INNER JOIN customers ON orders.cust_id = customers.id;")}
+        ${makeCard("LEFT JOIN", "All left table rows + matches.", "SELECT users.name, orders.total FROM users LEFT JOIN orders ON users.id = orders.user_id;")}
+        ${makeCard("RIGHT JOIN", "All right table rows + matches.", "SELECT employees.name, departments.name FROM employees RIGHT JOIN departments ON employees.dept_id = departments.id;")}
+        ${makeCard("CROSS JOIN", "Cartesian product.", "SELECT * FROM colors, sizes;")}
+        ${makeCard("SELF JOIN", "Join table to itself.", "SELECT e1.name AS Employee, e2.name AS Manager FROM emp e1 LEFT JOIN emp e2 ON e1.manager_id = e2.id;")}
+        ${makeCard("NATURAL JOIN", "Join on same column names.", "SELECT * FROM products NATURAL JOIN categories;")}
+        ${makeCard("UNION / UNION ALL", "Combine result sets.", "SELECT city FROM customers UNION SELECT city FROM suppliers;")}
+        ${makeCard("INTERSECT (emulated)", "Rows present in both queries.", "SELECT id FROM orders WHERE total>100 INTERSECT SELECT order_id FROM returns; -- MySQL: use EXISTS or IN")}
+        ${makeCard("EXCEPT (emulated)", "Rows only in first query.", "SELECT id FROM employees WHERE dept='sales' EXCEPT SELECT emp_id FROM terminated;")}
+        </div></div><div class="note">💡 MySQL lacks INTERSECT/EXCEPT natively; emulate with IN/NOT EXISTS.</div>`,
+        
+        // TAB 4 : CONDITIONS & OPERATORS / EXPRESSIONS
+        `<div class="card"><h2 class="section-title">🎯 Conditions & Logical Expressions</h2><div class="grid">
+        ${makeCard("IN / NOT IN", "Match list.", "SELECT * FROM products WHERE category_id IN (2,4,6);")}
+        ${makeCard("BETWEEN", "Range inclusive.", "SELECT * FROM orders WHERE order_date BETWEEN '2025-01-01' AND '2025-12-31';")}
+        ${makeCard("LIKE / REGEXP", "Pattern matching.", "SELECT name FROM users WHERE name LIKE 'J%'; SELECT email FROM contacts WHERE email REGEXP '^[a-z]+@';")}
+        ${makeCard("IS NULL / IS NOT NULL", "Check nulls.", "SELECT * FROM tasks WHERE completed_at IS NULL;")}
+        ${makeCard("EXISTS / ANY / ALL", "Subquery conditions.", "SELECT name FROM products WHERE EXISTS (SELECT 1 FROM orders WHERE orders.product_id = products.id);")}
+        ${makeCard("CASE", "Conditional logic.", "SELECT name, CASE WHEN salary > 80000 THEN 'High' ELSE 'Normal' END AS bracket FROM employees;")}
+        ${makeCard("IF()", "Simple if-else.", "SELECT name, IF(status='active', 'Enabled', 'Disabled') AS state FROM accounts;")}
+        ${makeCard("COALESCE", "First non-null.", "SELECT name, COALESCE(phone, 'No phone') FROM customers;")}
+        ${makeCard("NULLIF", "Returns NULL if equal.", "SELECT NULLIF(amount, 0) FROM payments; -- avoid division by zero")}
+        </div></div>`,
+        
+        // TAB 5 : AGGREGATE + STRING FUNCTIONS
+        `<div class="card"><h2 class="section-title">📊 Aggregates & 🧾 String Functions</h2><div class="grid">
+        ${makeCard("COUNT, SUM, AVG, MIN, MAX", "Statistical summaries.", "SELECT COUNT(*) AS total, AVG(price) FROM inventory; SELECT MAX(salary), MIN(salary) FROM employees;")}
+        ${makeCard("CONCAT", "Join strings.", "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users;")}
+        ${makeCard("SUBSTRING", "Extract part.", "SELECT SUBSTRING(description, 1, 50) AS snippet FROM articles;")}
+        ${makeCard("LENGTH / CHAR_LENGTH", "String length.", "SELECT name, LENGTH(name) FROM cities;")}
+        ${makeCard("TRIM / UPPER / LOWER", "Clean & case.", "SELECT UPPER(email), TRIM('  hello  ') FROM dual;")}
+        ${makeCard("REPLACE", "Substitute substring.", "UPDATE posts SET content = REPLACE(content, 'old', 'new');")}
+        </div></div><div class="important">📌 GROUP_CONCAT also useful: GROUP_CONCAT(name SEPARATOR ', ')</div>`,
+        
+        // TAB 6 : DATE & TIME FUNCTIONS
+        `<div class="card"><h2 class="section-title">📅 Date / Time Functions</h2><div class="grid">
+        ${makeCard("NOW(), CURDATE(), CURTIME()", "Current moment.", "SELECT NOW(), CURDATE(), CURTIME();")}
+        ${makeCard("DATE()", "Extract date part.", "SELECT DATE(created_at) FROM logs;")}
+        ${makeCard("DATEDIFF", "Days between dates.", "SELECT DATEDIFF('2025-12-31', '2025-01-01') AS days_left;")}
+        ${makeCard("DATE_ADD / DATE_SUB", "Arithmetic on dates.", "SELECT DATE_ADD(NOW(), INTERVAL 7 DAY); SELECT DATE_SUB(order_date, INTERVAL 1 MONTH) FROM orders;")}
+        ${makeCard("YEAR, MONTH, DAY", "Extract components.", "SELECT YEAR(birth_date) FROM employees;")}
+        </div></div>`,
+        
+        // TAB 7 : STORED PROGRAMS (Procedure, Function, Trigger, Event, Cursor)
+        `<div class="card"><h2 class="section-title">⚙️ Stored Routines & Triggers</h2><div class="grid">
+        ${makeCard("CREATE PROCEDURE", "Reusable routine.", "DELIMITER // CREATE PROCEDURE GetEmp(IN dept INT) BEGIN SELECT * FROM employees WHERE dept_id=dept; END //")}
+        ${makeCard("CREATE FUNCTION", "Returns value.", "CREATE FUNCTION calc_tax(price DECIMAL) RETURNS DECIMAL DETERMINISTIC RETURN price * 0.2;")}
+        ${makeCard("CREATE TRIGGER", "Auto action before/after event.", "CREATE TRIGGER audit_log AFTER INSERT ON orders FOR EACH ROW INSERT INTO logs(msg) VALUES('New order');")}
+        ${makeCard("EVENT SCHEDULER", "Scheduled jobs.", "CREATE EVENT cleanup ON SCHEDULE EVERY 1 DAY DO DELETE FROM sessions WHERE expiry < NOW();")}
+        ${makeCard("CURSOR", "Row-by-row iteration.", "DECLARE cur CURSOR FOR SELECT id FROM users; OPEN cur; FETCH cur INTO var;")}
+        </div></div><div class="warning">❗ Enable event_scheduler: SET GLOBAL event_scheduler = ON;</div>`,
+        
+        // TAB 8 : PERFORMANCE & INDEX (EXPLAIN, PARTITIONING, ANALYZE)
+        `<div class="card"><h2 class="section-title">📈 Optimization & Indexing</h2><div class="grid">
+        ${makeCard("CREATE / DROP INDEX", "Speed up queries.", "CREATE INDEX idx_email ON users(email); DROP INDEX idx_email ON users;")}
+        ${makeCard("EXPLAIN", "Query execution plan.", "EXPLAIN SELECT * FROM orders WHERE customer_id = 55;")}
+        ${makeCard("ANALYZE TABLE", "Update index statistics.", "ANALYZE TABLE employees;")}
+        ${makeCard("PARTITIONING", "Split large tables.", "CREATE TABLE sales (id INT, sale_date DATE) PARTITION BY RANGE(YEAR(sale_date)) (PARTITION p0 VALUES LESS THAN (2020));")}
+        ${makeCard("QUERY CACHE (legacy)", "Cached result sets (removed MySQL 8.0).", "Concept: store frequent SELECT results; use buffer pool instead now.")}
+        </div></div>`,
+        
+        // TAB 9 : ADMINISTRATION + SECURITY
+        `<div class="card"><h2 class="section-title">🧰 Admin & Security Commands</h2><div class="grid">
+        ${makeCard("CREATE / ALTER / DROP USER", "Manage accounts.", "CREATE USER 'webapp'@'%' IDENTIFIED BY 'securePass'; ALTER USER 'webapp'@'%' IDENTIFIED BY 'newpass'; DROP USER 'olduser'@'localhost';")}
+        ${makeCard("SHOW GRANTS", "View privileges.", "SHOW GRANTS FOR 'root'@'localhost';")}
+        ${makeCard("SHOW DATABASES / TABLES", "List metadata.", "SHOW DATABASES; SHOW TABLES FROM mydb;")}
+        ${makeCard("DESCRIBE / SHOW COLUMNS", "Table structure.", "DESCRIBE employees; SHOW COLUMNS FROM products;")}
+        ${makeCard("USE", "Select default database.", "USE ecommerce_db;")}
+        ${makeCard("SHOW PROCESSLIST / KILL", "Monitor connections.", "SHOW PROCESSLIST; KILL QUERY 1234;")}
+        </div></div>`,
+        
+        // TAB 10 : BACKUP & RECOVERY (mysqldump, binlogs, FLUSH)
+        `<div class="card"><h2 class="section-title">💾 Backup, Restore & Binary Logs</h2><div class="grid">
+        ${makeCard("mysqldump", "Logical backup tool.", "mysqldump -u root -p company > backup.sql  # terminal command")}
+        ${makeCard("RESTORE (source)", "Import dump.", "mysql -u root -p company < backup.sql  # shell | SOURCE backup.sql; inside MySQL")}
+        ${makeCard("BINARY LOGS", "Point-in-time recovery.", "SHOW BINARY LOGS; FLUSH LOGS;")}
+        ${makeCard("FLUSH LOGS", "Rotate logs.", "FLUSH LOGS; -- rotates error log, binary logs")}
+        </div></div><div class="note">💡 For incremental recovery use mysqlbinlog tool.</div>`
+    ];
+
+    function makeCard(title, desc, example) {
+        return `<div class="box"><strong>${title}</strong><p>${desc}</p><pre><code>${escapeHtml(example)}</code></pre></div>`;
+    }
+    
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // render tabs and panels
+    const tabBar = document.getElementById('tabBar');
+    const panelsContainer = document.getElementById('panelsContainer');
+    
+    tabsData.forEach((tab, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
+        btn.innerHTML = `<span class="lnum">${idx+1}</span> ${tab.badge} ${tab.name}`;
+        btn.setAttribute('data-index', idx);
+        btn.onclick = () => showTab(idx);
+        tabBar.appendChild(btn);
+        
+        const panelDiv = document.createElement('div');
+        panelDiv.className = 'lesson-panel' + (idx === 0 ? ' active' : '');
+        panelDiv.innerHTML = panelsHTML[idx];
+        panelsContainer.appendChild(panelDiv);
+    });
+    
+    let current = 0;
+    const total = tabsData.length;
+    
+    function showTab(i) {
+        document.querySelectorAll('.lesson-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+        document.querySelectorAll('.tab-btn').forEach((t, j) => t.classList.toggle('active', j === i));
+        current = i;
+        document.getElementById('navLabel').innerText = `Lesson ${i+1} of ${total}`;
+        document.getElementById('prevBtn').disabled = i === 0;
+        document.getElementById('nextBtn').disabled = i === total-1;
+        const activeTab = document.querySelectorAll('.tab-btn')[i];
+        if(activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+    
+    window.changeTab = function(dir) {
+        const next = current + dir;
+        if(next >= 0 && next < total) showTab(next);
+    };
+    
+    window.toggleTheme = function() {
+        const html = document.documentElement;
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        const btn = document.getElementById('themeBtn');
+        btn.innerHTML = isDark ? '<span class="icon">🌙</span> Dark Mode' : '<span class="icon">☀️</span> Light Mode';
+    };
+    
+    // set initial button text
+    document.getElementById('themeBtn').innerHTML = '<span class="icon">🌙</span> Dark Mode';
+    document.getElementById('prevBtn').disabled = true;
+    showTab(0);
+</script>
+</body>
+</html>

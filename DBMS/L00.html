@@ -1697,6 +1697,16 @@ DELETE FROM EMPLOYEE;  -- Deletes ALL tuples!</code></pre>
     if (next >= 0 && next < total) showTab(next);
   }
 
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        changeTab(-1);
+    }
+
+    if (e.key === 'ArrowRight') {
+        changeTab(1);
+    }
+  });
+
   function toggleTheme() {
     const html = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';

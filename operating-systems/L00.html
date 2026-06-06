@@ -39,11 +39,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg-page);padding:20px;lin
 .theme-toggle{display:flex;align-items:center;gap:8px;background:var(--color-toggle-bg);color:var(--color-toggle-text);border:none;cursor:pointer;padding:8px 18px;border-radius:24px;font-family:'DM Sans',sans-serif;font-size:.85em;font-weight:600;transition:all .25s;white-space:nowrap}
 .theme-toggle:hover{opacity:.85;transform:translateY(-1px)}
 
-.tab-browser{background:var(--bg-card);border-radius:14px 14px 0 0;box-shadow:0 4px 18px var(--color-shadow);overflow:hidden}
+.tab-browser{background:var(--bg-card); border-radius:14px 14px 0 0;box-shadow:0 4px 18px var(--color-shadow);overflow:hidden}
 .tab-bar-wrapper{background:var(--color-tab-bar);padding:3px 12px 0;border-bottom:2px solid var(--color-border);overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--color-primary) transparent}
 .tab-bar-wrapper::-webkit-scrollbar{height:4px}
 .tab-bar-wrapper::-webkit-scrollbar-thumb{background:var(--color-primary);border-radius:2px}
-.tab-bar{display:flex;gap:4px;min-width:max-content}
+.tab-bar{display:flex;gap:4px; min-width:max-content}
 
 .tab-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;background:transparent;color:var(--color-tab-inactive);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78em;font-weight:500;white-space:nowrap;transition:all .2s;position:relative;bottom:-2px}
 .tab-btn:hover{background:var(--color-tab-hover);color:var(--color-text)}
@@ -1047,6 +1047,16 @@ function changeTab(dir) {
   const next = current + dir;
   if (next >= 0 && next < total) showTab(next);
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        changeTab(-1);
+    }
+
+    if (e.key === 'ArrowRight') {
+        changeTab(1);
+    }
+});
 
 function toggleTheme() {
   const html = document.documentElement;
