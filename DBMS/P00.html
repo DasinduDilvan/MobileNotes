@@ -1,535 +1,1536 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MySQL Master Vault · Full Query & Feature Map</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
-    <style>
-        /* ── Reset & Base ── */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Practicals — Exam-Ready Study Note | ICT1212</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ── Theme Variables ── */
-        [data-theme="light"] {
-            --bg-page: #eef6f5;
-            --bg-card: #ffffff;
-            --bg-box: #f3fbfa;
-            --bg-highlight: #fff9e6;
-            --bg-important: #e8f5e9;
-            --bg-note: #e3f2fd;
-            --bg-warning: #fce4ec;
-            --bg-inclass: #f3e5f5;
-            --bg-pre: #1e1e1e;
-            --bg-code: #eee;
-            --color-primary: #2c6e6b;
-            --color-primary-light: #5a9d99;
-            --color-border: #cfe9e7;
-            --color-text: #333333;
-            --color-text-muted: #555555;
-            --color-tag-bg: #2c6e6b;
-            --color-shadow: rgba(0, 0, 0, 0.08);
-            --color-tab-bar: #d4eceb;
-            --color-tab-inactive: #5a8e8b;
-            --color-tab-active-bg: #ffffff;
-            --color-tab-hover: #e8f5f4;
-            --color-toggle-bg: #2c6e6b;
-            --color-toggle-text: #fff;
-            --color-code-text: #c0392b;
-        }
+  [data-theme="light"] {
+    --bg-page: #eef6f5;
+    --bg-card: #ffffff;
+    --bg-box: #f3fbfa;
+    --bg-highlight: #fff9e6;
+    --bg-important: #e8f5e9;
+    --bg-note: #e3f2fd;
+    --bg-warning: #fce4ec;
+    --bg-pre: #1e1e1e;
+    --bg-code: #eee;
+    --color-primary: #2c6e6b;
+    --color-primary-light: #5a9d99;
+    --color-border: #cfe9e7;
+    --color-text: #333333;
+    --color-text-muted: #555555;
+    --color-tag-bg: #2c6e6b;
+    --color-shadow: rgba(0,0,0,0.08);
+    --color-tab-bar: #d4eceb;
+    --color-tab-inactive: #5a8e8b;
+    --color-tab-active-bg: #ffffff;
+    --color-tab-hover: #e8f5f4;
+    --color-toggle-bg: #2c6e6b;
+    --color-toggle-text: #fff;
+    --color-code-text: #c0392b;
+    --color-formula: #1a6e4a;
+    --color-formula-bg: #e8f5ee;
+    --color-formula-border: #4caf50;
+    --color-green: #2e7d32;
+    --color-yellow: #e67e22;
+    --color-red: #c0392b;
+    --color-purple: #7b1fa2;
+    --color-teal: #1a8a86;
+  }
 
-        [data-theme="dark"] {
-            --bg-page: #0f1a19;
-            --bg-card: #1a2b2a;
-            --bg-box: #1e3432;
-            --bg-highlight: #2a2410;
-            --bg-important: #132a14;
-            --bg-note: #0f1e2d;
-            --bg-warning: #2d1020;
-            --bg-inclass: #1e1228;
-            --bg-pre: #0a0a0a;
-            --bg-code: #2a2a2a;
-            --color-primary: #5fcac6;
-            --color-primary-light: #82d8d5;
-            --color-border: #2a4a48;
-            --color-text: #d4e8e7;
-            --color-text-muted: #8ab8b6;
-            --color-tag-bg: #2a6e6b;
-            --color-shadow: rgba(0, 0, 0, 0.3);
-            --color-tab-bar: #132322;
-            --color-tab-inactive: #5a8e8b;
-            --color-tab-active-bg: #1a2b2a;
-            --color-tab-hover: #1e3432;
-            --color-toggle-bg: #5fcac6;
-            --color-toggle-text: #0f1a19;
-            --color-code-text: #ff8a65;
-        }
+  [data-theme="dark"] {
+    --bg-page: #0f1a19;
+    --bg-card: #1a2b2a;
+    --bg-box: #1e3432;
+    --bg-highlight: #2a2410;
+    --bg-important: #132a14;
+    --bg-note: #0f1e2d;
+    --bg-warning: #2d1020;
+    --bg-inclass: #1e1228;
+    --bg-pre: #0a0a0a;
+    --bg-code: #2a2a2a;
+    --color-primary: #5fcac6;
+    --color-primary-light: #82d8d5;
+    --color-border: #2a4a48;
+    --color-text: #d4e8e7;
+    --color-text-muted: #8ab8b6;
+    --color-tag-bg: #2a6e6b;
+    --color-shadow: rgba(0,0,0,0.3);
+    --color-tab-bar: #132322;
+    --color-tab-inactive: #5a8e8b;
+    --color-tab-active-bg: #1a2b2a;
+    --color-tab-hover: #1e3432;
+    --color-toggle-bg: #5fcac6;
+    --color-toggle-text: #0f1a19;
+    --color-code-text: #ff8a65;
+    --color-formula: #82d8d5;
+    --color-formula-bg: #0f2a28;
+    --color-formula-border: #5fcac6;
+    --color-green: #4ade80;
+    --color-yellow: #fbbf24;
+    --color-red: #f87171;
+    --color-purple: #c084fc;
+    --color-teal: #2dd4bf;
+  }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg-page);
-            padding: 20px;
-            line-height: 1.7;
-            color: var(--color-text);
-            transition: background .3s, color .3s;
-        }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-page);
+    padding: 20px;
+    line-height: 1.7;
+    color: var(--color-text);
+    transition: background .3s, color .3s;
+  }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+  .container { max-width: 980px; margin: 0 auto; }
 
-        /* header & toggle */
-        .page-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .page-header-text h1 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--color-primary);
+    font-size: 2em;
+    letter-spacing: -.01em;
+  }
+  .page-header-text p { color: var(--color-primary-light); font-size: .95em; margin-top: 4px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .course-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--bg-box);
+  }
 
-        .page-header-text h1 {
-            font-family: 'DM Serif Display', serif;
-            color: var(--color-primary);
-            font-size: 2em;
-            letter-spacing: -.01em;
-        }
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-toggle-bg);
+    color: var(--color-toggle-text);
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85em;
+    font-weight: 600;
+    transition: all .25s;
+    white-space: nowrap;
+  }
+  .theme-toggle:hover { opacity: .85; transform: translateY(-1px); }
+  .theme-toggle .icon { font-size: 1.1em; }
 
-        .page-header-text p {
-            color: var(--color-primary-light);
-            font-size: .95em;
-            margin-top: 4px;
-        }
+  .tab-browser {
+    background: var(--bg-card);
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 4px 18px var(--color-shadow);
+    overflow: hidden;
+  }
+  .tab-bar-wrapper {
+    background: var(--color-tab-bar);
+    padding: 3px 12px 3px;
+    border-bottom: 2px solid var(--color-border);
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+  }
+  .tab-bar-wrapper::-webkit-scrollbar { height: 4px; }
+  .tab-bar-wrapper::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 2px; }
+  .tab-bar { display: flex; gap: 4px; min-width: max-content; }
 
-        .theme-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--color-toggle-bg);
-            color: var(--color-toggle-text);
-            border: none;
-            cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 24px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: .85em;
-            font-weight: 600;
-            transition: all .25s;
-            white-space: nowrap;
-        }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    background: transparent;
+    color: var(--color-tab-inactive);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8em;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all .2s;
+    position: relative;
+    bottom: -2px;
+  }
+  .tab-btn:hover { background: var(--color-tab-hover); color: var(--color-text); }
+  .tab-btn.active {
+    background: var(--color-tab-active-bg);
+    border-color: var(--color-border);
+    color: var(--color-primary);
+    font-weight: 600;
+    box-shadow: 0 -2px 0 var(--color-primary) inset;
+  }
+  .tab-btn .lnum {
+    background: var(--color-primary);
+    color: #fff;
+    font-size: .7em;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+  }
 
-        .theme-toggle:hover {
-            opacity: .85;
-            transform: translateY(-1px);
-        }
+  .lesson-panel { display: none; padding: 30px; }
+  .lesson-panel.active { display: block; animation: fadeIn .2s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
-        /* tab component */
-        .tab-browser {
-            background: var(--bg-card);
-            border-radius: 14px 14px 0 0;
-            box-shadow: 0 4px 18px var(--color-shadow);
-            overflow: hidden;
-        }
+  .lesson-headline {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7em;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+  }
+  .lesson-desc { color: var(--color-text-muted); font-size: .95em; margin-bottom: 20px; }
+  .lec-tag {
+    display: inline-block;
+    background: var(--color-tag-bg);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: .75em;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: .5px;
+  }
 
-        .tab-bar-wrapper {
-            background: var(--color-tab-bar);
-            padding: 3px 12px 0;
-            border-bottom: 2px solid var(--color-border);
-            overflow-x: auto;
-            scrollbar-width: thin;
-        }
+  .section-title {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 8px;
+    margin: 24px 0 14px;
+    font-size: 1.15em;
+    font-family: 'DM Serif Display', serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    width: 3px; height: 18px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
 
-        .tab-bar {
-            display: flex;
-            gap: 4px;
-            min-width: max-content;
-        }
+  h3 { font-family: 'DM Sans', sans-serif; font-size: 1em; font-weight: 700; color: var(--color-text); margin: 18px 0 8px; }
+  p { font-size: .95em; line-height: 1.75; color: var(--color-text-muted); margin-bottom: 10px; }
+  ul { list-style-position: inside; line-height: 1.9; margin-left: 10px; }
+  ul li { margin: 4px 0; font-size: .93em; color: var(--color-text-muted); }
+  ul ul { margin-left: 22px; list-style-type: circle; }
+  li strong { color: var(--color-text); }
 
-        .tab-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 9px 16px;
-            border: 1px solid transparent;
-            border-bottom: none;
-            border-radius: 8px 8px 0 0;
-            background: transparent;
-            color: var(--color-tab-inactive);
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: .8em;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: all .2s;
-        }
+  .card {
+    background: var(--bg-card);
+    padding: 18px;
+    margin: 14px 0;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px var(--color-shadow);
+    border: 1px solid var(--color-border);
+    transition: background .3s, border-color .2s;
+  }
+  .card:hover { border-color: var(--color-primary); }
+  .card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .92em;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card p, .card li { font-size: .9em; }
 
-        .tab-btn:hover {
-            background: var(--color-tab-hover);
-            color: var(--color-text);
-        }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 14px 0; }
+  .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
 
-        .tab-btn.active {
-            background: var(--color-tab-active-bg);
-            border-color: var(--color-border);
-            color: var(--color-primary);
-            font-weight: 600;
-            box-shadow: 0 -2px 0 var(--color-primary) inset;
-        }
+  .box {
+    background: var(--bg-box);
+    padding: 14px;
+    border-radius: 10px;
+    border-left: 3px solid var(--color-primary);
+  }
+  .box strong { color: var(--color-primary); display: block; margin-bottom: 4px; }
 
-        .tab-btn .lnum {
-            background: var(--color-primary);
-            color: #fff;
-            font-size: .7em;
-            padding: 1px 6px;
-            border-radius: 8px;
-            font-weight: 700;
-        }
+  .highlight { background: var(--bg-highlight); padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--color-yellow); margin: 14px 0; }
+  .highlight .kb-label { color: var(--color-yellow); font-family: 'DM Mono', monospace; font-size: .75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
 
-        .lesson-panel {
-            display: none;
-            padding: 30px;
-        }
+  .important { background: var(--bg-important); padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--color-green); margin: 14px 0; }
+  .important .kb-label { color: var(--color-green); font-family: 'DM Mono', monospace; font-size: .75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
 
-        .lesson-panel.active {
-            display: block;
-        }
+  .note { background: var(--bg-note); padding: 14px 18px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 14px 0; }
+  .note .kb-label { color: #2196f3; font-family: 'DM Mono', monospace; font-size: .75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
 
-        /* card & layout */
-        .card {
-            background: var(--bg-card);
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px var(--color-shadow);
-            border: 1px solid var(--color-border);
-        }
+  .warning { background: var(--bg-warning); padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--color-red); margin: 14px 0; }
+  .warning .kb-label { color: var(--color-red); font-family: 'DM Mono', monospace; font-size: .75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
 
-        .section-title {
-            color: var(--color-primary);
-            border-bottom: 2px solid var(--color-border);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            font-family: 'DM Serif Display', serif;
-        }
+  .tip { background: var(--bg-important); padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--color-green); margin: 14px 0; }
+  .tip .kb-label { color: var(--color-green); font-family: 'DM Mono', monospace; font-size: .75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 18px;
-            margin-top: 15px;
-        }
+  code {
+    background: var(--bg-code);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: .88em;
+    color: var(--color-code-text);
+  }
+  pre {
+    background: var(--bg-pre);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+  pre code { background: none; padding: 0; font-size: .9em; color: #a8c4c2; }
 
-        .box {
-            background: var(--bg-box);
-            padding: 16px;
-            border-radius: 10px;
-            border-left: 3px solid var(--color-primary);
-            transition: background .2s;
-        }
+  .formula {
+    font-family: 'DM Mono', monospace;
+    font-size: .9em;
+    background: var(--color-formula-bg);
+    border: 1px solid var(--color-formula-border);
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: var(--color-formula);
+    margin: 8px 0;
+    display: inline-block;
+  }
 
-        .box strong {
-            color: var(--color-primary);
-            display: block;
-            font-size: 1.05em;
-            margin-bottom: 8px;
-        }
+  .table-wrap { overflow-x: auto; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 0; font-size: .88em; }
+  th {
+    background: var(--bg-box);
+    color: var(--color-primary);
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    text-align: left;
+    font-weight: 700;
+    font-size: .85em;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+  td { padding: 9px 12px; border: 1px solid var(--color-border); vertical-align: top; color: var(--color-text-muted); line-height: 1.55; }
+  tr:nth-child(even) td { background: var(--bg-box); }
+  tr:hover td { background: rgba(95,202,198,0.06); }
+  td strong { color: var(--color-text); }
+  td code { font-size: .85em; }
 
-        .box p {
-            font-size: .9em;
-            margin-bottom: 8px;
-        }
+  .badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: .75em; font-weight: 700; padding: 2px 9px; border-radius: 5px; margin: 2px 3px 2px 0; }
+  .badge-teal { background: rgba(95,202,198,0.15); color: var(--color-primary); }
+  .badge-green { background: rgba(74,222,128,0.12); color: var(--color-green); }
+  .badge-yellow { background: rgba(251,191,36,0.12); color: var(--color-yellow); }
+  .badge-red { background: rgba(248,113,113,0.12); color: var(--color-red); }
 
-        pre {
-            background: var(--bg-pre);
-            padding: 12px;
-            border-radius: 10px;
-            overflow-x: auto;
-            font-size: .85em;
-            margin: 10px 0 5px;
-        }
+  .tag { display: inline-block; background: var(--color-tag-bg); color: white; padding: 2px 10px; border-radius: 12px; font-size: .75em; margin: 2px; vertical-align: middle; }
+  .tag.orange { background: #e67e22; }
+  .tag.blue { background: #2980b9; }
+  .tag.red { background: #c0392b; }
+  .tag.green { background: #2e7d32; }
 
-        code {
-            font-family: 'Courier New', monospace;
-            color: #dcdcaa;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
+  .flow { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
+  .flow-step { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; background: var(--bg-box); border: 1px solid var(--color-border); border-radius: 8px; font-size: .9em; color: var(--color-text-muted); }
+  .flow-step-num { font-family: 'DM Mono', monospace; font-size: .82em; font-weight: 700; color: #fff; background: var(--color-primary); min-width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .flow-step strong { color: var(--color-text); }
 
-        .inline-code {
-            background: var(--bg-code);
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-family: monospace;
-            color: var(--color-code-text);
-        }
+  .def-list { margin: 12px 0; }
+  .def-item { display: grid; grid-template-columns: 160px 1fr; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--color-border); font-size: .9em; }
+  .def-term { font-family: 'DM Mono', monospace; font-size: .85em; font-weight: 700; color: var(--color-primary); align-self: start; padding-top: 2px; }
+  .def-desc { color: var(--color-text-muted); line-height: 1.6; }
 
-        .note, .important, .warning {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin: 15px 0;
-        }
+  hr { border: none; border-top: 1px solid var(--color-border); margin: 22px 0; }
 
-        .note { background: var(--bg-note); border-left: 4px solid #2196f3; }
-        .important { background: var(--bg-important); border-left: 4px solid #4caf50; }
-        
-        .bottom-nav {
-            background: var(--bg-card);
-            border-top: 2px solid var(--color-border);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 0 0 14px 14px;
-        }
+  .bottom-nav {
+    background: var(--bg-card);
+    border-top: 2px solid var(--color-border);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 4px 18px var(--color-shadow);
+  }
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-primary);
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85em;
+    font-weight: 600;
+    transition: all .2s;
+  }
+  .nav-btn:hover { background: var(--bg-box); }
+  .nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+  .nav-label { font-size: .85em; color: var(--color-text-muted); }
 
-        .nav-btn {
-            background: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-primary);
-            padding: 7px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-    </style>
+  @media(max-width:640px) {
+    body { padding: 10px; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+    .lesson-panel { padding: 16px; }
+    .page-header { flex-direction: column; align-items: flex-start; }
+    .def-item { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
 <div class="container">
-    <div class="page-header">
-        <div class="page-header-text">
-            <h1>🧠 MySQL Full Vault</h1>
-            <p>every clause • every object • copy‑ready examples</p>
-        </div>
-        <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()"><span class="icon">🌙</span> Dark Mode</button>
+  <div class="page-header">
+    <div class="page-header-text">
+      <h1>DBMS Practicals</h1>
+      <p>Practical Exam-Ready Study Note — ICT1212 (P01–P12)</p>
+    </div>
+    <div class="header-right">
+      <div class="course-badge">ICT1212</div>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+        <span class="icon">☀️</span> Light Mode
+      </button>
+    </div>
+  </div>
+
+  <div class="tab-browser">
+    <div class="tab-bar-wrapper">
+      <div class="tab-bar">
+        <button class="tab-btn active"  onclick="showTab(0)"><span class="lnum">P01</span> DB & Table Basics</button>
+        <button class="tab-btn"         onclick="showTab(1)"><span class="lnum">P02</span> INSERT & SELECT</button>
+        <button class="tab-btn"         onclick="showTab(2)"><span class="lnum">P03</span> UPDATE & DELETE</button>
+        <button class="tab-btn"         onclick="showTab(3)"><span class="lnum">P04</span> Aliases & Joins</button>
+        <button class="tab-btn"         onclick="showTab(4)"><span class="lnum">P05</span> All JOIN Types</button>
+        <button class="tab-btn"         onclick="showTab(5)"><span class="lnum">P06</span> Users & Operators</button>
+        <button class="tab-btn"         onclick="showTab(6)"><span class="lnum">P07</span> Constraints & ALTER</button>
+        <button class="tab-btn"         onclick="showTab(7)"><span class="lnum">P08</span> Views</button>
+        <button class="tab-btn"         onclick="showTab(8)"><span class="lnum">P09</span> Physical Design</button>
+        <button class="tab-btn"         onclick="showTab(9)"><span class="lnum">P10</span> Procedures</button>
+        <button class="tab-btn"         onclick="showTab(10)"><span class="lnum">P11</span> Normalization DB</button>
+        <button class="tab-btn"         onclick="showTab(11)"><span class="lnum">P12</span> Backup & Restore</button>
+      </div>
     </div>
 
-    <div class="tab-browser">
-        <div class="tab-bar-wrapper">
-            <div class="tab-bar" id="tabBar"></div>
-        </div>
-        <div id="panelsContainer"></div>
-        <div class="bottom-nav">
-            <button class="nav-btn" id="prevBtn" onclick="changeTab(-1)">◀ PREV</button>
-            <span class="nav-label" id="navLabel">Lesson 1 of 11</span>
-            <button class="nav-btn" id="nextBtn" onclick="changeTab(1)">NEXT ▶</button>
-        </div>
+    <!-- ══════════════════ P01 ══════════════════ -->
+    <div class="lesson-panel active" id="panel-0">
+      <div class="lec-tag">PRACTICAL 01</div>
+      <h1 class="lesson-headline">Database & Table Basics</h1>
+      <p class="lesson-desc">Creating databases, creating tables, data types, inserting rows</p>
+
+      <h2 class="section-title">Database Commands</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Command</th><th>Purpose</th></tr>
+          <tr><td><code>CREATE DATABASE company;</code></td><td>Create a new database</td></tr>
+          <tr><td><code>SHOW DATABASES;</code></td><td>List all databases</td></tr>
+          <tr><td><code>USE company;</code></td><td>Select database to work in</td></tr>
+          <tr><td><code>SELECT DATABASE();</code></td><td>Show currently selected database</td></tr>
+          <tr><td><code>DROP DATABASE company;</code></td><td>⚠️ Permanently delete a database</td></tr>
+        </table>
+      </div>
+
+      <h2 class="section-title">Create Table — Full Example</h2>
+      <pre><code>CREATE TABLE employee (
+    emp_no  INT AUTO_INCREMENT,
+    name    VARCHAR(20) NOT NULL,
+    gender  CHAR(1),
+    dob     DATE,
+    salary  FLOAT(7,2),
+    PRIMARY KEY(emp_no)
+);</code></pre>
+
+      <h2 class="section-title">Key Data Types</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Usage</th><th>Example</th></tr>
+          <tr><td><code>INT</code></td><td>Whole numbers</td><td>emp_no, age</td></tr>
+          <tr><td><code>VARCHAR(n)</code></td><td>Variable-length text</td><td>name VARCHAR(20)</td></tr>
+          <tr><td><code>CHAR(n)</code></td><td>Fixed-length text</td><td>gender CHAR(1)</td></tr>
+          <tr><td><code>DATE</code></td><td>Date values (YYYY-MM-DD)</td><td>dob DATE</td></tr>
+          <tr><td><code>FLOAT(p,s)</code></td><td>Floating-point number</td><td>salary FLOAT(7,2)</td></tr>
+          <tr><td><code>AUTO_INCREMENT</code></td><td>Auto-generated unique number</td><td>emp_no INT AUTO_INCREMENT</td></tr>
+        </table>
+      </div>
+
+      <h2 class="section-title">Table Utility Commands</h2>
+      <pre><code>DESC employee;       -- Show column structure of table
+DESCRIBE employee;   -- Same as DESC
+SHOW TABLES;         -- List all tables in current database
+DROP TABLE employee; -- ⚠️ Delete entire table</code></pre>
+
+      <h2 class="section-title">Inserting Rows — 3 Patterns</h2>
+      <pre><code>-- Pattern 1: Specify all columns explicitly
+INSERT INTO employee (emp_no, name, gender, dob, salary)
+VALUES (1, 'Silva', 'M', '1980-03-25', 55000.00);
+
+-- Pattern 2: No column list — value order must match table schema
+INSERT INTO employee
+VALUES (2, 'Zoysa', 'F', '1983-06-07', 48000.00);
+
+-- Pattern 3: Omit AUTO_INCREMENT column — DB generates it
+INSERT INTO employee (name, gender, dob, salary)
+VALUES ('Fonseka', 'M', '1979-04-19', 64000.00);
+
+-- Pattern 4: Insert multiple rows at once
+INSERT INTO employee (name, gender, dob, salary)
+VALUES
+  ('Fernando', 'F', '1975-05-28', 50000.00),
+  ('Perera',   'F', '1985-11-14', 72000.00),
+  ('Liyanage', 'M', '1989-04-10', 80000.00);</code></pre>
+
+      <h2 class="section-title">Copy Data Between Tables</h2>
+      <pre><code>-- Copy rows from one table to another
+INSERT INTO new_table (col1, col2)
+SELECT col1, col2 FROM old_table WHERE condition;</code></pre>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>AUTO_INCREMENT column can be omitted during INSERT — DB fills it</li>
+          <li>If no column list: values must match ALL columns in order</li>
+          <li><code>DROP DATABASE</code> / <code>DROP TABLE</code> = permanent, no undo</li>
+          <li><code>DELETE FROM employee;</code> removes all rows but keeps table structure; <code>DROP TABLE</code> removes structure too</li>
+        </ul>
+      </div>
     </div>
+
+    <!-- ══════════════════ P02 ══════════════════ -->
+    <div class="lesson-panel" id="panel-1">
+      <div class="lec-tag">PRACTICAL 02</div>
+      <h1 class="lesson-headline">INSERT & SELECT Queries</h1>
+      <p class="lesson-desc">Inserting data, retrieving rows, filtering with WHERE</p>
+
+      <h2 class="section-title">INSERT Variations</h2>
+      <pre><code>-- With specific column order
+INSERT INTO student (student_id, mobile_no, student_name)
+VALUES (3, '0773388333', 'Sunil');
+
+-- Without student_id (AUTO_INCREMENT)
+INSERT INTO student (mobile_no, student_name)
+VALUES ('0773388333', 'Mala');
+
+-- Insert multiple rows at once
+INSERT INTO student (student_name)
+VALUES ('Student 1'), ('Student 2'), ('Student 3');</code></pre>
+
+      <div class="warning">
+        <div class="kb-label">⚠️ Common INSERT Errors</div>
+        <ul>
+          <li><code>INSERT INTO student (mobile_no, student_name) VALUES ('Kamal', NULL);</code> — inserts NULL for mobile_no</li>
+          <li>Swapped column order causes data to land in wrong columns</li>
+          <li>Omitting a NOT NULL column without a DEFAULT causes an error</li>
+        </ul>
+      </div>
+
+      <h2 class="section-title">SELECT — Retrieving Data</h2>
+      <pre><code>-- All columns
+SELECT * FROM student;
+
+-- Specific columns
+SELECT student_name FROM student;
+SELECT student_name, mobile_no FROM student;
+
+-- Custom column order
+SELECT student_name, mobile_no, student_id FROM student;</code></pre>
+
+      <h2 class="section-title">WHERE — Filtering Rows</h2>
+      <pre><code>-- Single condition
+SELECT * FROM student_marks WHERE student_id = 2;
+SELECT * FROM student_marks WHERE marks > 50;
+
+-- AND — both conditions must be true
+SELECT * FROM student_marks
+WHERE subject_id = 'SUB002' AND marks < 50;
+
+-- OR — either condition true
+SELECT * FROM student_marks
+WHERE (subject_id = 'SUB001' AND marks > 50)
+   OR (subject_id = 'SUB002' AND marks > 50);</code></pre>
+
+      <h2 class="section-title">Practical 02 — Student Table Schema</h2>
+      <pre><code>CREATE TABLE Student (
+    student_id   INT NOT NULL AUTO_INCREMENT,
+    student_name VARCHAR(15) NOT NULL,
+    mobile_no    VARCHAR(15) DEFAULT NULL,
+    PRIMARY KEY (student_id)
+);</code></pre>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Use <code>AND</code> for strict filtering, <code>OR</code> for wider net</li>
+          <li><code>SELECT *</code> = all columns; specify column names for clarity</li>
+          <li><code>DEFAULT NULL</code> means the column allows NULL and inserts NULL if value not provided</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P03 ══════════════════ -->
+    <div class="lesson-panel" id="panel-2">
+      <div class="lec-tag">PRACTICAL 03</div>
+      <h1 class="lesson-headline">UPDATE & DELETE Queries</h1>
+      <p class="lesson-desc">Modifying data, deleting rows, CASCADE, safety preview with SELECT</p>
+
+      <h2 class="section-title">UPDATE Syntax & Examples</h2>
+      <pre><code>-- Single field update
+UPDATE student SET mobile_no = '071234789' WHERE student_id = 3;
+
+-- Multiple fields update
+UPDATE student SET student_name = 'Amal', mobile_no = '077854632'
+WHERE student_id = 5;
+
+-- ⚠️ Mass update — affects ALL rows (no WHERE clause)
+UPDATE student SET mobile_no = '911';</code></pre>
+
+      <h2 class="section-title">DELETE Syntax & Examples</h2>
+      <pre><code>-- Single row
+DELETE FROM student WHERE student_id = 2;
+
+-- Conditional delete
+DELETE FROM marks WHERE score < 40;
+DELETE FROM marks WHERE score BETWEEN 30 AND 35;
+DELETE FROM student WHERE age IS NULL;
+DELETE FROM student WHERE name = 'Nimal Perera';
+
+-- ⚠️ Delete ALL rows (table structure remains)
+DELETE FROM student;</code></pre>
+
+      <h2 class="section-title">DELETE with Multiple Conditions</h2>
+      <pre><code>-- AND on composite key
+DELETE FROM student_marks
+WHERE student_id = 4 AND subject_id = 'SUB005';
+
+-- Delete by range
+DELETE FROM student WHERE age BETWEEN 20 AND 22;
+DELETE FROM student WHERE age > 30;</code></pre>
+
+      <h2 class="section-title">⚠️ Safety: Preview Before Delete</h2>
+      <pre><code>-- Step 1: Always preview first!
+SELECT * FROM student WHERE department = 'IT';
+
+-- Step 2: Then delete
+DELETE FROM student WHERE department = 'IT';</code></pre>
+
+      <h2 class="section-title">ON DELETE CASCADE</h2>
+      <pre><code>-- Child table setup with cascade
+CREATE TABLE marks (
+    mark_id    INT PRIMARY KEY,
+    student_id INT,
+    score      INT,
+    FOREIGN KEY (student_id)
+        REFERENCES student(student_id)
+        ON DELETE CASCADE
+);
+
+-- Deleting parent automatically removes child rows
+DELETE FROM student WHERE student_id = 3;
+-- → All marks rows with student_id = 3 are also deleted</code></pre>
+
+      <h2 class="section-title">Practical 03 — Leave Management System</h2>
+      <pre><code>CREATE DATABASE leave_db;
+USE leave_db;
+
+CREATE TABLE employees (
+    employee_id   INT AUTO_INCREMENT,
+    employee_name VARCHAR(100),
+    department    VARCHAR(50),
+    join_date     DATE,
+    PRIMARY KEY (employee_id)
+);
+
+CREATE TABLE leave_requests (
+    request_id  INT AUTO_INCREMENT,
+    employee_id INT,
+    leave_type  VARCHAR(50),
+    start_date  DATE,
+    end_date    DATE,
+    status      VARCHAR(20),
+    PRIMARY KEY (request_id)
+);
+
+-- Display pending leave requests
+SELECT * FROM leave_requests WHERE status = 'Pending';
+
+-- IT department leave requests (JOIN)
+SELECT lr.* FROM leave_requests lr
+JOIN employees e ON lr.employee_id = e.employee_id
+WHERE e.department = 'IT';
+
+-- Approve a request
+UPDATE leave_requests SET status = 'Approved' WHERE request_id = 1;
+
+-- Delete rejected requests
+DELETE FROM leave_requests WHERE status = 'Rejected';</code></pre>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Always use WHERE with UPDATE and DELETE — without it = ALL rows affected</li>
+          <li>CASCADE: deleting parent row auto-deletes matching child rows</li>
+          <li>Use <code>IS NULL</code> (not <code>= NULL</code>) to check for NULL values</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P04 ══════════════════ -->
+    <div class="lesson-panel" id="panel-3">
+      <div class="lec-tag">PRACTICAL 04</div>
+      <h1 class="lesson-headline">Aliases, Arithmetic & INNER JOIN</h1>
+      <p class="lesson-desc">Column/table aliases, arithmetic in SELECT, aggregate functions, INNER JOIN</p>
+
+      <h2 class="section-title">Column & Table Aliases</h2>
+      <pre><code>-- Column alias (single word)
+SELECT marks/2 AS halfMarks FROM subject_marks WHERE student_id = 2;
+
+-- Column alias (multi-word — use quotes)
+SELECT marks/2 AS 'half Marks' FROM subject_marks WHERE student_id = 2;
+
+-- Table alias (shorthand reference)
+SELECT a.student_id, a.marks FROM subject_marks AS a;
+
+-- Both together
+SELECT mobile_no AS mobileNumber FROM Student AS studentTable;</code></pre>
+
+      <h2 class="section-title">Arithmetic in SELECT</h2>
+      <pre><code>SELECT marks     FROM subject_marks WHERE student_id = 2;
+SELECT marks/2   FROM subject_marks WHERE student_id = 2;  -- divide
+SELECT marks * 2 FROM subject_marks WHERE student_id = 2;  -- multiply</code></pre>
+
+      <h2 class="section-title">Aggregate Functions</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Function</th><th>Example</th><th>Purpose</th></tr>
+          <tr><td><code>SUM()</code></td><td><code>SELECT SUM(marks) FROM subject_marks WHERE student_id = 2;</code></td><td>Total of all values</td></tr>
+          <tr><td><code>AVG()</code></td><td><code>SELECT AVG(marks) FROM ict_marks;</code></td><td>Average value</td></tr>
+          <tr><td><code>COUNT()</code></td><td><code>SELECT COUNT(*) FROM student_data;</code></td><td>Row count</td></tr>
+          <tr><td><code>MIN()</code></td><td><code>SELECT MIN(marks) FROM ict_marks;</code></td><td>Smallest value</td></tr>
+          <tr><td><code>MAX()</code></td><td><code>SELECT MAX(marks) FROM ict_marks;</code></td><td>Largest value</td></tr>
+        </table>
+      </div>
+
+      <h2 class="section-title">INNER JOIN</h2>
+      <pre><code>-- Syntax (two tables)
+SELECT columnList FROM table1
+INNER JOIN table2 ON table1.col = table2.col;
+
+-- Without aliases
+SELECT * FROM subject_marks
+INNER JOIN student ON subject_marks.student_id = student.student_id;
+
+-- With aliases (cleaner)
+SELECT * FROM subject_marks a
+INNER JOIN student b ON a.student_id = b.student_id;</code></pre>
+
+      <div class="note">
+        <div class="kb-label">How INNER JOIN Works</div>
+        <p>Returns only rows where the join condition is met in <strong>both</strong> tables. Non-matching rows from either table are excluded.</p>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Multi-word aliases need quotes: <code>AS 'half Marks'</code></li>
+          <li>Table alias removes need to write full table name repeatedly</li>
+          <li>Aggregate functions ignore NULL values (except COUNT(*))</li>
+          <li>INNER JOIN = only matching rows in both tables</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P05 ══════════════════ -->
+    <div class="lesson-panel" id="panel-4">
+      <div class="lec-tag">PRACTICAL 05</div>
+      <h1 class="lesson-headline">All JOIN Types</h1>
+      <p class="lesson-desc">INNER, LEFT, RIGHT, FULL OUTER, SELF joins — syntax and use cases</p>
+
+      <h2 class="section-title">JOIN Types Comparison</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>JOIN Type</th><th>Returns</th></tr>
+          <tr><td><strong>INNER JOIN</strong></td><td>Only rows with matching values in BOTH tables</td></tr>
+          <tr><td><strong>LEFT JOIN</strong></td><td>ALL rows from left table + matching from right (NULL if no match)</td></tr>
+          <tr><td><strong>RIGHT JOIN</strong></td><td>ALL rows from right table + matching from left (NULL if no match)</td></tr>
+          <tr><td><strong>FULL OUTER JOIN</strong></td><td>ALL rows from both tables (NULL where no match) — not native in MySQL</td></tr>
+          <tr><td><strong>SELF JOIN</strong></td><td>Table joined to itself (use aliases)</td></tr>
+        </table>
+      </div>
+
+      <h2 class="section-title">INNER JOIN</h2>
+      <pre><code>SELECT emp.ENAME, emp.JOB, dept.DNAME, dept.LOC
+FROM EMPLOYEE emp
+INNER JOIN DEPARTMENT dept ON emp.DEPTNO = dept.DEPTNO;</code></pre>
+
+      <h2 class="section-title">LEFT JOIN</h2>
+      <pre><code>-- All employees + department (NULL if employee has no department)
+SELECT emp.ENAME, emp.JOB, dept.DNAME, dept.LOC
+FROM EMPLOYEE emp
+LEFT JOIN DEPARTMENT dept ON emp.DEPTNO = dept.DEPTNO;</code></pre>
+
+      <h2 class="section-title">RIGHT JOIN</h2>
+      <pre><code>-- All departments + employees (NULL if department has no employees)
+SELECT emp.ENAME, emp.JOB, dept.DNAME, dept.LOC
+FROM EMPLOYEE emp
+RIGHT JOIN DEPARTMENT dept ON emp.DEPTNO = dept.DEPTNO;</code></pre>
+
+      <h2 class="section-title">FULL OUTER JOIN (MySQL Workaround)</h2>
+      <pre><code>-- MySQL does not support FULL OUTER JOIN natively
+-- Simulate using LEFT JOIN UNION RIGHT JOIN:
+SELECT emp.ENAME, emp.JOB, dept.DNAME, dept.LOC
+FROM EMPLOYEE emp LEFT JOIN DEPARTMENT dept ON emp.DEPTNO = dept.DEPTNO
+UNION
+SELECT emp.ENAME, emp.JOB, dept.DNAME, dept.LOC
+FROM EMPLOYEE emp RIGHT JOIN DEPARTMENT dept ON emp.DEPTNO = dept.DEPTNO;</code></pre>
+
+      <h2 class="section-title">SELF JOIN</h2>
+      <pre><code>-- Employee-to-Manager relationship (same table, two aliases)
+SELECT e.ENAME AS Employee, m.ENAME AS Manager
+FROM EMPLOYEE e
+JOIN EMPLOYEE m ON e.MGR = m.EMPNO;</code></pre>
+
+      <div class="note">
+        <div class="kb-label">Venn Diagram Mental Model</div>
+        <p>INNER JOIN = overlap only. LEFT = full left circle. RIGHT = full right circle. FULL = both circles together.</p>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>MySQL doesn't have FULL OUTER JOIN — use UNION of LEFT + RIGHT</li>
+          <li>SELF JOIN requires two different aliases for the same table</li>
+          <li>Use aliases (emp, dept, e, m) for readability in multi-table queries</li>
+          <li>NULL appears in result where there's no matching row</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P06 ══════════════════ -->
+    <div class="lesson-panel" id="panel-5">
+      <div class="lec-tag">PRACTICAL 06</div>
+      <h1 class="lesson-headline">User Management & Operators</h1>
+      <p class="lesson-desc">CREATE USER, GRANT, REVOKE, NULL handling, LIKE, IN, BETWEEN, ORDER BY, DISTINCT, LIMIT, Aggregates</p>
+
+      <h2 class="section-title">User Management</h2>
+      <pre><code>-- Create users
+CREATE USER 'admin_ict'@'localhost'  IDENTIFIED BY 'adminpassword';
+CREATE USER 'lecturer'@'localhost'   IDENTIFIED BY 'lecturerpwd';
+CREATE USER 'Student'@'localhost'    IDENTIFIED BY 'studentpwd';
+CREATE USER 'ict_guest'@'localhost'; -- No password
+
+-- Grant privileges
+GRANT ALL PRIVILEGES ON tecict.* TO 'admin_ict'@'localhost';
+
+-- Grant DML only
+GRANT SELECT, INSERT, UPDATE, DELETE ON tecict.* TO 'lecturer'@'localhost';
+
+-- Grant read-only on specific table
+GRANT SELECT ON tecict.studentData TO 'Student'@'localhost';
+
+-- Apply changes immediately
+FLUSH PRIVILEGES;
+
+-- Delete a user
+DROP USER 'ict_guest'@'localhost';</code></pre>
+
+      <h2 class="section-title">NULL Handling</h2>
+      <pre><code>-- ❌ Wrong — never use = NULL
+SELECT * FROM table WHERE column_name = NULL;
+
+-- ✅ Correct
+SELECT * FROM table WHERE column_name IS NULL;
+SELECT * FROM table WHERE column_name IS NOT NULL;</code></pre>
+
+      <h2 class="section-title">AND / OR / NOT Operators</h2>
+      <pre><code>-- AND (both conditions must be true)
+SELECT * FROM student_data WHERE DoB > '1997-01-01' AND gender = 'Male';
+
+-- OR (either condition true)
+SELECT * FROM student_data WHERE gender = 'Male' OR DoB > '1997-01-01';
+
+-- NOT (negate condition)
+SELECT * FROM student_data WHERE NOT gender = 'Male';
+
+-- Combined
+SELECT * FROM student_data WHERE DoB > '1997-01-01' AND NOT gender = 'Male';</code></pre>
+
+      <h2 class="section-title">LIKE — Pattern Matching</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Pattern</th><th>Matches</th></tr>
+          <tr><td><code>'a%'</code></td><td>Starts with "a"</td></tr>
+          <tr><td><code>'%a'</code></td><td>Ends with "a"</td></tr>
+          <tr><td><code>'%or%'</code></td><td>Contains "or" anywhere</td></tr>
+          <tr><td><code>'_r%'</code></td><td>"r" in second position</td></tr>
+          <tr><td><code>'a_%_%'</code></td><td>Starts with "a", at least 3 chars</td></tr>
+        </table>
+      </div>
+      <pre><code>SELECT * FROM student_data WHERE StuName LIKE 'K%';
+SELECT * FROM student_data WHERE StuName LIKE '%a';</code></pre>
+
+      <h2 class="section-title">IN, BETWEEN, ORDER BY</h2>
+      <pre><code>-- IN — match any value in list
+SELECT * FROM student WHERE department IN ('IT', 'Finance');
+
+-- BETWEEN — inclusive range
+SELECT * FROM marks WHERE score BETWEEN 50 AND 80;
+
+-- ORDER BY
+SELECT * FROM student_data ORDER BY DoB ASC;
+SELECT * FROM student_data ORDER BY gender DESC;
+SELECT * FROM student_data ORDER BY DoB ASC, RegNo ASC, gender DESC;</code></pre>
+
+      <h2 class="section-title">DISTINCT, LIMIT</h2>
+      <pre><code>-- Unique values only
+SELECT DISTINCT gender FROM student_data;
+SELECT COUNT(DISTINCT gender) FROM student_data;
+
+-- Limit rows returned
+SELECT * FROM student_data LIMIT 3;
+SELECT * FROM student_data WHERE gender = 'Male' LIMIT 2;</code></pre>
+
+      <h2 class="section-title">Computed Column — Age on the Fly</h2>
+      <pre><code>SELECT
+    RegNo      AS 'Registration No',
+    StuName    AS 'Student Name',
+    DoB        AS 'Date of Birth',
+    gender     AS 'Gender',
+    TIMESTAMPDIFF(YEAR, DoB, CURDATE()) AS 'Age'
+FROM student_data;</code></pre>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>GRANT syntax: <code>GRANT privilege ON db.table TO 'user'@'host';</code></li>
+          <li><code>IS NULL</code> not <code>= NULL</code></li>
+          <li>BETWEEN is inclusive on both ends</li>
+          <li>ORDER BY default is ASC; add DESC to reverse</li>
+          <li>DISTINCT removes duplicate rows from result</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P07 ══════════════════ -->
+    <div class="lesson-panel" id="panel-6">
+      <div class="lec-tag">PRACTICAL 07</div>
+      <h1 class="lesson-headline">Constraints & ALTER TABLE</h1>
+      <p class="lesson-desc">NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY, CHECK, DEFAULT, ALTER TABLE, GROUP BY, HAVING, UNION</p>
+
+      <h2 class="section-title">Constraints on CREATE TABLE</h2>
+      <pre><code>CREATE TABLE employees (
+    emp_id   INT PRIMARY KEY,       -- PRIMARY KEY
+    name     VARCHAR(50) NOT NULL,  -- NOT NULL
+    email    VARCHAR(100) UNIQUE,   -- UNIQUE
+    salary   INT,
+    age      INT,
+    dept_id  INT,
+    CHECK (age >= 18),              -- CHECK
+    FOREIGN KEY (dept_id)
+        REFERENCES departments(dept_id)
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT
+);</code></pre>
+
+      <h2 class="section-title">Constraints Summary</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Constraint</th><th>Purpose</th><th>Notes</th></tr>
+          <tr><td><strong>NOT NULL</strong></td><td>Column must have a value</td><td>Prevents blank/null entries</td></tr>
+          <tr><td><strong>UNIQUE</strong></td><td>No duplicate values in column</td><td>Allows NULL (only one NULL)</td></tr>
+          <tr><td><strong>PRIMARY KEY</strong></td><td>Unique + Not Null identifier</td><td>Only one per table</td></tr>
+          <tr><td><strong>FOREIGN KEY</strong></td><td>Links to another table's PK</td><td>Enforces referential integrity</td></tr>
+          <tr><td><strong>CHECK</strong></td><td>Value must satisfy condition</td><td>e.g., age >= 18</td></tr>
+          <tr><td><strong>DEFAULT</strong></td><td>Fallback value if not provided</td><td>e.g., DEFAULT 'Male'</td></tr>
+        </table>
+      </div>
+
+      <h2 class="section-title">ALTER TABLE — Add / Modify / Drop</h2>
+      <pre><code>-- Add a column
+ALTER TABLE student_data ADD CivilStatus VARCHAR(20);
+
+-- Modify column data type
+ALTER TABLE student_data MODIFY COLUMN CivilStatus VARCHAR(30);
+
+-- Drop a column
+ALTER TABLE student_data DROP COLUMN CivilStatus;
+
+-- Add CHECK constraint
+ALTER TABLE ict_marks ADD CHECK (marks BETWEEN 0 AND 100);
+
+-- Add FOREIGN KEY
+ALTER TABLE orders ADD FOREIGN KEY (cust_id) REFERENCES customers(cust_id);
+
+-- Add DEFAULT
+ALTER TABLE student_data ALTER gender SET DEFAULT 'Male';
+ALTER TABLE student_data ALTER DoB SET DEFAULT CURDATE();
+
+-- Remove DEFAULT
+ALTER TABLE student_data ALTER gender DROP DEFAULT;</code></pre>
+
+      <h2 class="section-title">GROUP BY & HAVING</h2>
+      <pre><code>-- Total salary per department
+SELECT department, SUM(salary)
+FROM Employees
+GROUP BY department;
+
+-- Only departments with total salary > 10000
+SELECT department, SUM(salary) AS total_salary
+FROM Employees
+GROUP BY department
+HAVING SUM(salary) > 10000;</code></pre>
+
+      <div class="important">
+        <div class="kb-label">WHERE vs HAVING</div>
+        <p><strong>WHERE</strong> filters individual rows BEFORE grouping.<br>
+        <strong>HAVING</strong> filters grouped results AFTER GROUP BY.</p>
+      </div>
+
+      <h2 class="section-title">UNION vs UNION ALL</h2>
+      <pre><code>-- UNION — removes duplicates
+SELECT student_name FROM section_A
+UNION
+SELECT student_name FROM section_B;
+
+-- UNION ALL — keeps duplicates (faster)
+SELECT student_name FROM section_A
+UNION ALL
+SELECT student_name FROM section_B;</code></pre>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>PRIMARY KEY = NOT NULL + UNIQUE combined</li>
+          <li>CHECK constraint enforces value rules, e.g., <code>marks BETWEEN 0 AND 100</code></li>
+          <li>GROUP BY column must appear in SELECT list</li>
+          <li>HAVING is like WHERE but applied after grouping</li>
+          <li>UNION removes duplicates; UNION ALL keeps them (faster)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P08 ══════════════════ -->
+    <div class="lesson-panel" id="panel-7">
+      <div class="lec-tag">PRACTICAL 08</div>
+      <h1 class="lesson-headline">Views</h1>
+      <p class="lesson-desc">CREATE VIEW, DROP VIEW, OR REPLACE, DML through views, WITH CHECK OPTION</p>
+
+      <h2 class="section-title">What is a View?</h2>
+      <p>A <strong>view</strong> is a virtual table based on a SELECT query. It does not store data itself — it always shows up-to-date data from the underlying table(s).</p>
+
+      <h2 class="section-title">Create & Drop Views</h2>
+      <pre><code>-- Create a view
+CREATE VIEW high_gpa_students AS
+    SELECT name, gpa
+    FROM student
+    WHERE gpa > 3.0;
+
+-- Query the view like a table
+SELECT * FROM high_gpa_students;
+
+-- Delete a view
+DROP VIEW high_gpa_students;</code></pre>
+
+      <h2 class="section-title">Replace / Update a View</h2>
+      <pre><code>-- Modify an existing view
+CREATE OR REPLACE VIEW high_gpa_students AS
+    SELECT name, gpa
+    FROM student
+    WHERE gpa > 3.5;  -- changed threshold</code></pre>
+
+      <h2 class="section-title">DML Through Views</h2>
+      <pre><code>-- UPDATE through view (updates base table)
+UPDATE high_gpa_students SET gpa = 3.6 WHERE name = 'Amal';
+
+-- INSERT through view (inserts into base table)
+INSERT INTO high_gpa_students (name, gpa) VALUES ('Kamal', 3.6);
+
+-- ⚠️ Insert out-of-range row (succeeds WITHOUT check option!)
+INSERT INTO high_gpa_students (name, gpa) VALUES ('Ravi', 2.4);</code></pre>
+
+      <div class="warning">
+        <div class="kb-label">⚠️ Non-Updatable Views</div>
+        <p>Views using <strong>aggregate functions</strong> (AVG, SUM, COUNT etc.), DISTINCT, GROUP BY, HAVING, or UNION are <strong>NOT updatable</strong> through the view.</p>
+        <pre><code>-- Non-updatable view example
+CREATE VIEW student_avg AS
+    SELECT AVG(gpa) AS avg_gpa FROM student;</code></pre>
+      </div>
+
+      <h2 class="section-title">WITH CHECK OPTION</h2>
+      <pre><code>-- Enforces the WHERE condition on INSERT and UPDATE
+CREATE VIEW high_gpa_students AS
+    SELECT id, name, gpa
+    FROM students
+    WHERE gpa > 3.0
+    WITH CHECK OPTION;
+
+-- ✅ Valid — gpa 3.8 satisfies the view condition
+INSERT INTO high_gpa_students (name, gpa) VALUES ('Nadeesha', 3.8);
+
+-- ❌ Error — gpa 2.4 violates the view's WHERE condition
+INSERT INTO high_gpa_students (name, gpa) VALUES ('Ravi', 2.4);
+
+-- ✅ Valid update — stays above 3.0
+UPDATE high_gpa_students SET gpa = 3.9 WHERE name = 'Kamal';
+
+-- ❌ Error — update would drop below 3.0
+UPDATE high_gpa_students SET gpa = 2.0 WHERE name = 'Kamal';</code></pre>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Operation</th><th>Without CHECK OPTION</th><th>With CHECK OPTION</th></tr>
+          <tr><td>INSERT within condition</td><td>✅ Succeeds</td><td>✅ Succeeds</td></tr>
+          <tr><td>INSERT outside condition</td><td>✅ Succeeds (data invisible)</td><td>❌ Error thrown</td></tr>
+          <tr><td>UPDATE within condition</td><td>✅ Succeeds</td><td>✅ Succeeds</td></tr>
+          <tr><td>UPDATE outside condition</td><td>✅ Succeeds (row hidden)</td><td>❌ Error thrown</td></tr>
+        </table>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Views = virtual table = no stored data, always live from base table</li>
+          <li><code>WITH CHECK OPTION</code> enforces the view's WHERE filter on writes</li>
+          <li>Aggregate-based views are NOT updatable</li>
+          <li><code>CREATE OR REPLACE VIEW</code> is safer than DROP + CREATE</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P09 ══════════════════ -->
+    <div class="lesson-panel" id="panel-8">
+      <div class="lec-tag">PRACTICAL 09</div>
+      <h1 class="lesson-headline">Physical Design — Hospital System</h1>
+      <p class="lesson-desc">Ternary relationships, FK with CASCADE, multi-table JOIN verification query</p>
+
+      <h2 class="section-title">Ternary Relationship Concept</h2>
+      <p>A <strong>ternary relationship</strong> connects <strong>three entity types simultaneously</strong>. Represented by a relationship table with foreign keys to all three entity tables.</p>
+
+      <h2 class="section-title">Hospital Management DB Schema</h2>
+      <pre><code>CREATE DATABASE hospital_management_db;
+USE hospital_management_db;
+
+-- Entity 1: PATIENTS
+CREATE TABLE patients (
+    patient_id INT AUTO_INCREMENT,
+    name       VARCHAR(100) NOT NULL,
+    age        INT NOT NULL,
+    PRIMARY KEY (patient_id)
+);
+
+-- Entity 2: DOCTORS
+CREATE TABLE doctors (
+    doctor_id      INT AUTO_INCREMENT,
+    name           VARCHAR(100) NOT NULL,
+    specialization VARCHAR(100) NOT NULL,
+    PRIMARY KEY (doctor_id)
+);
+
+-- Entity 3: MEDICATIONS
+CREATE TABLE medications (
+    medication_id   INT AUTO_INCREMENT,
+    medication_name VARCHAR(100) NOT NULL,
+    type            VARCHAR(50) NOT NULL,
+    PRIMARY KEY (medication_id)
+);
+
+-- Ternary Relationship: PRESCRIPTIONS
+CREATE TABLE prescriptions (
+    prescription_id INT AUTO_INCREMENT,
+    patient_id      INT NOT NULL,
+    doctor_id       INT NOT NULL,
+    medication_id   INT NOT NULL,
+    dosage          VARCHAR(50) NOT NULL,
+    date_prescribed DATE NOT NULL,
+    PRIMARY KEY (prescription_id),
+    FOREIGN KEY (patient_id)    REFERENCES patients(patient_id)    ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id)     REFERENCES doctors(doctor_id)      ON DELETE CASCADE,
+    FOREIGN KEY (medication_id) REFERENCES medications(medication_id) ON DELETE CASCADE
+);</code></pre>
+
+      <h2 class="section-title">Sample Data</h2>
+      <pre><code>INSERT INTO patients (name, age) VALUES
+    ('Amal Perera', 34), ('Nimal Silva', 45), ('Kamal Fernando', 22);
+
+INSERT INTO doctors (name, specialization) VALUES
+    ('Dr. Sandaruwani Pathirage', 'Cardiology'),
+    ('Dr. Dinithi Vithanage', 'Neurology');
+
+INSERT INTO medications (medication_name, type) VALUES
+    ('Paracetamol', 'Analgesic'),
+    ('Amoxicillin', 'Antibiotic'),
+    ('Atorvastatin', 'Statin');
+
+INSERT INTO prescriptions (patient_id, doctor_id, medication_id, dosage, date_prescribed) VALUES
+    (1, 1, 3, '20mg once daily',     '2026-04-20'),
+    (2, 2, 1, '500mg every 6 hours', '2026-04-22'),
+    (3, 1, 2, '500mg thrice daily',  '2026-04-25');</code></pre>
+
+      <h2 class="section-title">Verification Query — Multi-Table JOIN</h2>
+      <pre><code>SELECT
+    pr.prescription_id AS 'Prescription ID',
+    p.name             AS 'Patient Name',
+    p.age              AS 'Patient Age',
+    d.name             AS 'Prescribing Doctor',
+    d.specialization   AS 'Specialization',
+    m.medication_name  AS 'Medication Name',
+    pr.dosage          AS 'Dosage',
+    pr.date_prescribed AS 'Date Prescribed'
+FROM prescriptions pr
+INNER JOIN patients    p  ON pr.patient_id    = p.patient_id
+INNER JOIN doctors     d  ON pr.doctor_id     = d.doctor_id
+INNER JOIN medications m  ON pr.medication_id = m.medication_id;</code></pre>
+
+      <div class="note">
+        <div class="kb-label">Key Pattern</div>
+        <p>Ternary: One relationship table holds <strong>3 FK columns</strong>. When joining back, chain 3 INNER JOINs to the relationship table. ON DELETE CASCADE ensures removing a doctor/patient/medication also removes their prescriptions.</p>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Ternary relationship = 3 entity tables + 1 relationship table with 3 FKs</li>
+          <li>Use ON DELETE CASCADE so orphan records are cleaned automatically</li>
+          <li>Multi-table JOIN: each INNER JOIN adds one more table with its condition</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P10 ══════════════════ -->
+    <div class="lesson-panel" id="panel-9">
+      <div class="lec-tag">PRACTICAL 10</div>
+      <h1 class="lesson-headline">Stored Procedures</h1>
+      <p class="lesson-desc">DELIMITER, CREATE PROCEDURE, no-parameter and IN-parameter procedures, CALL</p>
+
+      <h2 class="section-title">Why Stored Procedures?</h2>
+      <p>A stored procedure is a saved SQL block that can be <strong>called repeatedly</strong>. Reduces repetitive code, improves performance, and centralizes logic.</p>
+
+      <h2 class="section-title">DELIMITER — Why It's Needed</h2>
+      <div class="note">
+        <div class="kb-label">Concept</div>
+        <p>SQL uses <code>;</code> as statement terminator. Inside a procedure body, <code>;</code> would confuse the parser. We temporarily change the delimiter to <code>$$</code> so MySQL treats the entire procedure as one unit, then restore it.</p>
+      </div>
+
+      <h2 class="section-title">No-Parameter Procedure</h2>
+      <pre><code>-- Create
+DELIMITER $$
+CREATE PROCEDURE GetAllStudents()
+BEGIN
+    SELECT * FROM students;
+END $$
+DELIMITER ;
+
+-- Call
+CALL GetAllStudents();</code></pre>
+
+      <pre><code>-- Another example
+DELIMITER $$
+CREATE PROCEDURE GetAllCourses()
+BEGIN
+    SELECT * FROM courses;
+END $$
+DELIMITER ;
+
+CALL GetAllCourses();</code></pre>
+
+      <h2 class="section-title">IN Parameter Procedure</h2>
+      <pre><code>-- One IN parameter
+DELIMITER $$
+CREATE PROCEDURE GetStudentsByCity (IN city_name VARCHAR(50))
+BEGIN
+    SELECT * FROM students WHERE city = city_name;
+END $$
+DELIMITER ;
+
+-- Call with different values
+CALL GetStudentsByCity('Kandy');
+CALL GetStudentsByCity('Galle');</code></pre>
+
+      <pre><code>-- Multiple IN parameters
+DELIMITER $$
+CREATE PROCEDURE GetStudentsByCityAndAge (
+    IN city_name   VARCHAR(50),
+    IN student_age INT
+)
+BEGIN
+    SELECT * FROM students
+    WHERE city = city_name AND age = student_age;
+END $$
+DELIMITER ;
+
+-- Call
+CALL GetStudentsByCityAndAge('Colombo', 23);
+CALL GetStudentsByCityAndAge('Galle', 21);</code></pre>
+
+      <h2 class="section-title">Procedure Structure Template</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Part</th><th>Code</th><th>Purpose</th></tr>
+          <tr><td>Change delimiter</td><td><code>DELIMITER $$</code></td><td>Prevents ; confusion inside body</td></tr>
+          <tr><td>Create</td><td><code>CREATE PROCEDURE name(params)</code></td><td>Define procedure</td></tr>
+          <tr><td>Body start</td><td><code>BEGIN</code></td><td>Start of SQL block</td></tr>
+          <tr><td>SQL logic</td><td><code>SELECT / INSERT / ...</code></td><td>Actual work</td></tr>
+          <tr><td>Body end</td><td><code>END $$</code></td><td>End using custom delimiter</td></tr>
+          <tr><td>Restore delimiter</td><td><code>DELIMITER ;</code></td><td>Back to normal</td></tr>
+          <tr><td>Execute</td><td><code>CALL procedure_name(args);</code></td><td>Run the procedure</td></tr>
+        </table>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Always wrap procedure creation with <code>DELIMITER $$ ... DELIMITER ;</code></li>
+          <li>No-param: <code>GetAll()</code> — empty parentheses</li>
+          <li>IN param: passes a value into the procedure; cannot return it back</li>
+          <li>CALL to execute; pass values matching the parameter types and order</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P11 ══════════════════ -->
+    <div class="lesson-panel" id="panel-10">
+      <div class="lec-tag">PRACTICAL 11</div>
+      <h1 class="lesson-headline">Normalization in Practice</h1>
+      <p class="lesson-desc">3NF decomposition — university results database implementation</p>
+
+      <h2 class="section-title">Why Normalize?</h2>
+      <div class="three-column">
+        <div class="card"><div class="card-title">❌ Insertion Anomaly</div><p>Can't add a new course unless a student is enrolled in it.</p></div>
+        <div class="card"><div class="card-title">❌ Deletion Anomaly</div><p>Deleting a student removes the only record of a course.</p></div>
+        <div class="card"><div class="card-title">❌ Update Anomaly</div><p>Changing coordinator address needs updating many rows → risk of inconsistency.</p></div>
+      </div>
+
+      <h2 class="section-title">Problem: Unnormalized Table</h2>
+      <pre><code>-- Original flat table (violates 2NF and 3NF)
+-- RESULTS (student_id, student_name, address, degree,
+--          course_id, course_name, coordinator_name, coordinator_address,
+--          grade)
+--
+-- Partial dependencies  → student_name, address, degree depend only on student_id
+--                        → course_name, coordinator_name depend only on course_id
+-- Transitive dependency → coordinator_address depends on coordinator_name (not course_id)</code></pre>
+
+      <h2 class="section-title">3NF Decomposition Solution</h2>
+      <pre><code>CREATE DATABASE IF NOT EXISTS university_normalization_db;
+USE university_normalization_db;
+
+-- Table A: COORDINATOR (removes transitive dependency)
+-- coordinator_address depends on coordinator_name, not course_id
+CREATE TABLE coordinator (
+    coordinator_name    VARCHAR(100) NOT NULL,
+    coordinator_address VARCHAR(100) NOT NULL,
+    PRIMARY KEY (coordinator_name)
+);
+
+-- Table B: STUDENT (removes partial dependency from student_id)
+CREATE TABLE student (
+    student_id   VARCHAR(20)  NOT NULL,
+    student_name VARCHAR(100) NOT NULL,
+    address      VARCHAR(100) NOT NULL,
+    degree       VARCHAR(50)  NOT NULL,
+    PRIMARY KEY (student_id)
+);
+
+-- Table C: COURSE (removes partial dependency from course_id)
+CREATE TABLE course (
+    course_id        VARCHAR(20)  NOT NULL,
+    course_name      VARCHAR(100) NOT NULL,
+    coordinator_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (course_id),
+    FOREIGN KEY (coordinator_name)
+        REFERENCES coordinator(coordinator_name) ON UPDATE CASCADE
+);
+
+-- Table D: RESULTS (composite PK = many-to-many: student ↔ course)
+CREATE TABLE results (
+    student_id VARCHAR(20) NOT NULL,
+    course_id  VARCHAR(20) NOT NULL,
+    grade      CHAR(2)     NOT NULL,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id)  REFERENCES course(course_id)   ON DELETE CASCADE
+);</code></pre>
+
+      <h2 class="section-title">Normalization Steps Summary</h2>
+      <div class="flow">
+        <div class="flow-step"><div class="flow-step-num">1NF</div><div><strong>Atomicity:</strong> All values atomic. No repeating groups. Identify a primary key.</div></div>
+        <div class="flow-step"><div class="flow-step-num">2NF</div><div><strong>Remove partial dependencies:</strong> Every non-key attribute must depend on the WHOLE primary key (not just part of it). Only applies when PK is composite.</div></div>
+        <div class="flow-step"><div class="flow-step-num">3NF</div><div><strong>Remove transitive dependencies:</strong> Non-key attribute must NOT depend on another non-key attribute. Move it to its own table.</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Dependency Type</th><th>Violation</th><th>Fix</th></tr>
+          <tr><td>Partial (2NF)</td><td>Attribute depends on PART of composite PK</td><td>Extract to new table with that PK part</td></tr>
+          <tr><td>Transitive (3NF)</td><td>Non-key → Non-key → PK chain</td><td>Extract the transitively dependent group to new table</td></tr>
+        </table>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>2NF: Only relevant when primary key is <strong>composite</strong></li>
+          <li>3NF: Look for <code>A → B → C</code> where B is not a key</li>
+          <li>Many-to-many = bridge/results table with composite PK</li>
+          <li>Use ON UPDATE CASCADE on coordinator FK so name changes propagate</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══════════════════ P12 ══════════════════ -->
+    <div class="lesson-panel" id="panel-11">
+      <div class="lec-tag">PRACTICAL 12</div>
+      <h1 class="lesson-headline">Backup & Restore</h1>
+      <p class="lesson-desc">mysqldump for backups, mysql for restoration, single table or full database</p>
+
+      <h2 class="section-title">Setup: Sample School Database</h2>
+      <pre><code>CREATE DATABASE school;
+USE school;
+
+CREATE TABLE student (
+    id     INT PRIMARY KEY,
+    name   VARCHAR(50),
+    course VARCHAR(50)
+);
+
+INSERT INTO student VALUES
+    (1, 'Kamal', 'Computing'),
+    (2, 'Nimal', 'Networking');</code></pre>
+
+      <h2 class="section-title">Backup Commands (Command Prompt / Terminal)</h2>
+      <div class="warning">
+        <div class="kb-label">⚠️ Important</div>
+        <p>These commands are run in the <strong>OS terminal / command prompt</strong> — NOT inside the MySQL client.</p>
+      </div>
+      <pre><code>-- Full database backup
+mysqldump --set-gtid-purged=OFF -u root -p --databases school > school.sql
+
+-- Single table backup only
+mysqldump --set-gtid-purged=OFF -u root -p school student > student.sql</code></pre>
+
+      <h2 class="section-title">Restore Commands (Command Prompt / Terminal)</h2>
+      <pre><code>-- Full database restore
+mysql -u root -p < school.sql
+
+-- Single table restore into existing database
+mysql -u root -p school < student.sql</code></pre>
+
+      <h2 class="section-title">What's Inside a .sql Backup File?</h2>
+      <pre><code>-- A backup file contains DDL + DML:
+CREATE TABLE student (
+    id   int,
+    name varchar(50)
+);
+
+INSERT INTO student VALUES (1, 'Kamal', 'Computing');</code></pre>
+
+      <h2 class="section-title">Backup Options Explained</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Flag / Part</th><th>Meaning</th></tr>
+          <tr><td><code>mysqldump</code></td><td>MySQL utility for creating backups</td></tr>
+          <tr><td><code>--set-gtid-purged=OFF</code></td><td>Avoids GTID-related errors on restore</td></tr>
+          <tr><td><code>-u root</code></td><td>Login as root user</td></tr>
+          <tr><td><code>-p</code></td><td>Prompt for password</td></tr>
+          <tr><td><code>--databases school</code></td><td>Include CREATE DATABASE statement in backup</td></tr>
+          <tr><td><code>school student</code></td><td>Backup only the 'student' table from 'school' database</td></tr>
+          <tr><td><code>> file.sql</code></td><td>Write output to file</td></tr>
+          <tr><td><code>< file.sql</code></td><td>Read input from file (restore)</td></tr>
+        </table>
+      </div>
+
+      <h2 class="section-title">Quick Reference</h2>
+      <div class="two-column">
+        <div class="card">
+          <div class="card-title">📦 Backup</div>
+          <p><code>mysqldump ... &gt; output.sql</code></p>
+          <ul>
+            <li>Full DB: add <code>--databases dbname</code></li>
+            <li>Single table: <code>dbname tablename</code></li>
+            <li>Always run in OS terminal</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">♻️ Restore</div>
+          <p><code>mysql ... &lt; input.sql</code></p>
+          <ul>
+            <li>Full DB: no need to specify DB name</li>
+            <li>Single table: must specify target DB</li>
+            <li>DB must exist first for table restore</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="kb-label">📝 Exam Tips</div>
+        <ul>
+          <li>Backup uses <code>mysqldump</code>; restore uses <code>mysql</code></li>
+          <li><code>&gt;</code> = write to file (backup); <code>&lt;</code> = read from file (restore)</li>
+          <li>Backup commands run in OS terminal, NOT MySQL shell</li>
+          <li><code>--set-gtid-purged=OFF</code> is needed to avoid errors on most setups</li>
+          <li>A backup file is plain SQL — CREATE TABLE + INSERT statements</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+      <button class="nav-btn" id="prevBtn" onclick="changeTab(-1)" disabled>← Prev</button>
+      <span class="nav-label" id="navLabel">Practical 1 of 12</span>
+      <button class="nav-btn" id="nextBtn" onclick="changeTab(1)">Next →</button>
+    </div>
+  </div>
 </div>
 
 <script>
-    // ---------- CONTENT DEFINITION (11 TABS) ----------
-    const tabsData = [
-        { name: "SELECT & DQL", badge: "🔍", desc: "Core query building blocks" },
-        { name: "DDL + SCHEMA", badge: "🏗️", desc: "Database, tables, views, indexes" },
-        { name: "DML · DCL · TCL", badge: "✍️🔐", desc: "Data manip, security, transactions" },
-        { name: "JOINS & SET OPS", badge: "🔗📦", desc: "Combine data across relations" },
-        { name: "COND & EXPR", badge: "🎯", desc: "Powerful conditions & logic" },
-        { name: "AGG & STRING", badge: "📊🧾", desc: "Aggregations + text functions" },
-        { name: "DATE & MISC", badge: "📅", desc: "DateTime & utilities" },
-        { name: "STORED PROGRAMS", badge: "⚙️", desc: "Procedures, triggers, events" },
-        { name: "PERF & INDEX", badge: "📈", desc: "Optimization, EXPLAIN, partitioning" },
-        { name: "ADMIN + SEC", badge: "🔐🧰", desc: "Users, privileges, processlist" },
-        { name: "BACKUP & UTILS", badge: "💾", desc: "mysqldump, logs, restore" }
-    ];
+  let current = 0;
+  const total = 12;
 
-    // each panel content built with dynamic grid/cards per feature group
-    const panelsHTML = [
-        // TAB 0 : SELECT & DQL
-        `<div class="card"><h2 class="section-title">📘 DQL · SELECT & Clauses</h2><div class="grid">
-        ${makeCard("SELECT", "Retrieve rows from tables.", "SELECT first_name, salary FROM employees WHERE salary > 50000;")}
-        ${makeCard("DISTINCT", "Remove duplicate rows.", "SELECT DISTINCT department_id FROM employees;")}
-        ${makeCard("WHERE", "Filter rows based on condition.", "SELECT * FROM orders WHERE total > 100;")}
-        ${makeCard("ORDER BY", "Sort result set.", "SELECT name, price FROM products ORDER BY price DESC;")}
-        ${makeCard("GROUP BY", "Group rows for aggregation.", "SELECT department, COUNT(*) FROM employees GROUP BY department;")}
-        ${makeCard("HAVING", "Filter groups (after GROUP BY).", "SELECT department, AVG(salary) avg_sal FROM employees GROUP BY department HAVING avg_sal > 60000;")}
-        ${makeCard("LIMIT & OFFSET", "Limit rows & pagination.", "SELECT * FROM users LIMIT 10 OFFSET 20;")}
-        ${makeCard("WITH (CTE)", "Common Table Expression for complex queries.", "WITH high_sal AS (SELECT * FROM employees WHERE salary > 70000) SELECT * FROM high_sal WHERE dept_id=2;")}
-        </div></div><div class="note">💡 <strong>Example ready</strong> — run directly on any MySQL instance (adjust table names)</div>`,
-        
-        // TAB 1 : DDL + SCHEMA OBJECTS
-        `<div class="card"><h2 class="section-title">🏗️ Data Definition Language & Schema</h2><div class="grid">
-        ${makeCard("CREATE DATABASE", "Create new database.", "CREATE DATABASE ecommerce;")}
-        ${makeCard("CREATE TABLE", "Define new table.", "CREATE TABLE users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100));")}
-        ${makeCard("ALTER TABLE", "Modify existing table.", "ALTER TABLE users ADD COLUMN email VARCHAR(255);")}
-        ${makeCard("DROP / TRUNCATE", "Remove table / delete all rows.", "DROP TABLE old_data; TRUNCATE logs;")}
-        ${makeCard("RENAME TABLE", "Rename a table.", "RENAME TABLE employees TO staff;")}
-        ${makeCard("COMMENT", "Add documentation.", "ALTER TABLE products COMMENT 'Main inventory';")}
-        ${makeCard("CREATE INDEX", "Improve query speed.", "CREATE INDEX idx_name ON customers(last_name);")}
-        ${makeCard("CREATE VIEW", "Virtual table based on query.", "CREATE VIEW active_users AS SELECT * FROM users WHERE status='active';")}
-        ${makeCard("TEMPORARY TABLE", "Session-only table.", "CREATE TEMPORARY TABLE temp AS SELECT * FROM orders WHERE date=CURDATE();")}
-        ${makeCard("SEQUENCE (emulated)", "Auto increment simulation.", "CREATE TABLE seq (id INT AUTO_INCREMENT PRIMARY KEY); INSERT INTO seq VALUES(); SELECT LAST_INSERT_ID();")}
-        </div></div><div class="important">📌 <strong>SEQUENCE emulation</strong> uses AUTO_INCREMENT or a dedicated table.</div>`,
-        
-        // TAB 2 : DML · DCL · TCL
-        `<div class="card"><h2 class="section-title">✍️ DML + 🔐 DCL + 🔁 TCL</h2><div class="grid">
-        ${makeCard("INSERT", "Add rows.", "INSERT INTO products (name, price) VALUES ('Laptop', 1200);")}
-        ${makeCard("UPDATE", "Modify existing data.", "UPDATE employees SET salary = salary * 1.1 WHERE department='IT';")}
-        ${makeCard("DELETE", "Remove rows.", "DELETE FROM logs WHERE created_at < '2023-01-01';")}
-        ${makeCard("REPLACE", "Insert or replace if PK exists.", "REPLACE INTO users (id, name) VALUES (1, 'John Doe');")}
-        ${makeCard("LOAD DATA", "Bulk import from file.", "LOAD DATA INFILE '/data/users.csv' INTO TABLE users FIELDS TERMINATED BY ',';")}
-        ${makeCard("GRANT / REVOKE", "Manage privileges.", "GRANT SELECT, INSERT ON mydb.* TO 'app_user'@'localhost'; REVOKE DELETE ON mydb.* FROM 'app_user'@'localhost';")}
-        ${makeCard("START TRANSACTION", "Begin a transaction.", "START TRANSACTION; UPDATE accounts SET balance = balance - 100 WHERE id=1;")}
-        ${makeCard("COMMIT / ROLLBACK", "Save or undo transaction.", "COMMIT; -- or ROLLBACK;")}
-        ${makeCard("SAVEPOINT", "Partial rollback point.", "SAVEPOINT sp1; DELETE FROM temp; ROLLBACK TO SAVEPOINT sp1;")}
-        ${makeCard("SET TRANSACTION", "Set isolation level.", "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;")}
-        </div></div><div class="warning">⚠️ LOAD DATA requires FILE privilege and secure-file-priv settings.</div>`,
-        
-        // TAB 3 : JOINS & SET OPS
-        `<div class="card"><h2 class="section-title">🔗 JOIN + 📦 Set Operations</h2><div class="grid">
-        ${makeCard("INNER JOIN", "Matching rows both tables.", "SELECT orders.id, customers.name FROM orders INNER JOIN customers ON orders.cust_id = customers.id;")}
-        ${makeCard("LEFT JOIN", "All left table rows + matches.", "SELECT users.name, orders.total FROM users LEFT JOIN orders ON users.id = orders.user_id;")}
-        ${makeCard("RIGHT JOIN", "All right table rows + matches.", "SELECT employees.name, departments.name FROM employees RIGHT JOIN departments ON employees.dept_id = departments.id;")}
-        ${makeCard("CROSS JOIN", "Cartesian product.", "SELECT * FROM colors, sizes;")}
-        ${makeCard("SELF JOIN", "Join table to itself.", "SELECT e1.name AS Employee, e2.name AS Manager FROM emp e1 LEFT JOIN emp e2 ON e1.manager_id = e2.id;")}
-        ${makeCard("NATURAL JOIN", "Join on same column names.", "SELECT * FROM products NATURAL JOIN categories;")}
-        ${makeCard("UNION / UNION ALL", "Combine result sets.", "SELECT city FROM customers UNION SELECT city FROM suppliers;")}
-        ${makeCard("INTERSECT (emulated)", "Rows present in both queries.", "SELECT id FROM orders WHERE total>100 INTERSECT SELECT order_id FROM returns; -- MySQL: use EXISTS or IN")}
-        ${makeCard("EXCEPT (emulated)", "Rows only in first query.", "SELECT id FROM employees WHERE dept='sales' EXCEPT SELECT emp_id FROM terminated;")}
-        </div></div><div class="note">💡 MySQL lacks INTERSECT/EXCEPT natively; emulate with IN/NOT EXISTS.</div>`,
-        
-        // TAB 4 : CONDITIONS & OPERATORS / EXPRESSIONS
-        `<div class="card"><h2 class="section-title">🎯 Conditions & Logical Expressions</h2><div class="grid">
-        ${makeCard("IN / NOT IN", "Match list.", "SELECT * FROM products WHERE category_id IN (2,4,6);")}
-        ${makeCard("BETWEEN", "Range inclusive.", "SELECT * FROM orders WHERE order_date BETWEEN '2025-01-01' AND '2025-12-31';")}
-        ${makeCard("LIKE / REGEXP", "Pattern matching.", "SELECT name FROM users WHERE name LIKE 'J%'; SELECT email FROM contacts WHERE email REGEXP '^[a-z]+@';")}
-        ${makeCard("IS NULL / IS NOT NULL", "Check nulls.", "SELECT * FROM tasks WHERE completed_at IS NULL;")}
-        ${makeCard("EXISTS / ANY / ALL", "Subquery conditions.", "SELECT name FROM products WHERE EXISTS (SELECT 1 FROM orders WHERE orders.product_id = products.id);")}
-        ${makeCard("CASE", "Conditional logic.", "SELECT name, CASE WHEN salary > 80000 THEN 'High' ELSE 'Normal' END AS bracket FROM employees;")}
-        ${makeCard("IF()", "Simple if-else.", "SELECT name, IF(status='active', 'Enabled', 'Disabled') AS state FROM accounts;")}
-        ${makeCard("COALESCE", "First non-null.", "SELECT name, COALESCE(phone, 'No phone') FROM customers;")}
-        ${makeCard("NULLIF", "Returns NULL if equal.", "SELECT NULLIF(amount, 0) FROM payments; -- avoid division by zero")}
-        </div></div>`,
-        
-        // TAB 5 : AGGREGATE + STRING FUNCTIONS
-        `<div class="card"><h2 class="section-title">📊 Aggregates & 🧾 String Functions</h2><div class="grid">
-        ${makeCard("COUNT, SUM, AVG, MIN, MAX", "Statistical summaries.", "SELECT COUNT(*) AS total, AVG(price) FROM inventory; SELECT MAX(salary), MIN(salary) FROM employees;")}
-        ${makeCard("CONCAT", "Join strings.", "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users;")}
-        ${makeCard("SUBSTRING", "Extract part.", "SELECT SUBSTRING(description, 1, 50) AS snippet FROM articles;")}
-        ${makeCard("LENGTH / CHAR_LENGTH", "String length.", "SELECT name, LENGTH(name) FROM cities;")}
-        ${makeCard("TRIM / UPPER / LOWER", "Clean & case.", "SELECT UPPER(email), TRIM('  hello  ') FROM dual;")}
-        ${makeCard("REPLACE", "Substitute substring.", "UPDATE posts SET content = REPLACE(content, 'old', 'new');")}
-        </div></div><div class="important">📌 GROUP_CONCAT also useful: GROUP_CONCAT(name SEPARATOR ', ')</div>`,
-        
-        // TAB 6 : DATE & TIME FUNCTIONS
-        `<div class="card"><h2 class="section-title">📅 Date / Time Functions</h2><div class="grid">
-        ${makeCard("NOW(), CURDATE(), CURTIME()", "Current moment.", "SELECT NOW(), CURDATE(), CURTIME();")}
-        ${makeCard("DATE()", "Extract date part.", "SELECT DATE(created_at) FROM logs;")}
-        ${makeCard("DATEDIFF", "Days between dates.", "SELECT DATEDIFF('2025-12-31', '2025-01-01') AS days_left;")}
-        ${makeCard("DATE_ADD / DATE_SUB", "Arithmetic on dates.", "SELECT DATE_ADD(NOW(), INTERVAL 7 DAY); SELECT DATE_SUB(order_date, INTERVAL 1 MONTH) FROM orders;")}
-        ${makeCard("YEAR, MONTH, DAY", "Extract components.", "SELECT YEAR(birth_date) FROM employees;")}
-        </div></div>`,
-        
-        // TAB 7 : STORED PROGRAMS (Procedure, Function, Trigger, Event, Cursor)
-        `<div class="card"><h2 class="section-title">⚙️ Stored Routines & Triggers</h2><div class="grid">
-        ${makeCard("CREATE PROCEDURE", "Reusable routine.", "DELIMITER // CREATE PROCEDURE GetEmp(IN dept INT) BEGIN SELECT * FROM employees WHERE dept_id=dept; END //")}
-        ${makeCard("CREATE FUNCTION", "Returns value.", "CREATE FUNCTION calc_tax(price DECIMAL) RETURNS DECIMAL DETERMINISTIC RETURN price * 0.2;")}
-        ${makeCard("CREATE TRIGGER", "Auto action before/after event.", "CREATE TRIGGER audit_log AFTER INSERT ON orders FOR EACH ROW INSERT INTO logs(msg) VALUES('New order');")}
-        ${makeCard("EVENT SCHEDULER", "Scheduled jobs.", "CREATE EVENT cleanup ON SCHEDULE EVERY 1 DAY DO DELETE FROM sessions WHERE expiry < NOW();")}
-        ${makeCard("CURSOR", "Row-by-row iteration.", "DECLARE cur CURSOR FOR SELECT id FROM users; OPEN cur; FETCH cur INTO var;")}
-        </div></div><div class="warning">❗ Enable event_scheduler: SET GLOBAL event_scheduler = ON;</div>`,
-        
-        // TAB 8 : PERFORMANCE & INDEX (EXPLAIN, PARTITIONING, ANALYZE)
-        `<div class="card"><h2 class="section-title">📈 Optimization & Indexing</h2><div class="grid">
-        ${makeCard("CREATE / DROP INDEX", "Speed up queries.", "CREATE INDEX idx_email ON users(email); DROP INDEX idx_email ON users;")}
-        ${makeCard("EXPLAIN", "Query execution plan.", "EXPLAIN SELECT * FROM orders WHERE customer_id = 55;")}
-        ${makeCard("ANALYZE TABLE", "Update index statistics.", "ANALYZE TABLE employees;")}
-        ${makeCard("PARTITIONING", "Split large tables.", "CREATE TABLE sales (id INT, sale_date DATE) PARTITION BY RANGE(YEAR(sale_date)) (PARTITION p0 VALUES LESS THAN (2020));")}
-        ${makeCard("QUERY CACHE (legacy)", "Cached result sets (removed MySQL 8.0).", "Concept: store frequent SELECT results; use buffer pool instead now.")}
-        </div></div>`,
-        
-        // TAB 9 : ADMINISTRATION + SECURITY
-        `<div class="card"><h2 class="section-title">🧰 Admin & Security Commands</h2><div class="grid">
-        ${makeCard("CREATE / ALTER / DROP USER", "Manage accounts.", "CREATE USER 'webapp'@'%' IDENTIFIED BY 'securePass'; ALTER USER 'webapp'@'%' IDENTIFIED BY 'newpass'; DROP USER 'olduser'@'localhost';")}
-        ${makeCard("SHOW GRANTS", "View privileges.", "SHOW GRANTS FOR 'root'@'localhost';")}
-        ${makeCard("SHOW DATABASES / TABLES", "List metadata.", "SHOW DATABASES; SHOW TABLES FROM mydb;")}
-        ${makeCard("DESCRIBE / SHOW COLUMNS", "Table structure.", "DESCRIBE employees; SHOW COLUMNS FROM products;")}
-        ${makeCard("USE", "Select default database.", "USE ecommerce_db;")}
-        ${makeCard("SHOW PROCESSLIST / KILL", "Monitor connections.", "SHOW PROCESSLIST; KILL QUERY 1234;")}
-        </div></div>`,
-        
-        // TAB 10 : BACKUP & RECOVERY (mysqldump, binlogs, FLUSH)
-        `<div class="card"><h2 class="section-title">💾 Backup, Restore & Binary Logs</h2><div class="grid">
-        ${makeCard("mysqldump", "Logical backup tool.", "mysqldump -u root -p company > backup.sql  # terminal command")}
-        ${makeCard("RESTORE (source)", "Import dump.", "mysql -u root -p company < backup.sql  # shell | SOURCE backup.sql; inside MySQL")}
-        ${makeCard("BINARY LOGS", "Point-in-time recovery.", "SHOW BINARY LOGS; FLUSH LOGS;")}
-        ${makeCard("FLUSH LOGS", "Rotate logs.", "FLUSH LOGS; -- rotates error log, binary logs")}
-        </div></div><div class="note">💡 For incremental recovery use mysqlbinlog tool.</div>`
-    ];
+  function showTab(i) {
+    document.querySelectorAll('.lesson-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+    document.querySelectorAll('.tab-btn').forEach((t, j) => t.classList.toggle('active', j === i));
+    current = i;
+    document.getElementById('navLabel').textContent = 'Practical ' + (i + 1) + ' of ' + total;
+    document.getElementById('prevBtn').disabled = i === 0;
+    document.getElementById('nextBtn').disabled = i === total - 1;
+    document.querySelectorAll('.tab-btn')[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    document.querySelector('.tab-browser').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
-    function makeCard(title, desc, example) {
-        return `<div class="box"><strong>${title}</strong><p>${desc}</p><pre><code>${escapeHtml(example)}</code></pre></div>`;
-    }
-    
-    function escapeHtml(str) {
-        return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
-            return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
-        });
-    }
+  function changeTab(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) showTab(next);
+  }
 
-    // render tabs and panels
-    const tabBar = document.getElementById('tabBar');
-    const panelsContainer = document.getElementById('panelsContainer');
-    
-    tabsData.forEach((tab, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
-        btn.innerHTML = `<span class="lnum">${idx+1}</span> ${tab.badge} ${tab.name}`;
-        btn.setAttribute('data-index', idx);
-        btn.onclick = () => showTab(idx);
-        tabBar.appendChild(btn);
-        
-        const panelDiv = document.createElement('div');
-        panelDiv.className = 'lesson-panel' + (idx === 0 ? ' active' : '');
-        panelDiv.innerHTML = panelsHTML[idx];
-        panelsContainer.appendChild(panelDiv);
-    });
-    
-    let current = 0;
-    const total = tabsData.length;
-    
-    function showTab(i) {
-        document.querySelectorAll('.lesson-panel').forEach((p, j) => p.classList.toggle('active', j === i));
-        document.querySelectorAll('.tab-btn').forEach((t, j) => t.classList.toggle('active', j === i));
-        current = i;
-        document.getElementById('navLabel').innerText = `Lesson ${i+1} of ${total}`;
-        document.getElementById('prevBtn').disabled = i === 0;
-        document.getElementById('nextBtn').disabled = i === total-1;
-        const activeTab = document.querySelectorAll('.tab-btn')[i];
-        if(activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-    
-    window.changeTab = function(dir) {
-        const next = current + dir;
-        if(next >= 0 && next < total) showTab(next);
-    };
-    
-    window.toggleTheme = function() {
-        const html = document.documentElement;
-        const isDark = html.getAttribute('data-theme') === 'dark';
-        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        const btn = document.getElementById('themeBtn');
-        btn.innerHTML = isDark ? '<span class="icon">🌙</span> Dark Mode' : '<span class="icon">☀️</span> Light Mode';
-    };
-    
-    // set initial button text
-    document.getElementById('themeBtn').innerHTML = '<span class="icon">🌙</span> Dark Mode';
-    document.getElementById('prevBtn').disabled = true;
-    showTab(0);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') changeTab(-1);
+    if (e.key === 'ArrowRight') changeTab(1);
+  });
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const btn = document.getElementById('themeBtn');
+    btn.innerHTML = isDark ? '<span class="icon">🌙</span> Dark Mode' : '<span class="icon">☀️</span> Light Mode';
+  }
 </script>
 </body>
 </html>
