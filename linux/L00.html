@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICT1261 Linux — Exam Study Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+[data-theme="light"] {
+    --bg-page:#eef6f5; --bg-card:#ffffff; --bg-box:#f3fbfa;
+    --bg-highlight:#fff9e6; --bg-important:#e8f5e9; --bg-note:#e3f2fd;
+    --bg-warning:#fce4ec; --bg-inclass:#f3e5f5; --bg-pre:#1e1e1e; --bg-code:#eee;
+    --color-primary:#2c6e6b; --color-primary-light:#5a9d99; --color-border:#cfe9e7;
+    --color-text:#333333; --color-text-muted:#555555; --color-tag-bg:#2c6e6b;
+    --color-shadow:rgba(0,0,0,.08); --color-tab-bar:#d4eceb; --color-tab-inactive:#5a8e8b;
+    --color-tab-active-bg:#ffffff; --color-tab-hover:#e8f5f4;
+    --color-toggle-bg:#2c6e6b; --color-toggle-text:#fff; --color-code-text:#c0392b;
+}
+[data-theme="dark"] {
+    --bg-page:#0f1a19; --bg-card:#1a2b2a; --bg-box:#1e3432;
+    --bg-highlight:#2a2410; --bg-important:#132a14; --bg-note:#0f1e2d;
+    --bg-warning:#2d1020; --bg-inclass:#1e1228; --bg-pre:#0a0a0a; --bg-code:#2a2a2a;
+    --color-primary:#5fcac6; --color-primary-light:#82d8d5; --color-border:#2a4a48;
+    --color-text:#d4e8e7; --color-text-muted:#8ab8b6; --color-tag-bg:#2a6e6b;
+    --color-shadow:rgba(0,0,0,.3); --color-tab-bar:#132322; --color-tab-inactive:#5a8e8b;
+    --color-tab-active-bg:#1a2b2a; --color-tab-hover:#1e3432;
+    --color-toggle-bg:#5fcac6; --color-toggle-text:#0f1a19; --color-code-text:#ff8a65;
+}
+
+body { font-family:'DM Sans',sans-serif; background:var(--bg-page); padding:20px; line-height:1.7; color:var(--color-text); transition:background .3s,color .3s; }
+.container { max-width:980px; margin:0 auto; }
+
+.page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
+.page-header-text h1 { font-family:'DM Serif Display',serif; color:var(--color-primary); font-size:2em; letter-spacing:-.01em; }
+.page-header-text p { color:var(--color-primary-light); font-size:.95em; margin-top:4px; }
+
+.theme-toggle { display:flex; align-items:center; gap:8px; background:var(--color-toggle-bg); color:var(--color-toggle-text); border:none; cursor:pointer; padding:8px 16px; border-radius:24px; font-family:'DM Sans',sans-serif; font-size:.85em; font-weight:600; transition:all .25s; white-space:nowrap; }
+.theme-toggle:hover { opacity:.85; transform:translateY(-1px); }
+.theme-toggle .icon { font-size:1.1em; }
+
+.tab-browser { background:var(--bg-card); border-radius:14px 14px 0 0; box-shadow:0 4px 18px var(--color-shadow); overflow:hidden; }
+.tab-bar-wrapper { background:var(--color-tab-bar); padding:3px 12px 3px; border-bottom:2px solid var(--color-border); overflow-x:auto; scrollbar-width:thin; scrollbar-color:var(--color-primary) transparent; }
+.tab-bar-wrapper::-webkit-scrollbar { height:4px; }
+.tab-bar-wrapper::-webkit-scrollbar-thumb { background:var(--color-primary); border-radius:2px; }
+.tab-bar { display:flex; gap:4px; min-width:max-content; }
+
+.tab-btn { display:flex; align-items:center; gap:6px; padding:9px 16px; border:1px solid transparent; border-bottom:none; border-radius:8px 8px 0 0; background:transparent; color:var(--color-tab-inactive); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.8em; font-weight:500; white-space:nowrap; transition:all .2s; position:relative; bottom:-2px; }
+.tab-btn:hover { background:var(--color-tab-hover); color:var(--color-text); }
+.tab-btn.active { background:var(--color-tab-active-bg); border-color:var(--color-border); color:var(--color-primary); font-weight:600; box-shadow:0 -2px 0 var(--color-primary) inset; }
+.tab-btn .lnum { background:var(--color-primary); color:#fff; font-size:.7em; padding:1px 6px; border-radius:8px; font-weight:700; }
+
+.lesson-panel { display:none; padding:30px; }
+.lesson-panel.active { display:block; }
+
+.card { background:var(--bg-card); padding:25px; margin:20px 0; border-radius:12px; box-shadow:0 3px 10px var(--color-shadow); border:1px solid var(--color-border); transition:background .3s; }
+.section-title { color:var(--color-primary); border-bottom:2px solid var(--color-border); padding-bottom:8px; margin-bottom:15px; font-size:1.3em; font-family:'DM Serif Display',serif; }
+.lesson-headline { font-family:'DM Serif Display',serif; font-size:1.7em; color:var(--color-primary); margin-bottom:6px; }
+.lesson-desc { color:var(--color-text-muted); font-size:.95em; margin-bottom:20px; }
+
+ul { list-style-position:inside; line-height:1.9; margin-left:10px; }
+ul li { margin:6px 0; }
+ul ul { margin-left:22px; list-style-type:circle; }
+
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:15px; margin-top:15px; }
+.box { background:var(--bg-box); padding:15px; border-radius:10px; border-left:3px solid var(--color-primary); transition:background .3s; }
+.box strong { color:var(--color-primary); display:block; margin-bottom:5px; }
+
+.highlight { background:var(--bg-highlight); padding:15px; border-radius:8px; border-left:4px solid #f0ad4e; margin:15px 0; }
+.important { background:var(--bg-important); padding:15px; border-radius:8px; border-left:4px solid #4caf50; margin:15px 0; }
+.note { background:var(--bg-note); padding:15px; border-radius:8px; border-left:4px solid #2196f3; margin:15px 0; }
+.warning { background:var(--bg-warning); padding:15px; border-radius:8px; border-left:4px solid #e91e63; margin:15px 0; }
+.in-class { background:var(--bg-inclass); padding:20px; border-radius:10px; border-left:4px solid #9c27b0; margin:15px 0; }
+.in-class h3 { color:#9c27b0; margin-bottom:10px; }
+
+.two-column { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:15px; }
+.three-column { display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; margin-top:15px; }
+
+code { background:var(--bg-code); padding:2px 6px; border-radius:4px; font-family:'Courier New',monospace; font-size:.9em; color:var(--color-code-text); }
+
+pre { background:var(--bg-pre); color:#f8f8f2; padding:16px; border-radius:8px; overflow-x:auto; font-family:'Courier New',monospace; font-size:.85em; line-height:1.6; margin:12px 0; }
+pre .c { color:#75715e; } /* comment */
+pre .k { color:#66d9ef; } /* keyword */
+pre .s { color:#a6e22e; } /* string/output */
+
+.flow-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:12px 0; }
+.flow-box { background:var(--bg-box); border:1px solid var(--color-border); padding:7px 14px; border-radius:8px; font-size:.88em; font-weight:600; color:var(--color-primary); white-space:nowrap; }
+.flow-arrow { color:var(--color-primary-light); font-size:1.1em; font-weight:700; }
+
+.tag { display:inline-block; background:var(--color-tag-bg); color:white; padding:2px 10px; border-radius:12px; font-size:.78em; margin:2px; vertical-align:middle; }
+.tag.orange { background:#e67e22; } .tag.blue { background:#2980b9; } .tag.red { background:#c0392b; }
+.tag.purple { background:#7b1fa2; } .tag.green { background:#2e7d32; } .tag.pink { background:#c2185b; }
+
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:.9em; }
+th { background:var(--bg-box); color:var(--color-primary); padding:10px; border:1px solid var(--color-border); text-align:left; font-weight:600; }
+td { padding:9px 10px; border:1px solid var(--color-border); vertical-align:top; }
+tr:nth-child(even) td { background:var(--bg-box); }
+td code { font-size:.82em; }
+
+.bottom-nav { background:var(--bg-card); border-top:2px solid var(--color-border); padding:12px 20px; display:flex; justify-content:space-between; align-items:center; border-radius:0 0 14px 14px; box-shadow:0 4px 18px var(--color-shadow); }
+.nav-btn { display:flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--color-border); color:var(--color-primary); padding:7px 16px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85em; font-weight:600; transition:all .2s; }
+.nav-btn:hover { background:var(--bg-box); }
+.nav-btn:disabled { opacity:.3; cursor:not-allowed; }
+.nav-label { font-size:.85em; color:var(--color-text-muted); }
+
+@media(max-width:640px) {
+    body { padding:10px; }
+    .two-column,.three-column { grid-template-columns:1fr; }
+    .lesson-panel { padding:16px; }
+    .page-header { flex-direction:column; align-items:flex-start; }
+}
+
+@media print {
+    body { padding:0; background:#fff; color:#000; }
+    .theme-toggle,.bottom-nav,.tab-bar-wrapper { display:none !important; }
+    .tab-browser { box-shadow:none; }
+    .lesson-panel { display:block !important; page-break-after:always; }
+    .card { box-shadow:none; border:1px solid #ccc; }
+    pre { background:#f5f5f5; color:#000; border:1px solid #ccc; }
+    [data-theme="dark"] { --bg-page:#fff; --bg-card:#fff; --bg-box:#f5f5f5; --color-text:#000; --color-primary:#1a5e5c; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="page-header">
+  <div class="page-header-text">
+    <h1>🐧 ICT1261 — Linux Study Notes</h1>
+    <p>System Programming Fundamentals &amp; Linux · Practical Exam Reference · BY_#D1</p>
+  </div>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+    <span class="icon">🌙</span> Dark Mode
+  </button>
+</div>
+
+<div class="tab-browser">
+  <div class="tab-bar-wrapper">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab(0)"><span class="lnum">01</span> Basic Commands</button>
+      <button class="tab-btn" onclick="showTab(1)"><span class="lnum">02</span> File System</button>
+      <button class="tab-btn" onclick="showTab(2)"><span class="lnum">03</span> Shell Intro</button>
+      <button class="tab-btn" onclick="showTab(3)"><span class="lnum">04</span> Shell Scripts</button>
+      <button class="tab-btn" onclick="showTab(4)"><span class="lnum">05</span> Decisions &amp; Loops</button>
+      <button class="tab-btn" onclick="showTab(5)"><span class="lnum">06</span> Functions &amp; Dialog</button>
+      <button class="tab-btn" onclick="showTab(6)"><span class="lnum">07</span> AWK &amp; sed</button>
+      <button class="tab-btn" onclick="showTab(7)"><span class="lnum">08</span> Cron Jobs</button>
+      <button class="tab-btn" onclick="showTab(8)"><span class="lnum">09</span> Pthreads</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 01 — BASIC COMMANDS ═══════════════ -->
+  <div class="lesson-panel active">
+    <div class="lesson-headline">🐧 Basic Linux Commands</div>
+    <div class="lesson-desc">Lecture 01 — Login, filesystem navigation, permissions, text processing, processes</div>
+
+    <div class="card">
+      <div class="section-title">Command Syntax &amp; Shells</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>Syntax</strong>
+          <code>command [options] [arguments]</code><br>
+          Options start with <code>-</code>. Linux is <b>case-sensitive</b>. Prompt <code>$</code> = shell waiting.
+        </div>
+        <div class="box">
+          <strong>Shell Types</strong>
+          <code>sh</code> — Bourne (original)<br>
+          <code>bash</code> — Bourne-Again (default Linux)<br>
+          <code>csh</code> — C shell<br>
+          <code>echo $SHELL</code> · <code>cat /etc/shells</code> · <code>chsh</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Essential General Commands</div>
+      <table>
+        <tr><th>Command</th><th>Purpose / Key Flags</th></tr>
+        <tr><td><code>man cmd</code></td><td>Manual page — press <code>q</code> to quit</td></tr>
+        <tr><td><code>whoami</code></td><td>Print current username</td></tr>
+        <tr><td><code>which / whereis</code></td><td><code>which</code> → PATH location · <code>whereis</code> → all locations (bin, man, src)</td></tr>
+        <tr><td><code>date</code></td><td><code>date</code> local · <code>date -u</code> GMT</td></tr>
+        <tr><td><code>cal</code></td><td><code>cal</code> current month · <code>cal 2 2000</code> · <code>cal 2017</code> full year</td></tr>
+        <tr><td><code>alias / unalias</code></td><td><code>alias cl cal 2003</code> · <code>unalias cl</code></td></tr>
+        <tr><td><code>history</code></td><td><code>history 10</code> last 10 · <code>!!</code> repeat last</td></tr>
+        <tr><td><code>sleep N</code></td><td>Pause N seconds (scripts)</td></tr>
+        <tr><td><code>shutdown</code></td><td><code>-h now</code> halt · <code>-r now</code> reboot (needs root)</td></tr>
+        <tr><td><code>clear</code> / <kbd>Ctrl+L</kbd></td><td>Clear terminal screen</td></tr>
+      </table>
+      <div class="note">Group commands: <code>(date; cal) &gt; out.txt</code> — all output goes to file. Semicolon alone runs in sequence but only last redirection applies without grouping.</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">File &amp; Directory Commands</div>
+      <table>
+        <tr><th>Command</th><th>Key Usage</th></tr>
+        <tr><td><code>ls</code></td><td><code>-l</code> long · <code>-a</code> hidden · <code>-A</code> hidden (no . ..) · <code>-F</code> type markers · <code>-lt</code> sort by time · <code>-ltr</code> reverse</td></tr>
+        <tr><td><code>cat</code></td><td><code>cat file</code> display · <code>cat &gt; file</code> create (end with <kbd>Ctrl+D</kbd>) · <code>cat f1 f2</code> concat</td></tr>
+        <tr><td><code>less</code></td><td><code>less -N file</code> with line numbers · <code>q</code> quit · supports Page-Up</td></tr>
+        <tr><td><code>head / tail</code></td><td><code>head -5 file</code> first 5 lines · <code>tail -5 file</code> last 5 lines</td></tr>
+        <tr><td><code>touch</code></td><td>Create empty file or update timestamps</td></tr>
+        <tr><td><code>cp</code></td><td><code>cp f1 f2</code> · <code>cp f1 f2 /dir</code> · <code>-i</code> confirm overwrite</td></tr>
+        <tr><td><code>mv</code></td><td>Move or rename: <code>mv f1 dir/</code> · <code>mv f1 f2</code></td></tr>
+        <tr><td><code>rm</code></td><td><code>rm file</code> · <code>rm -r dir</code> recursive</td></tr>
+        <tr><td><code>mkdir / rmdir</code></td><td><code>mkdir dir</code> · <code>rmdir dir</code> (empty only)</td></tr>
+        <tr><td><code>cd</code></td><td><code>cd /abs</code> · <code>cd ..</code> parent · <code>cd ~</code> home · <code>cd /</code> root · <code>cd</code> home</td></tr>
+        <tr><td><code>pwd</code></td><td>Print working directory</td></tr>
+        <tr><td><code>find</code></td><td><code>find . -name '*.txt'</code> · <code>find /home -name '*.jpg'</code></td></tr>
+        <tr><td><code>script</code></td><td>Record terminal to <code>typescript</code> file. <code>exit</code> stops logging.</td></tr>
+        <tr><td><code>du / df</code></td><td><code>du</code> disk usage of dirs · <code>df</code> filesystem free/used</td></tr>
+        <tr><td><code>gzip</code></td><td><code>gzip file.txt</code> → <code>file.txt.gz</code></td></tr>
+        <tr><td><code>tar</code></td><td><code>tar -czvf arc.tar.gz dir/</code> create · <code>tar -xzvf arc.tar.gz</code> extract</td></tr>
+      </table>
+      <div class="highlight"><b>tar flags:</b> <code>-c</code> create · <code>-x</code> extract · <code>-z</code> gzip · <code>-v</code> verbose · <code>-f</code> filename</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">ls -l Output Format</div>
+      <pre>-rwxr-xr-x  1  owner  group  4096  Feb 2  15:32  filename
+│           │  │      │      │     │              │
+Permissions Links Owner Group  Size  Date          Name</pre>
+      <div class="two-column">
+        <div>
+          <strong>First character (file type):</strong>
+          <ul>
+            <li><code>-</code> regular file</li>
+            <li><code>d</code> directory</li>
+            <li><code>l</code> symbolic link</li>
+            <li><code>b</code> block device</li>
+            <li><code>c</code> character device</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Permissions (chars 2–10):</strong><br>
+          3 sets of <code>rwx</code> for <b>owner · group · others</b><br>
+          <code>-</code> = denied
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Access Permissions</div>
+      <div class="three-column">
+        <div class="box"><strong>Octal Values</strong>r = 4 · w = 2 · x = 1<br>Add per set: e.g. <code>rwx</code> = 7, <code>r-x</code> = 5</div>
+        <div class="box"><strong>chmod symbolic</strong><code>chmod u+x file</code><br><code>chmod go+rx dir</code><br><code>u</code>ser <code>g</code>roup <code>o</code>thers <code>a</code>ll</div>
+        <div class="box"><strong>chmod octal</strong><code>chmod 755 dir</code> → rwxr-xr-x<br><code>chmod 600 file</code> → rw-------<br><code>chmod 754 file</code> → rwxr-xr--</div>
+      </div>
+      <div class="two-column" style="margin-top:15px">
+        <div>
+          <table>
+            <tr><th>String</th><th>Meaning</th></tr>
+            <tr><td><code>-rw-------</code></td><td>Owner read/write only</td></tr>
+            <tr><td><code>-rwxrwxrwx</code></td><td>Everyone full access</td></tr>
+            <tr><td><code>-rw-r--r--</code></td><td>Owner rw, others read</td></tr>
+            <tr><td><code>drwx------</code></td><td>Dir: owner only</td></tr>
+            <tr><td><code>drwxr-xr-x</code></td><td>Dir: all can cd, owner modifies</td></tr>
+          </table>
+        </div>
+        <div>
+          <div class="warning">⚠ Write access on a <b>directory</b> lets you delete files inside it, even without write permission on the file itself!</div>
+          <div class="box"><strong>chown / chgrp</strong><code>chown ict2 file1</code> — change owner<br><code>chgrp ent1 file1</code> — change group</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Text Processing Commands</div>
+      <div class="three-column">
+        <div class="box">
+          <strong>grep</strong>
+          <code>grep -i pat file</code> case-insensitive<br>
+          <code>-v</code> non-matching · <code>-n</code> line numbers · <code>-c</code> count only
+        </div>
+        <div class="box">
+          <strong>wc</strong>
+          <code>wc -l</code> lines · <code>-w</code> words · <code>-c</code> bytes · <code>-m</code> chars<br>
+          Output: <code>[lines] [words] [bytes] filename</code>
+        </div>
+        <div class="box">
+          <strong>cmp / diff / tr</strong>
+          <code>cmp f1 f2</code> byte compare<br>
+          <code>diff f1 f2</code> line differences<br>
+          <code>echo "Hello" | tr eo 34</code> → <code>H3ll4</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Pipes &amp; Processes</div>
+      <div class="two-column">
+        <div>
+          <div class="box"><strong>Pipe <code>|</code></strong><br>Output of one command → input of next<br><code>ls -l | grep D</code><br><code>ls -l | sort</code><br><code>du | sort -nr</code><br><code>date | cut -f1 -d " "</code></div>
+        </div>
+        <div>
+          <div class="box"><strong>Process Commands</strong><br><code>ps -A</code> all processes · <code>ps -l</code> long<br><code>kill PID</code> stop · <code>kill 9 PID</code> force<br><code>sleep 50 &amp;</code> background<br><code>fg</code> bring to foreground<br><kbd>Ctrl+C</kbd> stop foreground</div>
+        </div>
+      </div>
+      <div class="note">A process has: <b>PID</b> (unique ID), <b>PPID</b> (parent ID), <b>UID</b> (owner). Background jobs: append <code>&amp;</code>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 02 — FILE SYSTEM ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🗂️ Linux File Organization</div>
+    <div class="lesson-desc">Lecture 02 — Virtual/Physical filesystem, inodes, links, NFS &amp; Samba</div>
+
+    <div class="card">
+      <div class="section-title">UNIX File Types</div>
+      <div class="grid">
+        <div class="box"><strong>Regular files</strong>Sequence of bytes. Max name 255 chars. Case-sensitive. Hidden files start with <code>.</code></div>
+        <div class="box"><strong>Directory files</strong>Special file grouping entries. Hierarchical tree from root <code>/</code></div>
+        <div class="box"><strong>Special files</strong><code>/dev</code> — I/O devices as files. Character (keyboard) or Block (disk) devices.</div>
+        <div class="box"><strong>Links</strong>Directory entries pointing to existing files. Two types: Hard &amp; Soft.</div>
+        <div class="box"><strong>Sockets</strong>IPC — inter-process communication, even across machines.</div>
+      </div>
+      <div class="note" style="margin-top:15px">
+        <b>Wildcards:</b> <code>*</code> zero or more chars · <code>?</code> single char · <code>[abc]</code> any of · <code>[a-z]</code> range · <code>[!abc]</code> not in set
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Key Linux Directories</div>
+      <table>
+        <tr><th>Directory</th><th>Purpose</th></tr>
+        <tr><td><code>/bin</code></td><td>User commands</td></tr>
+        <tr><td><code>/sbin</code></td><td>System commands (e.g. shutdown)</td></tr>
+        <tr><td><code>/etc</code></td><td>Config files</td></tr>
+        <tr><td><code>/dev</code></td><td>Device files</td></tr>
+        <tr><td><code>/var</code></td><td>Variable data (logs, spool)</td></tr>
+        <tr><td><code>/proc</code></td><td>Virtual FS — system info (not on disk)</td></tr>
+        <tr><td><code>/home</code></td><td>User home directories</td></tr>
+        <tr><td><code>/boot</code></td><td>Kernel &amp; boot files</td></tr>
+        <tr><td><code>/lib</code></td><td>Libraries for /bin and /sbin</td></tr>
+        <tr><td><code>/tmp</code></td><td>Temporary files</td></tr>
+        <tr><td><code>/root</code></td><td>Superuser home</td></tr>
+        <tr><td><code>/media</code></td><td>Mount points for removable media</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Physical Filesystem — inode</div>
+      <div class="three-column">
+        <div class="box"><strong>Super Block</strong>Filesystem layout info: number of inode blocks, disk blocks.</div>
+        <div class="box"><strong>inode (Index Node)</strong>One per file. Stores: permissions, owner, type, timestamps, link count, size, data block pointers. <code>ls -i</code> to view.</div>
+        <div class="box"><strong>Data Blocks</strong>Actual file contents stored here.</div>
+      </div>
+      <div class="note" style="margin-top:15px">A file may have many names (hard links) but only <b>one inode</b>.</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Hard Links vs Soft (Symbolic) Links</div>
+      <table>
+        <tr><th>Feature</th><th>Hard Link</th><th>Soft Link</th></tr>
+        <tr><td>Create</td><td><code>ln file link</code></td><td><code>ln -s file link</code></td></tr>
+        <tr><td>inode number</td><td>Same as original</td><td>Different</td></tr>
+        <tr><td>Contains</td><td>Actual file data pointer</td><td>Path of original file</td></tr>
+        <tr><td>If original deleted</td><td>Link still works</td><td>Dangling link (broken)</td></tr>
+        <tr><td>Link to directory</td><td>❌ Not allowed</td><td>✅ Allowed</td></tr>
+        <tr><td><code>ls -l</code> shows</td><td>Same inode, incremented count</td><td><code>l</code> prefix, arrow to target</td></tr>
+        <tr><td>Analogy</td><td>Another name for same file</td><td>Windows shortcut</td></tr>
+      </table>
+      <pre># Hard link exercise
+mkdir Test && cd Test
+touch sample1
+ln sample1 sample2       # same inode
+ls -il sample1 sample2
+rm sample1
+cat sample2              # still works!
+
+# Soft link exercise
+ln -s sample2 sample3    # different inode
+rm sample2
+cat sample3              # Error: dangling link</pre>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Network Filesystems</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>NFS (Network File System)</strong>
+          Mount remote Linux dirs over network. Use between Linux↔Linux. Server exports directories; client mounts them. Good for sharing data centrally.
+        </div>
+        <div class="box">
+          <strong>Samba</strong>
+          Open Source SMB/CIFS for Windows interop. Use when Linux↔Windows. Daemon: <code>smbd</code>. Runs on Unix, speaks to Windows clients. Supports user auth.
+        </div>
+      </div>
+      <table style="margin-top:15px">
+        <tr><th>Server</th><th>Client</th><th>Use</th></tr>
+        <tr><td>Linux</td><td>Linux</td><td>NFS</td></tr>
+        <tr><td>Linux / Windows</td><td>Windows / Linux</td><td>Samba</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 03 — SHELL INTRO ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🐚 Shell Programming — Introduction</div>
+    <div class="lesson-desc">Lecture 03 — Shell features, I/O redirection, variables, arithmetic</div>
+
+    <div class="card">
+      <div class="section-title">Shell Execution Cycle</div>
+      <div class="flow-row">
+        <div class="flow-box">Accept Input</div><div class="flow-arrow">→</div>
+        <div class="flow-box">Interpret</div><div class="flow-arrow">→</div>
+        <div class="flow-box">Execute (Kernel)</div><div class="flow-arrow">→</div>
+        <div class="flow-box">Interpret Output</div><div class="flow-arrow">→</div>
+        <div class="flow-box">Wait for Next</div>
+      </div>
+      <div class="note">Architecture: User → Shell → Kernel → Hardware. Each user has their own shell instance.</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Filename Substitution (Wildcards in Scripts)</div>
+      <table>
+        <tr><th>Pattern</th><th>Matches</th><th>Example</th></tr>
+        <tr><td><code>*</code></td><td>Zero or more characters</td><td><code>ls -l *ab*</code></td></tr>
+        <tr><td><code>?</code></td><td>Any single character</td><td><code>ls fi?e1</code></td></tr>
+        <tr><td><code>[abc]</code></td><td>Any character in brackets</td><td><code>ls fil[aeg]1</code></td></tr>
+        <tr><td><code>[a-z]</code></td><td>Any in range</td><td><code>ls [a-z]*</code></td></tr>
+        <tr><td><code>[!abc]</code></td><td>NOT any of listed</td><td><code>ls [!abc]*</code></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-title">I/O Redirection</div>
+      <div class="three-column">
+        <div class="box"><strong>stdin (0)</strong>Keyboard input by default</div>
+        <div class="box"><strong>stdout (1)</strong>Screen output by default</div>
+        <div class="box"><strong>stderr (2)</strong>Error messages to screen by default</div>
+      </div>
+      <table style="margin-top:15px">
+        <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+        <tr><td><code>&gt;</code></td><td>Redirect stdout (overwrite)</td><td><code>ls &gt; files.txt</code></td></tr>
+        <tr><td><code>&gt;&gt;</code></td><td>Append stdout</td><td><code>date &gt;&gt; log</code></td></tr>
+        <tr><td><code>&lt;</code></td><td>Redirect stdin from file</td><td><code>sort &lt; aa.txt</code></td></tr>
+        <tr><td><code>2&gt;</code></td><td>Redirect stderr</td><td><code>ls /root/ 2&gt; err.log</code></td></tr>
+        <tr><td><code>2&gt;&amp;1</code></td><td>Merge stderr into stdout</td><td><code>cmd &gt; out 2&gt;&amp;1</code></td></tr>
+        <tr><td><code>1&gt;&amp;2</code></td><td>Merge stdout into stderr</td><td><code>echo "err" 1&gt;&amp;2</code></td></tr>
+        <tr><td><code>&amp;&gt;</code></td><td>Both stdout and stderr to file</td><td><code>cmd &amp;&gt; all.log</code></td></tr>
+      </table>
+      <pre># Sort input from file, output to file
+sort &lt; aa.txt &gt; sorted.txt
+
+# Separate stdout and stderr
+cat x y 1&gt; file1 2&gt; file2</pre>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Variables</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>Environment Variables (global, UPPERCASE)</strong>
+          <code>HOME</code> <code>SHELL</code> <code>PATH</code> <code>PS1</code> <code>HOSTNAME</code> <code>USER</code><br>
+          View: <code>env</code><br>
+          Export to subshell: <code>export VARNAME</code>
+        </div>
+        <div class="box">
+          <strong>Shell Variables (local, lowercase)</strong>
+          User-defined. NOT passed to subshells.<br>
+          View all (local+global): <code>set</code>
+        </div>
+      </div>
+      <pre># Set variable (no spaces around =)
+name=sunil
+echo $name
+
+# Multi-word
+fullname="Sunil Sarath"
+echo $fullname
+
+# Assign command output (back-quotes)
+DATE=`date`
+echo $DATE
+
+# Export to subshell
+OS=Linux
+export OS
+bash          # new subshell
+echo $OS      # Linux — accessible!
+</pre>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Back Quote &amp; Arithmetic</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>Back Quote `` ` ` ``</strong><br>
+          Executes enclosed as command; output replaces expression.<br>
+          <code>echo Today is `date`</code><br>
+          <code>var=`ls -l`</code>
+        </div>
+        <div class="box">
+          <strong>Arithmetic with expr</strong><br>
+          Direct math doesn't work: <code>echo $n + 2</code> → literal<br>
+          Use: <code>echo `expr $n + 2`</code><br>
+          Parentheses: <code>`expr \( 2 + 3 \) \* 5`</code> → 25<br>
+          Operators: <code>* / % + - = &gt; &lt; != &amp; |</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Writing &amp; Running Scripts</div>
+      <pre>#!/bin/bash
+# Shebang must be first line
+clear
+echo "Hello $USER"
+echo "Today is `date`"
+cal</pre>
+      <div class="flow-row">
+        <div class="flow-box">Write in editor</div><div class="flow-arrow">→</div>
+        <div class="flow-box"><code>chmod u+x script</code></div><div class="flow-arrow">→</div>
+        <div class="flow-box"><code>./script</code></div>
+      </div>
+      <div class="note">Run methods: <code>bash script</code> · <code>sh script</code> · <code>./script</code> · <code>. script</code> (runs in current shell, no subshell)</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Command Grouping &amp; Subshell</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>( ) — Creates subshell</strong><br>
+          <code>(date; ls; pwd) &gt; file.txt</code> — ALL output redirected<br>
+          Background: <code>find / -name file &amp;</code>
+        </div>
+        <div class="box">
+          <strong>{ } — Current shell (no subshell)</strong><br>
+          Commands run in same shell context.<br>
+          <code>{ date; ls; }</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 04 — SHELL SCRIPTS ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🐚 Shell Scripts — Input, Parameters &amp; Debugging</div>
+    <div class="lesson-desc">Lectures 04 &amp; 05 — read, echo, positional params, special vars, debugging</div>
+
+    <div class="card">
+      <div class="section-title">read &amp; echo</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>read</strong> — reads full line into variable(s)<br>
+          <code>read varname</code><br>
+          <code>read fname lname</code><br>
+          Multiple vars: splits on spaces.
+        </div>
+        <div class="box">
+          <strong>echo options</strong><br>
+          <code>-e</code> enable escape sequences<br>
+          <code>-n</code> no trailing newline<br>
+          <code>\n</code> newline · <code>\t</code> tab · <code>\c</code> suppress newline
+        </div>
+      </div>
+      <pre>#!/bin/bash
+echo -e "\t Enter your name:\c"
+read name
+echo -e "\t Hello $name"
+echo -ne "\t Age: "
+read age</pre>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Neutralizing Metacharacters</div>
+      <table>
+        <tr><th>Mechanism</th><th>Effect</th><th>Example</th></tr>
+        <tr><td><code>\</code> backslash</td><td>Escapes next single character</td><td><code>\*</code> literal asterisk</td></tr>
+        <tr><td><code>' '</code> single quotes</td><td>ALL characters literal</td><td><code>'$HOME is *'</code> → printed as-is</td></tr>
+        <tr><td><code>" "</code> double quotes</td><td>Literal except <code>$</code> `` ` `` <code>\</code></td><td><code>"Value: $rent"</code> — $rent expands</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Positional Parameters</div>
+      <table>
+        <tr><th>Variable</th><th>Meaning</th></tr>
+        <tr><td><code>$0</code></td><td>Script name</td></tr>
+        <tr><td><code>$1, $2, …</code></td><td>1st, 2nd, … arguments</td></tr>
+        <tr><td><code>$#</code></td><td>Number of arguments</td></tr>
+        <tr><td><code>$*</code></td><td>All args as single string (in <code>"$*"</code>)</td></tr>
+        <tr><td><code>$@</code></td><td>All args, each separate (in <code>"$@"</code>)</td></tr>
+        <tr><td><code>$?</code></td><td>Exit status of last command (0=success)</td></tr>
+        <tr><td><code>$$</code></td><td>PID of current shell</td></tr>
+        <tr><td><code>$!</code></td><td>PID of last background job</td></tr>
+      </table>
+      <pre>#!/bin/bash
+echo "Args: $#"
+echo "Script: $0"
+echo "First: $1 · Second: $2"
+echo "All: $@"
+
+# Run: ./testPara Hello World
+# → Args: 2 · Script: ./testPara · First: Hello · Second: World</pre>
+    </div>
+
+    <div class="card">
+      <div class="section-title">exit &amp; Debugging</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>exit</strong><br>
+          <code>exit 0</code> — success<br>
+          <code>exit 1</code> — error (any non-zero)<br>
+          <code>echo $?</code> — check last exit status
+        </div>
+        <div class="box">
+          <strong>Debug flags</strong><br>
+          <code>bash -x script</code> — trace: shows each command with values<br>
+          <code>bash -v script</code> — verbose: prints lines as read<br>
+          <code>-x</code> prefixes each line with <code>+</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 05 — DECISIONS & LOOPS ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🔀 Decisions &amp; Loops</div>
+    <div class="lesson-desc">Lectures 04–05 — test, if/elif/case, for/while/until</div>
+
+    <div class="card">
+      <div class="section-title">test Command / [ expr ]</div>
+      <div class="two-column">
+        <div>
+          <strong>String Operators</strong>
+          <table>
+            <tr><th>Operator</th><th>Meaning</th></tr>
+            <tr><td><code>str1 = str2</code></td><td>Equal</td></tr>
+            <tr><td><code>str1 != str2</code></td><td>Not equal</td></tr>
+            <tr><td><code>-z str</code></td><td>Length is 0 (NULL)</td></tr>
+            <tr><td><code>-n str</code></td><td>Length &gt; 0 (not NULL)</td></tr>
+          </table>
+        </div>
+        <div>
+          <strong>Integer Operators</strong>
+          <table>
+            <tr><th>Op</th><th>Meaning</th></tr>
+            <tr><td><code>-eq</code></td><td>Equal</td></tr>
+            <tr><td><code>-ne</code></td><td>Not equal</td></tr>
+            <tr><td><code>-gt</code></td><td>Greater than</td></tr>
+            <tr><td><code>-ge</code></td><td>Greater or equal</td></tr>
+            <tr><td><code>-lt</code></td><td>Less than</td></tr>
+            <tr><td><code>-le</code></td><td>Less or equal</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="note" style="margin-top:12px">
+        <strong>File test options:</strong>
+        <code>-r</code> readable · <code>-w</code> writable · <code>-x</code> executable · <code>-f</code> is file · <code>-d</code> is directory · <code>-s</code> size &gt; 0<br>
+        Combine: <code>&amp;&amp;</code> (if true) · <code>||</code> (if false) — <code>test 5 -gt 2 &amp;&amp; echo "Yes"</code>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">if / elif / else</div>
+      <div class="two-column">
+        <div>
+          <pre>if condition; then
+  commands
+elif condition2; then
+  commands
+else
+  commands
+fi</pre>
+        </div>
+        <div>
+          <pre>#!/bin/bash
+read n
+if [ $n -gt 0 ]; then
+  echo "positive"
+elif [ $n -lt 0 ]; then
+  echo "negative"
+elif [ $n -eq 0 ]; then
+  echo "zero"
+else
+  echo "not a number"
+fi</pre>
+        </div>
+      </div>
+      <div class="highlight">Check argument count: <code>if [ $# -eq 0 ]; then echo "No args"; exit 1; fi</code></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">case … esac</div>
+      <pre>case $variable in
+  pattern1) commands ;;
+  pat2|pat3) commands ;;   # OR with |
+  *)         default ;;    # catch-all
+esac</pre>
+      <div class="two-column">
+        <div>
+          <pre># Day of week
+case $day in
+  "Sun") echo Sunday ;;
+  "Mon"|"Tue"|"Wed"|"Thu"|"Fri") echo Weekday ;;
+  "Sat") echo Saturday ;;
+esac</pre>
+        </div>
+        <div>
+          <pre># Service control
+case $1 in
+  start)   echo starting ;;
+  stop)    echo stopping ;;
+  restart) echo restarting ;;
+  *)       echo "unknown" ;;
+esac</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Loops</div>
+      <div class="two-column">
+        <div>
+          <strong>for — list-based</strong>
+          <pre>for num in 1 2 3 4 5
+do
+  echo "Loop $num"
+done
+
+# Range with step
+for i in {2..20..2}
+do echo $i; done</pre>
+          <strong>for — C-style</strong>
+          <pre>for (( i=0; i&lt;=5; i++ ))
+do
+  echo $i
+done</pre>
+        </div>
+        <div>
+          <strong>while — loops while TRUE</strong>
+          <pre>counter=1
+while [ $counter -le 10 ]
+do
+  echo $counter
+  (( counter++ ))
+done</pre>
+          <strong>until — loops while FALSE</strong>
+          <pre>num=0
+until test $num -gt 5
+do
+  echo $num
+  num=`expr $num + 1`
+done
+
+# Wait for file
+until test -f file123
+do sleep 300; done</pre>
+        </div>
+      </div>
+      <div class="warning">⚠ <b>while</b> continues when condition is <b>TRUE</b>. <b>until</b> continues when condition is <b>FALSE</b> — opposite!</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Read File Line-by-Line</div>
+      <pre>while read LINE
+do
+  case $LINE in
+    *root*) echo $LINE ;;
+  esac
+done &lt; /etc/passwd</pre>
+      <div class="note">Use input redirection with <code>read</code> inside <code>while</code> to process files one line at a time.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 06 — FUNCTIONS & DIALOG ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🔧 Functions, shift &amp; Dialog</div>
+    <div class="lesson-desc">Lecture 06 — Functions, shift, /dev/null, break/continue, dialog utility</div>
+
+    <div class="card">
+      <div class="section-title">Functions</div>
+      <pre>function-name()
+{
+  commands
+  return
+}
+
+# Example
+HelloUsr()
+{
+  echo "Hello $LOGNAME, Have a nice day!"
+  return
+}
+HelloUsr    # call it</pre>
+      <div class="box" style="margin-top:12px">
+        <strong>Function with parameters</strong>
+        <pre>calc()
+{
+  n1=$1; op=$2; n2=$3
+  if [ $# -eq 3 ]; then
+    ans=`expr $n1 $op $n2`
+    echo "$n1 $op $n2 = $ans"
+    return $ans
+  else
+    echo "Requires 3 args"
+  fi
+}
+calc 6 + 5
+calc 6 - 5
+calc 6 / 2</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">shift Command</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>shift</strong> moves positional parameters left.<br>
+          Before: <code>$1=one $2=two $3=three</code><br>
+          After <code>shift</code>: <code>$1=two $2=three</code><br>
+          After <code>shift 2</code>: <code>$1=three</code>
+        </div>
+        <div class="box">
+          <strong>Shell Config Files</strong><br>
+          <code>.bashrc</code> — runs when new shell starts<br>
+          <code>.bash_profile</code> — env variables (login)<br>
+          <code>.bash_logout</code> — runs on logout<br>
+          Only root can edit <code>/etc/bashrc</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">/dev/null &amp; break/continue</div>
+      <div class="two-column">
+        <div class="box">
+          <strong>/dev/null — discard output</strong><br>
+          <code>command &gt; /dev/null</code><br>
+          <code>ls &gt; /dev/null</code><br>
+          Silently discards all output written to it.
+        </div>
+        <div class="box">
+          <strong>break / continue</strong><br>
+          <code>break</code> — exits loop immediately<br>
+          <code>continue</code> — skips to next iteration<br>
+          <pre>if [ $i -eq 3 ]; then break; fi
+if [ $a == 5 ]; then continue; fi</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">dialog Utility — Terminal UI</div>
+      <div class="note">Install: <code>sudo apt install dialog</code></div>
+      <table>
+        <tr><th>Dialog Type</th><th>Command</th></tr>
+        <tr><td>Message box</td><td><code>dialog --msgbox "Hello!" 5 20</code></td></tr>
+        <tr><td>Yes/No box</td><td><code>dialog --yesno "Are you sure?" 6 25</code></td></tr>
+        <tr><td>Input box</td><td><code>dialog --inputbox "Enter name" 8 40 2&gt;file</code></td></tr>
+        <tr><td>Text box</td><td><code>dialog --textbox /etc/profile 22 70</code></td></tr>
+        <tr><td>Menu</td><td><code>dialog --menu "Choose:" 10 30 3 1 red 2 green 3 blue</code></td></tr>
+        <tr><td>Checklist</td><td><code>dialog --checklist "Toppings:" 10 40 3 1 Cheese on</code></td></tr>
+        <tr><td>Time/Date</td><td><code>dialog --timebox "Time" 0 0</code> · <code>--calendar "Date" 0 0</code></td></tr>
+      </table>
+      <div class="important">Yes/No exit status: <code>0</code> = Yes · <code>1</code> = No · <code>255</code> = ESC</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 07 — AWK & SED ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">📜 AWK &amp; sed</div>
+    <div class="lesson-desc">Lecture 07 — Pattern scanning, stream editing, text processing</div>
+
+    <div class="card">
+      <div class="section-title">AWK — Overview</div>
+      <div class="note">AWK (Aho, Weinberger, Kernighan) processes text line-by-line. Sees data as records (lines) and fields (columns, split by whitespace by default).</div>
+      <pre>awk '/pattern/ {action}' inputfile
+awk '{print}' file        # print all lines
+awk 'NR==3 {print}' file  # print line 3</pre>
+      <div class="two-column" style="margin-top:12px">
+        <div class="box">
+          <strong>Built-in Variables</strong><br>
+          <code>$0</code> whole line · <code>$1,$2…</code> fields<br>
+          <code>NF</code> number of fields · <code>NR</code> record (line) number<br>
+          <code>FS</code> field separator · <code>$NF</code> last field
+        </div>
+        <div class="box">
+          <strong>BEGIN / END</strong><br>
+          <code>BEGIN { }</code> runs before any input<br>
+          <code>END { }</code> runs after all input<br>
+          Used for headers, totals, counters.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">AWK Examples (employee.txt)</div>
+      <pre>100 Nihal Manager Sales $5,000
+200 Jagath Developer Technology $5,500
+300 Sanjaya Sysadmin Technology $7,000
+400 Nishadi Manager Marketing $9,500</pre>
+      <pre># Print specific fields
+awk '{print $2, $5}' employee.txt        # Name, Salary
+awk '{print $2, $NF}' employee.txt       # Name, last field
+
+# Pattern match
+awk '/Nihal/' employee.txt
+awk '$4 ~ /Technology/' employee.txt     # Dept = Technology
+
+# Condition
+awk '$1 > 200' employee.txt              # ID > 200
+awk '$5 > 6000 {print $1,$2}' employee.txt
+
+# Counter
+awk 'BEGIN {c=0} $4~/Technology/ {c++} END {print "Count=",c}' employee.txt
+
+# Sum salary
+awk '{sum+=$5} END {print "Total:", sum}' employee.txt
+
+# With field separator
+awk -F':' '{print $1}' /etc/passwd       # usernames
+
+# Header and footer
+awk 'BEGIN {print "Name\tSalary"} {print $2,$5} END {print "Done"}' employee.txt</pre>
+    </div>
+
+    <div class="card">
+      <div class="section-title">sed — Stream Editor</div>
+      <div class="note">sed transforms text without opening files interactively. Supports regex. Most common command: <code>s</code> (substitute).</div>
+      <pre>sed 's/old/new/' file          # replace 1st occurrence per line
+sed 's/old/new/g' file         # replace ALL occurrences (global)
+sed 's/old/new/2' file         # replace 2nd occurrence per line
+sed 's/old/new/p' file         # print replaced lines (shows twice)
+sed -n 's/old/new/p' file      # print ONLY replaced lines
+sed '3 s/old/new/' file        # only on line 3
+sed '1,3 s/old/new/g' file     # lines 1-3 global replace
+sed -i 's/old/new/g' file      # in-place edit (modifies file)
+sed -i.bak 's/old/new/g' file  # in-place with .bak backup</pre>
+      <div class="two-column">
+        <div class="box">
+          <strong>Deletion</strong><br>
+          <code>sed '5d' file</code> delete line 5<br>
+          <code>sed '$d' file</code> delete last line<br>
+          <code>sed '12,$d' file</code> from line 12 to end<br>
+          <code>sed '/pattern/d' file</code> delete matching lines<br>
+          <code>sed '/^$/d' file</code> remove blank lines
+        </div>
+        <div class="box">
+          <strong>Insert / Append / Change</strong><br>
+          <code>sed '2i\New line' file</code> insert before line 2<br>
+          <code>sed '3a\Appended' file</code> append after line 3<br>
+          <code>sed '4c\Replace line 4' file</code> change line<br>
+          <code>sed G file</code> add blank line after each<br>
+          <code>sed -e 'cmd1' -e 'cmd2' file</code> multiple commands
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">AWK vs sed</div>
+      <table>
+        <tr><th>AWK</th><th>sed</th></tr>
+        <tr><td>Field-oriented data processing</td><td>Line-oriented stream editing</td></tr>
+        <tr><td>Complex reports, arithmetic, loops</td><td>Simple find &amp; replace, delete, insert</td></tr>
+        <tr><td>More like a programming language</td><td>Scripted edits without opening files</td></tr>
+        <tr><td><code>NR, NF, $0, $1, FS, OFS</code></td><td><code>s///g, p, d, -i</code></td></tr>
+      </table>
+      <div class="note">Combine in pipeline: <code>cat file | awk '{print $2}' | sed 's/Manager/Lead/'</code></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 08 — CRON ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🕐 Cron Job Scheduling</div>
+    <div class="lesson-desc">Lab 2 — Automate tasks with crontab</div>
+
+    <div class="card">
+      <div class="section-title">Crontab Syntax</div>
+      <pre># minute  hour  day_of_month  month  day_of_week  command
+#   0-59   0-23      1-31       1-12     0-7
+#   0 or 7 = Sunday; names work: mon, tue, jan, feb …</pre>
+      <div class="three-column" style="margin-top:12px">
+        <div class="box"><strong>*</strong> = any/every value</div>
+        <div class="box"><strong>,</strong> = list (e.g. <code>4,10,16</code>)</div>
+        <div class="box"><strong>/</strong> = step (e.g. <code>*/2</code> = every 2)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Crontab Examples</div>
+      <table>
+        <tr><th>Expression</th><th>Meaning</th></tr>
+        <tr><td><code>* * * * *</code></td><td>Every minute</td></tr>
+        <tr><td><code>*/2 * * * *</code></td><td>Every 2 minutes</td></tr>
+        <tr><td><code>*/5 * * * *</code></td><td>Every 5 minutes</td></tr>
+        <tr><td><code>30 8 * * *</code></td><td>Every day at 8:30 AM</td></tr>
+        <tr><td><code>0 9 * * *</code></td><td>Every day at 9:00 AM</td></tr>
+        <tr><td><code>1 * * * *</code></td><td>Minute 1 of every hour</td></tr>
+        <tr><td><code>0 4,10,16 * * wed,sat</code></td><td>3× a day, Wed &amp; Sat only</td></tr>
+      </table>
+      <pre># Save date every minute to date.txt
+* * * * * date >> /home/ict_lab/date.txt
+
+# Run script every day at 9 AM
+0 9 * * * /home/ict_lab/ex3.sh
+
+# Save processes every hour at minute 1
+1 * * * * ps -au >> /home/ict_lab/proDetails.txt</pre>
+      <div class="warning">⚠ Use <code>&gt;&gt;</code> (append) not <code>&gt;</code> (overwrite) when accumulating data!</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Cron Setup Commands</div>
+      <table>
+        <tr><th>Task</th><th>Command</th></tr>
+        <tr><td>Check if installed</td><td><code>dpkg -l cron</code></td></tr>
+        <tr><td>Install</td><td><code>apt-get install cron</code></td></tr>
+        <tr><td>Check status</td><td><code>systemctl status cron</code></td></tr>
+        <tr><td>Edit crontab</td><td><code>crontab -e</code></td></tr>
+        <tr><td>View crontab</td><td><code>crontab -l</code></td></tr>
+        <tr><td>Restart cron</td><td><code>systemctl restart cron</code></td></tr>
+        <tr><td>Make script executable</td><td><code>chmod +x script.sh</code></td></tr>
+      </table>
+      <div class="note">After editing crontab, restart cron: <code>systemctl restart cron</code>. Use <a href="https://crontab.guru" style="color:var(--color-primary)">crontab.guru</a> to verify expressions.</div>
+    </div>
+
+    <div class="in-class">
+      <h3>📌 Lab Tasks</h3>
+      <pre># Task 1 — Display name every 5 minutes
+*/5 * * * * echo "Your Name"
+
+# Task 2 — Run script at 9 AM daily (ex3.sh: pwd + ls)
+0 9 * * * /home/ict_lab/ex3.sh
+
+# Task 3 — Save process details at minute 1 of every hour
+1 * * * * ps -au >> /home/ict_lab/proDetails.txt</pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 09 — PTHREADS ═══════════════ -->
+  <div class="lesson-panel">
+    <div class="lesson-headline">🧵 POSIX Threads (Pthreads)</div>
+    <div class="lesson-desc">Lab — Creating threads, concurrency, shared memory, race conditions</div>
+
+    <div class="card">
+      <div class="section-title">Key Concepts</div>
+      <div class="grid">
+        <div class="box"><strong>Process</strong>Running program with its own memory space</div>
+        <div class="box"><strong>Thread</strong>Lightweight execution unit inside a process; shares memory with siblings</div>
+        <div class="box"><strong>Concurrent Execution</strong>Multiple threads running simultaneously; order non-deterministic</div>
+        <div class="box"><strong>Race Condition</strong>Unpredictable result when threads modify shared data without synchronization</div>
+      </div>
+      <div class="note" style="margin-top:12px">
+        <b>Compilation:</b> Always use <code>-pthread</code> flag:<br>
+        <code>gcc filename.c -o output -pthread</code>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Core Pthread Functions</div>
+      <table>
+        <tr><th>Function / Type</th><th>Purpose</th></tr>
+        <tr><td><code>pthread_t</code></td><td>Data type to store thread ID</td></tr>
+        <tr><td><code>pthread_create(&amp;tid, NULL, func, arg)</code></td><td>Create a new thread; runs <code>func</code></td></tr>
+        <tr><td><code>pthread_join(tid, NULL)</code></td><td>Wait (block) until thread finishes</td></tr>
+        <tr><td><code>pthread_exit(NULL)</code></td><td>Terminate thread from within itself</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Activity 1 — Single Thread</div>
+      <pre>// thread1.c
+#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+
+void* addition(void* arg)
+{
+    printf("Addition Result = %d\n", 10 + 20);
+    pthread_exit(NULL);
+}
+
+int main()
+{
+    pthread_t t1;
+    pthread_create(&amp;t1, NULL, addition, NULL);
+    pthread_join(t1, NULL);
+    printf("Main Thread Finished\n");
+    return 0;
+}</pre>
+      <div class="important">pthread_create() launches thread. pthread_join() blocks main until child finishes. Output: <code>Addition Result = 30</code> then <code>Main Thread Finished</code></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Activity 3 — Four Arithmetic Threads</div>
+      <pre>// thread3.c
+#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+
+void* addition(void* arg)       { printf("Addition = %d\n",       40+10); pthread_exit(NULL); }
+void* subtraction(void* arg)    { printf("Subtraction = %d\n",    40-10); pthread_exit(NULL); }
+void* multiplication(void* arg) { printf("Multiplication = %d\n", 40*10); pthread_exit(NULL); }
+void* division(void* arg)       { printf("Division = %d\n",       40/10); pthread_exit(NULL); }
+
+int main()
+{
+    pthread_t t1, t2, t3, t4;
+    pthread_create(&amp;t1, NULL, addition,       NULL);
+    pthread_create(&amp;t2, NULL, subtraction,    NULL);
+    pthread_create(&amp;t3, NULL, multiplication, NULL);
+    pthread_create(&amp;t4, NULL, division,       NULL);
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+    pthread_join(t3, NULL);
+    pthread_join(t4, NULL);
+    printf("All Threads Finished\n");
+    return 0;
+}</pre>
+      <div class="highlight">Output order may vary — threads execute concurrently and CPU scheduler decides order.</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Activity 5 — Race Condition</div>
+      <pre>// thread5.c — shared variable
+#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+
+int counter = 0;  // shared variable
+
+void* increment(void* arg)
+{
+    int i;
+    for(i = 0; i &lt; 100000; i++)
+        counter++;  // ⚠ race condition!
+    pthread_exit(NULL);
+}
+
+int main()
+{
+    pthread_t t1, t2;
+    pthread_create(&amp;t1, NULL, increment, NULL);
+    pthread_create(&amp;t2, NULL, increment, NULL);
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+    printf("Final Counter = %d\n", counter);
+    return 0;
+}</pre>
+      <div class="warning">
+        <b>🚨 Race Condition:</b> Expected 200,000 but actual result varies (e.g. 147,382). Both threads read <code>counter</code> before the other writes — increments get lost. Fix requires <b>mutexes</b> (synchronization).
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Lab Questions Quick Answers</div>
+      <table>
+        <tr><th>Question</th><th>Answer</th></tr>
+        <tr><td>What is a thread?</td><td>Lightweight execution unit inside a process; shares memory with other threads of same process.</td></tr>
+        <tr><td>Process vs Thread?</td><td>Process has own memory; threads share process memory and are lighter/faster to create.</td></tr>
+        <tr><td>Why does output order change?</td><td>Threads run concurrently; CPU scheduler decides order — non-deterministic.</td></tr>
+        <tr><td>Why share memory?</td><td>Threads are part of same process, so they naturally access the same address space.</td></tr>
+        <tr><td>What is a race condition?</td><td>When multiple threads modify shared data without sync → unpredictable results.</td></tr>
+        <tr><td>Purpose of pthread_join()?</td><td>Blocks calling thread until target thread finishes; prevents zombie threads.</td></tr>
+        <tr><td>Why -pthread flag?</td><td>Links the pthread library required for Pthread functions.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ BOTTOM NAV ═══ -->
+  <div class="bottom-nav">
+    <button class="nav-btn" id="prevBtn" onclick="changeTab(-1)" disabled>← Prev</button>
+    <span class="nav-label" id="navLabel">Lesson 1 of 9</span>
+    <button class="nav-btn" id="nextBtn" onclick="changeTab(1)">Next →</button>
+  </div>
+</div><!-- end tab-browser -->
+
+</div><!-- end container -->
+
+
+<script>
+  let current = 0;
+  const total = 9;
+
+  function showTab(i) {
+    document.querySelectorAll('.lesson-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+    document.querySelectorAll('.tab-btn').forEach((t, j) => t.classList.toggle('active', j === i));
+    current = i;
+    document.getElementById('navLabel').textContent = 'Practical ' + (i + 1) + ' of ' + total;
+    document.getElementById('prevBtn').disabled = i === 0;
+    document.getElementById('nextBtn').disabled = i === total - 1;
+    document.querySelectorAll('.tab-btn')[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    document.querySelector('.tab-browser').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function changeTab(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) showTab(next);
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') changeTab(-1);
+    if (e.key === 'ArrowRight') changeTab(1);
+  });
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const btn = document.getElementById('themeBtn');
+    btn.innerHTML = isDark ? '<span class="icon">🌙</span> Dark Mode' : '<span class="icon">☀️</span> Light Mode';
+  }
+</script>
+</body>
+</html>
