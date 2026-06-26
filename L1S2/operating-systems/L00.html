@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operating Systems — Study Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+[data-theme="light"]{
+  --bg-page:#eef6f5;--bg-card:#ffffff;--bg-box:#f3fbfa;
+  --bg-highlight:#fff9e6;--bg-important:#e8f5e9;--bg-note:#e3f2fd;
+  --bg-warning:#fce4ec;--bg-inclass:#f3e5f5;--bg-pre:#1e1e1e;--bg-code:#eee;
+  --color-primary:#2c6e6b;--color-primary-light:#5a9d99;--color-border:#cfe9e7;
+  --color-text:#333;--color-text-muted:#555;--color-shadow:rgba(0,0,0,0.08);
+  --color-tab-bar:#d4eceb;--color-tab-inactive:#5a8e8b;
+  --color-tab-active-bg:#ffffff;--color-tab-hover:#e8f5f4;
+  --color-toggle-bg:#2c6e6b;--color-toggle-text:#fff;--color-code-text:#c0392b;
+}
+[data-theme="dark"]{
+  --bg-page:#0f1a19;--bg-card:#1a2b2a;--bg-box:#1e3432;
+  --bg-highlight:#2a2410;--bg-important:#132a14;--bg-note:#0f1e2d;
+  --bg-warning:#2d1020;--bg-inclass:#1e1228;--bg-pre:#0a0a0a;--bg-code:#2a2a2a;
+  --color-primary:#5fcac6;--color-primary-light:#82d8d5;--color-border:#2a4a48;
+  --color-text:#d4e8e7;--color-text-muted:#8ab8b6;--color-shadow:rgba(0,0,0,0.3);
+  --color-tab-bar:#132322;--color-tab-inactive:#5a8e8b;
+  --color-tab-active-bg:#1a2b2a;--color-tab-hover:#1e3432;
+  --color-toggle-bg:#5fcac6;--color-toggle-text:#0f1a19;--color-code-text:#ff8a65;
+}
+
+body{font-family:'DM Sans',sans-serif;background:var(--bg-page);padding:20px;line-height:1.7;color:var(--color-text);transition:background .3s,color .3s}
+.container{max-width:980px;margin:0 auto}
+
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-header-text h1{font-family:'DM Serif Display',serif;color:var(--color-primary);font-size:2em;letter-spacing:-.01em}
+.page-header-text p{color:var(--color-primary-light);font-size:.95em;margin-top:4px}
+
+.theme-toggle{display:flex;align-items:center;gap:8px;background:var(--color-toggle-bg);color:var(--color-toggle-text);border:none;cursor:pointer;padding:8px 18px;border-radius:24px;font-family:'DM Sans',sans-serif;font-size:.85em;font-weight:600;transition:all .25s;white-space:nowrap}
+.theme-toggle:hover{opacity:.85;transform:translateY(-1px)}
+
+.tab-browser{background:var(--bg-card); border-radius:14px 14px 0 0;box-shadow:0 4px 18px var(--color-shadow);overflow:hidden}
+.tab-bar-wrapper{background:var(--color-tab-bar);padding:3px 12px 0;border-bottom:2px solid var(--color-border);overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--color-primary) transparent}
+.tab-bar-wrapper::-webkit-scrollbar{height:4px}
+.tab-bar-wrapper::-webkit-scrollbar-thumb{background:var(--color-primary);border-radius:2px}
+.tab-bar{display:flex;gap:4px; min-width:max-content}
+
+.tab-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;background:transparent;color:var(--color-tab-inactive);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78em;font-weight:500;white-space:nowrap;transition:all .2s;position:relative;bottom:-2px}
+.tab-btn:hover{background:var(--color-tab-hover);color:var(--color-text)}
+.tab-btn.active{background:var(--color-tab-active-bg);border-color:var(--color-border);color:var(--color-primary);font-weight:700;box-shadow:0 -2px 0 var(--color-primary) inset}
+.tab-btn .lnum{background:var(--color-primary);color:#fff;font-size:.7em;padding:1px 6px;border-radius:8px;font-weight:700}
+
+.lesson-panel{display:none;padding:30px}
+.lesson-panel.active{display:block}
+
+.lesson-headline{font-family:'DM Serif Display',serif;font-size:1.7em;color:var(--color-primary);margin-bottom:6px}
+.lesson-desc{color:var(--color-text-muted);font-size:.93em;margin-bottom:22px;border-left:3px solid var(--color-border);padding-left:12px}
+
+.card{background:var(--bg-card);padding:24px;margin:18px 0;border-radius:12px;box-shadow:0 3px 10px var(--color-shadow);border:1px solid var(--color-border);transition:background .3s}
+.section-title{color:var(--color-primary);border-bottom:2px solid var(--color-border);padding-bottom:8px;margin-bottom:14px;font-size:1.25em;font-family:'DM Serif Display',serif}
+
+ul{list-style-position:inside;line-height:1.9;margin-left:10px}
+ul li{margin:5px 0}
+ul ul{margin-left:22px;list-style-type:circle}
+ol{margin-left:20px;line-height:1.9}
+ol li{margin:6px 0}
+ol ul{margin-left:18px;list-style-type:circle}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:14px}
+.two-column{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.three-column{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+
+.box{background:var(--bg-box);padding:14px;border-radius:10px;border-left:3px solid var(--color-primary);transition:background .3s}
+.box strong{color:var(--color-primary);display:block;margin-bottom:5px}
+.highlight{background:var(--bg-highlight);padding:14px;border-radius:8px;border-left:4px solid #f0ad4e;margin:14px 0}
+.important{background:var(--bg-important);padding:14px;border-radius:8px;border-left:4px solid #4caf50;margin:14px 0}
+.note{background:var(--bg-note);padding:14px;border-radius:8px;border-left:4px solid #2196f3;margin:14px 0}
+.warning{background:var(--bg-warning);padding:14px;border-radius:8px;border-left:4px solid #e91e63;margin:14px 0}
+.in-class{background:var(--bg-inclass);padding:18px;border-radius:10px;border-left:4px solid #9c27b0;margin:14px 0}
+.in-class h3{color:#9c27b0;margin-bottom:10px}
+
+code{background:var(--bg-code);padding:2px 6px;border-radius:4px;font-family:'Courier New',monospace;font-size:.88em;color:var(--color-code-text)}
+pre{background:var(--bg-pre);color:#d4d4d4;padding:16px;border-radius:8px;font-family:'Courier New',monospace;font-size:.82em;line-height:1.6;overflow-x:auto;margin:12px 0}
+pre .comment{color:#6a9955}pre .keyword{color:#569cd6}pre .string{color:#ce9178}pre .fn{color:#dcdcaa}pre .num{color:#b5cea8}
+
+.tag{display:inline-block;background:var(--color-primary);color:#fff;padding:2px 10px;border-radius:12px;font-size:.78em;margin:2px;vertical-align:middle}
+.tag.orange{background:#e67e22}.tag.blue{background:#2980b9}.tag.red{background:#c0392b}.tag.purple{background:#7b1fa2}.tag.green{background:#2e7d32}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88em}
+th{background:var(--bg-box);color:var(--color-primary);padding:10px;border:1px solid var(--color-border);text-align:left;font-weight:600}
+td{padding:9px 10px;border:1px solid var(--color-border);vertical-align:top}
+tr:nth-child(even) td{background:var(--bg-box)}
+
+.step-item{display:flex;align-items:flex-start;gap:12px;margin:9px 0;padding:10px 12px;background:var(--bg-box);border-radius:8px}
+.step-num{background:var(--color-primary);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:.88em;flex-shrink:0}
+
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:12px 0}
+.flow-box{background:var(--bg-box);border:1px solid var(--color-border);padding:7px 14px;border-radius:8px;font-size:.86em;font-weight:600;color:var(--color-primary);white-space:nowrap}
+.flow-arrow{color:var(--color-primary-light);font-size:1.1em;font-weight:700}
+
+.bottom-nav{background:var(--bg-card);border-top:2px solid var(--color-border);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 14px 14px;box-shadow:0 4px 18px var(--color-shadow)}
+.nav-btn{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--color-border);color:var(--color-primary);padding:7px 16px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85em;font-weight:600;transition:all .2s}
+.nav-btn:hover{background:var(--bg-box)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-label{font-size:.85em;color:var(--color-text-muted)}
+
+.footer{text-align:center;color:var(--color-text-muted);margin-top:40px;padding:18px;font-size:.9em;border-top:1px solid var(--color-border)}
+
+@media(max-width:640px){
+  body{padding:10px}
+  .two-column,.three-column{grid-template-columns:1fr}
+  .lesson-panel{padding:16px}
+  .page-header{flex-direction:column;align-items:flex-start}
+}
+@media print{body{background:#fff;padding:0}.card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}.tab-browser{box-shadow:none}.tab-bar-wrapper,.bottom-nav{display:none}.lesson-panel{display:block!important;padding:10px}}
+</style>
+</head>
+<body>
+<a class="back-link" href="/operating-systems" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-header-text">
+    <h1>📘 Operating Systems</h1>
+    <p>Concepts &amp; Application — All Lectures · Exam Ready Notes · BY_#D1</p>
+  </div>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+    <span>🌙</span> Dark Mode
+  </button>
+</div>
+
+<!-- TAB BROWSER -->
+<div class="tab-browser">
+  <div class="tab-bar-wrapper">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab(0)"><span class="lnum">01</span> Introduction</button>
+      <button class="tab-btn" onclick="showTab(1)"><span class="lnum">02</span> OS Structures</button>
+      <button class="tab-btn" onclick="showTab(2)"><span class="lnum">03</span> Processes</button>
+      <button class="tab-btn" onclick="showTab(3)"><span class="lnum">04</span> Threads</button>
+      <button class="tab-btn" onclick="showTab(4)"><span class="lnum">05</span> CPU Scheduling</button>
+      <button class="tab-btn" onclick="showTab(5)"><span class="lnum">06</span> Synchronization</button>
+      <button class="tab-btn" onclick="showTab(6)"><span class="lnum">07</span> Deadlocks</button>
+      <button class="tab-btn" onclick="showTab(7)"><span class="lnum">08</span> Main Memory</button>
+      <button class="tab-btn" onclick="showTab(8)"><span class="lnum">09</span> Virtual Memory</button>
+    </div>
+  </div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 01 ═══ -->
+<div class="lesson-panel active" id="panel-0">
+  <div class="lesson-headline">Lecture 01 — Introduction to Operating Systems</div>
+  <p class="lesson-desc">What an OS is, its components, startup, interrupts, storage, and architecture fundamentals.</p>
+
+  <div class="card">
+    <h2 class="section-title">What is an Operating System?</h2>
+    <div class="important"><strong>Definition:</strong> An OS is an intermediary between the user and hardware that executes user programs, makes the computer convenient to use, and uses hardware efficiently.</div>
+    <div class="grid">
+      <div class="box"><strong>Resource Allocator</strong>Manages all resources: CPU time, memory space, file storage, I/O devices.</div>
+      <div class="box"><strong>Control Program</strong>Controls execution of programs to prevent errors and improper use.</div>
+      <div class="box"><strong>Kernel</strong>The one program running at all times on the computer. System programs ship with the OS but are not part of the kernel.</div>
+    </div>
+    <div class="note" style="margin-top:14px;"><strong>Without an OS,</strong> a computer is just useless hardware.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Computer System Components</h2>
+    <div class="grid">
+      <div class="box"><strong>Hardware</strong>CPU, Memory, I/O devices — provides basic computing resources.</div>
+      <div class="box"><strong>Operating System</strong>Controls and coordinates hardware use among applications.</div>
+      <div class="box"><strong>Application Programs</strong>Word processors, compilers, web browsers, games.</div>
+      <div class="box"><strong>Users</strong>People, machines, other computers.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Computer Startup Process</h2>
+    <div class="step-item"><div class="step-num">1</div><div><strong>Bootstrap Program</strong> loaded at power-up or reboot — stored in ROM/EPROM (firmware).</div></div>
+    <div class="step-item"><div class="step-num">2</div><div>Initializes all aspects of the system.</div></div>
+    <div class="step-item"><div class="step-num">3</div><div>Loads the OS <strong>kernel</strong> into memory.</div></div>
+    <div class="step-item"><div class="step-num">4</div><div>Kernel starts the initial process; system is now running and ready.</div></div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Interrupts</h2>
+    <div class="two-column">
+      <div class="box"><strong>Hardware Interrupt</strong>Triggered by hardware devices via the system bus.</div>
+      <div class="box"><strong>Software Interrupt (Trap)</strong>Triggered by software via a system call.</div>
+    </div>
+    <ul style="margin-top:14px;">
+      <li>CPU stops current execution and transfers to the <strong>interrupt service routine</strong>.</li>
+      <li>CPU saves its current state before handling the interrupt.</li>
+      <li><strong>Interrupt vector:</strong> contains addresses of interrupt service routines.</li>
+      <li>The OS is <em>interrupt-driven</em> — it waits for interrupts to occur.</li>
+    </ul>
+    <div class="note"><strong>DMA (Direct Memory Access):</strong> Used for high-speed I/O — device controller transfers data directly to/from memory without CPU intervention. Only one interrupt per block of data; CPU is free for other tasks.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Storage Hierarchy &amp; Concepts</h2>
+    <div class="flow-row">
+      <div class="flow-box">Registers</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Cache</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Main Memory (RAM)</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Secondary Storage</div>
+    </div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Volatile Memory</strong>Loses contents when power is removed (RAM).</div>
+      <div class="box"><strong>Non-volatile Memory</strong>Retains contents without power (ROM, hard disk, SSD).</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Caching:</strong> Copies information into faster storage. CPU checks cache before main memory. Based on the principle of <em>locality of reference</em>.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Computer System Architecture</h2>
+    <div class="three-column">
+      <div class="box"><strong>Single Processor</strong>One main CPU executing instructions.</div>
+      <div class="box"><strong>SMP (Symmetric Multiprocessing)</strong>All processors are peers; no master-slave relationship.</div>
+      <div class="box"><strong>AMP (Asymmetric)</strong>Master-slave relationship among processors.</div>
+    </div>
+    <p style="margin-top:14px;"><strong>Advantages of multiprocessing:</strong> increased throughput, economy of scale, increased reliability and fault tolerance.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Multiprogramming &amp; Timesharing</h2>
+    <div class="two-column">
+      <div class="box"><strong>Multiprogramming</strong>Multiple jobs in memory; CPU switches between jobs to increase utilization. Job scheduling selects which job to run next.</div>
+      <div class="box"><strong>Timesharing (Multitasking)</strong>CPU switches rapidly; response time &lt; 1 second; enables interactive computing for multiple users simultaneously.</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Virtual memory</strong> allows execution of processes not completely in memory.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Dual Mode Operation</h2>
+    <div class="two-column">
+      <div class="box"><strong>User Mode (bit = 1)</strong>User applications execute here. Cannot run privileged instructions.</div>
+      <div class="box"><strong>Kernel Mode (bit = 0)</strong>OS kernel executes here. Can run all privileged instructions.</div>
+    </div>
+    <ul style="margin-top:12px;">
+      <li>System calls cause a mode switch from user → kernel mode.</li>
+      <li>After system call completion, returns to user mode.</li>
+      <li>Protects OS and critical resources from user programs.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">OS Management Responsibilities</h2>
+    <div class="grid">
+      <div class="box"><strong>Process Management</strong>Create/delete, suspend/resume, synchronization, communication, deadlock handling, CPU scheduling.</div>
+      <div class="box"><strong>Memory Management</strong>Track usage, allocate/deallocate, move data between memory and storage, manage virtual memory.</div>
+      <div class="box"><strong>File Management</strong>Create/delete files and directories, map files to storage, backup, access control.</div>
+      <div class="box"><strong>Mass Storage</strong>Disk scheduling, partitioning, protection, free-space management.</div>
+      <div class="box"><strong>I/O Subsystem</strong>Device drivers, buffering, caching, spooling, interrupt handling.</div>
+      <div class="box"><strong>Protection &amp; Security</strong>User IDs, group IDs, access control, authentication, encryption.</div>
+    </div>
+  </div>
+  <div class="footer">🌱 Lecture 01 - Operating Systems Introduction • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 02 ═══ -->
+<div class="lesson-panel" id="panel-1">
+  <div class="lesson-headline">Lecture 02 — Operating-System Structures</div>
+  <p class="lesson-desc">OS services, CLI, GUI, system calls, APIs, and OS structural approaches.</p>
+
+  <div class="card">
+    <h2 class="section-title">Two Major Tasks of an OS</h2>
+    <div class="two-column">
+      <div class="box"><strong>User-Centric Services</strong>Provide convenient environment, execute programs, I/O operations, file-system manipulation, communication, error detection. Visible to users.</div>
+      <div class="box"><strong>System Management</strong>Resource allocation, logging, protection &amp; security. Not much visible to users — behind-the-scenes operations.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">User Interface Types</h2>
+    <div class="three-column">
+      <div class="box"><strong>CLI (Command-Line)</strong>Direct command entry. Implemented in kernel or as shell programs. UNIX shells: Bourne, C shell, BASH, Korn.</div>
+      <div class="box"><strong>GUI (Graphical)</strong>Desktop with mouse-based window-and-menu system. Windows, Mac Aqua, GNOME/KDE on Linux.</div>
+      <div class="box"><strong>Touchscreen</strong>Gesture-based actions, virtual keyboard, voice commands. Required for mobile devices.</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>CLI commands:</strong> either <em>built-in</em> (inside the interpreter) or <em>program files</em> (named system programs, e.g., <code>rm filename.txt</code>).</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">System Calls</h2>
+    <div class="important"><strong>Definition:</strong> Programming interface to the services provided by the OS. Typically written in C/C++. Mostly accessed via an API rather than direct use.</div>
+    <div class="three-column" style="margin-top:12px;">
+      <div class="box"><strong>Win32 API</strong>For Windows systems.</div>
+      <div class="box"><strong>POSIX API</strong>For UNIX, Linux, Mac OS X.</div>
+      <div class="box"><strong>Java API</strong>For the JVM.</div>
+    </div>
+    <div class="highlight" style="margin-top:12px;"><strong>Why use APIs over direct system calls?</strong> Portability across systems, easier to use, OS details hidden, better abstraction.</div>
+    <p style="margin-top:12px;"><strong>Example call chain:</strong> Program calls <code>printf()</code> → C library → <code>write()</code> system call → OS kernel executes operation.</p>
+    <p style="margin-top:10px;"><strong>System-call interface:</strong> maintains a table indexed by system call numbers; each entry = (number, address of system call function).</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Types of System Calls</h2>
+    <div class="grid">
+      <div class="box"><strong>Process Control</strong>create/terminate, load/execute, get/set attributes, wait, allocate/free memory.</div>
+      <div class="box"><strong>File Management</strong>create/delete, open/close, read/write/reposition, get/set attributes.</div>
+      <div class="box"><strong>Device Management</strong>request/release device, read/write/reposition, get/set attributes.</div>
+      <div class="box"><strong>Information Maintenance</strong>get/set time &amp; date, system data, process/file/device attributes.</div>
+      <div class="box"><strong>Communications</strong>create/delete connection, send/receive messages, shared memory, transfer status.</div>
+      <div class="box"><strong>Protection</strong>control access, get/set permissions, allow/deny user access.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">OS Structure Approaches</h2>
+    <div class="grid">
+      <div class="box"><strong>Simple / Monolithic (MS-DOS)</strong>Not divided into modules. Interfaces and levels not well separated. Application programs can access I/O directly → system-wide crashes on user failure. Lacks modularity and protection.</div>
+      <div class="box"><strong>Layered Approach</strong>OS divided into layers, each built on top of lower layers. Bottom = hardware; top = user interface. Simpler debugging and verification, but less efficient and harder to define layer boundaries.</div>
+      <div class="box"><strong>Traditional UNIX</strong>Beyond simple but not fully layered. Kernel provides everything below the system-call interface: file system, CPU scheduling, memory management.</div>
+      <div class="box"><strong>Microkernel (Mach)</strong>Removes nonessential components from the kernel; implements them as user-level programs. Communication via message passing. Easier to extend and port; more reliable and secure. Performance overhead from user↔kernel communication.</div>
+    </div>
+  </div>
+
+  <div class="footer">🌱 Lecture 02 - Operating-System Structures • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 03 ═══ -->
+<div class="lesson-panel" id="panel-2">
+  <div class="lesson-headline">Lecture 03 — Processes</div>
+  <p class="lesson-desc">Process concept, memory layout, states, PCB, scheduling, creation, termination, and IPC.</p>
+
+  <div class="card">
+    <h2 class="section-title">Process Concept</h2>
+    <div class="two-column">
+      <div class="box"><strong>Program (Passive)</strong>Entity stored on disk; executable file; static code.</div>
+      <div class="box"><strong>Process (Active)</strong>Program loaded into memory and executing. Has a program counter and resources. Must execute sequentially.</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Memory layout of a process (high → low):</strong> Stack → ↕ Heap → Data → Text (code).<br>
+    Stack = function params, return addresses, local variables. Heap = dynamic allocation. Data = global variables. Text = program code.</div>
+    <p style="margin-top:10px;"><em>Multiple processes can be associated with the same program</em> — the text sections are the same, but data/heap/stack sections vary.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Process States</h2>
+    <div class="grid">
+      <div class="box"><strong>new</strong>Process is being created.</div>
+      <div class="box"><strong>ready</strong>Waiting to be assigned to a processor.</div>
+      <div class="box"><strong>running</strong>Instructions are being executed.</div>
+      <div class="box"><strong>waiting</strong>Waiting for some event to occur (e.g., I/O).</div>
+      <div class="box"><strong>terminated</strong>Process has finished execution.</div>
+    </div>
+    <div class="important" style="margin-top:12px;"><strong>Key rule:</strong> Only ONE process may be in the <em>running</em> state on a single-CPU system. Many can be in ready and waiting states.</div>
+    <p style="margin-top:10px;"><strong>State transitions:</strong> new→ready (admitted) · ready→running (scheduler dispatch) · running→ready (interrupt) · running→waiting (I/O or event wait) · waiting→ready (I/O completion) · running→terminated (exit)</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Process Control Block (PCB)</h2>
+    <p>Also called <em>task control block</em>. Stores all information associated with a process.</p>
+    <div class="grid" style="margin-top:12px;">
+      <div class="box"><strong>Process State</strong>Running, waiting, etc.</div>
+      <div class="box"><strong>Program Counter</strong>Location of next instruction.</div>
+      <div class="box"><strong>CPU Registers</strong>Contents of all process-centric registers.</div>
+      <div class="box"><strong>CPU Scheduling Info</strong>Priorities, scheduling queue pointers.</div>
+      <div class="box"><strong>Memory-Management Info</strong>Memory allocated to the process.</div>
+      <div class="box"><strong>Accounting Info</strong>CPU used, clock time, process numbers.</div>
+      <div class="box"><strong>I/O Status Info</strong>I/O devices allocated, list of open files.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Schedulers</h2>
+    <div class="three-column">
+      <div class="box"><strong>Short-term (CPU Scheduler)</strong>Selects which process to execute next and allocates CPU. Invoked frequently (ms). Must be fast.</div>
+      <div class="box"><strong>Long-term (Job Scheduler)</strong>Selects which processes enter the ready queue. Invoked infrequently (seconds/minutes). Controls degree of multiprogramming.</div>
+      <div class="box"><strong>Intermediate (Swapping)</strong>Reduces degree of multiprogramming. Swaps processes out to disk and back in. Saves and restores process status.</div>
+    </div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>I/O-bound Process</strong>Spends more time doing I/O; many short CPU bursts.</div>
+      <div class="box"><strong>CPU-bound Process</strong>Spends more time computing; generates I/O infrequently.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Context Switch</h2>
+    <div class="important"><strong>Definition:</strong> Saving the state of the old process (into its PCB) and loading the saved state of the new process. Context-switch time is pure <em>overhead</em> — no useful work is done during switching.</div>
+    <p style="margin-top:10px;">The more complex the OS and PCB → the longer the context switch. Time is hardware-dependent.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Process Creation &amp; Termination</h2>
+    <div class="two-column">
+      <div>
+        <p><strong>Creation:</strong> Parent creates children → tree of processes. Each identified by a pid.</p>
+        <ul>
+          <li><code>fork()</code> — creates new process (duplicate of parent).</li>
+          <li><code>exec()</code> — replaces process memory with a new program.</li>
+          <li><code>wait()</code> — parent waits for child to terminate.</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>Termination:</strong></p>
+        <ul>
+          <li>Normal: <code>exit()</code> — returns status to parent; OS deallocates resources.</li>
+          <li>Parent-initiated: <code>abort()</code> — when child exceeds resources or task is no longer needed.</li>
+          <li><strong>Cascading termination:</strong> if parent exits, all children are also terminated.</li>
+          <li><strong>Zombie:</strong> process finished but parent hasn't called <code>wait()</code>.</li>
+          <li><strong>Orphan:</strong> parent terminated without calling <code>wait()</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Interprocess Communication (IPC)</h2>
+    <div class="two-column">
+      <div class="box"><strong>Shared Memory</strong>An area of memory shared among processes. Communication under control of user processes (not OS). Issue: synchronization when accessing shared memory.</div>
+      <div class="box"><strong>Message Passing</strong>Processes communicate without shared variables via <code>send(message)</code> and <code>receive(message)</code>. Message size: fixed or variable.</div>
+    </div>
+    <div class="highlight" style="margin-top:12px;"><strong>Producer-Consumer Problem:</strong> Producer produces data; consumer consumes it via a shared buffer. <em>Bounded buffer</em> (fixed size — producer waits if full) vs. <em>unbounded buffer</em> (producer never waits).</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Direct Communication</strong>Processes name each other explicitly: <code>send(P, msg)</code>, <code>receive(Q, msg)</code>. One link per pair.</div>
+      <div class="box"><strong>Indirect Communication</strong>Messages sent to/from mailboxes (ports) with unique IDs. Multiple processes can share a mailbox.</div>
+    </div>
+  </div>
+
+  <div class="footer">🌱 Lecture 03 - Processes • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 04 ═══ -->
+<div class="lesson-panel" id="panel-3">
+  <div class="lesson-headline">Lecture 04 — Threads</div>
+  <p class="lesson-desc">Thread concepts, multithreading models, thread libraries, mutexes, and threading issues.</p>
+
+  <div class="card">
+    <h2 class="section-title">What is a Thread?</h2>
+    <div class="important"><strong>Definition:</strong> A thread is a basic unit of CPU utilization. A multithreaded process can perform more than one task concurrently.</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Each Thread Has (Private)</strong>Thread ID · Program Counter · Register Set · Stack</div>
+      <div class="box"><strong>Threads in Same Process Share</strong>Code section · Data section · OS resources (open files, signals)</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Key insight:</strong> Process creation is heavyweight (time-consuming and resource-intensive); thread creation is <em>lightweight</em>.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Benefits of Multithreading</h2>
+    <div class="grid">
+      <div class="box"><strong>Responsiveness</strong>Continued execution if part of process is blocked. Crucial for UIs.</div>
+      <div class="box"><strong>Resource Sharing</strong>Threads share process resources — easier than shared memory or message passing.</div>
+      <div class="box"><strong>Economy</strong>Thread creation is cheaper than process creation. Lower context-switch overhead.</div>
+      <div class="box"><strong>Scalability</strong>Threads run in parallel on multiple cores in multiprocessor architectures.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Parallelism vs. Concurrency</h2>
+    <div class="two-column">
+      <div class="box"><strong>Parallelism</strong>More than one task executes <em>simultaneously</em>. Requires multi-core hardware.</div>
+      <div class="box"><strong>Concurrency</strong>Supports more than one task by allowing all tasks to <em>make progress</em>. Can occur on a single-core (via rapid switching).</div>
+    </div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Data Parallelism</strong>Distributes subsets of the same data across cores, performing the same operation on each.</div>
+      <div class="box"><strong>Task Parallelism</strong>Distributes threads across cores; each thread performs a unique operation.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Multithreading Models</h2>
+    <table>
+      <tr><th>Model</th><th>Description</th><th>Examples</th><th>Drawback</th></tr>
+      <tr><td><strong>Many-to-One</strong></td><td>Many user threads → one kernel thread</td><td>Solaris Green Threads, GNU Portable Threads</td><td>One block = entire process blocks; no true parallelism</td></tr>
+      <tr><td><strong>One-to-One</strong></td><td>Each user thread → one kernel thread</td><td>Windows, Linux, Solaris 9+</td><td>Each user thread creates a kernel thread (overhead)</td></tr>
+      <tr><td><strong>Many-to-Many</strong></td><td>Many user threads → many kernel threads</td><td>Solaris &lt;9, Windows+ThreadFiber</td><td>Difficult to implement</td></tr>
+      <tr><td><strong>Two-Level</strong></td><td>Like M:M but allows binding user↔kernel thread</td><td>IRIX, HP-UX, Solaris 8</td><td>Complex</td></tr>
+    </table>
+    <div class="important"><strong>In practice today:</strong> Most modern OSes use the One-to-One model (Windows, Linux) because increasing core counts have reduced the need to limit kernel threads.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Mutexes &amp; Race Conditions</h2>
+    <div class="warning"><strong>Race Condition:</strong> Two or more threads access and modify the same shared resource simultaneously, and the result depends on execution order.</div>
+    <div class="important" style="margin-top:12px;"><strong>Mutex (Mutual Exclusion Lock):</strong> Blocks access to variables by other threads — enforces exclusive access. Protects the <em>critical region</em>. Only applicable to threads in a single process (unlike semaphores).</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Without Mutex (Unsafe)</strong><code>int counter = 0;</code><br>Both threads read same value → write 1 → final value: 1 instead of 2.</div>
+      <div class="box"><strong>With Mutex (Safe)</strong><code>pthread_mutex_lock(&amp;mutex1);</code><br><code>counter++;</code><br><code>pthread_mutex_unlock(&amp;mutex1);</code><br>Exclusive access → final value: 2 ✓</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Threading Issues</h2>
+    <div class="grid">
+      <div class="box"><strong>fork() &amp; exec()</strong>Does new process duplicate all threads or only the calling thread? exec() normally replaces all threads.</div>
+      <div class="box"><strong>Signal Handling</strong>Signals notify a process of an event. In multithreaded processes: deliver to thread it applies to, every thread, certain threads, or one designated thread.</div>
+      <div class="box"><strong>Thread Cancellation</strong><em>Asynchronous:</em> immediately terminate target thread. <em>Deferred:</em> thread checks periodically at cancellation points.</div>
+      <div class="box"><strong>Thread-Local Storage (TLS)</strong>Each thread has its own copy of data. Visible across function invocations (unlike local variables). Unique per thread (unlike static data).</div>
+      <div class="box"><strong>Thread Scheduling</strong>Preemptive: higher-priority thread preempts current. Starvation risk for low-priority threads. Aging: increase priority of waiting threads over time.</div>
+      <div class="box"><strong>Thread Pools</strong>Pre-create threads waiting for work. Faster than creating new thread per request. Bounds maximum thread count (prevents resource exhaustion).</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Fork-Join Parallelism:</strong> Main thread forks tasks → tasks execute in parallel → results joined back. Large problems recursively broken into subtasks. General pattern: <em>if small → solve directly; else fork subtasks, join results.</em></div>
+    <div class="note"><strong>Linux Threads:</strong> Linux refers to threads as <em>tasks</em>. Created via <code>clone()</code> system call, which allows a child task to share the address space of the parent.</div>
+  </div>
+
+  <div class="footer">🌱 Lecture 04 — Threads • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 05 ═══ -->
+<div class="lesson-panel" id="panel-4">
+  <div class="lesson-headline">Lecture 05 — CPU Scheduling</div>
+  <p class="lesson-desc">CPU burst cycle, scheduling algorithms, criteria, dispatcher, and multi-processor scheduling.</p>
+
+  <div class="card">
+    <h2 class="section-title">Background</h2>
+    <div class="important"><strong>CPU–I/O Burst Cycle:</strong> Process execution alternates between CPU execution (burst) and I/O wait (burst). Many short CPU bursts + few long CPU bursts. Goal: maximize CPU use by switching processes during I/O waits.</div>
+    <div class="note" style="margin-top:12px;"><strong>Dispatcher:</strong> Gives control of the CPU to the selected process. Involves: switching context, switching to user mode, jumping to the proper location. <em>Dispatch latency</em> = time to stop one process and start another — should be minimal.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Scheduling Decision Points</h2>
+    <div class="two-column">
+      <div class="box"><strong>Nonpreemptive (no choice)</strong>1. Running → Waiting (I/O request)<br>4. Terminates<br>A new process must be selected.</div>
+      <div class="box"><strong>Preemptive (choice exists)</strong>2. Running → Ready (interrupt)<br>3. Waiting → Ready (I/O completion)<br>Choice of which process runs next.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Scheduling Criteria</h2>
+    <table>
+      <tr><th>Criterion</th><th>Description</th><th>Goal</th></tr>
+      <tr><td><strong>CPU Utilization</strong></td><td>Keep CPU as busy as possible (0–100%)</td><td>Maximize</td></tr>
+      <tr><td><strong>Throughput</strong></td><td>Processes completing per time unit</td><td>Maximize</td></tr>
+      <tr><td><strong>Turnaround Time</strong></td><td>Submission to completion (includes all wait + exec + I/O)</td><td>Minimize</td></tr>
+      <tr><td><strong>Waiting Time</strong></td><td>Total time in the ready queue</td><td>Minimize</td></tr>
+      <tr><td><strong>Response Time</strong></td><td>Time from request to first response produced</td><td>Minimize</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Scheduling Algorithms</h2>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">FCFS — First-Come, First-Served</h3>
+    <ul>
+      <li>Nonpreemptive; implemented via FIFO queue.</li>
+      <li>Simple but average waiting time can be long.</li>
+      <li><strong>Convoy Effect:</strong> Short processes wait for one long process (I/O-bound processes stuck behind CPU-bound).</li>
+    </ul>
+    <div class="note">Example: P1(24ms), P2(3ms), P3(3ms) arriving in order → Avg wait = <strong>17ms</strong>. If reversed → Avg wait = <strong>3ms</strong>.</div>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">SJF — Shortest Job First</h3>
+    <ul>
+      <li>Assigns CPU to process with the smallest next CPU burst.</li>
+      <li><strong>Optimal</strong> — gives minimum average waiting time.</li>
+      <li>Difficulty: knowing the length of the next CPU burst (must estimate).</li>
+      <li>Can be preemptive or nonpreemptive.</li>
+      <li><strong>Preemptive version = SRTF (Shortest-Remaining-Time-First).</strong></li>
+    </ul>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Round Robin (RR)</h3>
+    <ul>
+      <li>Each process gets at most <em>q</em> time units (time quantum, usually 10–100 ms).</li>
+      <li>After q ms, preempted and added to end of the ready queue (circular FIFO).</li>
+      <li>No process waits more than <strong>(n−1) × q</strong> time units.</li>
+      <li>q very large → behaves like FCFS. q very small → too many context switches (overhead).</li>
+      <li><strong>Rule of thumb:</strong> 80% of CPU bursts should be shorter than q.</li>
+    </ul>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Priority Scheduling</h3>
+    <ul>
+      <li>CPU allocated to process with highest priority (smallest integer = highest priority).</li>
+      <li>Preemptive or nonpreemptive. SJF is a special case (priority = inverse of burst time).</li>
+      <li><strong>Starvation:</strong> low-priority processes may never execute.</li>
+      <li><strong>Aging:</strong> gradually increase the priority of waiting processes.</li>
+    </ul>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Multilevel Queue Scheduling</h3>
+    <ul>
+      <li>Ready queue partitioned into separate queues (e.g., foreground/background).</li>
+      <li>Processes permanently assigned to a queue.</li>
+      <li>Foreground (interactive): RR, 80% CPU. Background (batch): FCFS, 20% CPU.</li>
+      <li>Limitation: Inflexible — processes cannot move between queues.</li>
+    </ul>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Multilevel Feedback Queue</h3>
+    <ul>
+      <li>Processes <em>can</em> move between queues. Implements aging. Most flexible.</li>
+      <li>Defined by: number of queues, algorithm per queue, upgrade/demote rules, entry method.</li>
+    </ul>
+    <div class="note"><strong>Classic 3-queue example:</strong> Q0 (RR, q=8ms) → Q1 (RR, q=16ms) → Q2 (FCFS). New jobs enter Q0. If not finished → move to Q1. If not finished → move to Q2. Lower queue runs only when higher queues are empty.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Algorithm Comparison Summary</h2>
+    <table>
+      <tr><th>Algorithm</th><th>Preemptive?</th><th>Starvation?</th><th>Key Property</th></tr>
+      <tr><td>FCFS</td><td>No</td><td>No</td><td>Convoy effect; simple</td></tr>
+      <tr><td>SJF / SRTF</td><td>Optional</td><td>Yes</td><td>Optimal avg wait; needs future knowledge</td></tr>
+      <tr><td>Round Robin</td><td>Yes</td><td>No</td><td>Fair; response time depends on q</td></tr>
+      <tr><td>Priority</td><td>Optional</td><td>Yes (fix with aging)</td><td>Priority-based; SJF is a special case</td></tr>
+      <tr><td>Multilevel Queue</td><td>Yes</td><td>Yes</td><td>Separate queues; processes fixed to queue</td></tr>
+      <tr><td>Multilevel Feedback Q</td><td>Yes</td><td>No (aging)</td><td>Most flexible; processes move between queues</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">🌱 Lecture 05 - CPU Scheduling • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 06 ═══ -->
+<div class="lesson-panel" id="panel-5">
+  <div class="lesson-headline">Lecture 06 — Process Synchronization</div>
+  <p class="lesson-desc">Race conditions, critical section, Peterson's solution, semaphores, and classical synchronization problems.</p>
+
+  <div class="card">
+    <h2 class="section-title">Background</h2>
+    <div class="warning"><strong>Problem:</strong> Concurrent access to shared data may result in data inconsistency. Processes can be interrupted at any time, leading to partially completed executions on shared data.</div>
+    <div class="note" style="margin-top:12px;"><strong>Race Condition:</strong> Several processes access and manipulate the same data concurrently, and the outcome depends on the particular order in which the resource is accessed.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Critical Section Problem</h2>
+    <div class="important"><strong>Critical Section:</strong> A segment of code where shared variables, tables, or files may be modified. When one process is in its CS, no other process may enter its CS.</div>
+    <p style="margin-top:12px;"><strong>Structure of process Pᵢ:</strong></p>
+    <div class="flow-row">
+      <div class="flow-box">Entry Section</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Critical Section</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Exit Section</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Remainder Section</div>
+    </div>
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">3 Requirements for a Valid CS Solution</h3>
+    <div class="three-column">
+      <div class="box"><strong>1. Mutual Exclusion</strong>If Pᵢ is in CS, no other process can be in CS simultaneously.</div>
+      <div class="box"><strong>2. Progress</strong>If no process is in CS and some wish to enter, the selection must be decided in finite time.</div>
+      <div class="box"><strong>3. Bounded Waiting</strong>A bound exists on how many times others can enter CS after a request is made but before it is granted.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Peterson's Solution</h2>
+    <div class="note"><strong>Software solution</strong> for two processes Pᵢ and Pⱼ. Assumes load/store instructions are atomic. <em>Not guaranteed on modern hardware</em> due to CPU instruction reordering.</div>
+    <p style="margin-top:12px;"><strong>Shared Variables:</strong></p>
+    <ul>
+      <li><code>int turn</code> — indicates whose turn it is (turn == i → Pᵢ may enter CS).</li>
+      <li><code>boolean flag[2]</code> — flag[i] = true means Pᵢ is ready to enter CS.</li>
+    </ul>
+    <p style="margin-top:10px;"><strong>Algorithm for Pᵢ:</strong> Set flag[i]=true; set turn=j; busy-wait while (flag[j] &amp;&amp; turn==j); enter CS; set flag[i]=false.</p>
+    <div class="important" style="margin-top:12px;"><strong>Proves all 3 requirements:</strong> Mutual exclusion (both cannot be in CS simultaneously because of turn), Progress (while loop eventually becomes false), Bounded waiting (Pᵢ waits at most one entry by Pⱼ).</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Mutex Locks &amp; Semaphores</h2>
+    <div class="two-column">
+      <div>
+        <p><strong>Mutex Lock:</strong></p>
+        <ul>
+          <li><code>acquire()</code> — busy-waits until lock available, then sets unavailable.</li>
+          <li><code>release()</code> — sets lock back to available.</li>
+          <li>Uses <em>busy waiting</em> → called a <strong>spinlock</strong>.</li>
+          <li>Calls must be atomic (via hardware instructions).</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>Semaphore (S = integer):</strong></p>
+        <ul>
+          <li><code>wait(S)</code> — also P(): while (S≤0) busy-wait; S--</li>
+          <li><code>signal(S)</code> — also V(): S++</li>
+          <li><strong>Binary semaphore</strong>: 0 or 1 (like mutex).</li>
+          <li><strong>Counting semaphore</strong>: unrestricted; used for resource allocation (initialized to # of resources).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Classical Synchronization Problems</h2>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">🔲 Bounded-Buffer Problem</h3>
+    <div class="note">Semaphores: <code>mutex=1</code> (mutual exclusion), <code>full=0</code> (count of full buffers), <code>empty=n</code> (count of empty buffers).<br>
+    Producer: <code>wait(empty)</code> → <code>wait(mutex)</code> → add item → <code>signal(mutex)</code> → <code>signal(full)</code>.<br>
+    Consumer: <code>wait(full)</code> → <code>wait(mutex)</code> → remove item → <code>signal(mutex)</code> → <code>signal(empty)</code>.</div>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">📖 Readers-Writers Problem</h3>
+    <div class="note">Multiple readers may read simultaneously. Only one writer at a time; when writing, no readers or other writers allowed.<br>
+    Variables: <code>rw_mutex=1</code> (writer access), <code>mutex=1</code> (protects read_count), <code>read_count=0</code>.<br>
+    First reader: <code>wait(rw_mutex)</code>. Last reader: <code>signal(rw_mutex)</code>. Writer: <code>wait(rw_mutex)</code> … <code>signal(rw_mutex)</code>.</div>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">🍜 Dining-Philosophers Problem</h3>
+    <div class="note">5 philosophers, 5 chopsticks. Each must acquire both left and right chopstick to eat.<br>
+    Semaphore: <code>chopstick[5]</code> initialized to 1.<br>
+    Philosopher i: <code>wait(chopstick[i])</code> → <code>wait(chopstick[(i+1)%5])</code> → eat → <code>signal</code> both.<br>
+    <strong>Problem:</strong> If all 5 pick up left chopstick simultaneously → <em>Deadlock</em>.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Problems with Semaphores</h2>
+    <div class="three-column">
+      <div class="box" style="border-left-color:#e91e63;"><strong>signal before wait</strong><code>signal(mutex)…wait(mutex)</code>Multiple processes in CS simultaneously → violates mutual exclusion.</div>
+      <div class="box" style="border-left-color:#e91e63;"><strong>Double wait</strong><code>wait(mutex)…wait(mutex)</code>Deadlock — no one can release the lock.</div>
+      <div class="box" style="border-left-color:#e91e63;"><strong>Omitting wait/signal</strong>Forgetting either → mutual exclusion violated or deadlock.</div>
+    </div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Deadlock</strong>Two or more processes waiting indefinitely for events that can only be caused by waiting processes.</div>
+      <div class="box"><strong>Starvation</strong>Process waits indefinitely; may never be removed from the semaphore queue.</div>
+    </div>
+  </div>
+
+  <div class="footer">🌱 Lecture 06 - Process Synchronization • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 07 ═══ -->
+<div class="lesson-panel" id="panel-6">
+  <div class="lesson-headline">Lecture 07 — Deadlocks</div>
+  <p class="lesson-desc">Deadlock characterization, resource-allocation graphs, prevention, avoidance (Banker's), detection, and recovery.</p>
+
+  <div class="card">
+    <h2 class="section-title">System Model &amp; Definition</h2>
+    <div class="important"><strong>Deadlock:</strong> Every process in a set is waiting for an event that only another process in the set can cause. System consists of finite resources (CPU cycles, memory, I/O devices), each with a number of instances.</div>
+    <div class="flow-row" style="margin-top:12px;">
+      <div class="flow-box">Request</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Use</div><div class="flow-arrow">→</div>
+      <div class="flow-box">Release</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Real-world analogy:</strong> Bridge crossing — each section is a resource. Deadlock resolved by backing up (preemption). Starvation possible. Most OSes (UNIX/Linux) ignore deadlocks, assuming they are rare.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">4 Necessary Conditions for Deadlock</h2>
+    <div class="grid">
+      <div class="box"><strong>1. Mutual Exclusion</strong>Only one process can use a resource at a time (non-sharable resource).</div>
+      <div class="box"><strong>2. Hold and Wait</strong>Process holds at least one resource while waiting for additional resources held by others.</div>
+      <div class="box"><strong>3. No Preemption</strong>Resources released only voluntarily by the process holding them.</div>
+      <div class="box"><strong>4. Circular Wait</strong>Set {P₀,P₁,…,Pₙ} where each Pᵢ waits for a resource held by P(i+1 mod n).</div>
+    </div>
+    <div class="warning" style="margin-top:12px;"><strong>All four conditions must hold simultaneously</strong> for deadlock to exist. Prevention = negate at least one condition.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Resource-Allocation Graph (RAG)</h2>
+    <div class="two-column">
+      <div class="box"><strong>Request Edge</strong>Pᵢ → Rⱼ : Process Pᵢ requests an instance of resource Rⱼ.</div>
+      <div class="box"><strong>Assignment Edge</strong>Rⱼ → Pᵢ : An instance of Rⱼ is assigned to Pᵢ.</div>
+    </div>
+    <div class="three-column" style="margin-top:12px;">
+      <div class="box"><strong>No cycle</strong>No deadlock.</div>
+      <div class="box"><strong>Cycle + single instance per resource</strong>Deadlock.</div>
+      <div class="box"><strong>Cycle + multiple instances</strong>Possible deadlock (not certain).</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Wait-for Graph:</strong> Derived from RAG by removing resource nodes. Edge Pᵢ → Pⱼ means Pᵢ is waiting for Pⱼ. Cycle in wait-for graph → deadlock (for single-instance resources). Detection requires O(n²) cycle check.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Deadlock Prevention</h2>
+    <table>
+      <tr><th>Condition to Break</th><th>Method</th><th>Issues</th></tr>
+      <tr><td><strong>Mutual Exclusion</strong></td><td>Not required for sharable resources (e.g., read-only files). Must hold for non-sharable.</td><td>Cannot always avoid</td></tr>
+      <tr><td><strong>Hold &amp; Wait</strong></td><td>Request all resources before execution OR release all held resources before requesting more.</td><td>Low utilization; starvation possible</td></tr>
+      <tr><td><strong>No Preemption</strong></td><td>If request cannot be granted, release all held resources. Added to waiting list.</td><td>Rollback overhead</td></tr>
+      <tr><td><strong>Circular Wait</strong></td><td>Impose total ordering on resource types. Processes must request in increasing order.</td><td>May limit flexibility</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Deadlock Avoidance — Safe State &amp; Banker's Algorithm</h2>
+    <div class="important"><strong>Safe State:</strong> A sequence &lt;P₁, P₂, …, Pₙ&gt; exists such that each process's remaining needs can be satisfied by currently available + resources held by earlier processes. Safe state → no deadlock. Avoidance ensures system never enters unsafe state.</div>
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Banker's Algorithm (Multiple Instances)</h3>
+    <div class="grid">
+      <div class="box"><strong>Available</strong>Vector length m — resources currently available.</div>
+      <div class="box"><strong>Max</strong>n×m matrix — max demand of each process.</div>
+      <div class="box"><strong>Allocation</strong>n×m matrix — resources currently allocated.</div>
+      <div class="box"><strong>Need</strong>n×m matrix — Need = Max − Allocation.</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Safety Algorithm:</strong> Find a process with Need ≤ Available; simulate its completion (add allocation to Available); repeat. If all Finish[i]=true → safe state.</div>
+    <div class="note"><strong>Resource-Request Algorithm:</strong> If Request ≤ Need AND Request ≤ Available → pretend allocation → run safety algorithm. If safe → grant; else → restore state and wait.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Deadlock Detection &amp; Recovery</h2>
+    <div class="two-column">
+      <div>
+        <p><strong>Detection Algorithm (Multiple Instances):</strong></p>
+        <ol>
+          <li>Work = Available; Finish[i] = false if Allocation[i] ≠ 0.</li>
+          <li>Find i: Finish[i]==false AND Requestᵢ ≤ Work.</li>
+          <li>Work += Allocationᵢ; Finish[i] = true. Go to step 2.</li>
+          <li>If Finish[i]==false for any i → those processes are deadlocked.</li>
+        </ol>
+        <p style="margin-top:8px;">Complexity: O(m × n²).</p>
+      </div>
+      <div>
+        <p><strong>Recovery Options:</strong></p>
+        <div class="box" style="margin-bottom:10px;"><strong>Process Termination</strong>Abort all deadlocked processes, OR abort one at a time until cycle is eliminated. Selection: consider priority, computation time, resources used.</div>
+        <div class="box"><strong>Resource Preemption</strong>Select victim (minimize cost). Rollback to safe state. Starvation risk → include rollback count in cost factor.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">🌱 Lecture 07 - Deadlocks • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 08 ═══ -->
+<div class="lesson-panel" id="panel-7">
+  <div class="lesson-headline">Lecture 08 — Main Memory Management</div>
+  <p class="lesson-desc">Address binding, MMU, dynamic loading, contiguous allocation, fragmentation, and paging.</p>
+
+  <div class="card">
+    <h2 class="section-title">Background &amp; Memory Protection</h2>
+    <div class="important"><strong>Requirement:</strong> Programs must be in main memory (at least partially) to execute. Each process must have a separate memory space to protect processes from each other.</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Base Register</strong>Holds the smallest legal physical memory address for a process.</div>
+      <div class="box"><strong>Limit Register</strong>Specifies the size of the valid address range.</div>
+    </div>
+    <div class="warning" style="margin-top:12px;">CPU checks every user-mode memory access: if address ≥ base + limit → trap to OS (fatal error). Prevents user programs from accessing OS or other processes' memory.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Address Binding</h2>
+    <div class="three-column">
+      <div class="box"><strong>Compile Time</strong>Absolute code generated. If memory location changes, must recompile.</div>
+      <div class="box"><strong>Load Time</strong>Relocatable code. Binding occurs at load time by the loader.</div>
+      <div class="box"><strong>Execution Time</strong>Binding delayed until run-time. Requires MMU hardware. Used by most modern OSes.</div>
+    </div>
+    <div class="note" style="margin-top:12px;"><strong>Logical Address (Virtual):</strong> Generated by CPU; relative address. <strong>Physical Address:</strong> Seen by memory unit; absolute address. The <strong>MMU</strong> maps logical → physical at run-time. User programs deal only with logical addresses.</div>
+    <div class="note"><strong>Dynamic relocation (relocation register):</strong> physical address = logical address + relocation register value.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Dynamic Loading</h2>
+    <div class="important">A routine is loaded into memory only when it is called. Main program loaded first; when a routine calls another, the calling routine checks if target is loaded. If not → relocatable linking loader loads it and updates address tables.</div>
+    <ul style="margin-top:12px;">
+      <li>Advantage: unused routines are never loaded → better memory utilization.</li>
+      <li>No special OS support required; users can implement with library routines.</li>
+      <li><em>Different from paging</em> — dynamic loading is user-managed; paging is OS-managed.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Contiguous Memory Allocation</h2>
+    <div class="two-column">
+      <div class="box"><strong>Fixed-Size Partitions</strong>Memory divided into static partitions. Simple but suffers from <em>internal fragmentation</em>.</div>
+      <div class="box"><strong>Variable Partitions (Dynamic)</strong>Allocate exactly needed size. Hole table tracks free blocks. External fragmentation occurs over time.</div>
+    </div>
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Hole-Selection Strategies</h3>
+    <div class="three-column">
+      <div class="box"><strong>First-Fit</strong>Allocate the first hole big enough. Fast. Generally good performance.</div>
+      <div class="box"><strong>Best-Fit</strong>Allocate the smallest hole that fits. Minimizes leftover. Must search entire list. Generally good performance.</div>
+      <div class="box"><strong>Worst-Fit</strong>Allocate the largest hole. Leaves largest leftover. Worst performance overall.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Fragmentation</h2>
+    <div class="two-column">
+      <div class="box"><strong>External Fragmentation</strong>Total free memory exists but is not contiguous; scattered holes. Cannot satisfy a request even though total free space is enough.</div>
+      <div class="box"><strong>Internal Fragmentation</strong>Allocated memory slightly larger than requested; unused space <em>inside</em> the allocated region (e.g., fixed partition larger than process needs).</div>
+    </div>
+    <div class="highlight" style="margin-top:12px;"><strong>Compaction:</strong> Shuffle memory contents to combine free blocks into one large hole. Reduces external fragmentation. Only possible with <em>dynamic (execution-time) relocation</em>. Requires updating base registers.</div>
+    <div class="note"><strong>Alternative to compaction:</strong> Allow non-contiguous logical address space → Paging and Segmentation.</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Paging</h2>
+    <div class="important"><strong>Basic Idea:</strong> Break physical memory into fixed-size blocks called <em>frames</em>; break logical memory into same-size blocks called <em>pages</em>. Frame size = power of 2 (512B – 16MB).</div>
+    <ul style="margin-top:12px;">
+      <li>To run a program of N pages → find N free frames and load pages into them.</li>
+      <li><strong>Page table</strong> (per process): maps logical page number → physical frame number. Set up by OS, translated by hardware (MMU).</li>
+      <li><strong>No external fragmentation.</strong> Internal fragmentation possible on the last page.</li>
+      <li>Longer memory access time due to page table lookups.</li>
+    </ul>
+    <div class="note" style="margin-top:12px;"><strong>Address Translation:</strong> Logical address = [page number (p) | offset (d)]. MMU uses p to index page table → gets frame number f. Physical address = (f × frame size) + d.</div>
+    <div class="note"><strong>Free-frame list:</strong> OS maintains a list of all unused frames. When process requests memory → allocate from free list; update page table. When process terminates → frames returned to free list.</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Paging ✓</strong>No external fragmentation; supports virtual memory; efficient memory use.</div>
+      <div class="box"><strong>Paging ✗</strong>Internal fragmentation (last page); page table overhead; longer access time.</div>
+    </div>
+  </div>
+
+  <div class="footer">🌱 Lecture 08 - Main Memory • BY_#D1</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LECTURE 09 ═══ -->
+<div class="lesson-panel" id="panel-8">
+  <div class="lesson-headline">Lecture 09 — Virtual Memory</div>
+  <p class="lesson-desc">Demand paging, valid-invalid bit, page faults, page replacement algorithms, and thrashing.</p>
+
+  <div class="card">
+    <h2 class="section-title">1. Background</h2>
+    <div class="important"><strong>Definition:</strong> Virtual memory is the separation of a user's logical memory from physical memory, allowing a process to have an address space <em>larger</em> than the available physical RAM.</div>
+    <div class="grid" style="margin-top:12px;">
+      <div class="box">Only <em>part</em> of the program needs to be in memory for execution.</div>
+      <div class="box">Logical address space can be <strong>much larger</strong> than physical address space.</div>
+      <div class="box">Allows address spaces to be <strong>shared</strong> by several processes.</div>
+      <div class="box">More programs running <strong>concurrently</strong>.</div>
+      <div class="box">Increased CPU utilization and throughput with no increase in response/turnaround time.</div>
+      <div class="box">Less I/O needed to load or swap processes.</div>
+    </div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Demand Paging</strong>Pages loaded into memory only when they are referenced.</div>
+      <div class="box"><strong>Demand Segmentation</strong>Segments loaded only when required by the process.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">2. Virtual Address Space of a Process</h2>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-top:10px;">
+      <div style="min-width:160px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;font-size:.88em;">
+          <div style="background:#d4edda;border:1px solid #4caf50;padding:10px 30px;width:160px;text-align:center;font-weight:600;color:#2d6a4f;">stack</div>
+          <div style="color:var(--color-primary);font-size:1.4em;line-height:1.4;">↕</div>
+          <div style="background:var(--bg-note);border:1px solid #2196f3;padding:10px 30px;width:160px;text-align:center;font-style:italic;color:var(--color-text-muted);font-size:.85em;">unused / free space</div>
+          <div style="color:var(--color-primary);font-size:1.4em;line-height:1.4;">↕</div>
+          <div style="background:#fff3cd;border:1px solid #f0ad4e;padding:10px 30px;width:160px;text-align:center;font-weight:600;color:#856404;">heap</div>
+          <div style="background:#d1ecf1;border:1px solid #17a2b8;padding:10px 30px;width:160px;text-align:center;font-weight:600;color:#0c5460;margin-top:1px;">data</div>
+          <div style="background:#f8d7da;border:1px solid #f5c6cb;padding:10px 30px;width:160px;text-align:center;font-weight:600;color:#721c24;margin-top:1px;">code</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div class="box" style="margin-bottom:8px;"><strong>Stack (high)</strong>Function params, local variables, return addresses. Grows downward.</div>
+        <div class="box" style="margin-bottom:8px;"><strong>Unused Space</strong>Gap between heap and stack. Grows as needed.</div>
+        <div class="box" style="margin-bottom:8px;"><strong>Heap</strong>Dynamic allocation — <code>malloc()</code>. Grows upward.</div>
+        <div class="box" style="margin-bottom:8px;"><strong>Data</strong>Global (static) variables.</div>
+        <div class="box"><strong>Code (Text)</strong>Program's compiled instructions (lowest addresses).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">3. Demand Paging &amp; Valid–Invalid Bit</h2>
+    <div class="highlight"><strong>Pager:</strong> A swapper that deals specifically with individual pages (not whole processes). A page is needed when there is a reference to it. Invalid reference → abort. Not in memory → bring to memory.</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>v — Valid (in-memory)</strong>Page is memory-resident. MMU translates address normally.</div>
+      <div class="box"><strong>i — Invalid (not in memory)</strong>Page not yet loaded or does not belong to process's address space.</div>
+    </div>
+    <div class="important" style="margin-top:12px;"><strong>Initial State:</strong> All entries start with bit = i. During MMU translation, if bit = i → <strong>page fault</strong> (trap to OS).</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">4. Page Fault Handling Steps</h2>
+    <div class="step-item"><div class="step-num">1</div><div>Process references a page → MMU finds valid–invalid bit = <strong>i</strong>.</div></div>
+    <div class="step-item"><div class="step-num">2</div><div>MMU generates a <strong>trap</strong> (interrupt) to the OS.</div></div>
+    <div class="step-item"><div class="step-num">3</div><div>OS checks its table: <em>invalid reference</em> → abort; <em>just not in memory</em> → proceed.</div></div>
+    <div class="step-item"><div class="step-num">4</div><div>OS finds a <strong>free frame</strong> in physical memory.</div></div>
+    <div class="step-item"><div class="step-num">5</div><div><strong>Swap</strong> the missing page in from backing store (disk) into the free frame.</div></div>
+    <div class="step-item"><div class="step-num">6</div><div><strong>Reset page table:</strong> update frame number; set valid–invalid bit = <strong>v</strong>.</div></div>
+    <div class="step-item"><div class="step-num">7</div><div><strong>Restart</strong> the instruction that caused the page fault.</div></div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">5. Page Replacement</h2>
+    <div class="warning"><strong>When no free frame exists:</strong> OS must perform page replacement — evict a victim page (write to disk if modified), freeing a frame for the requested page.</div>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box"><strong>Victim Frame</strong>The page chosen to be replaced/evicted from physical memory.</div>
+      <div class="box"><strong>Modify (Dirty) Bit</strong>If page was not modified → discard without writing to disk. Reduces I/O overhead.</div>
+    </div>
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Basic Page Replacement Steps</h3>
+    <div class="step-item"><div class="step-num">1</div><div>Find location of desired page on secondary storage.</div></div>
+    <div class="step-item"><div class="step-num">2</div><div>Find free frame (or select victim and write it to disk if necessary). Update tables.</div></div>
+    <div class="step-item"><div class="step-num">3</div><div>Read desired page into freed frame; update page and frame tables.</div></div>
+    <div class="step-item"><div class="step-num">4</div><div>Continue process from where page fault occurred.</div></div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">6. Page Replacement Algorithms</h2>
+    <div class="note"><strong>Evaluation:</strong> Run algorithm on a reference string and count page faults. Reference string used: <code>7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1</code>. Repeated access to same page = no fault. More frames → fewer faults (generally).</div>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">FIFO — First-In-First-Out</h3>
+    <ul>
+      <li>Replace the <em>oldest</em> page in memory. Maintain a queue.</li>
+      <li>3 frames on reference string → <strong>15 page faults</strong>.</li>
+    </ul>
+    <div class="warning" style="margin-top:8px;"><strong>Belady's Anomaly:</strong> For FIFO, adding more frames can <em>increase</em> page faults. Example: 3→4 frames on string 1,2,3,4,1,2,5,1,2,3,4,5 increases faults from 9 to 10.</div>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">OPT — Optimal Algorithm</h3>
+    <ul>
+      <li>Replace the page that will <em>not be used for the longest period in the future</em>.</li>
+      <li>3 frames → <strong>9 page faults</strong> (theoretical minimum — cannot do better).</li>
+      <li><strong>Cannot be implemented in practice</strong> — requires future knowledge.</li>
+      <li>Used as a <em>benchmark</em> for comparison studies.</li>
+      <li>Does NOT suffer from Belady's Anomaly.</li>
+    </ul>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">LRU — Least Recently Used</h3>
+    <ul>
+      <li>Replace the page not used for the <em>longest time in the past</em>. Associates a timestamp with each page.</li>
+      <li>3 frames → <strong>12 page faults</strong>. Better than FIFO, worse than OPT.</li>
+      <li>Generally a <em>good, frequently used</em> algorithm in practice.</li>
+      <li>Does NOT suffer from Belady's Anomaly.</li>
+    </ul>
+
+    <h3 style="color:var(--color-primary);margin:14px 0 8px;">Comparison Table</h3>
+    <table>
+      <tr><th>Algorithm</th><th>Strategy</th><th>Page Faults (3 frames)</th><th>Belady's?</th><th>Practical?</th></tr>
+      <tr><td><strong>FIFO</strong></td><td>Evict oldest page</td><td>15</td><td><span style="color:#e91e63;font-weight:700;">Yes</span></td><td>Yes (simple)</td></tr>
+      <tr><td><strong>OPT</strong></td><td>Evict page unused furthest in future</td><td>9 (optimal)</td><td><span style="color:#4caf50;font-weight:700;">No</span></td><td>No (needs future knowledge)</td></tr>
+      <tr><td><strong>LRU</strong></td><td>Evict least recently used page</td><td>12</td><td><span style="color:#4caf50;font-weight:700;">No</span></td><td>Yes (commonly used)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">7. Thrashing</h2>
+    <div class="warning"><strong>Definition:</strong> A process is thrashing if it is spending <em>more time paging than executing</em>. Results in severe performance degradation — CPU utilization drops dramatically.</div>
+    <p style="margin-top:12px;"><strong>How it occurs:</strong></p>
+    <ul>
+      <li>Process doesn't have enough frames for the pages it actively uses.</li>
+      <li>Process quickly triggers a page fault.</li>
+      <li>Must replace a page — but all pages are active → replaced page needed again immediately.</li>
+      <li>Cycle of repeated page replacements → system almost entirely occupied with paging.</li>
+    </ul>
+    <div class="important" style="margin-top:12px;"><strong>Root Cause:</strong> Too many processes in memory competing for too few frames. Each process needs more frames than allocated for its <em>working set</em> (set of pages it actively references).</div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">📖 Key Terms Quick Reference</h2>
+    <div class="grid">
+      <div class="box"><strong>Virtual Memory</strong>Separation of logical from physical memory; address space larger than RAM.</div>
+      <div class="box"><strong>MMU</strong>Hardware that maps logical addresses to physical addresses.</div>
+      <div class="box"><strong>Demand Paging</strong>Load pages only when referenced, not at load time.</div>
+      <div class="box"><strong>Pager</strong>Swapper that deals specifically with pages (not whole processes).</div>
+      <div class="box"><strong>Valid–Invalid Bit</strong>v = in memory; i = not in memory.</div>
+      <div class="box"><strong>Page Fault</strong>Referenced page not in physical memory; triggers OS to load it.</div>
+      <div class="box"><strong>Page Replacement</strong>Evict a victim page when no free frame exists.</div>
+      <div class="box"><strong>Dirty/Modify Bit</strong>Tracks if page was modified; dirty pages must be written to disk.</div>
+      <div class="box"><strong>Belady's Anomaly</strong>More frames → more page faults (in FIFO).</div>
+      <div class="box"><strong>Reference String</strong>Sequence of page numbers used to evaluate algorithms.</div>
+      <div class="box"><strong>Backing Store</strong>Disk/secondary storage for pages not in physical memory.</div>
+      <div class="box"><strong>Thrashing</strong>More time paging than executing → severe performance loss.</div>
+    </div>
+  </div>
+
+  <div class="footer">🌱 Lecture 09 - Virtual Memory • BY_#D1</div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeTab(-1)" disabled>← Previous</button>
+  <span class="nav-label" id="navLabel">Lecture 1 of 9</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeTab(1)">Next →</button>
+</div>
+
+</div><!-- /tab-browser -->
+</div><!-- /container -->
+
+<script>
+let current = 0;
+const total = 9;
+
+function showTab(i) {
+  document.querySelectorAll('.lesson-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.tab-btn').forEach((t,j) => t.classList.toggle('active', j===i));
+  current = i;
+  document.getElementById('navLabel').textContent = 'Lecture ' + (i+1) + ' of ' + total;
+  document.getElementById('prevBtn').disabled = (i===0);
+  document.getElementById('nextBtn').disabled = (i===total-1);
+  const activeTab = document.querySelectorAll('.tab-btn')[i];
+  activeTab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  document.querySelector('.tab-browser').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function changeTab(dir) {
+  const next = current + dir;
+  if (next >= 0 && next < total) showTab(next);
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+        changeTab(-1);
+    }
+
+    if (e.key === 'ArrowRight') {
+        changeTab(1);
+    }
+});
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('themeBtn');
+  btn.innerHTML = isDark ? '<span>🌙</span> Dark Mode' : '<span>☀️</span> Light Mode';
+}
+</script>
+</body>
+</html>

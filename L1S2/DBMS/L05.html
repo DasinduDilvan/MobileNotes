@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 05 – Enhanced Entity-Relationship & Object Modeling</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/dbms" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+  <h1>📘 Database Management Systems </h1>
+  <p class="subtitle"> Lecture 05 | Enhanced Entity-Relationship &amp; Object Modeling</p>
+
+  <!-- ER Modeling Summary -->
+  <div class="card">
+    <h2 class="section-title">📋 Summary of ER Modeling (Review)</h2>
+    <ul>
+      <li>Entity Types, Entity Sets, Attributes, and Keys</li>
+      <li>The Conventions for ER Diagrams</li>
+      <li>Relationships, Relationship Types, Roles, and Structural Constraints</li>
+      <li>Weak Entity Types</li>
+      <li>ER Design for the COMPANY Database</li>
+      <li>ER Diagrams, Naming Conventions, and Design Issues</li>
+    </ul>
+    <div class="note" style="margin-top:15px;">
+      <strong>EER extends ER</strong> by adding concepts like subclasses, superclasses, specialization, generalization, and categories to better model real-world complexity.
+    </div>
+  </div>
+
+  <!-- Subclasses and Superclasses -->
+  <div class="card">
+    <h2 class="section-title">🔷 Subclasses and Superclasses</h2>
+
+    <p>An entity type may have additional meaningful <strong>subgroupings</strong> of its entities. EER diagrams extend ER diagrams to represent these subgroupings, called <strong>subclasses</strong> or <strong>subtypes</strong>.</p>
+
+    <div class="highlight" style="margin-top:15px;">
+      <strong>Example – EMPLOYEE subgroupings:</strong>
+      <ul>
+        <li><strong>By Job type:</strong> SECRETARY, ENGINEER, TECHNICIAN</li>
+        <li><strong>By role:</strong> MANAGER (employees who manage)</li>
+        <li><strong>By pay method:</strong> SALARIED_EMPLOYEE, HOURLY_EMPLOYEE</li>
+      </ul>
+    </div>
+
+    <p style="margin-top:15px;">Each subgrouping is a subset of EMPLOYEE entities → each is a <strong>subclass</strong>. EMPLOYEE is the <strong>superclass</strong> for all of them.</p>
+
+    <div class="two-column" style="margin-top:15px;">
+      <div class="box">
+        <strong>Superclass/Subclass Relationships</strong>
+        <ul>
+          <li>EMPLOYEE / SECRETARY</li>
+          <li>EMPLOYEE / TECHNICIAN</li>
+          <li>EMPLOYEE / MANAGER</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>IS-A Relationships</strong>
+        <ul>
+          <li>SECRETARY IS-A EMPLOYEE</li>
+          <li>TECHNICIAN IS-A EMPLOYEE</li>
+          <li>MANAGER IS-A EMPLOYEE</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="important" style="margin-top:15px;">
+      <strong>Key Rules about Subclass Membership:</strong>
+      <ul>
+        <li>A subclass member is the <em>same entity</em> in a distinct specific role.</li>
+        <li>An entity <strong>cannot exist</strong> in the database merely by being a member of a subclass — it must also be a member of the superclass.</li>
+        <li>A member of the superclass can be <em>optionally</em> included as a member of any number of its subclasses.</li>
+        <li>It is <strong>not necessary</strong> that every entity in a superclass be a member of some subclass.</li>
+      </ul>
+    </div>
+
+    <div class="highlight">
+      <strong>Multi-membership Example:</strong>
+      <ul>
+        <li>A salaried engineer → belongs to ENGINEER <em>and</em> SALARIED_EMPLOYEE (2 subclasses).</li>
+        <li>A salaried engineering manager → belongs to MANAGER, ENGINEER, <em>and</em> SALARIED_EMPLOYEE (3 subclasses).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Attribute Inheritance -->
+  <div class="card">
+    <h2 class="section-title">🧬 Attribute Inheritance</h2>
+    <p>An entity that is a member of a subclass <strong>inherits</strong>:</p>
+    <div class="two-column">
+      <div class="box">
+        <strong>All Attributes</strong>
+        of the entity as a member of the superclass.
+      </div>
+      <div class="box">
+        <strong>All Relationships</strong>
+        of the entity as a member of the superclass.
+      </div>
+    </div>
+    <div class="note" style="margin-top:15px;">
+      <strong>Example:</strong> SECRETARY (as well as TECHNICIAN and ENGINEER) inherits the attributes <code>Name</code>, <code>SSN</code>, <code>Birth_date</code>, <code>Address</code>, etc. from EMPLOYEE. Every SECRETARY entity will have values for these inherited attributes.
+    </div>
+  </div>
+
+  <!-- Specialization -->
+  <div class="card">
+    <h2 class="section-title">🔽 Specialization</h2>
+
+    <div class="important">
+      <strong>Definition:</strong> Specialization is the process of defining a set of subclasses of a superclass. The set of subclasses is based upon some <em>distinguishing characteristics</em> of the entities in the superclass.
+    </div>
+
+    <p style="margin-top:10px;"><strong>Example:</strong> {SECRETARY, ENGINEER, TECHNICIAN} is a specialization of EMPLOYEE based upon <em>job type</em>.</p>
+    <p>A superclass may have <strong>several specializations</strong>.</p>
+
+    <div class="highlight" style="margin-top:15px;">
+      <strong>Three specializations of EMPLOYEE:</strong>
+      <ul>
+        <li>{SECRETARY, TECHNICIAN, ENGINEER} — based on job type</li>
+        <li>{MANAGER} — based on management role</li>
+        <li>{HOURLY_EMPLOYEE, SALARIED_EMPLOYEE} — based on pay method</li>
+      </ul>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:15px;">Two Main Reasons for Specialization</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Reason 1: Specific Attributes</strong>
+        Certain attributes may apply to some but not all entities of the superclass.
+      </div>
+      <div class="box">
+        <strong>Reason 2: Specific Relationships</strong>
+        Some relationship types may be participated in only by members of the subclass.<br><br>
+        <em>Example:</em> Only HOURLY_EMPLOYEEs can belong to a TRADE_UNION via the BELONGS_TO relationship.
+      </div>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px;">Specialization Process</h3>
+    <ul>
+      <li>Define a set of subclasses of an entity type.</li>
+      <li>Establish additional specific attributes with each subclass.</li>
+      <li>Establish additional specific relationship types between each subclass and other entity types or other subclasses.</li>
+    </ul>
+  </div>
+
+  <!-- Generalization -->
+  <div class="card">
+    <h2 class="section-title">🔼 Generalization</h2>
+
+    <div class="important">
+      <strong>Definition:</strong> Generalization is the <em>reverse</em> of specialization. Several classes with common features are generalized into a superclass; the original classes become its subclasses.
+    </div>
+
+    <div class="highlight" style="margin-top:15px;">
+      <strong>Example:</strong> CAR and TRUCK are generalized into VEHICLE.
+      <ul>
+        <li>Both CAR and TRUCK become subclasses of VEHICLE.</li>
+        <li>Common attributes (Vehicle_id, Price, License_plate_no) move to VEHICLE.</li>
+        <li>Specific attributes remain: Max_speed, No_of_passengers → CAR; No_of_axles, Tonnage → TRUCK.</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      We can view CAR and TRUCK as a <strong>specialization of VEHICLE</strong>, or alternatively, VEHICLE as a <strong>generalization of CAR and TRUCK</strong>. Both perspectives describe the same end-result structure.
+    </div>
+
+    <div class="box" style="margin-top:15px;">
+      <strong>Diagrammatic Notation Note</strong>
+      Arrow pointing to the generalized superclass = generalization. Arrows pointing to specialized subclasses = specialization. In practice, this distinction is often subjective — advice is <em>not to draw any arrows</em>.
+    </div>
+
+    <div class="note" style="margin-top:12px;">
+      A superclass or subclass represents a <strong>collection (set/grouping)</strong> of entities and is shown as a <strong>rectangle</strong> in EER diagrams, just like entity types. All entity types, superclasses, and subclasses can collectively be called <strong>classes</strong>.
+    </div>
+  </div>
+
+  <!-- Constraints -->
+  <div class="card">
+    <h2 class="section-title">⚙️ Constraints on Specialization &amp; Generalization</h2>
+
+    <h3 style="color:#2c6e6b; margin-bottom:10px;">1. Membership Condition Constraints</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Predicate-Defined (Condition-Defined)</strong>
+        Membership in the subclass is determined by a condition on an attribute of the superclass. The condition is written next to the line attaching the subclass to the superclass in an EER diagram.
+      </div>
+      <div class="box">
+        <strong>Attribute-Defined Specialization</strong>
+        If all subclasses in a specialization have their membership condition on the <em>same attribute</em> of the superclass, the specialization is called attribute-defined. That attribute is the <b>defining attribute</b>.<br><br>
+        <em>Example:</em> <code>job_type</code> is the defining attribute for SECRETARY, TECHNICIAN, ENGINEER of EMPLOYEE.
+      </div>
+    </div>
+    <div class="note" style="margin-top:12px;">
+      <strong>User-Defined:</strong> If no condition determines membership, the subclass is user-defined. Membership is specified individually for each entity in the superclass by the user.
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">2. Disjointness Constraint</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Disjoint <span class="tag">"d"</span></strong>
+        An entity can be a member of <em>at most one</em> subclass of the specialization. Shown by letter <b>"d"</b> in EER diagram.
+      </div>
+      <div class="box">
+        <strong>Overlapping <span class="tag orange">"o"</span></strong>
+        The same entity may be a member of <em>more than one</em> subclass of the specialization. Shown by letter <b>"o"</b> in EER diagram.
+      </div>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">3. Completeness Constraint</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Total (Double Line)</strong>
+        Every entity in the superclass <em>must</em> be a member of at least one subclass. Shown by a <b>double line</b> in EER diagrams.
+      </div>
+      <div class="box">
+        <strong>Partial (Single Line)</strong>
+        An entity is allowed <em>not</em> to belong to any of the subclasses. Shown by a <b>single line</b> in EER diagrams.
+      </div>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">4 Possible Constraint Combinations</h3>
+    <div class="grid">
+      <div class="box"><strong>Disjoint, Total</strong> Each entity belongs to exactly one subclass.</div>
+      <div class="box"><strong>Disjoint, Partial</strong> Each entity belongs to at most one subclass (or none).</div>
+      <div class="box"><strong>Overlapping, Total</strong> Each entity belongs to at least one subclass (possibly many).</div>
+      <div class="box"><strong>Overlapping, Partial</strong> Each entity may belong to multiple or no subclasses.</div>
+    </div>
+  </div>
+
+  <!-- Insertion and Deletion Rules -->
+  <div class="card">
+    <h2 class="section-title">📝 Insertion and Deletion Rules</h2>
+    <div class="warning">
+      <ul>
+        <li><strong>Deleting</strong> an entity from a superclass implies it is <em>automatically deleted</em> from all the subclasses to which it belongs.</li>
+        <li><strong>Inserting</strong> an entity in a superclass implies that the entity is <em>mandatorily inserted</em> in all predicate-defined (or attribute-defined) subclasses for which the entity satisfies the defining predicate.</li>
+        <li><strong>Inserting</strong> an entity in a superclass of a <em>total specialization</em> implies that the entity is mandatorily inserted in <em>at least one</em> of the subclasses of the specialization.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hierarchies, Lattices, Shared Subclasses -->
+  <div class="card">
+    <h2 class="section-title">🌐 Hierarchies, Lattices &amp; Shared Subclasses</h2>
+
+    <p>A subclass may itself have further subclasses specified on it — forming a <strong>hierarchy</strong> or a <strong>lattice</strong>.</p>
+
+    <div class="two-column" style="margin-top:15px;">
+      <div class="box">
+        <strong>Specialization Hierarchy</strong>
+        Every subclass has <em>only one</em> superclass → called <b>single inheritance</b>. This forms a tree structure.
+      </div>
+      <div class="box">
+        <strong>Specialization Lattice</strong>
+        A subclass can be a subclass of <em>more than one</em> superclass → called <b>multiple inheritance</b>. A subclass with more than one superclass is called a <b>shared subclass</b>.
+      </div>
+    </div>
+
+    <div class="important" style="margin-top:15px;">
+      In a lattice or hierarchy, a subclass inherits attributes not only of its <em>direct superclass</em>, but also of <strong>all its predecessor superclasses</strong>.
+    </div>
+
+    <div class="highlight" style="margin-top:10px;">
+      <strong>Example — ENGINEERING_MANAGER shared subclass:</strong> It is a subclass of both ENGINEER and MANAGER (and SALARIED_EMPLOYEE), inheriting attributes from all three. This forms a specialization lattice.
+    </div>
+
+    <div class="note" style="margin-top:10px;">
+      <strong>UNIVERSITY lattice example:</strong> PERSON → EMPLOYEE, ALUMNUS, STUDENT. EMPLOYEE → STAFF, FACULTY, STUDENT_ASSISTANT. STUDENT → GRADUATE_STUDENT, UNDERGRADUATE_STUDENT. STUDENT_ASSISTANT → RESEARCH_ASSISTANT, TEACHING_ASSISTANT. This demonstrates multiple levels with multiple inheritance.
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:15px;">Design Approaches</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Top-Down (Specialization)</strong>
+        Start with an entity type, then define subclasses by successive specialization. Called a <em>top-down conceptual refinement process</em>.
+      </div>
+      <div class="box">
+        <strong>Bottom-Up (Generalization)</strong>
+        Start with many entity types and generalize those that have common properties. Called a <em>bottom-up conceptual synthesis process</em>.
+      </div>
+    </div>
+    <p style="margin-top:12px;">In practice, a <strong>combination of both processes</strong> is usually employed.</p>
+  </div>
+
+  <!-- Categories (UNION TYPES) -->
+  <div class="card">
+    <h2 class="section-title">🔗 Categories (UNION Types)</h2>
+
+    <div class="important">
+      <strong>Definition:</strong> A <strong>category</strong> (or UNION type) is a subclass that represents a subset of the <em>union</em> of multiple superclasses from different entity types.
+    </div>
+
+    <div class="highlight" style="margin-top:15px;">
+      <strong>Example — Vehicle Registration Database:</strong><br>
+      A vehicle owner can be a PERSON, a BANK (holding a lease), or a COMPANY. A category OWNER is created to represent a subset of the union of COMPANY ∪ BANK ∪ PERSON. A category member must exist in <em>at least one</em> of its superclasses.
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:15px;">Category vs. Shared Subclass</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Category (UNION type)</strong>
+        Subset of the <em>union</em> of its superclasses. Member must exist in <b>at least one</b> superclass. Superclasses can be different entity types. Shown with <b>"U"</b> in EER diagram.
+      </div>
+      <div class="box">
+        <strong>Shared Subclass</strong>
+        Subset of the <em>intersection</em> of its superclasses. Member must exist in <b>all</b> of its superclasses. Leads to multiple inheritance.
+      </div>
+    </div>
+  </div>
+
+  <!-- Formal Definitions of EER Model -->
+  <div class="card">
+    <h2 class="section-title">📐 Formal Definitions of the EER Model</h2>
+
+    <div class="grid">
+      <div class="box">
+        <strong>Class C</strong>
+        A set or collection of entities. Includes any EER schema construct that groups entities: entity types, subclasses, superclasses, and categories.
+      </div>
+      <div class="box">
+        <strong>Subclass S of C</strong>
+        Inherits all attributes and relationships of class C. Set of entities always a subset: <b>S ⊆ C</b>. C is called the superclass of S. Relationship denoted C/S (IS-A).
+      </div>
+      <div class="box">
+        <strong>Specialization Z</strong>
+        Z = {S1, S2, …, Sn} is a set of subclasses with the same superclass G. G is called a <em>generalization</em> of the subclasses.
+      </div>
+    </div>
+
+    <div class="two-column" style="margin-top:15px;">
+      <div class="box">
+        <strong>Total Specialization</strong>
+        Z is total if: S1 ∪ S2 ∪ … ∪ Sn = G. (Every entity in G belongs to at least one subclass.) Otherwise, Z is <em>partial</em>.
+      </div>
+      <div class="box">
+        <strong>Disjoint Specialization</strong>
+        Z is disjoint if: Si ∩ Sj = ∅ for i ≠ j. (No entity belongs to more than one subclass.) Otherwise, Z is <em>overlapping</em>.
+      </div>
+    </div>
+
+    <div class="two-column" style="margin-top:15px;">
+      <div class="box">
+        <strong>Predicate-Defined Subclass</strong>
+        Subclass S of C is predicate-defined if a predicate (condition) p on attributes of C determines membership: S = C[p], where C[p] is the set of entities in C that satisfy condition p.
+      </div>
+      <div class="box">
+        <strong>User-Defined Subclass</strong>
+        A subclass <em>not</em> defined by a predicate. Membership is specified individually for each entity in the superclass by the user.
+      </div>
+    </div>
+
+    <div class="important" style="margin-top:15px;">
+      <strong>Category / UNION Type T — Formal Definition:</strong><br>
+      T is a class that is a subset of the union of n defining superclasses D1, D2, …, Dn (n &gt; 1):<br>
+      <code>T ⊆ (D1 ∪ D2 ∪ … ∪ Dn)</code><br><br>
+      A predicate pi can be specified on each Di. If a predicate is specified on every Di:<br>
+      <code>T = (D1[p1] ∪ D2[p2] ∪ … ∪ Dn[pn])</code>
+    </div>
+  </div>
+
+  <!-- UML & Alternative Notations -->
+  <div class="card">
+    <h2 class="section-title">📊 Alternative Diagrammatic Notations &amp; UML</h2>
+
+    <p>ER/EER diagrams are one specific notation for displaying conceptual data model constructs. DB design tools use many alternative notations for the same or similar concepts.</p>
+
+    <div class="note" style="margin-top:12px;">
+      <strong>One popular alternative: UML Class Diagrams.</strong> In UML, classes correspond to entity types, with attributes and operations shown inside the class box. Inheritance (specialization/generalization) is shown with a hollow triangle arrow pointing to the superclass.
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:15px; margin-bottom:10px;">Alternative Symbol Comparisons</h3>
+    <div class="three-column">
+      <div class="box">
+        <strong>Entity type/class</strong>
+        EER: rectangle. UML: class box with sections.
+      </div>
+      <div class="box">
+        <strong>Attribute</strong>
+        EER: oval. UML: listed inside class box. Also shown as line with circle.
+      </div>
+      <div class="box">
+        <strong>Relationship</strong>
+        EER: diamond. UML: line between classes. Also shown as rectangle or plain line.
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-top:15px;">
+      <strong>Cardinality Notation Variants:</strong>
+      <ul>
+        <li>1 and N (standard EER)</li>
+        <li>(O,n) and (1,1) — min/max notation</li>
+        <li>1..1 and 0..n — UML style</li>
+        <li>Crow's foot notation (various tools)</li>
+      </ul>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:15px; margin-bottom:10px;">Specialization/Generalization Notation Variants</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>EER Notation</strong>
+        Circle with "d" (disjoint) or "o" (overlapping). Single line = partial, double line = total. Subclasses in rectangles connected by lines through the circle.
+      </div>
+      <div class="box">
+        <strong>UML Notation</strong>
+        Hollow triangle pointing up to superclass (generalization arrow). Subclasses shown beneath. Constraints labeled {disjoint}, {overlapping}, {complete}, {incomplete}.
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Reference -->
+  <div class="card">
+    <h2 class="section-title">📌 Quick Reference — Key Terms</h2>
+    <div class="grid">
+      <div class="box"><strong>Superclass</strong> The higher-level entity type from which subclasses inherit.</div>
+      <div class="box"><strong>Subclass / Subtype</strong> A meaningful subgrouping of a superclass (S ⊆ C).</div>
+      <div class="box"><strong>IS-A Relationship</strong> Denotes superclass/subclass: e.g., SECRETARY IS-A EMPLOYEE.</div>
+      <div class="box"><strong>Specialization</strong> Top-down process of defining subclasses from a superclass.</div>
+      <div class="box"><strong>Generalization</strong> Bottom-up process of creating a superclass from similar entity types.</div>
+      <div class="box"><strong>Attribute Inheritance</strong> A subclass member inherits all attributes and relationships of the superclass.</div>
+      <div class="box"><strong>Predicate-Defined</strong> Subclass membership determined by a condition on a superclass attribute.</div>
+      <div class="box"><strong>Attribute-Defined</strong> All subclasses in a specialization use the same defining attribute.</div>
+      <div class="box"><strong>Disjoint ("d")</strong> Entity can belong to at most one subclass.</div>
+      <div class="box"><strong>Overlapping ("o")</strong> Entity can belong to more than one subclass.</div>
+      <div class="box"><strong>Total (double line)</strong> Every superclass entity must be in at least one subclass.</div>
+      <div class="box"><strong>Partial (single line)</strong> Superclass entity may not belong to any subclass.</div>
+      <div class="box"><strong>Hierarchy</strong> Single inheritance — each subclass has exactly one superclass (tree).</div>
+      <div class="box"><strong>Lattice</strong> Multiple inheritance — subclass can have more than one superclass.</div>
+      <div class="box"><strong>Shared Subclass</strong> A subclass with more than one superclass (multiple inheritance).</div>
+      <div class="box"><strong>Category / UNION Type</strong> Subclass as a subset of the union of multiple different-type superclasses.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 Lecture 05 - Enhanced Entity-Relationship &amp; Object Modeling • BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

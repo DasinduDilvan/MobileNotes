@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 01 - Introduction to JavaScript | ICT 1232</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+.card { background: white; padding: 25px; margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.section-title { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 15px; font-size: 1.4em; }
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+.box { background: #f3fbfa; padding: 15px; border-radius: 10px; border-left: 3px solid #2c6e6b; }
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+.highlight { background: #fff9e6; padding: 15px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 15px 0; }
+.important { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 15px 0; }
+.note { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 15px 0; }
+.warning { background: #fce4ec; padding: 15px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 15px 0; }
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; color: #c0392b; }
+pre { background: #1e1e1e; color: #d4d4d4; padding: 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.6; overflow-x: auto; margin: 12px 0; }
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string { color: #ce9178; }
+pre .fn { color: #dcdcaa; }
+pre .type { color: #4ec9b0; }
+pre .num { color: #b5cea8; }
+.tag { display: inline-block; background: #2c6e6b; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin: 2px; vertical-align: middle; }
+.tag.orange { background: #e67e22; }
+.tag.blue { background: #2980b9; }
+.tag.red { background: #c0392b; }
+.footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/web-development" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+  <h1>ICT 1232 - Web Development</h1>
+
+  <!-- SCRIPTING LANGUAGE -->
+  <div class="card">
+    <h2 class="section-title">📜 Scripting Language</h2>
+    <p>A scripting language is a programming language designed to <strong>automate tasks or control other software</strong>.</p>
+    <div class="grid" style="margin-top:15px;">
+      <div class="box">
+        <strong>Interpreted, not compiled</strong>
+        Scripts run line-by-line through an interpreter — they are not compiled before execution.
+      </div>
+      <div class="box">
+        <strong>Dynamic behavior</strong>
+        Used to add dynamic behavior to applications such as web pages, servers, and system tools.
+      </div>
+      <div class="box">
+        <strong>Common examples</strong>
+        JavaScript, Python, PHP, Ruby, Shell scripts.
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT-SIDE SCRIPTING -->
+  <div class="card">
+    <h2 class="section-title">🖥️ Client-Side Scripting</h2>
+    <p>Client-side scripting refers to code that runs <strong>inside the user's web browser</strong>, not on the server. It allows web pages to become interactive, dynamic, and responsive without reloading the page.</p>
+    <div class="note" style="margin-top:15px;">
+      <strong>Common tasks of client-side scripting:</strong>
+      <ul>
+        <li>Updating the DOM (changing text, styles, layout)</li>
+        <li>Validating form inputs before submitting to the server</li>
+        <li>Handling user events (clicks, typing, scrolling)</li>
+        <li>Fetching data from servers using APIs (AJAX / fetch)</li>
+      </ul>
+    </div>
+    <div class="important">
+      The most commonly used client-side scripting language is <strong>JavaScript</strong>.
+    </div>
+    <h3 style="margin-top:15px; color:#2c6e6b;">Key Characteristics</h3>
+    <div class="grid">
+      <div class="box"><strong>Improved User Experience</strong>Pages respond without full reloads.</div>
+      <div class="box"><strong>Browser JS Engines</strong>The browser's built-in engine executes the code.</div>
+      <div class="box"><strong>Limited Access</strong>Restricted for security reasons (sandboxed).</div>
+      <div class="box"><strong>Essential for SPAs</strong>Enables Single Page Applications and modern web apps.</div>
+    </div>
+  </div>
+
+  <!-- HOW WEB PAGES WORK -->
+  <div class="card">
+    <h2 class="section-title">🌐 How Web Pages Work</h2>
+    <p>Understanding the request-response cycle is fundamental to web development.</p>
+    <div style="margin-top:15px; background:#f3fbfa; border-radius:10px; padding:20px;">
+      <ol style="list-style:decimal; margin-left:20px; line-height:2;">
+        <li>You type a <strong>URL</strong> in the browser's address bar and press Enter.</li>
+        <li>The browser sends an <strong>HTTP GET request</strong> to the server at that URL.</li>
+        <li>The server responds by sending back an <strong>HTML file</strong>.</li>
+        <li>The HTML contains references to other resources like <code>&lt;img src="pup.png"&gt;</code> and <code>&lt;link src="style.css"&gt;</code> — these trigger additional requests.</li>
+        <li>The server replies with those resources (images, CSS files, JS files).</li>
+        <li>Once all resources are loaded, the browser <strong>renders the complete web page</strong>.</li>
+      </ol>
+    </div>
+    <div class="highlight" style="margin-top:15px;">
+      <strong>HTML + CSS alone produces a web page that doesn't <em>do</em> anything.</strong><br>
+      HTML describes structure and content. CSS describes appearance and style. To add behavior, we need JavaScript.
+    </div>
+    <h3 style="margin-top:15px; color:#2c6e6b;">What HTML/CSS cannot do alone:</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>HTML + CSS can:</strong>
+        <ul>
+          <li>Look the way we want</li>
+          <li>Link to other pages</li>
+          <li>Display differently on different screen sizes</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>HTML + CSS cannot:</strong>
+        <ul>
+          <li>Get user input</li>
+          <li>Save user input</li>
+          <li>Show/hide elements dynamically</li>
+          <li>React to events like clicks or typing</li>
+        </ul>
+      </div>
+    </div>
+    <div class="important" style="margin-top:15px; text-align:center; font-size:1.1em;">
+      👉 <strong>Enter JavaScript!</strong>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT INTRO -->
+  <div class="card">
+    <h2 class="section-title">⚡ JavaScript</h2>
+    <p>JavaScript is a programming language. It is currently the <strong>only programming language that your browser can execute natively</strong>. If you want to make a webpage interactive (animations, events, DOM updates, API calls), you must use JavaScript or a language that compiles to JavaScript (e.g., TypeScript).</p>
+    <div class="grid" style="margin-top:15px;">
+      <div class="box">
+        <strong>Created</strong>
+        1995 by Brendan Eich at Netscape. The first version was written in just 10 days.
+      </div>
+      <div class="box">
+        <strong>Name origin</strong>
+        Has nothing to do with Java — it was named that way purely for marketing reasons.
+      </div>
+      <div class="box">
+        <strong>Standardized as</strong>
+        ECMAScript — widely used across browsers, servers, and apps.
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES OF JAVASCRIPT -->
+  <div class="card">
+    <h2 class="section-title">🔧 Features of JavaScript</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>Dynamic Typing</strong>
+        Variable types are defined based on the stored value. A variable <code>x</code> can store a string, number, array, or object at any time.
+      </div>
+      <div class="box">
+        <strong>Case Sensitive</strong>
+        <code>count</code> and <code>Count</code> are treated as completely different identifiers.
+      </div>
+      <div class="box">
+        <strong>Event-Driven Programming</strong>
+        Handles user interactions (clicks, keyboard events, mouse movements) efficiently.
+      </div>
+      <div class="box">
+        <strong>Platform Independent</strong>
+        Write the script once and run it on any platform or browser without affecting the output.
+      </div>
+      <div class="box">
+        <strong>Interpreted Language</strong>
+        Scripts are processed line by line by the JavaScript interpreter — a built-in component of the web browser.
+      </div>
+      <div class="box">
+        <strong>First-Class Functions</strong>
+        Functions are treated like variables. You can pass them as arguments, return them, or store them in variables.
+      </div>
+      <div class="box">
+        <strong>Asynchronous &amp; Non-Blocking</strong>
+        Uses event loop, callbacks, promises, and async/await. API calls run in the background — no UI freezing.
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW JS GETS LOADED -->
+  <div class="card">
+    <h2 class="section-title">📦 How JavaScript Gets Loaded in the Browser</h2>
+    <ol style="list-style:decimal; margin-left:20px; line-height:2.2;">
+      <li>The browser parses the HTML file and encounters a <code>&lt;script src="script.js"&gt;</code> tag.</li>
+      <li>The browser makes an HTTP request to the server for the <code>script.js</code> file (just like for CSS or images).</li>
+      <li>The server responds with the JavaScript file.</li>
+      <li>The JavaScript file executes <strong>client-side</strong> — in the browser on the user's computer.</li>
+    </ol>
+    <div class="note" style="margin-top:15px;">
+      <strong>JavaScript Execution Rules:</strong><br>
+      There is no "main method". The script file is executed <strong>from top to bottom</strong>. There is no compilation by the developer — JavaScript is compiled and executed on the fly by the browser (just-in-time / JIT compilation).
+    </div>
+  </div>
+
+  <!-- USING JS IN HTML -->
+  <div class="card">
+    <h2 class="section-title">🔗 How to Use JavaScript with HTML</h2>
+    <p>JavaScript code can be placed in the <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code> sections of an HTML page, always wrapped inside <code>&lt;script&gt;</code> and <code>&lt;/script&gt;</code> tags. The <code>type</code> attribute is not required — JavaScript is the default scripting language in HTML.</p>
+
+    <div class="three-column" style="margin-top:15px;">
+      <div class="box">
+        <strong>In &lt;head&gt;</strong>
+        Script is loaded before the body renders. Functions defined here can be called from body elements.
+      </div>
+      <div class="box">
+        <strong>In &lt;body&gt;</strong>
+        Script runs as the page loads. Can use <code>document.write()</code> to insert content.
+      </div>
+      <div class="box">
+        <strong>External .js file</strong>
+        Best practice for reusable code. Reference via <code>src</code> attribute. Does not contain <code>&lt;script&gt;</code> tags.
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px; color:#2c6e6b;">JavaScript in &lt;head&gt;</h3>
+    <pre><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+<span class="keyword">&lt;html&gt;</span>
+<span class="keyword">&lt;head&gt;</span>
+  <span class="keyword">&lt;script&gt;</span>
+    <span class="keyword">function</span> <span class="fn">showMessage</span>() {
+      <span class="fn">alert</span>(<span class="string">"Hello from the HEAD section!"</span>);
+    }
+  <span class="keyword">&lt;/script&gt;</span>
+<span class="keyword">&lt;/head&gt;</span>
+<span class="keyword">&lt;body&gt;</span>
+  <span class="keyword">&lt;button</span> onclick=<span class="string">"showMessage()"</span><span class="keyword">&gt;</span>Click Me<span class="keyword">&lt;/button&gt;</span>
+<span class="keyword">&lt;/body&gt;</span>
+<span class="keyword">&lt;/html&gt;</span></pre>
+
+    <h3 style="margin-top:15px; color:#2c6e6b;">JavaScript in &lt;body&gt;</h3>
+    <pre><span class="keyword">&lt;body&gt;</span>
+  <span class="keyword">&lt;h2&gt;</span>JavaScript Inside Body<span class="keyword">&lt;/h2&gt;</span>
+  <span class="keyword">&lt;script&gt;</span>
+    document.<span class="fn">write</span>(<span class="string">"This is JS running inside the BODY tag."</span>);
+  <span class="keyword">&lt;/script&gt;</span>
+<span class="keyword">&lt;/body&gt;</span></pre>
+
+    <h3 style="margin-top:15px; color:#2c6e6b;">External JavaScript File</h3>
+    <pre><span class="comment">&lt;!-- In &lt;head&gt; or &lt;body&gt;: --&gt;</span>
+<span class="keyword">&lt;script</span> src=<span class="string">"externalFile.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Full URL --&gt;</span>
+<span class="keyword">&lt;script</span> src=<span class="string">"https://www.w3schools.com/js/myScript.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- File path --&gt;</span>
+<span class="keyword">&lt;script</span> src=<span class="string">"/js/myScript.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Same directory --&gt;</span>
+<span class="keyword">&lt;script</span> src=<span class="string">"myScript.js"</span><span class="keyword">&gt;&lt;/script&gt;</span></pre>
+    <div class="note">External scripts are practical when the same code is used in many different web pages. External script files have the <code>.js</code> extension and do <strong>not</strong> contain <code>&lt;script&gt;</code> tags inside them.</div>
+  </div>
+
+  <!-- DISPLAY OUTPUTS -->
+  <div class="card">
+    <h2 class="section-title">📤 Display Outputs Using JavaScript</h2>
+    <p>JavaScript can display output in several ways:</p>
+
+    <div class="grid" style="margin-top:15px;">
+      <div class="box">
+        <strong>1. Alert Box</strong>
+        Displays a popup message. Pauses the script until the user clicks OK (blocking).
+      </div>
+      <div class="box">
+        <strong>2. document.write()</strong>
+        Writes directly to the webpage while loading. If used after loading, it <em>erases the whole page</em>.
+      </div>
+      <div class="box">
+        <strong>3. innerHTML</strong>
+        Most common method. Updates HTML content inside an element selected by <code>getElementById(id)</code>.
+      </div>
+      <div class="box">
+        <strong>4. console.log()</strong>
+        Writes to the browser console. Used mainly for <strong>debugging</strong>, not for displaying to users.
+      </div>
+      <div class="box">
+        <strong>5. textContent</strong>
+        Safer alternative to innerHTML. Inserts plain text only — avoids HTML injection risks.
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px; color:#2c6e6b;">Alert Box</h3>
+    <pre><span class="keyword">&lt;script&gt;</span>
+  window.<span class="fn">alert</span>(<span class="string">"Welcome to JavaScript!"</span>);
+<span class="keyword">&lt;/script&gt;</span></pre>
+
+    <h3 style="margin-top:15px; color:#2c6e6b;">innerHTML</h3>
+    <pre><span class="keyword">&lt;p</span> id=<span class="string">"result"</span><span class="keyword">&gt;&lt;/p&gt;</span>
+<span class="keyword">&lt;script&gt;</span>
+  document.<span class="fn">getElementById</span>(<span class="string">"result"</span>).innerHTML =
+    <span class="string">"This text appears inside the paragraph!"</span>;
+<span class="keyword">&lt;/script&gt;</span></pre>
+
+    <h3 style="margin-top:15px; color:#2c6e6b;">console.log()</h3>
+    <pre><span class="keyword">&lt;script&gt;</span>
+  <span class="keyword">let</span> x = <span class="num">10</span>;
+  <span class="keyword">let</span> y = <span class="num">20</span>;
+  console.<span class="fn">log</span>(<span class="string">"The sum is:"</span>, x + y); <span class="comment">// Output: The sum is: 30</span>
+<span class="keyword">&lt;/script&gt;</span></pre>
+
+    <h3 style="margin-top:15px; color:#2c6e6b;">textContent (Safer Alternative)</h3>
+    <pre><span class="keyword">&lt;p</span> id=<span class="string">"demo"</span><span class="keyword">&gt;&lt;/p&gt;</span>
+<span class="keyword">&lt;script&gt;</span>
+  document.<span class="fn">getElementById</span>(<span class="string">"demo"</span>).textContent =
+    <span class="string">"&lt;b&gt;This will not be bold&lt;/b&gt;"</span>; <span class="comment">// Renders as plain text</span>
+<span class="keyword">&lt;/script&gt;</span></pre>
+
+    <div class="note">To view console output: right-click on the page → <strong>Inspect</strong> → click the <strong>Console</strong> tab. The Console tab is also a <strong>REPL</strong> (Read-Eval-Print Loop) — an interactive shell where you can type and test JavaScript expressions directly.</div>
+  </div>
+
+  <!-- FUNCTIONS -->
+  <div class="card">
+    <h2 class="section-title">🔨 Functions</h2>
+    <p>One way to define a JavaScript function:</p>
+    <pre><span class="keyword">function</span> <span class="fn">name</span>() {
+  statement;
+  statement;
+  <span class="comment">// ...</span>
+}</pre>
+    <pre><span class="keyword">function</span> <span class="fn">hello</span>() {
+  console.<span class="fn">log</span>(<span class="string">'Hello!'</span>);
+  console.<span class="fn">log</span>(<span class="string">'Welcome to JavaScript'</span>);
+}
+
+<span class="fn">hello</span>(); <span class="comment">// Calls the function</span>
+<span class="fn">hello</span>(); <span class="comment">// Calls it again</span></pre>
+    <div class="highlight">
+      <strong>Function Hoisting:</strong> Function <em>declarations</em> are "hoisted" — you can call them before they appear in the code. The browser behaves as if the definition is moved to the top of the scope. However, other ways of defining functions (e.g., arrow functions assigned to variables) are <strong>not</strong> hoisted. <strong>Best practice: avoid relying on hoisting.</strong>
+    </div>
+    <pre><span class="comment">// This works due to hoisting:</span>
+<span class="fn">hello</span>();
+<span class="fn">hello</span>();
+
+<span class="keyword">function</span> <span class="fn">hello</span>() {
+  console.<span class="fn">log</span>(<span class="string">'Hello!'</span>);
+}</pre>
+  </div>
+
+  <!-- VARIABLES -->
+  <div class="card">
+    <h2 class="section-title">📦 Variables</h2>
+
+    <h3 style="color:#2c6e6b; margin-bottom:10px;">Naming Rules</h3>
+    <div class="two-column">
+      <div class="box">
+        <strong>Variable names can contain:</strong>
+        <ul>
+          <li>Letters (a–z, A–Z)</li>
+          <li>Digits (0–9)</li>
+          <li>Underscores (_)</li>
+          <li>Dollar signs ($)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>Variable names must:</strong>
+        <ul>
+          <li>Begin with a letter, <code>_</code>, or <code>$</code></li>
+          <li>Not start with a digit</li>
+          <li>Not be a reserved keyword</li>
+          <li>Be case sensitive (<code>count</code> ≠ <code>Count</code>)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note" style="margin-top:15px;"><strong>Best Practice:</strong> Use meaningful names and follow <strong>camelCase</strong> convention for variables and functions. Example: <code>userName</code>, <code>totalPrice</code>.</div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">var, let, const</h3>
+    <pre><span class="comment">// Function scope variable (old way)</span>
+<span class="keyword">var</span> x = <span class="num">15</span>;
+
+<span class="comment">// Block scope variable (modern)</span>
+<span class="keyword">let</span> fruit = <span class="string">'banana'</span>;
+
+<span class="comment">// Block scope constant; cannot be reassigned</span>
+<span class="keyword">const</span> isHungry = <span class="keyword">true</span>;</pre>
+    <p style="margin-top:10px;">You do <strong>not</strong> declare the datatype of a variable — JavaScript is <em>dynamically typed</em>.</p>
+
+    <div class="three-column" style="margin-top:15px;">
+      <div class="box">
+        <strong>var — Function Scope</strong>
+        Does not go out of scope at the end of a block (like an if-statement or loop), only at the end of a function. Can cause unexpected bugs.
+      </div>
+      <div class="box">
+        <strong>let — Block Scope</strong>
+        Goes out of scope at the end of the block <code>{}</code> in which it is declared. Safer and more predictable than <code>var</code>.
+      </div>
+      <div class="box">
+        <strong>const — Block Scope + No Reassignment</strong>
+        Cannot be reassigned after declaration. However, the underlying object can still be mutated (like Java's <code>final</code>).
+      </div>
+    </div>
+
+    <div class="warning" style="margin-top:15px;">
+      <strong>Variables Best Practices:</strong>
+      <ul>
+        <li>Use <code>const</code> whenever possible.</li>
+        <li>Use <code>let</code> if you need to reassign.</li>
+        <li>Do <strong>not</strong> use <code>var</code>.</li>
+        <li>You'll see a lot of old code with <code>var</code>, but <code>const</code> and <code>let</code> are well-supported and recommended by Google and AirBnB JavaScript Style Guides.</li>
+      </ul>
+    </div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Scope Examples</h3>
+    <pre><span class="comment">// var — readable OUTSIDE the for-loop (function scope)</span>
+<span class="keyword">function</span> <span class="fn">printMessage</span>(message, times) {
+  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="num">0</span>; i &lt; times; i++) {
+    console.<span class="fn">log</span>(message);
+  }
+  console.<span class="fn">log</span>(<span class="string">'Value of i is '</span> + i); <span class="comment">// Works! prints 3</span>
+}
+
+<span class="comment">// let — causes ERROR outside the for-loop (block scope)</span>
+<span class="keyword">function</span> <span class="fn">printMessage</span>(message, times) {
+  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="num">0</span>; i &lt; times; i++) {
+    console.<span class="fn">log</span>(message);
+  }
+  console.<span class="fn">log</span>(<span class="string">'Value of i is '</span> + i); <span class="comment">// ERROR: i is not defined</span>
+}
+
+<span class="comment">// const — ERROR if reassigned</span>
+<span class="keyword">const</span> y = <span class="num">10</span>;
+y = <span class="num">0</span>;  <span class="comment">// ERROR!</span>
+y++;    <span class="comment">// ERROR!</span>
+
+<span class="keyword">const</span> list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+list.<span class="fn">push</span>(<span class="num">4</span>); <span class="comment">// OK — mutating the object is allowed</span></pre>
+  </div>
+
+  <!-- TYPES -->
+  <div class="card">
+    <h2 class="section-title">🏷️ Data Types</h2>
+    <p>JS variables do not have types, but the <strong>values do</strong>. There are <strong>six primitive types</strong>:</p>
+    <div class="grid" style="margin-top:15px;">
+      <div class="box"><strong>Boolean</strong><code>true</code> and <code>false</code></div>
+      <div class="box"><strong>Number</strong>Everything is a double (no integer type). Special values: <code>NaN</code>, <code>+Infinity</code>, <code>-Infinity</code>.</div>
+      <div class="box"><strong>String</strong>In <code>'single'</code> or <code>"double"</code> quotes. Immutable. No char type.</div>
+      <div class="box"><strong>Symbol</strong>Used for unique identifiers (advanced topic).</div>
+      <div class="box"><strong>Null</strong><code>null</code> — a value meaning "this has no value".</div>
+      <div class="box"><strong>Undefined</strong>The value of a variable that has been declared but not assigned a value.</div>
+    </div>
+    <div class="note" style="margin-top:15px;">There are also <strong>Object types</strong>, including <code>Array</code>, <code>Date</code>, <code>String</code> (the object wrapper), etc.</div>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Numbers</h3>
+    <p>All numbers are floating point. Operators and precedence are like C. A <code>Math</code> class is available: <code>Math.floor()</code>, <code>Math.ceil()</code>, etc.</p>
+    <pre><span class="keyword">const</span> homework = <span class="num">0.45</span>;
+<span class="keyword">const</span> midterm  = <span class="num">0.2</span>;
+<span class="keyword">const</span> final    = <span class="num">0.35</span>;
+<span class="keyword">const</span> score = homework * <span class="num">87</span> + midterm * <span class="num">90</span> + final * <span class="num">95</span>;
+console.<span class="fn">log</span>(score); <span class="comment">// 90.4</span></pre>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Strings</h3>
+    <p>Strings can be defined with single or double quotes (no functional difference). They are <strong>immutable</strong>. Use <code>+</code> for concatenation. Use the <code>.length</code> property (not a function) to get the size.</p>
+    <pre><span class="keyword">let</span> snack = <span class="string">'coo'</span>;
+snack += <span class="string">'kies'</span>;
+snack = snack.<span class="fn">toUpperCase</span>();
+console.<span class="fn">log</span>(<span class="string">"I want "</span> + snack); <span class="comment">// "I want COOKIES"</span></pre>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Template Literals</h3>
+    <p>Template literals provide a clean way to create multi-line strings and perform <strong>string interpolation</strong>. Created using backticks (<code>` `</code>). Variables and expressions are embedded using <code>${...}</code> syntax.</p>
+    <pre><span class="comment">// Multi-line string</span>
+<span class="keyword">let</span> str = <span class="string">`The quick brown fox
+jumps over the lazy dog.`</span>;
+
+<span class="comment">// String interpolation</span>
+<span class="keyword">let</span> a = <span class="num">10</span>;
+<span class="keyword">let</span> b = <span class="num">20</span>;
+<span class="keyword">let</span> result = <span class="string">`The sum of <span style="color:#ce9178;">${a}</span> and <span style="color:#ce9178;">${b}</span> is <span style="color:#ce9178;">${a+b}</span>.`</span>;
+console.<span class="fn">log</span>(result); <span class="comment">// "The sum of 10 and 20 is 30."</span></pre>
+
+    <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:8px;">Boolean</h3>
+    <p>Boolean operators: <code>&amp;&amp;</code> (AND), <code>||</code> (OR), <code>!</code> (NOT).</p>
+    <pre><span class="keyword">let</span> isHungry = <span class="keyword">true</span>;
+<span class="keyword">let</span> isTeenager = age &gt; <span class="num">12</span> &amp;&amp; age &lt; <span class="num">20</span>;
+
+<span class="keyword">if</span> (isHungry &amp;&amp; isTeenager) {
+  pizza++;
+}</pre>
+    <div class="highlight">
+      <strong>Truthy and Falsy Values:</strong> Non-boolean values are automatically converted when used in control statements.
+      <ul style="margin-top:8px;">
+        <li><strong>Falsy:</strong> <code>null</code>, <code>undefined</code>, <code>0</code>, <code>NaN</code>, <code>''</code>, <code>""</code></li>
+        <li><strong>Truthy:</strong> Everything else</li>
+      </ul>
+      <pre style="margin-top:8px;"><span class="keyword">if</span> (username) {
+  <span class="comment">// Only runs if username is defined and non-empty</span>
+}</pre>
+    </div>
+  </div>
+
+  <!-- FUNCTION PARAMETERS -->
+  <div class="card">
+    <h2 class="section-title">🧩 Function Parameters</h2>
+    <p>Function parameters are <strong>not declared</strong> with <code>var</code>, <code>let</code>, or <code>const</code>.</p>
+    <pre><span class="keyword">function</span> <span class="fn">printMessage</span>(message, times) {
+  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="num">0</span>; i &lt; times; i++) {
+    console.<span class="fn">log</span>(message);
+  }
+}</pre>
+  </div>
+
+  <div class="footer">
+    🌱 Lecture 01 - Introduction to JavaScript • BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

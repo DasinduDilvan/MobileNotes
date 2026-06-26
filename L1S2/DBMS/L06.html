@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 06 - ER & EER to Relational Mapping</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .sub-title {
+            color: #2c6e6b;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin: 18px 0 8px 0;
+        }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 8px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        /* Relation Table Style */
+        .rel-table {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 0;
+            border: 1.5px solid #2c6e6b;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 8px 0;
+            font-size: 0.88em;
+        }
+        .rel-table .rel-name {
+            background: #2c6e6b;
+            color: white;
+            padding: 5px 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+        .rel-table .rel-cols {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .rel-table .col {
+            padding: 5px 12px;
+            border-right: 1px solid #cfe9e7;
+            background: #f3fbfa;
+        }
+        .rel-table .col:last-child { border-right: none; }
+        .rel-table .col.pk {
+            text-decoration: underline;
+            font-weight: 600;
+            background: #e0f2f1;
+        }
+        .step-badge {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .option-badge {
+            display: inline-block;
+            background: #e67e22;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        table.corr-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.95em;
+        }
+        table.corr-table th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        table.corr-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #d8f0ee;
+        }
+        table.corr-table tr:nth-child(even) td { background: #f3fbfa; }
+        table.corr-table tr:hover td { background: #e0f2f1; }
+        .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/dbms" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>ER &amp; EER → Relational Mapping</h1>
+    <p class="subtitle">ICT1212 – Database Management Systems &nbsp;|&nbsp; Lecture 06</p>
+
+    <!-- Topics Overview -->
+    <div class="card">
+        <h2 class="section-title">📋 Topics Covered</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>Part 1</strong>
+                Relational Database Design using <em>ER-to-Relational Mapping</em> (Steps 1–7)
+            </div>
+            <div class="box">
+                <strong>Part 2</strong>
+                Relational Database Design using <em>EER-to-Relational Mapping</em> (Steps 8–9)
+            </div>
+        </div>
+        <div class="note" style="margin-top:15px;">
+            <strong>Context:</strong> Mapping is part of the <em>Logical Design (Data Model Mapping)</em> phase in the database design process — it converts a conceptual ER/EER schema into a relational schema specific to a DBMS.
+        </div>
+    </div>
+
+    <!-- ===== PART 1: ER Mapping ===== -->
+    <div class="card">
+        <h2 class="section-title">Part 1 — Mapping ER Model Constructs to Relations</h2>
+
+        <!-- Step 1 -->
+        <div class="step-badge">Step 1</div>
+        <p class="sub-title">Mapping of Regular (Strong) Entity Types</p>
+        <ul>
+            <li>For each regular (strong) entity type <em>E</em>, create a relation <em>R</em> that includes all <strong>simple attributes</strong> of <em>E</em>.</li>
+            <li>For composite attributes, include only their <strong>simple component attributes</strong> (not the composite itself).</li>
+            <li>Choose one key attribute of <em>E</em> as the <strong>primary key</strong> of <em>R</em>.</li>
+            <li>If the chosen key is composite, the set of its simple components together form the primary key of <em>R</em>.</li>
+            <li>If multiple keys exist for <em>E</em>, additional keys become <strong>secondary (unique) keys</strong> of <em>R</em>.</li>
+            <li>Relations created this way are called <strong>entity relations</strong> — each tuple represents one entity instance.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example — COMPANY Database (Regular Entity Relations):</strong>
+            <div style="margin-top:10px;">
+                <div class="rel-table"><div class="rel-name">EMPLOYEE</div><div class="rel-cols"><span class="col">Fname</span><span class="col">Minit</span><span class="col">Lname</span><span class="col pk">Ssn</span><span class="col">Bdate</span><span class="col">Address</span><span class="col">Sex</span><span class="col">Salary</span></div></div>
+            </div>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">DEPARTMENT</div><div class="rel-cols"><span class="col">Dname</span><span class="col pk">Dnumber</span></div></div>
+            </div>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">PROJECT</div><div class="rel-cols"><span class="col">Pname</span><span class="col pk">Pnumber</span><span class="col">Plocation</span></div></div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-badge" style="margin-top:20px;">Step 2</div>
+        <p class="sub-title">Mapping of Weak Entity Types</p>
+        <ul>
+            <li>For each weak entity type <em>W</em> with owner entity type <em>E</em>, create a relation <em>R</em> with all simple attributes of <em>W</em>.</li>
+            <li>Include the <strong>primary key of the owner</strong> as a <strong>foreign key</strong> in <em>R</em> — this handles the identifying relationship.</li>
+            <li>The <strong>primary key of R</strong> = primary key(s) of owner(s) <strong>+</strong> partial key of <em>W</em> (if any).</li>
+            <li>If a weak entity <em>E2</em> has a weak entity <em>E1</em> as its owner, map <em>E1</em> first.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example:</strong> DEPENDENT's primary key = {Essn, Dependent_name} because Dependent_name is the partial key.
+            <div style="margin-top:10px;">
+                <div class="rel-table"><div class="rel-name">DEPENDENT</div><div class="rel-cols"><span class="col pk">Essn</span><span class="col pk">Dependent_name</span><span class="col">Sex</span><span class="col">Bdate</span><span class="col">Relationship</span></div></div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-badge" style="margin-top:20px;">Step 3</div>
+        <p class="sub-title">Mapping of Binary 1:1 Relationship Types</p>
+        <p style="margin-bottom:10px;">Identify relations <em>S</em> and <em>T</em> for the two participating entity types. Three possible approaches:</p>
+
+        <div class="three-column">
+            <div class="box">
+                <strong>Approach A — Foreign Key</strong>
+                Choose one relation (preferably the one with <em>total participation</em>) as <em>S</em>, and add the primary key of <em>T</em> as a foreign key in <em>S</em>. Also add simple attributes of the relationship to <em>S</em>.
+            </div>
+            <div class="box">
+                <strong>Approach B — Merged Relation</strong>
+                Merge both entity types and the relationship into a single relation. Only suitable when <em>both participations are total</em> (same number of tuples always).
+            </div>
+            <div class="box">
+                <strong>Approach C — Cross-Reference / Relationship Relation</strong>
+                Create a third relation <em>R</em> (lookup table) with the primary keys of <em>S</em> and <em>T</em> as foreign keys. Primary key of <em>R</em> = one FK; the other FK becomes a unique key. Drawback: extra join needed.
+            </div>
+        </div>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example (Foreign Key approach — MANAGES is 1:1):</strong>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">DEPARTMENT</div><div class="rel-cols"><span class="col">Dname</span><span class="col pk">Dnumber</span><span class="col">Mgr_ssn</span><span class="col">Mgr_start_date</span></div></div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-badge" style="margin-top:20px;">Step 4</div>
+        <p class="sub-title">Mapping of Binary 1:N Relationship Types</p>
+        <ul>
+            <li>Identify relation <em>S</em> at the <strong>N-side</strong> and relation <em>T</em> at the 1-side.</li>
+            <li>Add the primary key of <em>T</em> as a <strong>foreign key</strong> in <em>S</em>. (Each N-side entity relates to at most one 1-side entity.)</li>
+            <li>Include any simple attributes of the relationship as attributes of <em>S</em>.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example (WORKS_FOR is 1:N — Employee is N-side, Department is 1-side):</strong>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">EMPLOYEE</div><div class="rel-cols"><span class="col">Fname</span><span class="col">Minit</span><span class="col">Lname</span><span class="col pk">Ssn</span><span class="col">Bdate</span><span class="col">Address</span><span class="col">Sex</span><span class="col">Salary</span><span class="col">Super_ssn</span><span class="col">Dno</span></div></div>
+            </div>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">PROJECT</div><div class="rel-cols"><span class="col">Pname</span><span class="col pk">Pnumber</span><span class="col">Plocation</span><span class="col">Dnum</span></div></div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-badge" style="margin-top:20px;">Step 5</div>
+        <p class="sub-title">Mapping of Binary M:N Relationship Types</p>
+        <ul>
+            <li>Create a <strong>new relation <em>S</em></strong> to represent the M:N relationship.</li>
+            <li>Include the primary keys of both participating entity relations as <strong>foreign keys</strong> in <em>S</em>.</li>
+            <li>Their <strong>combination forms the primary key</strong> of <em>S</em>.</li>
+            <li>Include any simple attributes of the relationship as attributes of <em>S</em>.</li>
+            <li><strong>Cannot</strong> use a single foreign key in one of the participating relations (unlike 1:1 or 1:N) — a separate relationship relation is required.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example (WORKS_ON — M:N between EMPLOYEE and PROJECT):</strong>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">WORKS_ON</div><div class="rel-cols"><span class="col pk">Essn</span><span class="col pk">Pno</span><span class="col">Hours</span></div></div>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-badge" style="margin-top:20px;">Step 6</div>
+        <p class="sub-title">Mapping of Multivalued Attributes</p>
+        <ul>
+            <li>For each multivalued attribute <em>A</em>, create a <strong>new relation <em>R</em></strong>.</li>
+            <li><em>R</em> includes: an attribute for <em>A</em> + the primary key <em>K</em> of the entity/relationship that owns <em>A</em> (as a foreign key).</li>
+            <li><strong>Primary key of R</strong> = combination of <em>A</em> and <em>K</em>.</li>
+            <li>If <em>A</em> is composite, include its simple components.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example (Locations is a multivalued attribute of DEPARTMENT):</strong>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">DEPT_LOCATIONS</div><div class="rel-cols"><span class="col pk">Dnumber</span><span class="col pk">Dlocation</span></div></div>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="step-badge" style="margin-top:20px;">Step 7</div>
+        <p class="sub-title">Mapping of N-ary Relationship Types (n &gt; 2)</p>
+        <ul>
+            <li>For each n-ary relationship type <em>R</em> (where n &gt; 2), create a <strong>new relation <em>S</em></strong>.</li>
+            <li>Include the primary keys of all participating entity types as <strong>foreign keys</strong> in <em>S</em>.</li>
+            <li>Include any simple attributes of the relationship as attributes of <em>S</em>.</li>
+            <li><strong>Primary key of S</strong> = combination of all foreign keys (all participating entity PKs).</li>
+            <li><strong>Exception:</strong> If any participating entity type <em>E</em> has cardinality = 1, exclude its FK from the primary key of <em>S</em>.</li>
+        </ul>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example (SUPPLY — ternary relationship among SUPPLIER, PROJECT, PART):</strong>
+            <div style="margin-top:8px;">
+                <div class="rel-table"><div class="rel-name">SUPPLY</div><div class="rel-cols"><span class="col pk">Sname</span><span class="col pk">Proj_name</span><span class="col pk">Part_no</span><span class="col">Quantity</span></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ER-Relational Correspondence Table -->
+    <div class="card">
+        <h2 class="section-title">📊 Correspondence: ER Model ↔ Relational Model</h2>
+        <table class="corr-table">
+            <thead>
+                <tr><th>ER Model Construct</th><th>Relational Model Equivalent</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Entity type</td><td><em>Entity</em> relation</td></tr>
+                <tr><td>1:1 or 1:N relationship type</td><td>Foreign key (or <em>relationship</em> relation)</td></tr>
+                <tr><td>M:N relationship type</td><td><em>Relationship</em> relation and <strong>two</strong> foreign keys</td></tr>
+                <tr><td>n-ary relationship type</td><td><em>Relationship</em> relation and <strong>n</strong> foreign keys</td></tr>
+                <tr><td>Simple attribute</td><td>Attribute</td></tr>
+                <tr><td>Composite attribute</td><td>Set of simple component attributes</td></tr>
+                <tr><td>Multivalued attribute</td><td>Relation and foreign key</td></tr>
+                <tr><td>Value set</td><td>Domain</td></tr>
+                <tr><td>Key attribute</td><td>Primary (or secondary) key</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Final ER Result -->
+    <div class="card">
+        <h2 class="section-title">✅ Final Result — COMPANY ER Schema Mapped to Relations</h2>
+        <p style="margin-bottom:12px;">After applying all 7 steps, the COMPANY ER schema yields these relations:</p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <div class="rel-table"><div class="rel-name">EMPLOYEE</div><div class="rel-cols"><span class="col">Fname</span><span class="col">Minit</span><span class="col">Lname</span><span class="col pk">Ssn</span><span class="col">Bdate</span><span class="col">Address</span><span class="col">Sex</span><span class="col">Salary</span><span class="col">Super_ssn</span><span class="col">Dno</span></div></div>
+            <div class="rel-table"><div class="rel-name">DEPARTMENT</div><div class="rel-cols"><span class="col">Dname</span><span class="col pk">Dnumber</span><span class="col">Mgr_ssn</span><span class="col">Mgr_start_date</span></div></div>
+            <div class="rel-table"><div class="rel-name">DEPT_LOCATIONS</div><div class="rel-cols"><span class="col pk">Dnumber</span><span class="col pk">Dlocation</span></div></div>
+            <div class="rel-table"><div class="rel-name">PROJECT</div><div class="rel-cols"><span class="col">Pname</span><span class="col pk">Pnumber</span><span class="col">Plocation</span><span class="col">Dnum</span></div></div>
+            <div class="rel-table"><div class="rel-name">WORKS_ON</div><div class="rel-cols"><span class="col pk">Essn</span><span class="col pk">Pno</span><span class="col">Hours</span></div></div>
+            <div class="rel-table"><div class="rel-name">DEPENDENT</div><div class="rel-cols"><span class="col pk">Essn</span><span class="col pk">Dependent_name</span><span class="col">Sex</span><span class="col">Bdate</span><span class="col">Relationship</span></div></div>
+        </div>
+        <div class="note" style="margin-top:15px;"><strong>Note:</strong> Underlined attributes represent primary key components. Super_ssn and Dno in EMPLOYEE are foreign keys (self-referencing and to DEPARTMENT respectively).</div>
+    </div>
+
+    <!-- ===== PART 2: EER Mapping ===== -->
+    <div class="card">
+        <h2 class="section-title">Part 2 — Mapping EER Model Constructs to Relations</h2>
+
+        <!-- Step 8 Overview -->
+        <div class="step-badge">Step 8</div>
+        <p class="sub-title">Options for Mapping Specialization or Generalization</p>
+        <p style="margin-bottom:12px;">For a specialization with <em>m</em> subclasses {S1, S2, ..., Sm} and superclass <em>C</em> with attributes {k, a1, ...an} (k = primary key), choose one of four options:</p>
+
+        <div class="grid">
+            <div class="box">
+                <strong>Option 8A</strong>
+                Multiple relations — superclass AND subclasses
+            </div>
+            <div class="box">
+                <strong>Option 8B</strong>
+                Multiple relations — subclass relations ONLY
+            </div>
+            <div class="box">
+                <strong>Option 8C</strong>
+                Single relation with ONE type attribute
+            </div>
+            <div class="box">
+                <strong>Option 8D</strong>
+                Single relation with MULTIPLE type attributes
+            </div>
+        </div>
+
+        <!-- Option 8A -->
+        <div style="margin-top:20px;">
+            <div class="option-badge">Option 8A — Multiple Relations: Superclass + Subclasses</div>
+            <ul>
+                <li>Create a relation <em>L</em> for the superclass <em>C</em>: Attrs(L) = {k, a1, ..., an}, PK(L) = k.</li>
+                <li>Create a relation <em>Li</em> for each subclass <em>Si</em>: Attrs(Li) = {k} ∪ {attributes of Si}, PK(Li) = k.</li>
+                <li>Each subclass relation references the superclass via the shared key.</li>
+                <li><strong>Works for any specialization</strong> — total or partial, disjoint or overlapping.</li>
+            </ul>
+            <div class="highlight" style="margin-top:10px;">
+                <strong>Example (EMPLOYEE specialization into SECRETARY, TECHNICIAN, ENGINEER):</strong>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+                    <div class="rel-table"><div class="rel-name">EMPLOYEE (superclass)</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Fname</span><span class="col">Minit</span><span class="col">Lname</span><span class="col">Birth_date</span><span class="col">Address</span><span class="col">Job_type</span></div></div>
+                    <div class="rel-table"><div class="rel-name">SECRETARY</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Typing_speed</span></div></div>
+                    <div class="rel-table"><div class="rel-name">TECHNICIAN</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Tgrade</span></div></div>
+                    <div class="rel-table"><div class="rel-name">ENGINEER</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Eng_type</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 8B -->
+        <div style="margin-top:20px;">
+            <div class="option-badge">Option 8B — Multiple Relations: Subclasses Only</div>
+            <ul>
+                <li>Create a relation <em>Li</em> for each subclass <em>Si</em>: Attrs(Li) = {attributes of Si} ∪ {k, a1, ..., an}, PK(Li) = k.</li>
+                <li>No separate superclass relation — all superclass attributes are duplicated into each subclass relation.</li>
+                <li><strong>Only works when specialization is total</strong> (every superclass entity must belong to at least one subclass).</li>
+                <li>Recommended only when the specialization is <strong>disjoint</strong>. If overlapping, the same entity would be duplicated across multiple relations.</li>
+            </ul>
+            <div class="highlight" style="margin-top:10px;">
+                <strong>Example (VEHICLE specialization into CAR and TRUCK — total, disjoint):</strong>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+                    <div class="rel-table"><div class="rel-name">CAR</div><div class="rel-cols"><span class="col pk">Vehicle_id</span><span class="col">License_plate_no</span><span class="col">Price</span><span class="col">Max_speed</span><span class="col">No_of_passengers</span></div></div>
+                    <div class="rel-table"><div class="rel-name">TRUCK</div><div class="rel-cols"><span class="col pk">Vehicle_id</span><span class="col">License_plate_no</span><span class="col">Price</span><span class="col">No_of_axles</span><span class="col">Tonnage</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 8C -->
+        <div style="margin-top:20px;">
+            <div class="option-badge">Option 8C — Single Relation with One Type Attribute</div>
+            <ul>
+                <li>Create a <strong>single relation <em>L</em></strong>: Attrs(L) = {k, a1, ..., an} ∪ {all subclass attributes} ∪ {t}, PK(L) = k.</li>
+                <li>The attribute <em>t</em> is called a <strong>type (discriminating) attribute</strong> — its value indicates which subclass each tuple belongs to.</li>
+                <li><strong>Only works for disjoint</strong> specializations.</li>
+                <li><strong>Potential for many NULL values</strong> if subclasses have many specific attributes.</li>
+            </ul>
+            <div class="highlight" style="margin-top:10px;">
+                <strong>Example (EMPLOYEE with disjoint subclasses — single relation, Job_type acts as discriminator):</strong>
+                <div style="margin-top:8px;">
+                    <div class="rel-table"><div class="rel-name">EMPLOYEE</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Fname</span><span class="col">Minit</span><span class="col">Lname</span><span class="col">Birth_date</span><span class="col">Address</span><span class="col">Job_type</span><span class="col">Typing_speed</span><span class="col">Tgrade</span><span class="col">Eng_type</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 8D -->
+        <div style="margin-top:20px;">
+            <div class="option-badge">Option 8D — Single Relation with Multiple Type Attributes</div>
+            <ul>
+                <li>Create a <strong>single relation <em>L</em></strong>: Attrs(L) = {k, a1, ..., an} ∪ {all subclass attributes} ∪ {t1, t2, ..., tm}, PK(L) = k.</li>
+                <li>Each <em>ti</em> is a <strong>Boolean type attribute</strong> — indicates whether a tuple belongs to subclass <em>Si</em> (true/false).</li>
+                <li>Used for <strong>overlapping</strong> specializations (but also works for disjoint).</li>
+            </ul>
+            <div class="highlight" style="margin-top:10px;">
+                <strong>Example (PART — overlapping subclasses MANUFACTURED_PART and PURCHASED_PART):</strong>
+                <div style="margin-top:8px;">
+                    <div class="rel-table"><div class="rel-name">PART</div><div class="rel-cols"><span class="col pk">Part_no</span><span class="col">Description</span><span class="col">Mflag</span><span class="col">Drawing_no</span><span class="col">Manufacture_date</span><span class="col">Batch_no</span><span class="col">Pflag</span><span class="col">Supplier_name</span><span class="col">List_price</span></div></div>
+                </div>
+                <p style="margin-top:6px; font-size:0.9em;"><em>Mflag</em> = Boolean for MANUFACTURED_PART; <em>Pflag</em> = Boolean for PURCHASED_PART.</p>
+            </div>
+        </div>
+
+        <!-- Option Summary Table -->
+        <div style="margin-top:20px;">
+            <p class="sub-title">Option 8 — Quick Comparison</p>
+            <table class="corr-table">
+                <thead>
+                    <tr><th>Option</th><th>Relations Created</th><th>Works For</th><th>Key Consideration</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>8A</strong></td><td>Superclass + one per subclass</td><td>Any (total/partial, disjoint/overlapping)</td><td>Most general; requires join for full data</td></tr>
+                    <tr><td><strong>8B</strong></td><td>One per subclass (includes superclass attrs)</td><td>Total + Disjoint specialization only</td><td>Duplication if overlapping; no superclass table</td></tr>
+                    <tr><td><strong>8C</strong></td><td>Single relation + type attribute</td><td>Disjoint only</td><td>May produce many NULLs</td></tr>
+                    <tr><td><strong>8D</strong></td><td>Single relation + Boolean flags</td><td>Overlapping (also disjoint)</td><td>Multiple Boolean flag attributes per subclass</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Specialization Hierarchies and Lattices -->
+    <div class="card">
+        <h2 class="section-title">🌐 Specialization/Generalization Hierarchies &amp; Lattices</h2>
+        <p>A <strong>specialization hierarchy</strong> has each subclass with only one superclass (single inheritance). A <strong>specialization lattice</strong> allows a subclass to have more than one superclass (multiple inheritance).</p>
+        <div class="note" style="margin-top:12px;">
+            <strong>University Database Lattice Example:</strong> PERSON is the root superclass. EMPLOYEE, ALUMNUS, and STUDENT are first-level subclasses. STAFF, FACULTY, STUDENT_ASSISTANT, GRADUATE_STUDENT, and UNDERGRADUATE_STUDENT are second-level. RESEARCH_ASSISTANT and TEACHING_ASSISTANT are third-level. STUDENT_ASSISTANT is a <em>shared subclass</em> inheriting from both EMPLOYEE and STUDENT.
+        </div>
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Result of mapping the UNIVERSITY lattice (using multiple options):</strong>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+                <div class="rel-table"><div class="rel-name">PERSON</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Name</span><span class="col">Birth_date</span><span class="col">Sex</span><span class="col">Address</span></div></div>
+                <div class="rel-table"><div class="rel-name">EMPLOYEE</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Salary</span><span class="col">Employee_type</span><span class="col">Position</span><span class="col">Rank</span><span class="col">Percent_time</span><span class="col">Ra_flag</span><span class="col">Ta_flag</span><span class="col">Project</span><span class="col">Course</span></div></div>
+                <div class="rel-table"><div class="rel-name">ALUMNUS</div><div class="rel-cols"><span class="col pk">Ssn</span></div></div>
+                <div class="rel-table"><div class="rel-name">ALUMNUS_DEGREES</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col pk">Year</span><span class="col pk">Degree</span><span class="col pk">Major</span></div></div>
+                <div class="rel-table"><div class="rel-name">STUDENT</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Major_dept</span><span class="col">Grad_flag</span><span class="col">Undergrad_flag</span><span class="col">Degree_program</span><span class="col">Class</span><span class="col">Student_assist_flag</span></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shared Subclasses -->
+    <div class="card">
+        <h2 class="section-title">🔗 Mapping of Shared Subclasses (Multiple Inheritance)</h2>
+        <ul>
+            <li>A <strong>shared subclass</strong> is a subclass of two or more superclasses — this represents <strong>multiple inheritance</strong>.</li>
+            <li>All superclasses of a shared subclass must share the <strong>same key attribute</strong>. If they have different keys, the construct must be modeled as a <strong>category (union type)</strong> instead.</li>
+            <li>Any of the Step 8 options can be applied to a shared subclass (subject to their constraints).</li>
+        </ul>
+        <div class="important" style="margin-top:12px;">
+            <strong>University Example:</strong> STUDENT_ASSISTANT is a shared subclass of both EMPLOYEE and STUDENT.
+            <ul style="margin-top:8px;">
+                <li>In EMPLOYEE relation → <strong>Option 8C</strong> used (Employee_type discriminating attribute).</li>
+                <li>In STUDENT relation → <strong>Option 8D</strong> used (Student_assist_flag Boolean attribute).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Step 9: Categories -->
+    <div class="card">
+        <h2 class="section-title">Step 9 — Mapping of Categories (Union Types)</h2>
+
+        <div class="step-badge">Definition</div>
+        <p style="margin: 10px 0 12px;">A <strong>category (union type)</strong> is a subclass of the <em>union</em> of two or more superclasses. Unlike shared subclasses, the superclasses of a category can have <strong>different keys</strong> because they may be of different entity types.</p>
+
+        <ul>
+            <li>When superclasses have <strong>different keys</strong>: create a new attribute called a <strong>surrogate key</strong> as the primary key for the category relation. Add this surrogate key to each superclass relation as well (as a foreign key reference to the category).</li>
+            <li>When superclasses have the <strong>same key</strong>: no surrogate key is needed.</li>
+        </ul>
+
+        <div class="important" style="margin-top:12px;">
+            <strong>Key Concept — Surrogate Key:</strong> A surrogate key is a new, artificially created key attribute used when the category's defining superclasses have different natural keys, making it impossible to use any single existing key to identify all entities in the category.
+        </div>
+
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Example — OWNER category (subset of PERSON ∪ BANK ∪ COMPANY):</strong>
+            <p style="margin-top:6px; font-size:0.9em;">PERSON, BANK, and COMPANY have different keys (Ssn, Bname, Cname), so a surrogate key <em>Owner_id</em> is created.</p>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+                <div class="rel-table"><div class="rel-name">PERSON</div><div class="rel-cols"><span class="col pk">Ssn</span><span class="col">Driver_license_no</span><span class="col">Name</span><span class="col">Address</span><span class="col">Owner_id</span></div></div>
+                <div class="rel-table"><div class="rel-name">BANK</div><div class="rel-cols"><span class="col pk">Bname</span><span class="col">Baddress</span><span class="col">Owner_id</span></div></div>
+                <div class="rel-table"><div class="rel-name">COMPANY</div><div class="rel-cols"><span class="col pk">Cname</span><span class="col">Caddress</span><span class="col">Owner_id</span></div></div>
+                <div class="rel-table"><div class="rel-name">OWNER (category)</div><div class="rel-cols"><span class="col pk">Owner_id</span></div></div>
+                <div class="rel-table"><div class="rel-name">REGISTERED_VEHICLE (same key superclasses)</div><div class="rel-cols"><span class="col pk">Vehicle_id</span><span class="col">License_plate_number</span></div></div>
+                <div class="rel-table"><div class="rel-name">CAR</div><div class="rel-cols"><span class="col pk">Vehicle_id</span><span class="col">Cstyle</span><span class="col">Cmake</span><span class="col">Cmodel</span><span class="col">Cyear</span></div></div>
+                <div class="rel-table"><div class="rel-name">TRUCK</div><div class="rel-cols"><span class="col pk">Vehicle_id</span><span class="col">Tmake</span><span class="col">Tmodel</span><span class="col">Tonnage</span><span class="col">Tyear</span></div></div>
+                <div class="rel-table"><div class="rel-name">OWNS</div><div class="rel-cols"><span class="col pk">Owner_id</span><span class="col pk">Vehicle_id</span><span class="col">Purchase_date</span><span class="col">Lien_or_regular</span></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Summary -->
+    <div class="card">
+        <h2 class="section-title">📝 Complete Mapping Algorithm — All 9 Steps at a Glance</h2>
+        <table class="corr-table">
+            <thead>
+                <tr><th>Step</th><th>Construct</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>1</strong></td><td>Regular (strong) entity type</td><td>Create relation R with all simple attributes; choose primary key</td></tr>
+                <tr><td><strong>2</strong></td><td>Weak entity type</td><td>Create relation R; add owner's PK as FK; PK = owner PK + partial key</td></tr>
+                <tr><td><strong>3</strong></td><td>Binary 1:1 relationship</td><td>Foreign key approach / Merged approach / Cross-reference approach</td></tr>
+                <tr><td><strong>4</strong></td><td>Binary 1:N relationship</td><td>Add 1-side PK as FK in N-side relation</td></tr>
+                <tr><td><strong>5</strong></td><td>Binary M:N relationship</td><td>Create new relationship relation; combined FK = PK</td></tr>
+                <tr><td><strong>6</strong></td><td>Multivalued attribute</td><td>Create new relation; PK = attribute value + owner PK (FK)</td></tr>
+                <tr><td><strong>7</strong></td><td>N-ary relationship (n &gt; 2)</td><td>Create new relation; all participating PKs as FKs; usually all combined = PK</td></tr>
+                <tr><td><strong>8</strong></td><td>Specialization / Generalization</td><td>Choose Option 8A, 8B, 8C, or 8D based on constraints</td></tr>
+                <tr><td><strong>9</strong></td><td>Union type (category)</td><td>Create category relation; use surrogate key if superclasses have different keys</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 06 - Relational Database Design by ER and EER to Relational Mapping • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

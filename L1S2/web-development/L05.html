@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 05 - Form Encoding & Validation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef6f5; padding: 20px; line-height: 1.6; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card { background: white; padding: 25px; margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .section-title { color: #2c6e6b; border-bottom: 2px solid #cfe9e7; padding-bottom: 8px; margin-bottom: 15px; font-size: 1.4em; }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 8px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+        .box { background: #f3fbfa; padding: 15px; border-radius: 10px; border-left: 3px solid #2c6e6b; }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight { background: #fff9e6; padding: 15px; border-radius: 8px; border-left: 4px solid #f0ad4e; margin: 15px 0; }
+        .important { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 4px solid #4caf50; margin: 15px 0; }
+        .note { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3; margin: 15px 0; }
+        .warning { background: #fce4ec; padding: 15px; border-radius: 8px; border-left: 4px solid #e91e63; margin: 15px 0; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; color: #c0392b; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.6; overflow-x: auto; margin: 12px 0; }
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #569cd6; }
+        pre .string { color: #ce9178; }
+        pre .fn { color: #dcdcaa; }
+        pre .attr { color: #9cdcfe; }
+        pre .tag-c { color: #4ec9b0; }
+        pre .val { color: #ce9178; }
+        pre .regex { color: #d7ba7d; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.95em; }
+        th { background: #2c6e6b; color: white; padding: 10px 14px; text-align: left; }
+        td { padding: 9px 14px; border-bottom: 1px solid #e0f0ee; }
+        tr:nth-child(even) td { background: #f3fbfa; }
+        .encode-arrow { text-align: center; font-size: 1.1em; color: #2c6e6b; margin: 10px 0; font-family: 'Courier New', monospace; background: #f3fbfa; padding: 10px; border-radius: 8px; }
+        .method-badge { display: inline-block; background: #2c6e6b; color: white; padding: 3px 12px; border-radius: 20px; font-size: 0.82em; font-weight: bold; margin-bottom: 8px; }
+        .method-badge.orange { background: #e67e22; }
+        .method-badge.blue { background: #2980b9; }
+        .method-badge.green { background: #27ae60; }
+        .method-badge.purple { background: #8e44ad; }
+        .in-class { background: #f3e5f5; padding: 20px; border-radius: 10px; border-left: 4px solid #9c27b0; margin: 15px 0; }
+        .in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+        .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/web-development" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>Form Encoding & Validation</h1>
+    <p class="subtitle">ICT 1232 — Web Development | Lecture 05</p>
+
+
+    <!-- ===== PART 1: ENCODING ===== -->
+    <div class="card">
+        <h2 class="section-title">🔐 Part 1 — HTML Form Encoding & Client Data Submission</h2>
+
+        <h3 style="color:#2c6e6b; margin-bottom:10px;">Why Encoding Matters</h3>
+        <div class="two-column">
+            <div class="warning" style="margin:0;">
+                <strong>❌ Without Encoding</strong>
+                <ul style="margin-top:8px;">
+                    <li>Special characters (<code>? & # =</code>) can change the meaning of the URL</li>
+                    <li>Spaces and non-ASCII characters can make the request invalid</li>
+                    <li>Data can get corrupted or misread by the server</li>
+                </ul>
+            </div>
+            <div class="important" style="margin:0;">
+                <strong>✅ With Encoding</strong>
+                <ul style="margin-top:8px;">
+                    <li>URLs are safe to send over the web</li>
+                    <li>The server parses values exactly as intended</li>
+                    <li>You stay compliant with URL/HTTP rules</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- enctype -->
+    <div class="card">
+        <h2 class="section-title">🏷️ What is <code>enctype</code>?</h2>
+        <p><strong>enctype</strong> (encoding type) specifies how form data is encoded when submitting a form to the server.</p>
+
+        <pre style="margin-top:12px;">&lt;<span class="tag-c">form</span> <span class="attr">method</span>=<span class="val">"post"</span> <span class="attr">enctype</span>=<span class="val">"value"</span>&gt;</pre>
+
+        <div class="note" style="margin-top:12px;">
+            <ul>
+                <li><code>enctype</code> works with both GET and POST, but is only meaningful for <strong>POST</strong> requests.</li>
+                <li>If <code>enctype</code> is not specified, browsers automatically apply <code>application/x-www-form-urlencoded</code> encoding.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Default Encoding -->
+    <div class="card">
+        <h2 class="section-title">📦 Encoding Form Data — Default (<code>application/x-www-form-urlencoded</code>)</h2>
+
+        <h3 style="color:#2c6e6b; margin: 0 0 10px 0;">Field Structure</h3>
+        <ul>
+            <li>Fields are listed in the order they appear in the form</li>
+            <li>Data sent as <strong>name=value</strong> pairs</li>
+            <li>Pairs separated by <code>&</code></li>
+        </ul>
+
+        <div class="encode-arrow" style="margin-top:12px;">
+            <code>name=Nimal Perera</code> (Plain text) &nbsp;→&nbsp; <code>name=Nimal+Perera</code> (Encoded)
+        </div>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">Handling Empty Fields</h3>
+        <ul>
+            <li>Fields with <strong>null values</strong> may be omitted.</li>
+            <li>Unselected radio buttons and checkboxes <strong>do not appear</strong> in the encoded data.</li>
+            <li>Hidden fields with a <code>value</code> attribute <strong>are included</strong>.</li>
+        </ul>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">How Data is Converted</h3>
+        <div class="grid">
+            <div class="box"><strong>Spaces</strong>Encoded as <code>+</code></div>
+            <div class="box"><strong>Special Characters</strong>Percent encoding: <code>%HH</code> (ASCII HEX value)</div>
+            <div class="box"><strong>Line Breaks</strong>Encoded as <code>%0D%0A</code> in multi-line text fields</div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">Common ASCII → HEX Reference</h3>
+        <table>
+            <thead><tr><th>Character</th><th>HEX Value</th><th>Character</th><th>HEX Value</th></tr></thead>
+            <tbody>
+                <tr><td><code>!</code></td><td>21</td><td><code>%</code></td><td>25</td></tr>
+                <tr><td><code>"</code></td><td>22</td><td><code>&</code></td><td>26</td></tr>
+                <tr><td><code>#</code></td><td>23</td><td><code>'</code></td><td>27</td></tr>
+                <tr><td><code>$</code></td><td>24</td><td><code>@</code></td><td>40</td></tr>
+                <tr><td><code>(</code></td><td>28</td><td><code>)</code></td><td>29</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">Example Encoding</h3>
+        <div class="encode-arrow">
+            <code>city=Kandy &amp; Colombo</code> &nbsp;→&nbsp; <code>city=Kandy+%26+Colombo</code>
+        </div>
+        <div class="encode-arrow" style="margin-top:8px;">
+            <code>Faculty=Technology &amp; University=University of Ruhuna↵Matara</code><br>
+            →&nbsp; <code>Faculty=Technology&University=University+of+Ruhuna%0D%0AMatara</code>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">Structure Rules</h3>
+        <ul>
+            <li>Only form elements with a <code>name</code> attribute are included.</li>
+            <li><code>&lt;input type="submit" value="Submit"&gt;</code> has no <code>name</code>, so it is <strong>ignored</strong> in encoded data.</li>
+            <li>Browsers treat submit buttons as action triggers, not form data.</li>
+        </ul>
+    </div>
+
+    <!-- Exercises -->
+    <div class="card">
+        <h2 class="section-title">📝 Encoding Exercises</h2>
+
+        <div class="in-class">
+            <h3>Exercise 01</h3>
+            <table style="margin-top:10px;">
+                <thead><tr><th>Field</th><th>Value</th></tr></thead>
+                <tbody>
+                    <tr><td>ID</td><td>001</td></tr>
+                    <tr><td>Course</td><td>Internet &amp;<br>Web Development</td></tr>
+                </tbody>
+            </table>
+            <p style="margin-top:10px; font-size:0.9em; color:#666;">Hints: <code>&amp;</code> → <code>26</code>, line break → <code>%0D%0A</code></p>
+            <div class="encode-arrow" style="margin-top:10px;">
+                <strong>Answer:</strong> <code>ID=001&amp;Course=Internet+%26%0D%0AWeb+Development</code>
+            </div>
+        </div>
+
+        <div class="in-class" style="margin-top:15px;">
+            <h3>Exercise 02 — Form with Multiple Fields</h3>
+            <p style="margin-bottom:10px;">Given a form with: username = "John Doe", email = "john@example.com", password = "my@password", gender = "male" (selected), subscribe checkbox = checked (value="yes"), membership = "basic" (radio, checked), tracking_id = "ABC123" (hidden), submit button (no name).</p>
+            <p style="font-size:0.9em; color:#666;">Hint: <code>@</code> → <code>%40</code></p>
+            <div class="encode-arrow" style="margin-top:10px; text-align:left; padding:12px 16px; font-size:0.85em;">
+                <strong>Answer:</strong><br>
+                <code>username=John+Doe&amp;</code><br>
+                <code>email=john%40example.com&amp;</code><br>
+                <code>password=my%40password&amp;</code><br>
+                <code>gender=male&amp;</code><br>
+                <code>subscribe=yes&amp;</code><br>
+                <code>membership=basic&amp;</code><br>
+                <code>tracking_id=ABC123</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other enctype values -->
+    <div class="card">
+        <h2 class="section-title">📋 Other <code>enctype</code> Values</h2>
+        <div class="two-column">
+            <div>
+                <div class="method-badge">multipart/form-data</div>
+                <p style="margin-bottom:8px;">Used when a form includes <strong>file uploads</strong>.</p>
+                <pre>&lt;<span class="tag-c">form</span> <span class="attr">method</span>=<span class="val">"post"</span>
+  <span class="attr">enctype</span>=<span class="val">"multipart/form-data"</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"file"</span> <span class="attr">name</span>=<span class="val">"upload"</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">value</span>=<span class="val">"Upload"</span>&gt;
+&lt;/<span class="tag-c">form</span>&gt;</pre>
+            </div>
+            <div>
+                <div class="method-badge orange">text/plain</div>
+                <p style="margin-bottom:8px;">Sends data in a human-readable format <strong>without encoding</strong> special characters.</p>
+                <pre>&lt;<span class="tag-c">form</span> <span class="attr">method</span>=<span class="val">"post"</span>
+  <span class="attr">enctype</span>=<span class="val">"text/plain"</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">name</span>=<span class="val">"username"</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">value</span>=<span class="val">"Send"</span>&gt;
+&lt;/<span class="tag-c">form</span>&gt;</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript encoding -->
+    <div class="card">
+        <h2 class="section-title">🧪 JavaScript & Encoding — <code>encodeURIComponent()</code></h2>
+        <p>JavaScript ensures safe transmission of values using the built-in <code>encodeURIComponent(value)</code> function.</p>
+        <pre style="margin-top:12px;"><span class="keyword">let</span> name = <span class="fn">encodeURIComponent</span>(<span class="string">"Nimal Perera"</span>);
+<span class="comment">// Result: "Nimal%20Perera"</span></pre>
+        <div class="note" style="margin-top:10px;">Note: Unlike the default form encoding which uses <code>+</code> for spaces, <code>encodeURIComponent</code> uses <code>%20</code>.</div>
+    </div>
+
+    <!-- ===== PART 2: VALIDATION ===== -->
+    <div class="card">
+        <h2 class="section-title">✅ Part 2 — HTML Form Validation</h2>
+
+        <div class="important">
+            <strong>Definition:</strong> Form validation is the process of verifying that user input is <strong>correct, complete, and acceptable</strong> before processing.
+        </div>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">Goals of Validation</h3>
+        <div class="grid">
+            <div class="box"><strong>🚫 Prevent invalid data</strong>Stop bad or harmful input from being submitted.</div>
+            <div class="box"><strong>😊 Improve user experience</strong>Give immediate, helpful feedback to users.</div>
+            <div class="box"><strong>🛡 Reduce server errors</strong>Clean data before it reaches the backend.</div>
+            <div class="box"><strong>📐 Enforce input rules</strong>Ensure fields follow required formats.</div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">When Validation Happens</h3>
+        <table>
+            <thead><tr><th>Trigger</th><th>Event Used</th></tr></thead>
+            <tbody>
+                <tr><td>On form submission</td><td><code>submit</code></td></tr>
+                <tr><td>While typing</td><td><code>input</code></td></tr>
+                <tr><td>After leaving a field</td><td><code>blur</code></td></tr>
+                <tr><td>On value change</td><td><code>change</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event Object & preventDefault -->
+    <div class="card">
+        <h2 class="section-title">⚙️ The Event Object & <code>event.preventDefault()</code></h2>
+
+        <h3 style="color:#2c6e6b; margin-bottom:10px;">What Happens During an Event</h3>
+        <ul>
+            <li>Browser detects the action</li>
+            <li>Browser <strong>automatically creates an event object</strong></li>
+            <li>Event object is passed to the JavaScript handler</li>
+        </ul>
+
+        <pre style="margin-top:12px;">element.<span class="fn">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>(event) {
+  console.<span class="fn">log</span>(event); <span class="comment">// inspect the event object</span>
+});</pre>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">What the Event Object Stores</h3>
+        <div class="grid">
+            <div class="box"><strong>Which element triggered it</strong>e.g., the button that was clicked</div>
+            <div class="box"><strong>Type of event</strong>e.g., "click", "submit", "keydown"</div>
+            <div class="box"><strong>Mouse position / key pressed</strong>coordinates or key code</div>
+            <div class="box"><strong>Default behavior</strong>what the browser would normally do</div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin: 15px 0 10px 0;">Preventing Form Submission</h3>
+        <p>JavaScript controls submission using <code>event.preventDefault()</code>. This is called when validation fails to stop invalid data from being sent.</p>
+
+        <div class="two-column" style="margin-top:12px;">
+            <div class="warning" style="margin:0;">
+                <strong>Without <code>preventDefault()</code></strong>
+                <p style="margin-top:6px;">Form submits immediately — no validation possible.</p>
+            </div>
+            <div class="important" style="margin:0;">
+                <strong>With <code>preventDefault()</code></strong>
+                <p style="margin-top:6px;">JavaScript validates first. Submission is blocked if invalid.</p>
+            </div>
+        </div>
+
+        <pre style="margin-top:15px;">form.<span class="fn">addEventListener</span>(<span class="string">"submit"</span>, <span class="keyword">function</span>(event) {
+  event.<span class="fn">preventDefault</span>(); <span class="comment">// Stop form submission</span>
+});</pre>
+
+        <div class="highlight" style="margin-top:12px;">
+            <strong>Browser Default Actions (what <code>preventDefault</code> stops):</strong>
+            <ul style="margin-top:8px;">
+                <li>Form submit → reload page &amp; send request</li>
+                <li>Link click → navigate to URL</li>
+                <li>Right-click → open context menu</li>
+                <li>Key press → insert character</li>
+            </ul>
+        </div>
+
+        <div class="note" style="margin-top:12px;">
+            <strong>Key definitions to remember:</strong><br>
+            <code>Event</code> = Something that happens &nbsp;|&nbsp;
+            <code>Event Object</code> = Information about what happened &nbsp;|&nbsp;
+            <code>preventDefault()</code> = Stop browser's automatic response
+        </div>
+
+        <h3 style="color:#2c6e6b; margin:15px 0 10px 0;">Example</h3>
+        <div class="two-column">
+            <div>
+                <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">HTML</p>
+                <pre>&lt;<span class="tag-c">form</span> <span class="attr">id</span>=<span class="val">"myForm"</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+    <span class="attr">id</span>=<span class="val">"username"</span>
+    <span class="attr">placeholder</span>=<span class="val">"Enter Name"</span>&gt;
+  &lt;<span class="tag-c">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>&gt;
+    Submit
+  &lt;/<span class="tag-c">button</span>&gt;
+&lt;/<span class="tag-c">form</span>&gt;</pre>
+            </div>
+            <div>
+                <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">JavaScript</p>
+                <pre>document.<span class="fn">getElementById</span>(<span class="string">"myForm"</span>)
+  .<span class="fn">addEventListener</span>(<span class="string">"submit"</span>,
+    <span class="keyword">function</span>(event) {
+      event.<span class="fn">preventDefault</span>();
+      <span class="comment">// stop submission</span>
+      <span class="fn">alert</span>(<span class="string">"Form submitted!"</span>);
+  });</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validate Emptiness -->
+    <div class="card">
+        <h2 class="section-title">🔲 Validating Field Emptiness</h2>
+        <p>There are multiple methods to check if a field is empty. Each has tradeoffs.</p>
+
+        <div style="margin-top:15px;">
+            <div class="method-badge">Method 1 — HTML <code>required</code> Attribute</div>
+            <p style="margin: 8px 0;">The simplest approach. The browser enforces it automatically before submission.</p>
+            <pre>&lt;<span class="tag-c">form</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">placeholder</span>=<span class="val">"Enter Name"</span> <span class="attr">required</span>&gt;
+  &lt;<span class="tag-c">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>&gt;Submit&lt;/<span class="tag-c">button</span>&gt;
+&lt;/<span class="tag-c">form</span>&gt;</pre>
+            <p style="font-size:0.9em; color:#555;">Browser shows "Please fill in this field." if empty.</p>
+        </div>
+
+        <div style="margin-top:20px;">
+            <div class="method-badge blue">Method 2 — JavaScript Empty String Check</div>
+            <p style="margin: 8px 0;">Manually checks if the value equals an empty string.</p>
+            <pre><span class="keyword">let</span> name = document.<span class="fn">getElementById</span>(<span class="string">"name"</span>);
+
+<span class="keyword">if</span> (name.value === <span class="string">""</span>) {
+    <span class="fn">alert</span>(<span class="string">"Name cannot be empty"</span>);
+}</pre>
+            <div class="warning" style="margin-top:8px; padding:10px;">
+                <strong>⚠️ Problem:</strong> A value of <code>"&nbsp;&nbsp;"</code> (only spaces) will pass this check.
+            </div>
+        </div>
+
+        <div style="margin-top:20px;">
+            <div class="method-badge green">Method 3 — Trimmed Empty Check ⭐ Best Practice</div>
+            <p style="margin: 8px 0;">Uses <code>.trim()</code> to remove leading/trailing spaces before checking.</p>
+            <pre><span class="keyword">let</span> name = document.<span class="fn">getElementById</span>(<span class="string">"name"</span>);
+
+<span class="keyword">if</span> (name.value.<span class="fn">trim</span>() === <span class="string">""</span>) {
+    <span class="fn">alert</span>(<span class="string">"Name is required"</span>);
+}</pre>
+            <div class="important" style="margin-top:8px; padding:10px;">
+                <strong>Why better?</strong> Removes leading/trailing spaces and correctly detects logically empty input.
+            </div>
+        </div>
+
+        <div style="margin-top:20px;">
+            <div class="method-badge purple">Method 4 — Length-Based Validation</div>
+            <p style="margin: 8px 0;">Checks the <code>.length</code> property. Can be combined with <code>.trim()</code>.</p>
+            <pre><span class="keyword">if</span> (name.value.length === <span class="num">0</span>) {
+    <span class="fn">alert</span>(<span class="string">"Field empty"</span>);
+}
+
+<span class="comment">// Combined with trim (recommended):</span>
+<span class="keyword">if</span> (name.value.<span class="fn">trim</span>().length === <span class="num">0</span>) {
+    <span class="fn">alert</span>(<span class="string">"Field empty"</span>);
+}</pre>
+        </div>
+
+        <div class="in-class" style="margin-top:20px;">
+            <h3>Practice Question 1</h3>
+            <p style="margin-bottom:10px;">HTML form with a name field and submit button. JS validation: if empty (including whitespace-only) → alert "Name cannot be empty"; else → alert "Form submitted successfully".</p>
+            <div class="two-column">
+                <div>
+                    <p style="font-weight:600; color:#7b1fa2; margin-bottom:6px;">HTML</p>
+                    <pre>&lt;<span class="tag-c">form</span> <span class="attr">id</span>=<span class="val">"myForm"</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+    <span class="attr">id</span>=<span class="val">"name"</span>
+    <span class="attr">name</span>=<span class="val">"name"</span>
+    <span class="attr">placeholder</span>=<span class="val">"Enter your name"</span>&gt;
+  &lt;<span class="tag-c">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>&gt;
+    Submit
+  &lt;/<span class="tag-c">button</span>&gt;
+&lt;/<span class="tag-c">form</span>&gt;</pre>
+                </div>
+                <div>
+                    <p style="font-weight:600; color:#7b1fa2; margin-bottom:6px;">JavaScript</p>
+                    <pre>document.<span class="fn">getElementById</span>(<span class="string">"myForm"</span>)
+  .<span class="fn">addEventListener</span>(<span class="string">"submit"</span>,
+    <span class="keyword">function</span>(event) {
+      event.<span class="fn">preventDefault</span>();
+      <span class="keyword">const</span> val =
+        document.<span class="fn">getElementById</span>(<span class="string">"name"</span>)
+        .value.<span class="fn">trim</span>();
+      <span class="keyword">if</span> (val === <span class="string">""</span>)
+        <span class="fn">alert</span>(<span class="string">"Name cannot be empty"</span>);
+      <span class="keyword">else</span>
+        <span class="fn">alert</span>(<span class="string">"Form submitted successfully"</span>);
+  });</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RegEx Validation -->
+    <div class="card">
+        <h2 class="section-title">🔍 Pattern Validation using RegEx</h2>
+
+        <h3 style="color:#2c6e6b; margin-bottom:10px;">What is <code>test()</code>?</h3>
+        <p><code>test()</code> is a method used with <strong>Regular Expressions (RegEx)</strong>. It checks whether a value matches a pattern.</p>
+        <pre style="margin-top:10px;"><span class="comment">// Syntax:</span>
+regexPattern.<span class="fn">test</span>(value)
+
+<span class="comment">// Returns:</span>
+<span class="comment">// true  → value matches the pattern</span>
+<span class="comment">// false → value does NOT match the pattern</span>
+
+<span class="keyword">let</span> pattern = <span class="regex">/^[0-9]+$/</span>;
+pattern.<span class="fn">test</span>(<span class="string">"123"</span>);   <span class="comment">// true</span>
+pattern.<span class="fn">test</span>(<span class="string">"abc"</span>);   <span class="comment">// false</span>
+pattern.<span class="fn">test</span>(<span class="string">"12ab"</span>);  <span class="comment">// false</span></pre>
+
+        <!-- Numbers only -->
+        <div style="margin-top:20px;">
+            <div class="method-badge">Numbers Only Validation</div>
+            <div class="two-column" style="margin-top:10px;">
+                <div>
+                    <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">HTML Approach</p>
+                    <pre>&lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">pattern</span>=<span class="val">"[0-9]+"</span>
+  <span class="attr">required</span>&gt;</pre>
+                </div>
+                <div>
+                    <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">JavaScript Approach</p>
+                    <pre><span class="keyword">let</span> value = input.value.<span class="fn">trim</span>();
+<span class="keyword">let</span> numbersOnly = <span class="regex">/^[0-9]+$/</span>;
+
+<span class="keyword">if</span> (!numbersOnly.<span class="fn">test</span>(value)) {
+    <span class="fn">alert</span>(<span class="string">"Only numbers allowed"</span>);
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Characters only -->
+        <div style="margin-top:20px;">
+            <div class="method-badge blue">Characters Only Validation</div>
+            <div class="two-column" style="margin-top:10px;">
+                <div>
+                    <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">HTML Approach</p>
+                    <pre>&lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">pattern</span>=<span class="val">"[A-Za-z]+"</span>
+  <span class="attr">required</span>&gt;</pre>
+                </div>
+                <div>
+                    <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">JavaScript Approach</p>
+                    <pre><span class="keyword">let</span> charsOnly = <span class="regex">/^[A-Za-z]+$/</span>;
+
+<span class="keyword">if</span> (!charsOnly.<span class="fn">test</span>(value)) {
+    <span class="fn">alert</span>(<span class="string">"Only letters allowed"</span>);
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alphanumeric -->
+        <div style="margin-top:20px;">
+            <div class="method-badge green">Alphanumeric Validation (Letters + Numbers)</div>
+            <div class="two-column" style="margin-top:10px;">
+                <div>
+                    <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">HTML Approach</p>
+                    <pre>&lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">pattern</span>=<span class="val">"[A-Za-z0-9]+"</span>
+  <span class="attr">required</span>&gt;</pre>
+                </div>
+                <div>
+                    <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">JavaScript Approach</p>
+                    <pre><span class="keyword">let</span> alphaNum = <span class="regex">/^[A-Za-z0-9]+$/</span>;
+
+<span class="keyword">if</span> (!alphaNum.<span class="fn">test</span>(value)) {
+    <span class="fn">alert</span>(<span class="string">"Only letters and numbers"</span>);
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- RegEx summary table -->
+        <h3 style="color:#2c6e6b; margin: 20px 0 10px 0;">RegEx Pattern Summary</h3>
+        <table>
+            <thead><tr><th>Validation Type</th><th>HTML Pattern</th><th>JS RegEx</th></tr></thead>
+            <tbody>
+                <tr><td>Numbers only</td><td><code>[0-9]+</code></td><td><code>/^[0-9]+$/</code></td></tr>
+                <tr><td>Letters only</td><td><code>[A-Za-z]+</code></td><td><code>/^[A-Za-z]+$/</code></td></tr>
+                <tr><td>Letters + spaces</td><td><code>[A-Za-z\s]+</code></td><td><code>/^[A-Za-z\s]+$/</code></td></tr>
+                <tr><td>Alphanumeric</td><td><code>[A-Za-z0-9]+</code></td><td><code>/^[A-Za-z0-9]+$/</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Practice Question 2 -->
+    <div class="card">
+        <h2 class="section-title">🧪 Practice Question 2 — Student Details Form</h2>
+        <p><strong>Task:</strong> Design a Student Details Entry form with Student Name, Contact Number, Index Number, and Submit. Validate: Name → letters only, Contact → numbers only, Index → alphanumeric only.</p>
+
+        <div style="margin-top:15px;">
+            <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">HTML (index.html)</p>
+            <pre>&lt;<span class="tag-c">form</span> <span class="attr">id</span>=<span class="val">"studentForm"</span>&gt;
+  &lt;<span class="tag-c">label</span>&gt;Student Name:&lt;/<span class="tag-c">label</span>&gt;&lt;<span class="tag-c">br</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"name"</span> <span class="attr">required</span>&gt;&lt;<span class="tag-c">br</span>&gt;&lt;<span class="tag-c">br</span>&gt;
+
+  &lt;<span class="tag-c">label</span>&gt;Contact Number:&lt;/<span class="tag-c">label</span>&gt;&lt;<span class="tag-c">br</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"contact"</span> <span class="attr">required</span>&gt;&lt;<span class="tag-c">br</span>&gt;&lt;<span class="tag-c">br</span>&gt;
+
+  &lt;<span class="tag-c">label</span>&gt;Index Number:&lt;/<span class="tag-c">label</span>&gt;&lt;<span class="tag-c">br</span>&gt;
+  &lt;<span class="tag-c">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"indexno"</span> <span class="attr">required</span>&gt;&lt;<span class="tag-c">br</span>&gt;&lt;<span class="tag-c">br</span>&gt;
+
+  &lt;<span class="tag-c">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>&gt;Submit&lt;/<span class="tag-c">button</span>&gt;
+&lt;/<span class="tag-c">form</span>&gt;
+&lt;<span class="tag-c">script</span> <span class="attr">src</span>=<span class="val">"validate.js"</span>&gt;&lt;/<span class="tag-c">script</span>&gt;</pre>
+        </div>
+
+        <div style="margin-top:15px;">
+            <p style="font-weight:600; color:#2c6e6b; margin-bottom:6px;">JavaScript (validate.js)</p>
+            <pre>document.<span class="fn">getElementById</span>(<span class="string">"studentForm"</span>)
+  .<span class="fn">addEventListener</span>(<span class="string">"submit"</span>, <span class="keyword">function</span>(event) {
+
+    event.<span class="fn">preventDefault</span>(); <span class="comment">// stop submission immediately</span>
+
+    <span class="keyword">const</span> name    = document.<span class="fn">getElementById</span>(<span class="string">"name"</span>).value.<span class="fn">trim</span>();
+    <span class="keyword">const</span> contact = document.<span class="fn">getElementById</span>(<span class="string">"contact"</span>).value.<span class="fn">trim</span>();
+    <span class="keyword">const</span> indexno = document.<span class="fn">getElementById</span>(<span class="string">"indexno"</span>).value.<span class="fn">trim</span>();
+
+    <span class="keyword">const</span> namePattern    = <span class="regex">/^[A-Za-z\s]+$/</span>;
+    <span class="keyword">const</span> contactPattern = <span class="regex">/^[0-9]+$/</span>;
+    <span class="keyword">const</span> indexPattern   = <span class="regex">/^[A-Za-z0-9]+$/</span>;
+
+    <span class="keyword">if</span> (!namePattern.<span class="fn">test</span>(name)) {
+        <span class="fn">alert</span>(<span class="string">"Student Name must contain characters only."</span>);
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">if</span> (!contactPattern.<span class="fn">test</span>(contact)) {
+        <span class="fn">alert</span>(<span class="string">"Contact Number must contain numbers only."</span>);
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">if</span> (!indexPattern.<span class="fn">test</span>(indexno)) {
+        <span class="fn">alert</span>(<span class="string">"Index Number must contain letters and numbers only."</span>);
+        <span class="keyword">return</span>;
+    }
+
+    <span class="fn">alert</span>(<span class="string">"All details are valid! Form will submit."</span>);
+    <span class="keyword">this</span>.<span class="fn">submit</span>(); <span class="comment">// manually submit after validation passes</span>
+});</pre>
+        </div>
+    </div>
+
+    <!-- Encoding vs Validation -->
+    <div class="card">
+        <h2 class="section-title">⚖️ Encoding vs Validation — Key Difference</h2>
+        <table>
+            <thead><tr><th>Aspect</th><th>Encoding</th><th>Validation</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Purpose</strong></td><td>Safely transmit data over HTTP</td><td>Verify data is correct and complete</td></tr>
+                <tr><td><strong>When it happens</strong></td><td>At the time of form submission</td><td>Before or during submission</td></tr>
+                <tr><td><strong>Who does it</strong></td><td>Browser (automatically)</td><td>HTML attributes or JavaScript</td></tr>
+                <tr><td><strong>Example</strong></td><td><code>Nimal Perera → Nimal+Perera</code></td><td>Name field must not be empty</td></tr>
+                <tr><td><strong>Can stop submission?</strong></td><td>No</td><td>Yes (via <code>preventDefault()</code>)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">🌱 Lecture 05 - Form Encoding & Validation • BY_#D1</div>
+
+</div>
+</body>
+</html>

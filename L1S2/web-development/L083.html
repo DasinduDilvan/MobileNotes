@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lecture 6 – PHP File Handling</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .var     { color: #9cdcfe; }
+pre .num     { color: #b5cea8; }
+pre .op      { color: #d4d4d4; }
+pre .tag     { color: #4ec9b0; }
+
+.output-box {
+    background: #f0f0f0;
+    border: 1px dashed #aaa;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #333;
+    margin: 8px 0 14px 0;
+}
+.output-box span.label {
+    display: block;
+    font-weight: bold;
+    color: #2c6e6b;
+    margin-bottom: 4px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.85em;
+}
+
+.syntax-box {
+    background: #f8f4ff;
+    border: 1px solid #d4b8f5;
+    border-left: 4px solid #8e44ad;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.92em;
+    color: #4a235a;
+}
+
+/* Mode table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.92em;
+}
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 14px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0f0ee;
+    vertical-align: top;
+}
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+
+/* Mode badges */
+.mode-badge {
+    display: inline-block;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: white;
+}
+.mode-r  { background: #2980b9; }
+.mode-w  { background: #e67e22; }
+.mode-a  { background: #27ae60; }
+.mode-x  { background: #c0392b; }
+.mode-rw { background: #8e44ad; }
+
+/* Flow diagram */
+.flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 16px 0;
+    justify-content: center;
+}
+.flow-step {
+    background: #2c6e6b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.88em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.flow-arrow {
+    color: #2c6e6b;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.func-header {
+    background: #2c6e6b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px 8px 0 0;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    font-weight: bold;
+}
+.func-body {
+    background: #f3fbfa;
+    border: 1px solid #cfe9e7;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 14px;
+    margin-bottom: 16px;
+    font-size: 0.93em;
+}
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    pre { background: #1e1e1e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .func-header, .flow-step, .mode-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/web-development" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+  <!-- HEADER -->
+  <h1>📂 PHP File Handling</h1>
+  <p class="subtitle">Lecture 6 · ICT1232</p>
+
+  <!-- OBJECTIVES -->
+  <div class="card">
+    <h2 class="section-title">🎯 Learning Objectives</h2>
+    <p>After completing this lecture, you should be able to:</p>
+    <ul>
+      <li>Identify all types of <strong>file manipulations</strong> in PHP</li>
+      <li><strong>Handle files</strong> using PHP scripts — create, open, read, write, append, and delete</li>
+    </ul>
+  </div>
+
+  <!-- INTRODUCTION -->
+  <div class="card">
+    <h2 class="section-title">💡 Introduction</h2>
+    <p>PHP can create, open, read, write, and delete files stored on the server. File operations are grouped as:</p>
+    <div class="two-column" style="margin-top:12px;">
+      <div class="box">
+        <strong>🔧 Basic Operations</strong>
+        Create · Open · Close
+      </div>
+      <div class="box">
+        <strong>📋 Other Operations</strong>
+        Read · Write · Append · Truncate · Upload · Delete
+      </div>
+    </div>
+    <div class="warning" style="margin-top:15px;">
+      <strong>⚠️ Important Warning:</strong> When manipulating files you must be very careful — doing something wrong can cause a lot of damage (overwriting or deleting important data permanently).
+    </div>
+
+    <!-- File operation flow -->
+    <p style="margin-top:16px; font-weight:600; color:#2c6e6b;">Typical File Operation Flow:</p>
+    <div class="flow">
+      <div class="flow-step">1. Open / Create<br><small>fopen()</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">2. Read / Write<br><small>fread() / fwrite()</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">3. Close<br><small>fclose()</small></div>
+    </div>
+  </div>
+
+  <!-- FOPEN MODES -->
+  <div class="card">
+    <h2 class="section-title">🔓 fopen() Modes — Types of Access</h2>
+    <p>When opening a file with <code>fopen()</code>, you must specify a <strong>mode</strong> that defines how the file will be accessed.</p>
+
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th>Mode</th><th>Access Type</th><th>File Exists?</th><th>Pointer Starts At</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mode-badge mode-r">r</span></td>
+          <td><strong>Read only</strong></td>
+          <td>Must exist</td>
+          <td>Beginning</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-w">w</span></td>
+          <td><strong>Write only</strong> — erases existing content</td>
+          <td>Creates if not exists</td>
+          <td>Beginning</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-a">a</span></td>
+          <td><strong>Write only</strong> — preserves existing content</td>
+          <td>Creates if not exists</td>
+          <td>End (appends)</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-x">x</span></td>
+          <td><strong>Write only</strong> — new file only</td>
+          <td>Returns FALSE if exists</td>
+          <td>Beginning</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-rw">r+</span></td>
+          <td><strong>Read &amp; Write</strong></td>
+          <td>Must exist</td>
+          <td>Beginning</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-w">w+</span></td>
+          <td><strong>Read &amp; Write</strong> — erases existing content</td>
+          <td>Creates if not exists</td>
+          <td>Beginning</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-a">a+</span></td>
+          <td><strong>Read &amp; Write</strong> — preserves existing content</td>
+          <td>Creates if not exists</td>
+          <td>End (appends)</td>
+        </tr>
+        <tr>
+          <td><span class="mode-badge mode-x">x+</span></td>
+          <td><strong>Read &amp; Write</strong> — new file only</td>
+          <td>Returns FALSE if exists</td>
+          <td>Beginning</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="margin-top:14px;">
+      <strong>Quick Memory Aid:</strong><br>
+      <code>r</code> = <em>read</em> &nbsp;|&nbsp;
+      <code>w</code> = <em>write (wipes)</em> &nbsp;|&nbsp;
+      <code>a</code> = <em>append (adds to end)</em> &nbsp;|&nbsp;
+      <code>x</code> = <em>exclusive new file</em><br>
+      Add <code>+</code> to any mode to also allow the opposite operation (e.g., <code>r+</code> = read AND write).
+    </div>
+  </div>
+
+  <!-- CREATE & OPEN -->
+  <div class="card">
+    <h2 class="section-title">📄 Create &amp; Open a File — fopen()</h2>
+
+    <div class="func-header">fopen( filename, mode )</div>
+    <div class="func-body">
+      Binds a named file to a stream (opens it for use). Returns a <strong>file pointer resource</strong> on success, or <strong>FALSE</strong> on error. When opened with mode <code>'w'</code>, it <em>implicitly creates</em> the file if it does not exist.
+    </div>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">$handle</span> = <span style="color:#dcdcaa;">fopen</span>(<span style="color:#ce9178;">$filename</span>, <span style="color:#ce9178;">'mode'</span>)
+      &nbsp;<span style="color:#808080;">or</span>&nbsp;
+      <span style="color:#dcdcaa;">die</span>(<span style="color:#ce9178;">'Cannot open file: '</span> . <span style="color:#ce9178;">$filename</span>);
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example — Create a new file</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$my_file</span> <span class="op">=</span> <span class="string">'file.txt'</span>;
+
+<span class="comment">// Mode 'w' creates the file if it doesn't exist</span>
+<span class="var">$handle</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$my_file</span>, <span class="string">'w'</span>) <span class="keyword">or</span> <span class="fn">die</span>(<span class="string">'Cannot open file: '</span> . <span class="var">$my_file</span>);
+
+<span class="fn">echo</span> <span class="string">"File created/opened successfully!"</span>;
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>File created/opened successfully!</div>
+
+    <div class="note">
+      <strong>The <code>or die()</code> pattern:</strong> If <code>fopen()</code> fails and returns FALSE, <code>die()</code> immediately stops the script and displays the error message. This is a safe way to handle file errors.
+    </div>
+  </div>
+
+  <!-- WRITE -->
+  <div class="card">
+    <h2 class="section-title">✏️ Write to a File — fwrite()</h2>
+
+    <div class="func-header">fwrite( handle, string )</div>
+    <div class="func-body">
+      Writes the given <strong>string</strong> to the file pointed to by <strong>handle</strong>. Returns the number of bytes written, or FALSE on failure.
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example — Write data to a file</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$filename</span> <span class="op">=</span> <span class="string">"/home/user/guest/newfile.txt"</span>;
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$filename</span>, <span class="string">"w"</span>);   <span class="comment">// Open in write mode</span>
+
+<span class="keyword">if</span> (<span class="var">$file</span> <span class="op">==</span> <span class="keyword">false</span>) {
+    <span class="fn">echo</span> (<span class="string">"Error in opening new file"</span>);
+    <span class="fn">exit</span>();
+}
+
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"This is a simple test\n"</span>);  <span class="comment">// Write a line of text</span>
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"Second line of text\n"</span>);    <span class="comment">// Write another line</span>
+<span class="fn">fclose</span>(<span class="var">$file</span>);                             <span class="comment">// Always close after writing</span>
+
+<span class="fn">echo</span> <span class="string">"Data written successfully!"</span>;
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>Data written successfully!<br><br><em>newfile.txt will contain:</em><br>This is a simple test<br>Second line of text</div>
+
+    <div class="warning">
+      <strong>⚠️ Mode 'w' overwrites!</strong> Opening a file with <code>'w'</code> erases all existing content. To add data without erasing, use mode <code>'a'</code> (append) instead.
+    </div>
+  </div>
+
+  <!-- CLOSE -->
+  <div class="card">
+    <h2 class="section-title">🔒 Close a File — fclose()</h2>
+
+    <div class="func-header">fclose( handle )</div>
+    <div class="func-body">
+      Closes the file pointed to by <strong>handle</strong>. Returns <strong>TRUE</strong> on success or <strong>FALSE</strong> on failure. Always close files after you are done with them to free up system resources.
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$my_file</span> <span class="op">=</span> <span class="string">'file.txt'</span>;
+<span class="var">$handle</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$my_file</span>, <span class="string">'w'</span>) <span class="keyword">or</span> <span class="fn">die</span>(<span class="string">'Cannot open file: '</span> . <span class="var">$my_file</span>);
+
+<span class="fn">fwrite</span>(<span class="var">$handle</span>, <span class="string">"Hello, file!"</span>);   <span class="comment">// Write some data</span>
+
+<span class="fn">fclose</span>(<span class="var">$handle</span>);                    <span class="comment">// Close the file — free resources</span>
+<span class="fn">echo</span> <span class="string">"File closed successfully."</span>;
+<span class="keyword">?&gt;</span></pre>
+
+    <div class="important">
+      <strong>✅ Best Practice:</strong> Always call <code>fclose()</code> after finishing with a file. Leaving files open wastes server memory and can cause unexpected behavior.
+    </div>
+  </div>
+
+  <!-- READ -->
+  <div class="card">
+    <h2 class="section-title">📖 Read a File — fread()</h2>
+
+    <div class="func-header">fread( file, length )</div>
+    <div class="func-body">
+      Reads up to <strong>length</strong> bytes from the open file. Stops at end-of-file <em>or</em> when the specified length is reached — whichever comes first. Returns the read string, or <strong>FALSE</strong> on failure.
+    </div>
+
+    <table style="margin-top:12px;">
+      <thead><tr><th>Parameter</th><th>Required?</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>file</code></td><td>✅ Required</td><td>The open file resource (handle)</td></tr>
+        <tr><td><code>length</code></td><td>✅ Required</td><td>Maximum number of bytes to read</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="margin-top:12px;">
+      <strong>Tip — Read entire file:</strong> Use <code>filesize($filename)</code> as the length to read the whole file in one call.
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example — Read a whole file</h3>
+    <pre><span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+<span class="keyword">&lt;?php</span>
+<span class="var">$filename</span> <span class="op">=</span> <span class="string">"tmp.txt"</span>;
+<span class="var">$file</span>     <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$filename</span>, <span class="string">"r"</span>);   <span class="comment">// Open in read-only mode</span>
+
+<span class="keyword">if</span> (<span class="var">$file</span> <span class="op">==</span> <span class="keyword">false</span>) {
+    <span class="fn">echo</span>(<span class="string">"Error in opening file"</span>);
+    <span class="fn">exit</span>();
+}
+
+<span class="var">$filesize</span> <span class="op">=</span> <span class="fn">filesize</span>(<span class="var">$filename</span>);         <span class="comment">// Get total size in bytes</span>
+<span class="var">$filetext</span> <span class="op">=</span> <span class="fn">fread</span>(<span class="var">$file</span>, <span class="var">$filesize</span>);     <span class="comment">// Read the whole file</span>
+<span class="fn">fclose</span>(<span class="var">$file</span>);                             <span class="comment">// Close after reading</span>
+
+<span class="fn">echo</span>(<span class="string">"File size: $filesize bytes"</span>);
+<span class="fn">echo</span>(<span class="string">"&lt;pre&gt;$filetext&lt;/pre&gt;"</span>);            <span class="comment">// &lt;pre&gt; preserves formatting</span>
+<span class="keyword">?&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre>
+    <div class="output-box"><span class="label">Output (example — if tmp.txt contains "Hello World"):</span>File size: 11 bytes<br>Hello World</div>
+  </div>
+
+  <!-- EOF CHECK -->
+  <div class="card">
+    <h2 class="section-title">🏁 Check End-of-File — feof()</h2>
+
+    <div class="func-header">feof( handle )</div>
+    <div class="func-body">
+      Tests whether the file pointer has reached the <strong>End Of File (EOF)</strong>. Returns <strong>TRUE</strong> if at EOF, otherwise <strong>FALSE</strong>. Especially useful when reading files of unknown size in a loop.
+    </div>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">bool</span> <span style="color:#dcdcaa;">feof</span> ( <span style="color:#4ec9b0;">resource</span> <span style="color:#9cdcfe;">$handle</span> )
+    </div>
+
+    <div class="warning">
+      <strong>⚠️ Note:</strong> You <strong>cannot read</strong> from files opened in write-only modes: <code>w</code>, <code>a</code>, or <code>x</code>. Always use a readable mode (<code>r</code>, <code>r+</code>, <code>a+</code>, etc.) before calling feof().
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="string">"name.txt"</span>, <span class="string">"r"</span>);
+
+<span class="keyword">if</span> (<span class="fn">feof</span>(<span class="var">$file</span>)) {
+    <span class="fn">echo</span> <span class="string">"End of file reached."</span>;
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Not at end of file yet."</span>;
+}
+
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+<span class="keyword">?&gt;</span></pre>
+  </div>
+
+  <!-- READ LINE BY LINE -->
+  <div class="card">
+    <h2 class="section-title">📃 Read Line by Line — fgets()</h2>
+
+    <div class="func-header">fgets( handle [, length] )</div>
+    <div class="func-body">
+      Reads <strong>one line</strong> from the file pointer. Returns up to <code>length - 1</code> bytes of text. Returns <strong>FALSE</strong> when there is no more data or on error. If <code>length</code> is omitted, reads until end of line.
+    </div>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">string</span> <span style="color:#dcdcaa;">fgets</span> ( <span style="color:#4ec9b0;">resource</span> <span style="color:#9cdcfe;">$handle</span> [, <span style="color:#569cd6;">int</span> <span style="color:#9cdcfe;">$length</span>] )
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example — Read all lines until EOF</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="string">"welcome.txt"</span>, <span class="string">"r"</span>) <span class="keyword">or</span> <span class="fn">exit</span>(<span class="string">"Unable to open file!"</span>);
+
+<span class="comment">// Keep reading one line at a time until end of file</span>
+<span class="keyword">while</span> (!<span class="fn">feof</span>(<span class="var">$file</span>)) {
+    <span class="fn">echo</span> <span class="fn">fgets</span>(<span class="var">$file</span>) . <span class="string">"&lt;br&gt;"</span>;   <span class="comment">// Read and display each line</span>
+}
+
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output (if welcome.txt contains 3 lines):</span>Hello, welcome to PHP!<br>This is line two.<br>This is line three.</div>
+
+    <div class="note">
+      <strong>How it works:</strong> <code>while(!feof($file))</code> keeps looping as long as we have <em>not</em> reached the end of the file. Each call to <code>fgets()</code> reads one line and moves the pointer forward automatically.
+    </div>
+  </div>
+
+  <!-- READ CHAR BY CHAR -->
+  <div class="card">
+    <h2 class="section-title">🔡 Read Character by Character — fgetc()</h2>
+
+    <div class="func-header">fgetc( handle )</div>
+    <div class="func-body">
+      Reads exactly <strong>one character</strong> from the file pointer. Returns a single-character string, or <strong>FALSE</strong> at end-of-file.
+    </div>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">string</span> <span style="color:#dcdcaa;">fgetc</span> ( <span style="color:#4ec9b0;">resource</span> <span style="color:#9cdcfe;">$handle</span> )
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example — Read each character one at a time</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="string">"welcome.txt"</span>, <span class="string">"r"</span>) <span class="keyword">or</span> <span class="fn">exit</span>(<span class="string">"Unable to open file!"</span>);
+
+<span class="keyword">while</span> (!<span class="fn">feof</span>(<span class="var">$file</span>)) {
+    <span class="fn">echo</span> <span class="fn">fgetc</span>(<span class="var">$file</span>);   <span class="comment">// Print one character, then move to next</span>
+}
+
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output (if welcome.txt contains "Hi!"):</span>H i !</div>
+
+    <div class="highlight">
+      <strong>fgets() vs fgetc() — When to use which?</strong><br>
+      Use <code>fgets()</code> when you want to process text <strong>line by line</strong> (e.g., reading a log file).<br>
+      Use <code>fgetc()</code> when you need to inspect or process each <strong>individual character</strong> (e.g., parsing custom file formats).
+    </div>
+  </div>
+
+  <!-- DELETE -->
+  <div class="card">
+    <h2 class="section-title">🗑️ Delete a File — unlink()</h2>
+
+    <div class="func-header">unlink( filename )</div>
+    <div class="func-body">
+      Deletes a file from the server. Returns <strong>TRUE</strong> on success, or <strong>FALSE</strong> on failure (e.g., file doesn't exist or no permissions). Note: there is no "recycle bin" — deletion is permanent.
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$my_file</span> <span class="op">=</span> <span class="string">'file.txt'</span>;
+
+<span class="keyword">if</span> (<span class="fn">unlink</span>(<span class="var">$my_file</span>)) {
+    <span class="fn">echo</span> <span class="string">"$my_file deleted successfully."</span>;
+} <span class="keyword">else</span> {
+    <span class="fn">echo</span> <span class="string">"Error deleting $my_file."</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box"><span class="label">Output:</span>file.txt deleted successfully.</div>
+
+    <div class="warning">
+      <strong>⚠️ Permanent deletion!</strong> Unlike moving to a trash folder, <code>unlink()</code> permanently removes the file. Always double-check the filename before calling this function.
+    </div>
+  </div>
+
+  <!-- APPEND EXAMPLE -->
+  <div class="card">
+    <h2 class="section-title">➕ Append to a File — fwrite() with mode 'a'</h2>
+    <p>To add content to a file <strong>without erasing</strong> existing data, open it in mode <code>'a'</code> (append). The file pointer starts at the <em>end</em> of the file.</p>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example — Append a new line each time</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$filename</span> <span class="op">=</span> <span class="string">"log.txt"</span>;
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$filename</span>, <span class="string">"a"</span>) <span class="keyword">or</span> <span class="fn">die</span>(<span class="string">"Cannot open file!"</span>);
+
+<span class="comment">// This adds to the END of the file, not overwriting</span>
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"User logged in at 10:00 AM\n"</span>);
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"User logged out at 11:30 AM\n"</span>);
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+
+<span class="fn">echo</span> <span class="string">"Data appended successfully!"</span>;
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">log.txt content after running twice:</span>
+      User logged in at 10:00 AM<br>
+      User logged out at 11:30 AM<br>
+      User logged in at 10:00 AM<br>
+      User logged out at 11:30 AM
+    </div>
+
+    <div class="note">
+      Each time the script runs, new data is <strong>added to the bottom</strong> of the file — nothing is lost. This is perfect for log files or audit trails.
+    </div>
+  </div>
+
+  <!-- FULL SUMMARY TABLE -->
+  <div class="card">
+    <h2 class="section-title">📌 Complete Function Reference</h2>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Operation</th><th>Function</th><th>Key Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Create a File</strong></td>
+          <td><code>fopen($f, 'w')</code></td>
+          <td>Creates file if it doesn't exist (with 'w', 'a', 'x')</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Open a File</strong></td>
+          <td><code>fopen($f, mode)</code></td>
+          <td>Returns a file handle/resource for further operations</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Read a File</strong></td>
+          <td><code>fread($h, $size)</code></td>
+          <td>Use <code>filesize()</code> as length to read entire file</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Read Line by Line</strong></td>
+          <td><code>fgets($h)</code></td>
+          <td>Returns one line; use with <code>while(!feof())</code> loop</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Read Char by Char</strong></td>
+          <td><code>fgetc($h)</code></td>
+          <td>Returns a single character; use with <code>while(!feof())</code></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Write to a File</strong></td>
+          <td><code>fwrite($h, $data)</code></td>
+          <td>Use mode <code>'w'</code> — overwrites existing content</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Append to a File</strong></td>
+          <td><code>fwrite($h, $data)</code></td>
+          <td>Use mode <code>'a'</code> — adds to end, preserves data</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Check End of File</strong></td>
+          <td><code>feof($h)</code></td>
+          <td>Returns TRUE when file pointer reaches end</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>Close a File</strong></td>
+          <td><code>fclose($h)</code></td>
+          <td>Always close files to free server resources</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>Delete a File</strong></td>
+          <td><code>unlink($filename)</code></td>
+          <td>Permanently deletes — no undo!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PUTTING IT ALL TOGETHER -->
+  <div class="card">
+    <h2 class="section-title">🧪 Full Practical Example</h2>
+    <p>A complete script that creates, writes, reads, and then deletes a file:</p>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$filename</span> <span class="op">=</span> <span class="string">"demo.txt"</span>;
+
+<span class="comment">// --- STEP 1: Write to file ---</span>
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$filename</span>, <span class="string">"w"</span>) <span class="keyword">or</span> <span class="fn">die</span>(<span class="string">"Cannot open!"</span>);
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"Line 1: Hello PHP\n"</span>);
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"Line 2: File Handling\n"</span>);
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+<span class="fn">echo</span> <span class="string">"Written. &lt;br&gt;"</span>;
+
+<span class="comment">// --- STEP 2: Append to file ---</span>
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$filename</span>, <span class="string">"a"</span>) <span class="keyword">or</span> <span class="fn">die</span>(<span class="string">"Cannot open!"</span>);
+<span class="fn">fwrite</span>(<span class="var">$file</span>, <span class="string">"Line 3: Appended!\n"</span>);
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+<span class="fn">echo</span> <span class="string">"Appended. &lt;br&gt;"</span>;
+
+<span class="comment">// --- STEP 3: Read the file line by line ---</span>
+<span class="var">$file</span> <span class="op">=</span> <span class="fn">fopen</span>(<span class="var">$filename</span>, <span class="string">"r"</span>) <span class="keyword">or</span> <span class="fn">die</span>(<span class="string">"Cannot open!"</span>);
+<span class="fn">echo</span> <span class="string">"&lt;strong&gt;File contents:&lt;/strong&gt;&lt;br&gt;"</span>;
+<span class="keyword">while</span> (!<span class="fn">feof</span>(<span class="var">$file</span>)) {
+    <span class="fn">echo</span> <span class="fn">fgets</span>(<span class="var">$file</span>) . <span class="string">"&lt;br&gt;"</span>;
+}
+<span class="fn">fclose</span>(<span class="var">$file</span>);
+
+<span class="comment">// --- STEP 4: Delete the file ---</span>
+<span class="fn">unlink</span>(<span class="var">$filename</span>);
+<span class="fn">echo</span> <span class="string">"File deleted."</span>;
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">Output:</span>
+      Written.<br>
+      Appended.<br>
+      <strong>File contents:</strong><br>
+      Line 1: Hello PHP<br>
+      Line 2: File Handling<br>
+      Line 3: Appended!<br>
+      File deleted.
+    </div>
+  </div>
+
+  <div class="footer">
+    🌱 Lecture 06 - PHP File Handling • BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

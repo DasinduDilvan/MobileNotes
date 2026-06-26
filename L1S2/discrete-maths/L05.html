@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, print-scale: 100%">
+    <title>Predicate Logic | Study Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #1a2f2e;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 8px;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 400;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 16px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 6px;
+            margin-bottom: 18px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .subsection-title {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: #2c6e6b;
+            margin: 20px 0 12px 0;
+            padding-left: 6px;
+            border-left: 4px solid #5a9d99;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 25px;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 16px;
+            border-radius: 14px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.05em;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        code {
+            background: #f0f2f0;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #b33c1f;
+        }
+
+        pre {
+            background: #1e2a2a;
+            color: #e2e8e6;
+            padding: 18px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #d6e6e4;
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #e0f0ee;
+            color: #1f5e5b;
+            font-weight: 600;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6b8c89;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.9em;
+            border-top: 1px solid #cfe1df;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+            pre {
+                background: #f5f5f5;
+                color: #000;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .card { padding: 18px; }
+            h1 { font-size: 1.8em; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/discrete-maths" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+    <h1>📖 Predicate Logic</h1>
+    <div class="subtitle">Propositional functions · Quantifiers · Translation · Negation · Equivalences</div>
+
+    <!-- Why Predicate Logic -->
+    <div class="card">
+        <div class="section-title">❓ Why Predicate Logic?</div>
+        <p>Propositional logic is not expressive enough for many mathematical statements. Example:</p>
+        <ul>
+            <li>“Every computer in ICT Lab 11 is functioning properly.”</li>
+            <li>From this, we cannot deduce “First computer is functioning properly” using propositional rules alone.</li>
+            <li>Need a language that talks about <strong>objects, properties, and relations</strong>.</li>
+        </ul>
+        <div class="important">
+            💡 Predicate logic introduces <strong>variables</strong> (<em>x, y, z</em>), <strong>predicates</strong> (<em>P(x), M(x)</em>), and <strong>quantifiers</strong> (∀, ∃) to express generality.
+        </div>
+    </div>
+
+    <!-- Propositional Functions -->
+    <div class="card">
+        <div class="section-title">🧩 Propositional Functions (Predicates)</div>
+        <p>A <strong>propositional function</strong> is a statement containing variables. It becomes a proposition (true/false) when variables are assigned values from a <strong>domain (U)</strong>.</p>
+        <div class="two-column">
+            <div class="box"><strong>Example</strong><br>P(x) = “x &gt; 3”<br>P(4) is true, P(2) is false.</div>
+            <div class="box"><strong>Multiple variables</strong><br>Q(x, y) = “x = y + 3”<br>Q(1,2) false, Q(3,0) true.</div>
+        </div>
+        <div class="highlight">
+            📌 <strong>A(c, n)</strong>: “Computer c is connected to network n”.<br>
+            If MATH1 is connected to CAMPUS2 but not CAMPUS1 → A(MATH1, CAMPUS1) false, A(MATH1, CAMPUS2) true.
+        </div>
+        <div class="note">
+            ⚡ Propositional functions can be combined with logical connectives (¬, ∧, ∨, →, ↔).<br>
+            Example: <code>P(3) ∨ P(-1)</code> is a proposition, but <code>P(x) ∧ P(y)</code> is not until variables are bound.
+        </div>
+    </div>
+
+    <!-- Quantifiers Overview -->
+    <div class="card">
+        <div class="section-title">🎯 Quantifiers – Expressing scope</div>
+        <p>Quantification creates a proposition from a propositional function. Two fundamental quantifiers:</p>
+        <div class="grid">
+            <div class="box"><strong>∀ Universal Quantifier</strong><br>“For all”, “for every”, “all”<br>∀x P(x) : P(x) holds for every x in domain.</div>
+            <div class="box"><strong>∃ Existential Quantifier</strong><br>“There exists”, “for some”, “at least one”<br>∃x P(x) : P(x) true for some x in domain.</div>
+        </div>
+        <div class="important">
+            🔁 Domain must <strong>always</strong> be specified; without it, quantified statements have no meaning.
+        </div>
+    </div>
+
+    <!-- Universal Quantifier Details -->
+    <div class="card">
+        <div class="section-title">🌍 Universal Quantifier ∀</div>
+        <p><code>∀x P(x)</code> is true iff P(x) is true for <strong>every</strong> element in the domain. False if a counterexample exists.</p>
+        <ul>
+            <li>P(x): “x &gt; 0”, domain = integers → ∀x P(x) <strong>false</strong> (negative numbers).</li>
+            <li>P(x): “x &gt; 0”, domain = positive integers → ∀x P(x) <strong>true</strong>.</li>
+            <li>P(x): “x + 1 &gt; x”, domain = real numbers → ∀x P(x) <strong>true</strong>.</li>
+        </ul>
+        <div class="highlight">
+            Example: Q(x): “x &lt; 2”, domain = real numbers → ∀x Q(x) is <strong>false</strong> (e.g., x = 3 is counterexample).
+        </div>
+        <div class="note">
+            📐 If domain is finite {x₁, x₂, …, xₙ}, then ∀x P(x) ≡ P(x₁) ∧ P(x₂) ∧ … ∧ P(xₙ).
+        </div>
+    </div>
+
+    <!-- Existential Quantifier Details -->
+    <div class="card">
+        <div class="section-title">🔍 Existential Quantifier ∃</div>
+        <p><code>∃x P(x)</code> is true iff there exists <strong>at least one</strong> element in the domain for which P(x) is true.</p>
+        <ul>
+            <li>P(x): “x &gt; 3”, domain = real numbers → ∃x P(x) <strong>true</strong> (e.g., x = 4).</li>
+            <li>Q(x): “x = x + 1”, domain = reals → ∃x Q(x) <strong>false</strong> (no real satisfies).</li>
+            <li>P(x): “x² &gt; 10”, domain = {1,2,3,4} → ∃x P(x) <strong>true</strong> (since 4²=16&gt;10).</li>
+        </ul>
+        <div class="highlight">
+            For finite domain: ∃x P(x) ≡ P(x₁) ∨ P(x₂) ∨ … ∨ P(xₙ).
+        </div>
+    </div>
+
+    <!-- Uniqueness Quantifier -->
+    <div class="card">
+        <div class="section-title">✨ Uniqueness Quantifier (∃!)</div>
+        <p><strong>∃!x P(x)</strong> means “there exists a <strong>unique</strong> x such that P(x)” (one and only one).</p>
+        <ul>
+            <li>Example: ∃!x (x - 1 = 0), domain real numbers → true (only x=1).</li>
+            <li>P(x): “x &gt; 0”, domain integers → ∃!x P(x) is false (many positive integers).</li>
+        </ul>
+        <div class="note">
+            📖 Alternative expression without ∃!: ∃x ( P(x) ∧ ∀y (P(y) → y = x) ).
+        </div>
+    </div>
+
+    <!-- Precedence and Binding -->
+    <div class="card">
+        <div class="section-title">⚡ Precedence of Quantifiers</div>
+        <p>Quantifiers <strong>∀</strong> and <strong>∃</strong> have higher precedence than all logical operators.</p>
+        <div class="important">
+            ∀x P(x) ∨ Q(x)  means  (∀x P(x)) ∨ Q(x) .<br>
+            To bind Q(x) inside the quantifier, use parentheses: ∀x (P(x) ∨ Q(x)).
+        </div>
+    </div>
+
+    <!-- Translating English to Logic (core) -->
+    <div class="card">
+        <div class="section-title">📝 Translating English ↔ Predicate Logic</div>
+        <p><strong>Key principle:</strong> For “all students” use ∀ with implication; for “some student” use ∃ with conjunction.</p>
+        <div class="two-column">
+            <div class="box">
+                <strong>❌ Common Mistake:</strong><br>
+                “Every student has taken Java”<br>
+                ∀x (S(x) ∧ J(x)) is <strong>wrong</strong> (means everyone is a student AND took Java).<br>
+                ✅ Correct: ∀x (S(x) → J(x))
+            </div>
+            <div class="box">
+                <strong>❌ ∃x (S(x) → J(x))</strong> is wrong for “some student took Java”.<br>
+                ✅ Correct: ∃x (S(x) ∧ J(x))
+            </div>
+        </div>
+        <div class="highlight">
+            <strong>Example 1:</strong> “Every student in this class has studied calculus.”<br>
+            Domain = all students in class → ∀x C(x) <br>
+            Domain = all people → ∀x (S(x) → C(x)) where S(x) = “x is a student in this class”.
+        </div>
+        <div class="highlight">
+            <strong>Example 2:</strong> “Some student has visited Mexico.”<br>
+            Domain = students → ∃x M(x) <br>
+            Domain = all people → ∃x (S(x) ∧ M(x))
+        </div>
+        <div class="important">
+            📍 “Every student has visited Canada or Mexico”: ∀x (S(x) → (C(x) ∨ M(x))) <br>
+            📍 “Some student has visited both”: ∃x (S(x) ∧ C(x) ∧ M(x))
+        </div>
+    </div>
+
+    <!-- Advanced translation examples (universe fruits etc) -->
+    <div class="card">
+        <div class="section-title">🌱 Translation with Specific Domains</div>
+        <p>Universe: {Fruit, Vegetable, Plant}<br>Predicates: F(x): fruit, S(x): vegetable, T(x): plant.</p>
+        <ul>
+            <li><strong>“Nothing is a vegetable.”</strong> → ¬∃x S(x)  ≡  ∀x ¬S(x)</li>
+            <li><strong>“All fruits are plants.”</strong> → ∀x (F(x) → T(x))</li>
+            <li><strong>“Some fruits are plants.”</strong> → ∃x (F(x) ∧ T(x))</li>
+            <li><strong>“No vegetable is a plant.”</strong> → ¬∃x (S(x) ∧ T(x))  ≡  ∀x (¬S(x) ∨ ¬T(x))</li>
+            <li><strong>“If any fruit is a vegetable then it is also a plant.”</strong> → ∀x ((F(x) ∧ S(x)) → T(x))</li>
+        </ul>
+    </div>
+
+    <!-- Logical Equivalences in Predicate Logic -->
+    <div class="card">
+        <div class="section-title">⚖️ Logical Equivalences (Predicate)</div>
+        <p>Two quantified statements are logically equivalent iff they have same truth value for all predicates and domains.</p>
+        <div class="important">
+            ✅ <strong>∀x (P(x) ∧ Q(x)) ≡ ∀x P(x) ∧ ∀x Q(x)</strong><br>
+            Proof: If every element makes both true, then all make P true and all make Q true, and vice versa.
+        </div>
+        <div class="highlight">
+            ❌ <strong>∃x P(x) ∧ ∃x Q(x)</strong> is <strong>NOT equivalent</strong> to ∃x (P(x) ∧ Q(x)).<br>
+            Counterexample: domain integers, P(x)=“x even”, Q(x)=“x odd”. LHS true, RHS false (nothing is both even & odd).
+        </div>
+        <div class="note">
+            ⚠️ Also ∀x P(x) ∨ ∀x Q(x) is <strong>not equivalent</strong> to ∀x (P(x) ∨ Q(x)).<br>
+            Example: P(x)=“x even”, Q(x)=“x odd”, domain integers. RHS true, LHS false.
+        </div>
+    </div>
+
+    <!-- De Morgan’s Laws for Quantifiers (core) -->
+    <div class="card">
+        <div class="section-title">🔁 De Morgan’s Laws for Quantifiers</div>
+        <p>Negation moves the quantifier and flips it:</p>
+        <div class="two-column">
+            <div class="box">
+                <strong>¬∀x P(x) ≡ ∃x ¬P(x)</strong><br>
+                “Not all are P” = “Some are not P”
+            </div>
+            <div class="box">
+                <strong>¬∃x P(x) ≡ ∀x ¬P(x)</strong><br>
+                “No x is P” = “All x are not P”
+            </div>
+        </div>
+        <table>
+            <thead><tr><th>Negation</th><th>Equivalent Statement</th><th>When True</th></tr></thead>
+            <tbody>
+                <tr><td>¬∃x P(x)</td><td>∀x ¬P(x)</td><td>For every x, P(x) is false</td></tr>
+                <tr><td>¬∀x P(x)</td><td>∃x ¬P(x)</td><td>There exists x for which P(x) is false</td></tr>
+            </tbody>
+        </table>
+        <div class="highlight">
+            <strong>Example:</strong> Negation of ∀x (x² &gt; x) ≡ ∃x (x² ≤ x).<br>
+            Negation of ∃x (x² = 2) ≡ ∀x (x² ≠ 2).
+        </div>
+        <div class="important">
+            📌 Show ¬∀x(P(x)→Q(x)) ≡ ∃x(P(x) ∧ ¬Q(x))<br>
+            Using De Morgan: ¬∀x(P→Q) ≡ ∃x ¬(P→Q) ≡ ∃x (P ∧ ¬Q).
+        </div>
+    </div>
+
+    <!-- Thinking as Conjunctions/Disjunctions -->
+    <div class="card">
+        <div class="section-title">🧠 Quantifiers as Conjunctions / Disjunctions</div>
+        <p>If domain is finite, quantifiers reduce to logical connectives:</p>
+        <div class="two-column">
+            <div><code>∀x P(x) ≡ P(x₁) ∧ P(x₂) ∧ … ∧ P(xₙ)</code></div>
+            <div><code>∃x P(x) ≡ P(x₁) ∨ P(x₂) ∨ … ∨ P(xₙ)</code></div>
+        </div>
+        <div class="note">
+            Even if domain is infinite, this intuition helps understand quantifier behavior.
+        </div>
+    </div>
+
+    <!-- Additional translation exercises -->
+    <div class="card">
+        <div class="section-title">✍️ More Translation Practice</div>
+        <ul>
+            <li><strong>“Every student in this class has taken a course in Java.”</strong> <br>
+                Domain all people: ∀x (Student(x) → HasTakenJava(x))</li>
+            <li><strong>“Some student in this class has taken a course in Java.”</strong> <br>
+                ∃x (Student(x) ∧ HasTakenJava(x))</li>
+            <li><strong>“All Americans eat cheeseburgers.”</strong> <br> ∀x (American(x) → EatsCheeseburger(x))</li>
+            <li><strong>“There is an American who does not eat cheeseburgers.”</strong> <br> ∃x (American(x) ∧ ¬EatsCheeseburger(x))</li>
+            <li><strong>“For every person, if person is a student in this class then they have visited Mexico or Canada.”</strong> <br> ∀x (S(x) → (M(x) ∨ C(x)))</li>
+        </ul>
+        <div class="important">
+            💡 Key reminder: <strong>∀</strong> is usually paired with → (implication), <strong>∃</strong> with ∧ (conjunction) in restricted domains.
+        </div>
+    </div>
+
+    <!-- Summary and final notes -->
+    <div class="card">
+        <div class="section-title">📚 Summary – Key Takeaways</div>
+        <ul>
+            <li><strong>Propositional functions</strong> generalize propositions using variables & predicates.</li>
+            <li><strong>Universal ∀</strong>: true for every element; <strong>Existential ∃</strong>: true for at least one element.</li>
+            <li>To translate “all A are B”: ∀x (A(x) → B(x)). To translate “some A is B”: ∃x (A(x) ∧ B(x)).</li>
+            <li><strong>De Morgan for quantifiers:</strong> ¬∀ ≡ ∃¬ , ¬∃ ≡ ∀¬ .</li>
+            <li><strong>Logical equivalences:</strong> ∀ distributes over ∧, ∃ does NOT distribute over ∧ (but ∃ distributes over ∨).</li>
+            <li>Quantifiers bind tightly; always use parentheses to clarify scope.</li>
+        </ul>
+        <div class="note">
+            📖 Based on lecture: “Predicate Logic” — TMS1233 Discrete Mathematics. Covers all core definitions, translation patterns, uniqueness quantifier and De Morgan’s laws.
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture XX - Predicate Logic • BY_#D1
+    </div>
+</div>
+</body>
+</html>

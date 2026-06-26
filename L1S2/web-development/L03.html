@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 03 - Arrow Functions, Async JS & Objects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .sub-title {
+            color: #2c6e6b;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 18px 0 8px 0;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 25px;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+
+        pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.7;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #89b4fa; }
+        pre .string  { color: #a6e3a1; }
+        pre .fn      { color: #f9e2af; }
+        pre .type    { color: #89dceb; }
+        pre .num     { color: #fab387; }
+        pre .punct   { color: #cdd6f4; }
+
+        .model-diagram {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .tag.orange { background: #e67e22; }
+        .tag.blue   { background: #2980b9; }
+        .tag.red    { background: #c0392b; }
+
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+
+        .in-class h3 {
+            color: #7b1fa2;
+            margin-bottom: 10px;
+        }
+
+        .analogy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.95em;
+        }
+
+        .analogy-table th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .analogy-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #ddf0ee;
+        }
+
+        .analogy-table tr:nth-child(even) td {
+            background: #f3fbfa;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+            .footer {
+                page-break-before: avoid;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/web-development" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>ICT 1232 — Web Development</h1>
+    <p class="subtitle">Lecture 03 &nbsp;|&nbsp; Arrow Functions · Asynchronous JavaScript · Objects</p>
+
+
+    <!-- ─── ARROW FUNCTIONS ─── -->
+    <div class="card">
+        <h2 class="section-title">⚡ Arrow Functions (ES6 Feature)</h2>
+
+        <div class="highlight">
+            <strong>What is an Arrow Function?</strong>
+            <ul>
+                <li>Introduced in <strong>ES6 (2015)</strong></li>
+                <li>Provides a <strong>shorter syntax</strong> for writing functions</li>
+                <li>Often used for <strong>callbacks</strong> and concise one-liner functions</li>
+                <li>Also known as <strong>"fat arrow functions"</strong> because of the <code>=&gt;</code> symbol</li>
+            </ul>
+        </div>
+
+        <div class="important">
+            <strong>Basic Syntax</strong><br>
+            <code>const functionName = (parameters) =&gt; expression;</code>
+            <ul style="margin-top:8px;">
+                <li><strong>parameters</strong> → zero, one, or multiple parameters</li>
+                <li><strong>expression</strong> → automatically returned (if single-line)</li>
+                <li><code>const</code> is recommended for the variable</li>
+            </ul>
+        </div>
+
+        <h3 class="sub-title">Syntax Variations</h3>
+
+        <div class="grid">
+            <div class="box">
+                <strong>No Parameters</strong>
+<pre><span class="keyword">const</span> <span class="fn">greet</span> = () =&gt; <span class="string">"Hello!"</span>;
+console.<span class="fn">log</span>(<span class="fn">greet</span>()); <span class="comment">// Hello!</span></pre>
+            </div>
+            <div class="box">
+                <strong>Single Parameter</strong>
+<pre><span class="keyword">const</span> <span class="fn">square</span> = x =&gt; x * x;
+console.<span class="fn">log</span>(<span class="fn">square</span>(<span class="num">4</span>)); <span class="comment">// 16</span></pre>
+            </div>
+            <div class="box">
+                <strong>Multiple Parameters</strong>
+<pre><span class="keyword">const</span> <span class="fn">add</span> = (a, b) =&gt; a + b;
+console.<span class="fn">log</span>(<span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>)); <span class="comment">// 5</span></pre>
+            </div>
+        </div>
+
+        <h3 class="sub-title">Multi-line Body (with <code>{ }</code> and <code>return</code>)</h3>
+<pre><span class="keyword">const</span> <span class="fn">multiply</span> = (a, b) =&gt; {
+    <span class="keyword">const</span> result = a * b;
+    <span class="keyword">return</span> result;
+};
+console.<span class="fn">log</span>(<span class="fn">multiply</span>(<span class="num">2</span>, <span class="num">4</span>)); <span class="comment">// 8</span></pre>
+
+        <div class="note">
+            <strong>💡 Key Rule:</strong> If the body is a single expression, you can omit <code>{ }</code> and <code>return</code> — the value is returned automatically. For multi-line logic, curly braces <strong>and</strong> an explicit <code>return</code> are required.
+        </div>
+    </div>
+
+    <!-- ─── ASYNCHRONOUS JS ─── -->
+    <div class="card">
+        <h2 class="section-title">🔄 Asynchronous JavaScript</h2>
+
+        <h3 class="sub-title">Direct vs Indirect Function Execution</h3>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Direct Execution (Synchronous)</strong>
+                <p>Functions are called one after another and executed in order. Each function must complete before the next one starts.</p>
+<pre><span class="keyword">function</span> <span class="fn">one</span>()   { console.<span class="fn">log</span>(<span class="string">"one"</span>); }
+<span class="keyword">function</span> <span class="fn">two</span>()   { console.<span class="fn">log</span>(<span class="string">"two"</span>); }
+<span class="keyword">function</span> <span class="fn">three</span>() { console.<span class="fn">log</span>(<span class="string">"three"</span>); }
+
+<span class="fn">one</span>();
+<span class="fn">three</span>();
+<span class="fn">two</span>();
+<span class="comment">// Output: one, three, two</span></pre>
+            </div>
+            <div class="box">
+                <strong>Indirect Execution (Asynchronous)</strong>
+                <p>Functions can go <strong>outside the sequence</strong> and do not depend on the strict order of execution. Associated with asynchronous programming.</p>
+            </div>
+        </div>
+
+        <h3 class="sub-title">☕ Real-World Analogy: Ordering Coffee at a Café</h3>
+        <div class="highlight">
+            <ul>
+                <li>You <strong>order a coffee</strong> → Starting an async task</li>
+                <li>While coffee is being prepared, you <strong>talk to a friend</strong> → Other JS code continues running</li>
+                <li>The barista <strong>calls your name</strong> → Callback / event fires</li>
+                <li>You <strong>collect your coffee</strong> → Async task completes</li>
+            </ul>
+        </div>
+
+        <table class="analogy-table">
+            <thead>
+                <tr>
+                    <th>Café Scenario</th>
+                    <th>JavaScript Equivalent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Ordering coffee</td><td>Starting an asynchronous task</td></tr>
+                <tr><td>Coffee preparation</td><td>Background task (non-blocking)</td></tr>
+                <tr><td>Talking to a friend</td><td>Other JS code continues</td></tr>
+                <tr><td>Barista calls your name</td><td>Callback / event</td></tr>
+                <tr><td>You collect coffee</td><td>Async task completes</td></tr>
+            </tbody>
+        </table>
+
+        <h3 class="sub-title">Ways to Implement Asynchronous Flow</h3>
+        <div class="grid">
+            <div class="box"><strong>Callbacks</strong><span class="tag" style="margin-left:6px;">covered this lecture</span></div>
+            <div class="box"><strong>Promises</strong></div>
+            <div class="box"><strong>Async / Await</strong></div>
+            <div class="box"><strong>Timers</strong></div>
+            <div class="box"><strong>Event Loops</strong></div>
+            <div class="box"><strong>Non-blocking I/O</strong></div>
+        </div>
+    </div>
+
+    <!-- ─── CALLBACK FUNCTIONS ─── -->
+    <div class="card">
+        <h2 class="section-title">📞 Callback Functions</h2>
+
+        <div class="important">
+            <strong>Definition:</strong> A <strong>callback function</strong> is a function passed as an <em>argument</em> to another function, which is then executed later — usually after a task is completed.
+        </div>
+
+        <h3 class="sub-title">Basic Example</h3>
+<pre><span class="keyword">function</span> <span class="fn">displayMessage</span>() {
+    console.<span class="fn">log</span>(<span class="string">"Task completed!"</span>);
+}
+
+<span class="keyword">function</span> <span class="fn">performTask</span>(callback) {
+    <span class="fn">callback</span>(); <span class="comment">// calling the callback function</span>
+}
+
+<span class="fn">performTask</span>(displayMessage);</pre>
+
+        <h3 class="sub-title">Real-World Callback Example (Food Order)</h3>
+<pre><span class="keyword">function</span> <span class="fn">order</span>(food, id, callback) {
+    console.<span class="fn">log</span>(<span class="string">`Order received for the ${food}`</span>);
+    <span class="comment">// simulating preparation...</span>
+    <span class="fn">callback</span>(id); <span class="comment">// order is ready, call the customer</span>
+}
+
+<span class="keyword">function</span> <span class="fn">callCustomer</span>(orderNum) {
+    console.<span class="fn">log</span>(<span class="string">`Food for order #${orderNum} is ready`</span>);
+}
+
+<span class="comment">// New customer approached</span>
+<span class="fn">order</span>(<span class="string">"pasta"</span>, <span class="string">"987"</span>, callCustomer);</pre>
+    </div>
+
+    <!-- ─── SETTIMEOUT ─── -->
+    <div class="card">
+        <h2 class="section-title">⏱️ setTimeout() in JavaScript</h2>
+
+        <div class="highlight">
+            <strong>What is setTimeout?</strong> A built-in JavaScript function that executes a callback after a specified delay (in milliseconds).
+        </div>
+
+        <div class="important">
+            <strong>Basic Syntax:</strong>
+            <code>setTimeout(function, delay);</code>
+            <ul style="margin-top:8px;">
+                <li><strong>function</strong> → the callback to execute after the delay</li>
+                <li><strong>delay</strong> → time in milliseconds (<code>1000 ms = 1 second</code>)</li>
+            </ul>
+        </div>
+
+        <h3 class="sub-title">Simple Example</h3>
+<pre><span class="fn">setTimeout</span>(<span class="keyword">function</span> () {
+    <span class="fn">alert</span>(<span class="string">"Hello!"</span>);
+}, <span class="num">2000</span>); <span class="comment">// Displays an alert after 2 seconds</span></pre>
+
+        <h3 class="sub-title">setTimeout with Out-of-Order Execution</h3>
+<pre><span class="keyword">function</span> <span class="fn">one</span>()   { console.<span class="fn">log</span>(<span class="string">"one"</span>); }
+<span class="keyword">function</span> <span class="fn">two</span>()   { console.<span class="fn">log</span>(<span class="string">"two"</span>); }
+<span class="keyword">function</span> <span class="fn">three</span>() { console.<span class="fn">log</span>(<span class="string">"three"</span>); }
+
+<span class="fn">one</span>();
+<span class="fn">setTimeout</span>(three, <span class="num">2000</span>); <span class="comment">// three executes after 2 seconds</span>
+<span class="fn">two</span>();
+
+<span class="comment">// Output order: one → two → (2s later) → three</span></pre>
+
+        <div class="note">
+            <strong>💡 Note:</strong> <code>two()</code> runs before <code>three()</code> even though it was called after — because <code>three</code> is delayed by <code>setTimeout</code>. This is the essence of <strong>non-blocking asynchronous behavior</strong>.
+        </div>
+    </div>
+
+    <!-- ─── OBJECTS ─── -->
+    <div class="card">
+        <h2 class="section-title">📦 Objects in JavaScript</h2>
+
+        <div class="important">
+            <strong>What is an Object?</strong>
+            <ul>
+                <li>An object is a <strong>collection of key-value pairs</strong></li>
+                <li>Keys are called <strong>properties</strong></li>
+                <li>Values can be: primitive types (string, number, boolean), arrays, functions (called <strong>methods</strong>), or other objects</li>
+            </ul>
+        </div>
+
+        <h3 class="sub-title">Object Creation — 3 Ways</h3>
+
+        <div class="grid">
+            <div class="box">
+                <strong>1. Using <code>new Object()</code> Constructor</strong>
+<pre><span class="keyword">const</span> student = <span class="keyword">new</span> <span class="type">Object</span>();
+student.name = <span class="string">"Alice"</span>;
+student.age = <span class="num">20</span>;
+student.program = <span class="string">"CS"</span>;</pre>
+            </div>
+            <div class="box">
+                <strong>2. Using Object Literal</strong>
+<pre><span class="keyword">const</span> student = {
+    name: <span class="string">"Alice"</span>,
+    age: <span class="num">20</span>,
+    program: <span class="string">"CS"</span>
+};</pre>
+            </div>
+            <div class="box">
+                <strong>3. ES6 Shorthand</strong><br>
+                <small>(when variable name = property name)</small>
+<pre><span class="keyword">const</span> name = <span class="string">"Alice"</span>;
+<span class="keyword">const</span> age = <span class="num">20</span>;
+
+<span class="keyword">const</span> student = { name, age };</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ACCESSING PROPERTIES ─── -->
+    <div class="card">
+        <h2 class="section-title">🔍 Accessing Object Properties</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Dot Notation</strong>
+                <ul>
+                    <li>Most common and readable</li>
+                    <li>Property name must be a <strong>valid identifier</strong></li>
+                    <li>Preferred when property name is known in advance</li>
+                </ul>
+<pre>console.<span class="fn">log</span>(student.name);    <span class="comment">// Alice</span>
+console.<span class="fn">log</span>(student.age);     <span class="comment">// 20</span>
+console.<span class="fn">log</span>(student.program); <span class="comment">// CS</span></pre>
+            </div>
+            <div class="box">
+                <strong>Bracket Notation</strong>
+                <ul>
+                    <li>Property name written as a <strong>string</strong></li>
+                    <li>Useful when property name <strong>contains spaces</strong> or is <strong>dynamic</strong></li>
+                </ul>
+<pre>console.<span class="fn">log</span>(student[<span class="string">"name"</span>]); <span class="comment">// Alice</span>
+console.<span class="fn">log</span>(student[<span class="string">"age"</span>]);  <span class="comment">// 20</span></pre>
+            </div>
+        </div>
+
+        <h3 class="sub-title">Dynamic Property Access</h3>
+<pre><span class="keyword">const</span> key = <span class="string">"program"</span>;
+console.<span class="fn">log</span>(student[key]); <span class="comment">// Computer Science</span>
+<span class="comment">// JS first evaluates `key`, then accesses student["program"]</span></pre>
+
+        <div class="warning">
+            <strong>⚠️ When Dot Notation Fails</strong> — If a property key contains spaces, dot notation is invalid. Use bracket notation instead.
+<pre><span class="keyword">const</span> person = { <span class="string">"full name"</span>: <span class="string">"Alice Smith"</span> };
+
+console.<span class="fn">log</span>(person[<span class="string">"full name"</span>]); <span class="comment">// Alice Smith ✅</span>
+<span class="comment">// person.full name  ❌ invalid</span></pre>
+        </div>
+    </div>
+
+    <!-- ─── ADD / UPDATE / DELETE ─── -->
+    <div class="card">
+        <h2 class="section-title">✏️ Adding, Updating, and Deleting Properties</h2>
+
+        <div class="three-column">
+            <div class="box">
+                <strong>Adding a Property</strong>
+                <p>JavaScript allows properties to be added <b>at runtime</b>. Objects are <b>dynamic</b>.</p>
+<pre>student.program = <span class="string">"CS"</span>;
+student.year = <span class="num">2</span>;</pre>
+            </div>
+            <div class="box">
+                <strong>Updating a Property</strong>
+                <p>Assign a new value to an existing key. No special syntax required.</p>
+<pre>student.age = <span class="num">21</span>;
+console.<span class="fn">log</span>(student.age); <span class="comment">// 21</span></pre>
+            </div>
+            <div class="box">
+                <strong>Deleting a Property</strong>
+                <p><code>delete</code> removes the property completely. Accessing it afterwards returns <code>undefined</code>.</p>
+<pre><span class="keyword">delete</span> student.year;</pre>
+            </div>
+        </div>
+
+        <h3 class="sub-title">Checking Property Existence — <code>in</code> Operator</h3>
+<pre>console.<span class="fn">log</span>(<span class="string">"program"</span> <span class="keyword">in</span> student); <span class="comment">// true</span>
+console.<span class="fn">log</span>(<span class="string">"year"</span>    <span class="keyword">in</span> student); <span class="comment">// false (was deleted)</span></pre>
+    </div>
+
+    <!-- ─── METHODS & this ─── -->
+    <div class="card">
+        <h2 class="section-title">🛠️ Functions Inside Objects — Methods</h2>
+
+        <div class="important">
+            <strong>Definition:</strong> When a function is stored as a value inside an object, it is called a <strong>method</strong>.
+        </div>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Standard Method Syntax</strong>
+<pre><span class="keyword">const</span> person = {
+    name: <span class="string">"Alice"</span>,
+    age: <span class="num">25</span>,
+    greet: <span class="keyword">function</span>() {
+        console.<span class="fn">log</span>(<span class="string">"Hello, my name is "</span> + <span class="keyword">this</span>.name);
+    }
+};
+
+person.<span class="fn">greet</span>(); <span class="comment">// Hello, my name is Alice</span></pre>
+            </div>
+            <div class="box">
+                <strong>ES6 Shorthand Method Syntax</strong>
+                <small>(omit the <code>function</code> keyword)</small>
+<pre><span class="keyword">const</span> person = {
+    name: <span class="string">"Bob"</span>,
+    age: <span class="num">30</span>,
+    <span class="fn">greet</span>() {
+        console.<span class="fn">log</span>(<span class="string">`Hi, I'm ${<span class="keyword">this</span>.name} and I'm ${<span class="keyword">this</span>.age} years old`</span>);
+    }
+};
+
+person.<span class="fn">greet</span>(); <span class="comment">// Hi, I'm Bob and I'm 30 years old</span></pre>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong><code>this</code></strong> refers to the <strong>object itself</strong>. In the example above, <code>this.name</code> refers to the <code>name</code> property of the same object.
+        </div>
+    </div>
+
+    <!-- ─── THE this KEYWORD ─── -->
+    <div class="card">
+        <h2 class="section-title">🔑 The <code>this</code> Keyword</h2>
+
+        <div class="highlight">
+            <strong>What is <code>this</code>?</strong>
+            <ul>
+                <li><code>this</code> is a <strong>special keyword</strong> in JavaScript</li>
+                <li>It refers to the object that is currently <strong>"calling"</strong> the function</li>
+                <li>The value of <code>this</code> <strong>depends on how the function is called</strong></li>
+            </ul>
+        </div>
+
+        <h3 class="sub-title"><code>this</code> Inside an Object Method</h3>
+<pre><span class="keyword">const</span> student = {
+    name: <span class="string">"Alice"</span>,
+    <span class="fn">greet</span>: <span class="keyword">function</span>() {
+        console.<span class="fn">log</span>(<span class="string">"Hello, "</span> + <span class="keyword">this</span>.name);
+    }
+};
+
+student.<span class="fn">greet</span>(); <span class="comment">// Hello, Alice</span></pre>
+
+        <div class="grid">
+            <div class="box">
+                <b><code>greet()</code> is called by</b><br>
+                the object <code>student</code>
+            </div>
+            <div class="box">
+                <b><code>this</code> points to</b><br>
+                the object <code>student</code>
+            </div>
+            <div class="box">
+                <b>Therefore <code>this.name</code></b><br>
+                equals <code>"Alice"</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── FACTORY FUNCTIONS ─── -->
+    <div class="card">
+        <h2 class="section-title">🏭 Factory Functions</h2>
+
+        <div class="important">
+            <strong>Definition:</strong> A <strong>factory function</strong> is a regular function that <strong>creates and returns an object</strong>. The object is created at the <code>return { ... }</code> statement inside the function.
+        </div>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>General Pattern</strong>
+<pre><span class="keyword">function</span> <span class="fn">createObject</span>(param1, param2) {
+    <span class="keyword">return</span> {
+        key1: param1,
+        key2: param2
+    };
+}</pre>
+            </div>
+            <div class="box">
+                <strong>Practical Example</strong>
+<pre><span class="keyword">function</span> <span class="fn">createStudent</span>(name, age) {
+    <span class="keyword">return</span> {
+        name,
+        age,
+        <span class="fn">greet</span>() {
+            <span class="keyword">return</span> <span class="string">`Hi, I am ${name}`</span>;
+        }
+    };
+}</pre>
+            </div>
+        </div>
+
+        <h3 class="sub-title">Creating and Using Objects via Factory Function</h3>
+<pre><span class="keyword">const</span> s1 = <span class="fn">createStudent</span>(<span class="string">"Alice"</span>, <span class="num">20</span>);
+
+console.<span class="fn">log</span>(s1.name);    <span class="comment">// Alice</span>
+console.<span class="fn">log</span>(s1.age);     <span class="comment">// 20</span>
+console.<span class="fn">log</span>(s1.<span class="fn">greet</span>()); <span class="comment">// Hi, I am Alice</span></pre>
+
+        <div class="model-diagram">
+            <code>createStudent("Alice", 20)</code><br>↓<br>
+            <strong>New Object Created</strong><br>↓<br>
+            <code>{ name: "Alice", age: 20, greet() }</code><br>↓<br>
+            <strong>Assigned to s1</strong>
+        </div>
+    </div>
+
+    <!-- ─── PRACTICE: ARROW FUNCTIONS ─── -->
+    <div class="card">
+        <h2 class="section-title">📝 Practice Questions — Arrow Functions</h2>
+
+        <div class="in-class">
+            <h3>Q1: checkGrade — Arrow Function with Conditional</h3>
+            <p>Write an arrow function named <code>checkGrade</code> that accepts one parameter <code>marks</code> and returns <code>"Pass"</code> if marks ≥ 40, otherwise <code>"Fail"</code>. Use a multi-line arrow function with <code>{ }</code> and <code>return</code>.</p>
+<pre><span class="keyword">const</span> <span class="fn">checkGrade</span> = (marks) =&gt; {
+    <span class="keyword">if</span> (marks &gt;= <span class="num">40</span>) {
+        <span class="keyword">return</span> <span class="string">"Pass"</span>;
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> <span class="string">"Fail"</span>;
+    }
+};
+
+<span class="comment">// Sample calls</span>
+<span class="fn">alert</span>(<span class="string">"Marks: 50 → "</span> + <span class="fn">checkGrade</span>(<span class="num">50</span>)); <span class="comment">// Pass</span>
+<span class="fn">alert</span>(<span class="string">"Marks: 35 → "</span> + <span class="fn">checkGrade</span>(<span class="num">35</span>)); <span class="comment">// Fail</span>
+<span class="fn">alert</span>(<span class="string">"Marks: 80 → "</span> + <span class="fn">checkGrade</span>(<span class="num">80</span>)); <span class="comment">// Pass</span></pre>
+        </div>
+
+        <div class="in-class">
+            <h3>Q2: countDown — Arrow Function with while Loop</h3>
+            <p>Write an arrow function named <code>countDown</code> that accepts parameter <code>n</code> and uses a <code>while</code> loop to print numbers from <code>n</code> down to <code>1</code> using <code>document.write()</code>.</p>
+<pre><span class="keyword">const</span> <span class="fn">countDown</span> = (n) =&gt; {
+    <span class="keyword">while</span> (n &gt;= <span class="num">1</span>) {
+        document.<span class="fn">write</span>(n + <span class="string">"&lt;br&gt;"</span>); <span class="comment">// write number with line break</span>
+        n--;                         <span class="comment">// decrement</span>
+    }
+};
+
+<span class="comment">// Call the function</span>
+<span class="fn">countDown</span>(<span class="num">5</span>);</pre>
+        </div>
+    </div>
+
+    <!-- ─── PRACTICE: OBJECTS ─── -->
+    <div class="card">
+        <h2 class="section-title">📝 Practice Questions — Objects</h2>
+
+        <div class="in-class">
+            <h3>Q1: Student Record System (Factory Function)</h3>
+            <p>Write a factory function <code>createStudent</code> accepting name, rollNumber, and department. Return an object with those properties and a <code>displayInfo()</code> method. Create two student objects and call <code>displayInfo()</code> on each.</p>
+<pre><span class="keyword">function</span> <span class="fn">createStudent</span>(name, rollNumber, department) {
+    <span class="keyword">return</span> {
+        name,
+        rollNumber,
+        department,
+        <span class="fn">displayInfo</span>() {
+            <span class="keyword">return</span> <span class="string">`Name: ${<span class="keyword">this</span>.name}, Roll No: ${<span class="keyword">this</span>.rollNumber}, Department: ${<span class="keyword">this</span>.department}`</span>;
+        }
+    };
+}
+
+<span class="comment">// Creating student objects</span>
+<span class="keyword">const</span> student1 = <span class="fn">createStudent</span>(<span class="string">"Alice"</span>, <span class="num">101</span>, <span class="string">"Computer Science"</span>);
+<span class="keyword">const</span> student2 = <span class="fn">createStudent</span>(<span class="string">"Bob"</span>,   <span class="num">102</span>, <span class="string">"Information Technology"</span>);
+
+console.<span class="fn">log</span>(student1.<span class="fn">displayInfo</span>());
+console.<span class="fn">log</span>(student2.<span class="fn">displayInfo</span>());</pre>
+
+            <div class="note" style="margin-top:12px;">
+                <ul>
+                    <li><code>name</code>, <code>rollNumber</code>, <code>department</code> → are <strong>properties of the object</strong> being returned</li>
+                    <li><code>this</code> refers to <strong>the object itself</strong> when <code>displayInfo()</code> is called</li>
+                    <li>This ensures the method always refers to the <strong>object's own properties</strong>, not the outer function parameters</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="in-class">
+            <h3>Q2: Employee Salary System</h3>
+            <p>Create an <code>employee</code> object, write a <code>calculateNetSalary</code> function (adds 20% allowance), update the basic salary, and display all details with a <code>for...in</code> loop.</p>
+<pre><span class="comment">// Employee object</span>
+<span class="keyword">const</span> employee = {
+    name: <span class="string">"John"</span>,
+    id: <span class="num">5001</span>,
+    basicSalary: <span class="num">30000</span>
+};
+
+<span class="comment">// Function to calculate net salary</span>
+<span class="keyword">function</span> <span class="fn">calculateNetSalary</span>(emp) {
+    <span class="keyword">const</span> allowance = emp.basicSalary * <span class="num">0.20</span>;
+    emp.netSalary = emp.basicSalary + allowance; <span class="comment">// adds new property</span>
+}
+
+<span class="fn">calculateNetSalary</span>(employee);
+
+<span class="comment">// Updating basic salary directly</span>
+employee.basicSalary = employee.basicSalary + <span class="num">5000</span>;
+
+<span class="comment">// Displaying employee details using for...in</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> employee) {
+    console.<span class="fn">log</span>(key + <span class="string">": "</span> + employee[key]);
+}</pre>
+        </div>
+    </div>
+
+    <!-- ─── QUICK REFERENCE ─── -->
+    <div class="card">
+        <h2 class="section-title">📋 Quick Reference Summary</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>Arrow Function</strong>
+                <code>const f = (x) =&gt; x * 2;</code>
+            </div>
+            <div class="box">
+                <strong>Callback</strong>
+                Function passed as argument, called later
+            </div>
+            <div class="box">
+                <strong>setTimeout</strong>
+                <code>setTimeout(fn, ms)</code> — non-blocking delay
+            </div>
+            <div class="box">
+                <strong>Object Literal</strong>
+                <code>const obj = { key: value };</code>
+            </div>
+            <div class="box">
+                <strong>Dot Notation</strong>
+                <code>obj.key</code> — valid identifiers
+            </div>
+            <div class="box">
+                <strong>Bracket Notation</strong>
+                <code>obj["key"]</code> — strings / dynamic
+            </div>
+            <div class="box">
+                <strong>Add Property</strong>
+                <code>obj.newKey = value;</code>
+            </div>
+            <div class="box">
+                <strong>Delete Property</strong>
+                <code>delete obj.key;</code>
+            </div>
+            <div class="box">
+                <strong>Check Existence</strong>
+                <code>"key" in obj</code> → true/false
+            </div>
+            <div class="box">
+                <strong>Method</strong>
+                Function stored inside an object
+            </div>
+            <div class="box">
+                <strong><code>this</code></strong>
+                Refers to the calling object
+            </div>
+            <div class="box">
+                <strong>Factory Function</strong>
+                Function that returns a new object
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 03 - Arrow Functions, Asynchronous JavaScript & Objects • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

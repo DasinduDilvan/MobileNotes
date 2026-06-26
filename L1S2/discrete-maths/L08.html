@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Set Theory · TMS1223 Discrete Mathematics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .subsection-title {
+            color: #2c6e6b;
+            font-size: 1.25em;
+            margin: 20px 0 12px 0;
+            padding-left: 4px;
+            border-left: 3px solid #80c0bc;
+        }
+
+        ul, .styled-list {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li, .styled-list li {
+            margin: 8px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .truth-table {
+            background: #fefaf5;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: monospace;
+            border: 1px solid #dce8e6;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .truth-table table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .truth-table th, .truth-table td {
+            border: 1px solid #cbdcd9;
+            padding: 8px 10px;
+        }
+
+        .truth-table th {
+            background: #e0f0ed;
+            color: #1d5a56;
+        }
+
+        .membership-table {
+            background: #faf8f0;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .membership-table table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .membership-table th, .membership-table td {
+            border: 1px solid #bbb;
+            padding: 6px 8px;
+        }
+
+        .membership-table th {
+            background: #d9e6e3;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+
+        pre {
+            background: #1e1e2f;
+            color: #d4d4d4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+
+        .venn-placeholder {
+            background: #f9f5eb;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/discrete-maths" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+    <h1>🧩 Set Theory</h1>
+    <div class="subtitle">TMS1223 Discrete Mathematics — Foundations of Counting, Relations & Cardinality</div>
+
+    <!-- SECTION 1: Introduction & Basic Definitions -->
+    <div class="card">
+        <div class="section-title">📘 Introduction to Sets</div>
+        <p>A <strong>set</strong> is an unordered collection of distinct objects. The objects are called <strong>elements</strong> (or members). If <em>a</em> belongs to set <em>A</em>, write <code>a ∈ A</code>; otherwise <code>a ∉ A</code>. Sets are fundamental for counting, databases, and programming languages.</p>
+        <div class="note">📌 "Naive set theory" is used here — we focus on practical understanding without formal axioms.</div>
+        <div class="subsection-title">✍️ Describing Sets</div>
+        <div class="two-column">
+            <div class="box"><strong>Roster (Listing) Method</strong><br>
+                <code>S = {a, b, c, d}</code><br>
+                Order irrelevant, repetitions ignored.<br>
+                <code>{1,2,3,...}</code> for patterns.<br>
+                Example: vowels <code>V = {a, e, i, o, u}</code>
+            </div>
+            <div class="box"><strong>Set-Builder Notation</strong><br>
+                <code>S = { x | P(x) }</code><br>
+                Example: <code>O = { x ∈ Z⁺ | x is odd and x<10 }</code><br>
+                Interval: <code>[a,b] = {x | a ≤ x ≤ b}</code>
+            </div>
+        </div>
+        <div class="highlight">✨ <strong>Key sets:</strong> ℕ = {0,1,2,…}, ℤ = integers, ℤ⁺ = positive integers, ℝ = real numbers, ℚ = rationals, ℂ = complex numbers.</div>
+    </div>
+
+    <!-- SECTION 2: Universe, Empty Set, Russell's Paradox -->
+    <div class="card">
+        <div class="section-title">🌌 Universal Set & Empty Set</div>
+        <p><strong>Universal set (U)</strong>: contains everything under consideration (context dependent). <strong>Empty set (∅)</strong>: set with no elements. Note: <code>∅ ≠ {∅}</code> (the latter contains the empty set as an element).</p>
+        <div class="important">⚠️ <strong>Russell's Paradox:</strong> Let S = {x | x ∉ x}. Is S ∈ S? Leads to contradiction. Shows naive set theory has limits, but standard ZFC axioms avoid paradoxes.</div>
+        <div class="note">💈 Barber paradox: A barber shaves all those who do not shave themselves. Does he shave himself? ⇒ logical paradox.</div>
+    </div>
+
+    <!-- SECTION 3: Subsets, Equality, Proper Subsets -->
+    <div class="card">
+        <div class="section-title">📏 Subsets & Set Equality</div>
+        <p><strong>A ⊆ B</strong> (A is subset of B) iff every element of A is also in B: <code>∀x (x∈A → x∈B)</code>.</p>
+        <p><strong>A = B</strong> iff <code>A ⊆ B</code> and <code>B ⊆ A</code>.</p>
+        <p><strong>Proper subset (A ⊂ B)</strong>: A ⊆ B and A ≠ B (∃x∈B with x∉A).</p>
+        <div class="grid">
+            <div class="box"><strong>Theorem 1</strong><br>For any set S: ∅ ⊆ S and S ⊆ S. Every nonempty set has at least two subsets (∅ and itself).</div>
+            <div class="box"><strong>Counterexample for non-subset</strong><br>To show A ⊄ B, find x∈A with x∉B.</div>
+        </div>
+        <div class="highlight">📐 <strong>Example:</strong> Set of airline flights from London to New Delhi ⊂ set of all flights (including nonstop). The set of flying squirrels ⊂ set of living creatures that can fly.</div>
+    </div>
+
+    <!-- SECTION 4: Cardinality, Power Sets -->
+    <div class="card">
+        <div class="section-title">🔢 Cardinality & Power Sets</div>
+        <p><strong>Cardinality |A|</strong> = number of distinct elements in a finite set. Infinite sets have infinite cardinality.<br> 
+        Examples: |∅| = 0, |{a,b,c}| = 3, |{{∅}}| = 1, |ℤ| infinite.</p>
+        <div class="important">⭐ <strong>Power set P(A)</strong> = set of all subsets of A. If |A| = n, then |P(A)| = 2ⁿ.<br>
+        Example: A = {a,b} → P(A) = {∅, {a}, {b}, {a,b}}.
+        </div>
+        <div class="two-column">
+            <div class="box"><strong>Power set examples</strong><br>{c} → {∅, {c}}<br>{c,d} → {∅,{c},{d},{c,d}}<br>{0,{0}} → {∅,{0},{{0}},{0,{0}}}</div>
+            <div class="box"><strong>Ordered n-tuple</strong><br>(a₁,a₂,…,aₙ) ordered; equality iff each component matches.<br>Ordered pair (a,b) = (c,d) ⇔ a=c and b=d.</div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: Cartesian Product & Relations -->
+    <div class="card">
+        <div class="section-title">✖️ Cartesian Product & Relations</div>
+        <p><strong>Cartesian product</strong> A × B = {(a,b) | a∈A ∧ b∈B}. Generalization: A₁×A₂×…×Aₙ = {(a₁,…,aₙ) | aᵢ∈Aᵢ}.</p>
+        <div class="two-column">
+            <div class="box"><strong>Example</strong><br>A={a,b}, B={1,2,3} →<br>A×B = {(a,1),(a,2),(a,3),(b,1),(b,2),(b,3)}</div>
+            <div class="box"><strong>Relation</strong><br>A subset R ⊆ A×B is a <strong>relation</strong> from A to B. Essential in databases & graph theory.</div>
+        </div>
+        <p>A×B ≠ B×A unless A=B or one is empty. Cartesian product of 3 sets: A×B×C = triples.</p>
+        <div class="note">🌐 Example: A={0,1}, B={1,2}, C={0,1,2} → A×B×C has 12 ordered triples (0,1,0), …, (1,2,2).</div>
+    </div>
+
+    <!-- SECTION 6: Set Operations (Union, Intersection, Complement, Difference) -->
+    <div class="card">
+        <div class="section-title">⚙️ Set Operations</div>
+        <div class="two-column">
+            <div class="box"><strong>Union (A ∪ B)</strong><br>{x | x∈A ∨ x∈B}<br>Example: {1,2,3} ∪ {3,4,5} = {1,2,3,4,5}</div>
+            <div class="box"><strong>Intersection (A ∩ B)</strong><br>{x | x∈A ∧ x∈B}<br>Disjoint if A∩B = ∅.<br>Example: {1,2,3} ∩ {3,4,5} = {3}</div>
+            <div class="box"><strong>Complement (Ā or Aᶜ)</strong><br>U − A = {x∈U | x∉A}. Example: U=positive integers<100, complement of {x|x>70} is {x|x≤70}.</div>
+            <div class="box"><strong>Difference (A − B)</strong><br>{x | x∈A ∧ x∉B} = A ∩ B̅.<br>Example: {1,2,3} − {3,4} = {1,2}.</div>
+        </div>
+        <div class="venn-placeholder">🎨 Venn diagrams illustrate union, intersection, complement, disjoint sets.</div>
+    </div>
+
+    <!-- SECTION 7: Set Identities (De Morgan, Distributive) + Membership Table -->
+    <div class="card">
+        <div class="section-title">🔐 Set Identities & Proof Techniques</div>
+        <p><strong>Methods to prove set identities:</strong> (1) mutual subset inclusion, (2) set-builder + propositional logic, (3) membership tables.</p>
+        <div class="important">📜 <strong>Second De Morgan Law:</strong> <code>Ā ∩ B̅ = A ∪ B</code> &nbsp; and &nbsp; <code>A ∩ B = Ā ∪ B̅</code>.</div>
+        <div class="highlight">
+            <strong>Proof of one De Morgan law (subset method):</strong><br>
+            Show <code>Ā ∩ B̅ ⊆ A ∪ B</code>: let x∈Ā∩B̅ ⇒ x∉A and x∉B ⇒ x∉(A∪B) ⇒ x∈Ā∪B̅. Reverse inclusion similarly.
+        </div>
+        <div class="subsection-title">Membership Table Example (Distributive Law)</div>
+        <div class="membership-table">
+            <table>
+                <thead><tr><th>A</th><th>B</th><th>C</th><th>B∪C</th><th>A∩(B∪C)</th><th>A∩B</th><th>A∩C</th><th>(A∩B)∪(A∩C)</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                </tbody>
+            </table>
+            <p style="margin-top:8px;">Columns for <code>A∩(B∪C)</code> and <code>(A∩B)∪(A∩C)</code> are identical ⇒ <strong>A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)</strong>. </p>
+        </div>
+        <div class="note">Other key identities: Idempotent, Commutative, Associative, Absorption, Domination, Complement laws.</div>
+    </div>
+
+    <!-- SECTION 8: Quantifiers & Truth Sets -->
+    <div class="card">
+        <div class="section-title">🎯 Truth Sets of Predicates</div>
+        <p>For a predicate P(x) with domain D, the <strong>truth set</strong> is {x∈D | P(x)}. Quantifiers relate to set operations: ∀xP(x) true iff truth set = D; ∃xP(x) true iff truth set ≠ ∅.</p>
+        <div class="two-column">
+            <div class="box"><strong>Example</strong><br>Domain ℤ, P(x): |x|=1 → truth set {-1,1}.<br>Q(x): x²=2 → truth set ∅.<br>R(x): |x|=x → truth set ℕ (nonnegatives).</div>
+            <div class="box"><strong>Use in proofs</strong><br>Set inclusion ↔ universal quantifier: A⊆B ⇔ ∀x(x∈A → x∈B).</div>
+        </div>
+    </div>
+
+    <!-- SECTION 9: Generalized Unions & Intersections -->
+    <div class="card">
+        <div class="section-title">🔁 Generalized Unions & Intersections</div>
+        <p>For indexed collection {A₁, A₂, …, Aₙ}: <code>⋃_{i=1}^{n} Aᵢ = A₁∪A₂∪…∪Aₙ</code> ; <code>⋂_{i=1}^{n} Aᵢ = A₁∩A₂∩…∩Aₙ</code>. Union and intersection are associative/commutative.</p>
+        <p>Example: Aᵢ = {i, i+1, i+2, …} then ⋃Aᵢ = ℕ, ⋂Aᵢ = ∅.</p>
+    </div>
+
+    <!-- SECTION 10: Cardinality, Countability, One-to-One & Onto -->
+    <div class="card">
+        <div class="section-title">📊 Cardinality & Countable Sets</div>
+        <p><strong>|A| = |B|</strong> if there exists a bijection (one‑to‑one correspondence) between A and B.<br>
+        <strong>|A| ≤ |B|</strong> if there exists an injection from A to B.<br>
+        A set is <strong>countable</strong> if it is finite or has the same cardinality as ℤ⁺ (positive integers). Countably infinite sets have cardinality ℵ₀ (aleph‑null). Uncountable: ℝ (real numbers).</p>
+        <div class="highlight">
+            <strong>Examples of countable sets:</strong><br>
+            • ℤ (integers): list 0,1,-1,2,-2,3,-3,… → bijection<br>
+            • Odd positive integers: f(n)=2n−1 is a bijection from ℤ⁺ to odd positives.<br>
+            • ℚ (rationals) is countable (diagonal argument).
+        </div>
+        <div class="note">📌 <strong>One-to-one function (injective):</strong> f(a)=f(b) ⇒ a=b. Example: f(x)=x+1 injective. f(x)=x² (over ℤ) not injective.<br>
+        <strong>Onto (surjective):</strong> every element in codomain has a preimage.<br>
+        Bijection = both injective and surjective → used for cardinality comparisons.</div>
+        <p><strong>Computability:</strong> A function is computable if some program computes its values; non‑computable functions exist (e.g., halting problem).</p>
+    </div>
+
+    <!-- SECTION 11: Classic Countability Proof -->
+    <div class="card">
+        <div class="section-title">📝 Proving Countability: Odd Positive Integers</div>
+        <p>Show that the set O = {1,3,5,7,…} is countable. Define f: ℤ⁺ → O by f(n)=2n−1.<br>
+        • <strong>Injective:</strong> f(n)=f(m) ⇒ 2n−1=2m−1 ⇒ n=m.<br>
+        • <strong>Surjective:</strong> for any odd t, t=2k−1 ⇒ t=f(k). Hence f is bijection ⇒ |O| = |ℤ⁺| ⇒ countable.</p>
+        <div class="important">✨ This matches the definition: an infinite set is countable iff its elements can be listed as a sequence (a₁,a₂,a₃,…).</div>
+    </div>
+
+    <!-- SECTION 12: Summary of Key Notations -->
+    <div class="card">
+        <div class="section-title">📖 Quick Reference – Symbols & Key Facts</div>
+        <div class="grid">
+            <div class="box">∅ &nbsp; empty set<br>∈, ∉ &nbsp; element, not element<br>⊆ &nbsp; subset<br>⊂ &nbsp; proper subset<br>|A| &nbsp; cardinality</div>
+            <div class="box">ℙ(A) &nbsp; power set<br>Aᶜ, Ā &nbsp; complement<br>A×B &nbsp; Cartesian product<br>∪, ∩ &nbsp; union, intersection<br>− &nbsp; set difference</div>
+            <div class="box">ℕ, ℤ, ℚ, ℝ, ℂ standard sets<br>Countable: ℤ, ℚ, ℕ<br>Uncountable: ℝ, (0,1)<br>|ℙ(A)| = 2^{|A|}</div>
+        </div>
+        <div class="note">📘 <strong>Theorem 1 reminder:</strong> For any set S, ∅ ⊆ S and S ⊆ S. The empty set is subset of every set.</div>
+    </div>
+
+    <!-- SECTION 13: Historical & Further Remarks -->
+    <div class="card">
+        <div class="section-title">🏛️ Historical Notes</div>
+        <p>∅ introduced by empty set symbol; Venn diagrams by John Venn (1834‑1923); Russell’s paradox (Bertrand Russell, 1872‑1970) showed limitations of naive set theory, leading to axiomatic set theories (ZFC). Descartes (1596‑1650) gave Cartesian coordinates; Cartesian product is named after him. The concept of countability was developed by Georg Cantor (late 19th century), who proved ℝ uncountable.</p>
+        <div class="highlight">💡 Understanding sets is essential for probability, database theory, combinatorics, and logic.</div>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 08 - Set Theory · TMS1223 Discrete Mathematics · BY_#D1
+    </div>
+</div>
+</body>
+</html>

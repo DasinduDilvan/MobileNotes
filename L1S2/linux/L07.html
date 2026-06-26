@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, print-scale: 1.0">
+    <title>Study Notes: AWK & sed – Text Processing in Unix/Linux</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 24px;
+            line-height: 1.6;
+            color: #1e3a3a;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 8px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 32px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            margin: 24px 0;
+            border-radius: 18px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.1s;
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.55em;
+            font-weight: 600;
+        }
+
+        ul {
+            list-style-position: outside;
+            line-height: 1.7;
+            margin-left: 1.6rem;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 1.8rem;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 18px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 18px;
+            border-radius: 16px;
+            border-left: 4px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.08em;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 16px 22px;
+            border-radius: 14px;
+            border-left: 4px solid #f0ad4e;
+            margin: 20px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 16px 22px;
+            border-radius: 14px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 16px 22px;
+            border-radius: 14px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+        }
+
+        .terminal {
+            background: #1e2a2a;
+            color: #e2e8e8;
+            padding: 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', 'Fira Code', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 18px 0;
+            line-height: 1.5;
+        }
+
+        code {
+            background: #edf2f1;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #b9493c;
+        }
+
+        pre {
+            background: #1e2a2a;
+            color: #e2e8e8;
+            padding: 18px;
+            border-radius: 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            color: #62807e;
+            margin-top: 50px;
+            padding: 20px 10px;
+            font-size: 0.9em;
+            border-top: 1px solid #cde3e0;
+        }
+
+        @media print {
+            body { background: white; padding: 0.2in; }
+            .card { box-shadow: none; border: 1px solid #cfdfdd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+            h1, .section-title { color: black; }
+        }
+
+        @media (max-width: 680px) {
+            body { padding: 14px; }
+            .card { padding: 20px; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+        hr.dashed {
+            border: none;
+            border-top: 1px dashed #cde0dd;
+            margin: 16px 0;
+        }
+        .inline-code {
+            background: #edf2f1;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/linux" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+    <h1>📜 AWK & sed — Text Processing Power Tools</h1>
+    <div class="subtitle">Pattern scanning · Stream editing · Data extraction · Automation</div>
+
+    <!-- AWK Introduction & Key Features -->
+    <div class="card">
+        <div class="section-title">🔍 AWK — Overview & Philosophy</div>
+        <p><strong>AWK</strong> (Aho, Weinberger, Kernighan) is a programming language for structured data manipulation and formatted reports. It processes text line by line, matches patterns, and executes associated actions.</p>
+        <div class="grid">
+            <div class="box"><strong>📁 Records & Fields</strong><br>Views text as records (lines) and fields (columns). Splits by whitespace by default.</div>
+            <div class="box"><strong>🔧 Programming features</strong><br>Variables, conditionals, loops, arithmetic & string operators.</div>
+            <div class="box"><strong>📄 Formatted reports</strong><br>Generate structured output with <code>BEGIN</code> & <code>END</code> blocks.</div>
+        </div>
+        <div class="note">
+            ⚙️ AWK reads from file(s) or stdin, outputs to stdout. Does <strong>not</strong> work with binary files.
+        </div>
+    </div>
+
+    <!-- AWK Syntax + Working Methodology -->
+    <div class="card">
+        <div class="section-title">⚙️ AWK Syntax & Workflow</div>
+        <div class="terminal">
+            awk '/search pattern1/ {Actions} /pattern2/ {Actions}' inputfile
+        </div>
+        <ul>
+            <li><strong>Pattern:</strong> regular expression; <strong>Actions:</strong> statements inside <code>{ }</code>.</li>
+            <li>Multiple pattern-action pairs allowed, separated by newline.</li>
+            <li><strong>Default action:</strong> <code>{ print }</code> → prints matching lines if no action given.</li>
+            <li>If pattern missing → action applied to every line.</li>
+            <li>Statements delimited by semicolon (<code>;</code>).</li>
+        </ul>
+        <div class="highlight">
+            📌 <strong>Working methodology:</strong> AWK reads input one line at a time. For each line, checks patterns in order; if pattern matches, executes corresponding action. If no pattern matches and no action defined → default print.
+        </div>
+    </div>
+
+    <!-- AWK Practical Examples -->
+    <div class="card">
+        <div class="section-title">📂 AWK Examples — employee.txt demonstration</div>
+        <p>Sample data (<code>employee.txt</code>):<br>
+        <code>100 Nihal Manager Sales $5,000</code><br>
+        <code>200 Jagath Developer Technology $5,500</code><br>
+        <code>300 Sanjaya Sysadmin Technology $7,000</code><br>
+        <code>400 Nishadi Manager Marketing $9,500</code><br>
+        <code>500 Ranga DBA Technology $6,000</code>
+        </p>
+        <div class="two-column">
+            <div>
+                <strong>Print all lines</strong>
+                <div class="terminal">awk '{print;}' employee.txt</div>
+                <strong>Pattern match (Nihal or Nishadi)</strong>
+                <div class="terminal">awk '/Nihal/ &gt; /Nishadi/' employee.txt</div>
+            </div>
+            <div>
+                <strong>Print specific fields</strong>
+                <div class="terminal">awk '{print $2, $5;}' employee.txt</div>
+                <div class="terminal">awk '{print $2, $NF;}' employee.txt  # $NF = last field</div>
+            </div>
+        </div>
+        <div class="important">
+            💡 Built-in variables: <code>$0</code> (whole line), <code>$1,$2,...</code> (fields), <code>NF</code> (number of fields), <code>NR</code> (record number), <code>FS</code> (field separator).
+        </div>
+    </div>
+
+    <!-- BEGIN & END Patterns -->
+    <div class="card">
+        <div class="section-title">🏁 BEGIN and END — initialization & finalization</div>
+        <p><code>BEGIN</code> block executes <strong>before</strong> reading input. <code>END</code> block runs <strong>after</strong> all lines processed.</p>
+        <div class="terminal">
+            awk 'BEGIN { print "Header: Name\tSalary" } { print $2, $5 } END { print "Report complete" }' employee.txt
+        </div>
+        <div class="highlight">
+            📊 <strong>Useful one-liners:</strong><br>
+            • Employees with ID &gt; 200: <code>awk '$1 &gt; 200' employee.txt</code><br>
+            • Technology department: <code>awk '$4 ~ /Technology/' employee.txt</code><br>
+            • Count employees in Technology: <br><code>awk 'BEGIN {c=0} $4 ~ /Technology/ {c++} END {print "Tech count =", c}' employee.txt</code>
+        </div>
+    </div>
+
+    <!-- sed Introduction + Syntax -->
+    <div class="card">
+        <div class="section-title">✂️ sed — Stream Editor Introduction</div>
+        <p><strong>sed (Stream EDitor)</strong> performs text transformations: substitution, deletion, insertion, search & replace, without opening files interactively. Supports regular expressions.</p>
+        <div class="terminal">
+            sed OPTIONS... [SCRIPT] [INPUTFILE...]
+        </div>
+        <div class="note">
+            🧠 Most common command: <code>s</code> (substitute). Changes occurrences of a regex into a replacement string.
+        </div>
+        <p><strong>Example file:</strong> <code>Unixos.txt</code> containing lines with "unix" string.</p>
+    </div>
+
+    <!-- sed substitution flags & examples -->
+    <div class="card">
+        <div class="section-title">🔄 sed Substitution — flags & advanced usage</div>
+        <div class="grid">
+            <div class="box"><strong>Basic replace</strong><br><code>sed 's/unix/linux/' Unixos.txt</code><br>Replaces first occurrence per line.</div>
+            <div class="box"><strong>Replace Nth occurrence</strong><br><code>sed 's/unix/linux/2'</code><br>Changes second match only.</div>
+            <div class="box"><strong>Global replacement</strong><br><code>sed 's/unix/linux/g'</code><br>All occurrences on each line.</div>
+            <div class="box"><strong>Specific line number</strong><br><code>sed '3 s/unix/linux/'</code><br>Affects only line 3.</div>
+        </div>
+        <div class="important">
+            🖨️ <strong>/p flag (print):</strong> <code>sed 's/unix/linux/p'</code> prints replaced line twice (use <code>-n</code> to suppress default output).<br>
+            📍 <strong>Range of lines:</strong> <code>sed '1,3 s/unix/linux/'</code> applies substitution to lines 1 through 3.
+        </div>
+    </div>
+
+    <!-- sed deletion, blank lines, general manipulations -->
+    <div class="card">
+        <div class="section-title">🗑️ sed deletion & line manipulation</div>
+        <div class="two-column">
+            <div>
+                <strong>Delete a specific line</strong><br>
+                <code>sed '5d' Unixos.txt</code><br>
+                <strong>Delete last line</strong><br>
+                <code>sed '$d' Unixos.txt</code><br>
+                <strong>Delete from nth to end</strong><br>
+                <code>sed '12,$d' file</code>
+            </div>
+            <div>
+                <strong>Delete pattern-matching lines</strong><br>
+                <code>sed '/abc/d' Unixos.txt</code><br>
+                <strong>Add blank line after each line</strong><br>
+                <code>sed G Unixos.txt</code><br>
+                <strong>Add double space</strong> (sed G inserts newline)
+            </div>
+        </div>
+        <div class="highlight">
+            🧹 <strong>Practical deletion:</strong> <code>sed '/^$/d'</code> removes empty lines. <code>sed '/Technology/d'</code> removes lines containing "Technology".
+        </div>
+    </div>
+
+    <!-- Universities & more sed examples -->
+    <div class="card">
+        <div class="section-title">🏛️ sed with text files — Universities & system files</div>
+        <p><strong>Universities.txt</strong> (Sri Lankan Universities):<br>
+        <code>Ruhuna University<br>Colombo University<br>Moratuwa University<br>Kelaniya University</code><br>
+        Use sed to rename, edit, or delete entries.</p>
+        <div class="terminal">
+            sed 's/University/Univ./' Universities.txt     # replace first occurrence per line<br>
+            sed '2,4 s/University/U/g' Universities.txt    # global on lines 2-4
+        </div>
+        <div class="note">
+            📁 sed works directly on streams; use <code>-i</code> flag for in‑place editing (e.g., <code>sed -i 's/old/new/g' file.txt</code>).
+        </div>
+    </div>
+
+    <!-- Summary comparison: AWK vs sed -->
+    <div class="card">
+        <div class="section-title">📊 AWK vs sed – When to use which?</div>
+        <div class="two-column">
+            <div>
+                <strong>🎯 AWK</strong>
+                <ul>
+                    <li>Field-oriented data processing</li>
+                    <li>Complex report formatting</li>
+                    <li>Arithmetic / conditionals / loops</li>
+                    <li>Numeric and string computations</li>
+                </ul>
+            </div>
+            <div>
+                <strong>✂️ sed</strong>
+                <ul>
+                    <li>Stream editing, text substitution</li>
+                    <li>Simple find & replace</li>
+                    <li>Line deletion, insertion, search</li>
+                    <li>Faster for pattern-based replacements</li>
+                </ul>
+            </div>
+        </div>
+        <div class="important">
+            🧠 Both support regular expressions. AWK is more like a programming language; sed excels at scripted edits.
+        </div>
+    </div>
+
+    <!-- Additional AWK patterns & built-ins -->
+    <div class="card">
+        <div class="section-title">🔧 AWK advanced patterns & built-in variables</div>
+        <ul>
+            <li><strong>NR</strong> (Number of Records) → <code>awk 'NR==3 {print $0}'</code> print only line 3</li>
+            <li><strong>NF</strong> (Number of Fields) → <code>awk '{print $NF}'</code> last field each line</li>
+            <li><strong>FS</strong> (Field Separator) → <code>awk -F':' '{print $1}' /etc/passwd</code></li>
+            <li>Multiple patterns: <code>awk '/Manager/ {print $2} /DBA/ {print $2}' emp.txt</code></li>
+            <li>Arithmetic: <code>awk '$5 &gt; 6000 {print $1, $2}' employee.txt</code></li>
+        </ul>
+        <div class="highlight">
+            📌 <strong>BEGIN/END with counters:</strong> <code>awk 'BEGIN {sum=0} {sum+=$5} END {print "Total salary:", sum}' employee.txt</code>
+        </div>
+    </div>
+
+    <!-- sed additional commands: insert, append, change -->
+    <div class="card">
+        <div class="section-title">✍️ sed extended commands (insert / append / change)</div>
+        <div class="two-column">
+            <div>
+                <strong>Insert line before</strong><br>
+                <code>sed '2i\New line before line 2' file</code><br>
+                <strong>Append after line</strong><br>
+                <code>sed '3a\Appended after line 3' file</code>
+            </div>
+            <div>
+                <strong>Change line</strong><br>
+                <code>sed '4c\Replace entire line 4' file</code><br>
+                <strong>Multiple commands with -e</strong><br>
+                <code>sed -e 's/unix/linux/' -e '/os/d' file</code>
+            </div>
+        </div>
+        <div class="note">
+            💡 Use <code>sed -n 's/pattern/replacement/p'</code> to print <strong>only</strong> replaced lines, avoiding duplicate output.
+        </div>
+    </div>
+
+    <!-- Exercise & quick reference -->
+    <div class="card">
+        <div class="section-title">📝 Hands-on exercises & quick reference</div>
+        <ul>
+            <li>From <code>employee.txt</code>, print names and salaries of employees from <em>Technology</em> department using AWK.</li>
+            <li>Use <strong>sed</strong> to replace all occurrences of "Manager" with "Lead" in the file.</li>
+            <li>Delete lines 2 to 4 from <code>Universities.txt</code> with sed.</li>
+            <li>Find the average salary from employee.txt using AWK (fields: $5).</li>
+            <li>Use sed global replace to change "unix" to "GNU/Linux" globally, then save changes to new file.</li>
+        </ul>
+        <div class="terminal">
+            # AWK average salary example<br>
+            awk '{sum+=$5} END {print "Avg =", sum/NR}' employee.txt<br>
+            # sed in-place backup<br>
+            sed -i.bak 's/unix/linux/g' Unixos.txt
+        </div>
+    </div>
+
+    <!-- Final summary card -->
+    <div class="card">
+        <div class="section-title">📖 Summary – AWK & sed at a glance</div>
+        <ul>
+            <li><strong>AWK</strong> ideal for structured data, column‑based reports, field arithmetic, conditionals. BEGIN/END add headers/footers.</li>
+            <li><strong>sed</strong> perfect for quick substitutions, deletions, text transformations in scripts without opening files.</li>
+            <li>Both use regular expressions, can be combined in shell pipelines: <code>cat file | awk '{...}' | sed 's/.../.../'</code>.</li>
+            <li>Common AWK variables: <code>NR, NF, $0, $1...$NF, FS, OFS</code>.</li>
+            <li>Common sed flags: <code>s///g</code> (global), <code>p</code> (print), <code>d</code> (delete), <code>-i</code> (in‑place).</li>
+            <li>Master these tools for efficient log analysis, configuration management, and report generation on Unix/Linux.</li>
+        </ul>
+        <div class="important">
+            🧪 <strong>Pro tip:</strong> Learn to combine AWK & sed with grep for powerful one-liners — indispensable for sysadmins and developers.
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        🌱 Lecture XX - AWK and sed: Text Processing & Stream Editing • BY_#D1
+    </div>
+</div>
+</body>
+</html>

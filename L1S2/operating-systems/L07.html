@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, print-scale: 1.0">
+    <title>Study Notes: Deadlocks — Operating Systems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #1e3a3a;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 16px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.1s ease;
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        ul {
+            list-style-position: outside;
+            line-height: 1.7;
+            margin-left: 1.4rem;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 1.8rem;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 16px;
+            border-radius: 14px;
+            border-left: 4px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #f0ad4e;
+            margin: 18px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #4caf50;
+            margin: 18px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #2196f3;
+            margin: 18px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #e91e63;
+            margin: 18px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 16px 0;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin: 16px 0;
+        }
+
+        code {
+            background: #edf2f1;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #b9493c;
+        }
+
+        pre {
+            background: #1e2a2a;
+            color: #e2e8e8;
+            padding: 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .model-diagram {
+            text-align: center;
+            padding: 18px;
+            background: #fafcfb;
+            border-radius: 16px;
+            margin: 16px 0;
+            font-size: 0.95em;
+            border: 1px solid #dcebe9;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .footer {
+            text-align: center;
+            color: #62807e;
+            margin-top: 50px;
+            padding: 20px 10px;
+            font-size: 0.9em;
+            border-top: 1px solid #cde3e0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0.2in;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #cfdfdd;
+                page-break-inside: avoid;
+            }
+            .footer {
+                page-break-before: avoid;
+            }
+            h1, .section-title {
+                color: black;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .card { padding: 18px; }
+            h1 { font-size: 1.8em; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+
+        hr.dashed {
+            border: none;
+            border-top: 1px dashed #cde0dd;
+            margin: 12px 0;
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/operating-systems" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+    <h1>📘 Deadlocks in Operating Systems</h1>
+    <div class="subtitle">Theory & Core Concepts: Prevention, Avoidance, Detection, Recovery</div>
+
+    <!-- Bridge Crossing & System Model -->
+    <div class="card">
+        <div class="section-title">🚦 System Model & Resource Essentials</div>
+        <p>A <strong>deadlock</strong> occurs when every process in a set is waiting for an event that only another process in the set can cause. System consists of finite resources (CPU cycles, memory, I/O devices) with <em>instances</em>. Each resource type <strong>R<sub>i</sub></strong> has <strong>W<sub>i</sub></strong> instances.</p>
+        <div class="highlight">
+            <strong>📌 Bridge crossing analogy:</strong> Traffic one direction; each bridge section = resource. Deadlock resolved by backing up (preemption). Starvation possible. Most OSs ignore deadlocks (assume rare).
+        </div>
+        <p><strong>Resource utilization cycle:</strong> <code>request → use → release</code>. Example: 3 CD-RW drives, each process holds one and requests another → circular wait → deadlock.</p>
+    </div>
+
+    <!-- Four Necessary Conditions -->
+    <div class="card">
+        <div class="section-title">⚙️ Deadlock Characterization (4 Necessary Conditions)</div>
+        <p>All four conditions must hold <strong>simultaneously</strong> for deadlock to exist:</p>
+        <div class="grid">
+            <div class="box"><strong>Mutual exclusion</strong><br>Only one process can use a resource at a time (non-sharable).</div>
+            <div class="box"><strong>Hold and wait</strong><br>Process holds at least one resource while waiting for additional resources held by others.</div>
+            <div class="box"><strong>No preemption</strong><br>Resources released only voluntarily by the process holding them.</div>
+            <div class="box"><strong>Circular wait</strong><br>Set {P₀, P₁,…, Pₙ} where each Pᵢ waits for resource held by Pᵢ₊₁ (mod n).</div>
+        </div>
+    </div>
+
+    <!-- Resource Allocation Graph (RAG) & wait-for -->
+    <div class="card">
+        <div class="section-title">📊 Resource-Allocation Graph (RAG)</div>
+        <p><strong>Vertices:</strong> Processes <code>P = {P₁..Pₙ}</code> and Resource types <code>R = {R₁..Rₘ}</code>. <strong>Edges:</strong> Request edge Pᵢ → Rⱼ (process requests instance). Assignment edge Rⱼ → Pᵢ (resource assigned).</p>
+        <div class="two-column">
+            <div class="model-diagram">
+                <strong>🔵 Graph facts</strong><br>
+                • No cycle → no deadlock.<br>
+                • Cycle + single instance per resource → deadlock.<br>
+                • Cycle + multiple instances → possible deadlock.
+            </div>
+            <div class="model-diagram">
+                <strong>🔄 Wait-for Graph</strong><br>
+                Derived from RAG by collapsing resources. Vertices = processes; edge Pᵢ → Pⱼ means Pᵢ waiting for Pⱼ. Cycle → deadlock (single-instance resources).
+            </div>
+        </div>
+        <div class="note">
+            📌 <strong>Example with no deadlock despite cycle:</strong> If P₄ holds R₂ and may release it, then P₃ can acquire → cycle but no deadlock (multiple instances).
+        </div>
+    </div>
+
+    <!-- Methods for handling deadlocks -->
+    <div class="card">
+        <div class="section-title">🛠️ Methods for Handling Deadlocks</div>
+        <ul>
+            <li><strong>Deadlock prevention:</strong> Negate at least one necessary condition.</li>
+            <li><strong>Deadlock avoidance:</strong> Use additional a priori info (Banker's algorithm / RAG with claim edges).</li>
+            <li><strong>Deadlock detection & recovery:</strong> Allow deadlock, then detect and recover.</li>
+            <li><strong>Ignore deadlocks:</strong> Used by UNIX, most OSs; assume rare, cost of prevention high.</li>
+        </ul>
+    </div>
+
+    <!-- Deadlock Prevention (detailed) -->
+    <div class="card">
+        <div class="section-title">🛡️ Deadlock Prevention</div>
+        <div class="grid">
+            <div class="box"><strong>💎 Mutual Exclusion</strong><br>Not required for sharable resources (read-only files). Must hold for non-sharable.</div>
+            <div class="box"><strong>🔄 Hold and Wait</strong><br>Request all resources before execution OR request only when holding none. Low utilization, starvation possible.</div>
+            <div class="box"><strong>⚡ No Preemption</strong><br>If a request cannot be granted, release all held resources. Preempted resources added to waiting list.</div>
+            <div class="box"><strong>🔁 Circular Wait</strong><br>Impose total ordering of resource types. Process requests resources in increasing order.</div>
+        </div>
+        <div class="highlight">
+            <strong>Circular wait example ordering:</strong> Resources ordered (R1, R2, R3, R4). Process can only request R1 then R2 then R3 … sequence prevents cycles.
+        </div>
+    </div>
+
+    <!-- Deadlock Avoidance + Safe State + Banker's intro -->
+    <div class="card">
+        <div class="section-title">🧠 Deadlock Avoidance & Safe State</div>
+        <p>Requires <em>a priori</em> knowledge: each process declares <strong>maximum needs</strong>. System dynamically examines resource-allocation state (available, allocated, max demands) to avoid circular-wait.</p>
+        <div class="important">
+            <strong>✅ Safe state:</strong> A sequence &lt;P₁, P₂, …, Pₙ&gt; exists such that each process’s remaining needs can be satisfied by currently available + resources held by earlier processes. <br>
+            <strong>Safe state → no deadlock.</strong> Unsafe state → may lead to deadlock. Avoidance ensures system never enters unsafe state.
+        </div>
+        <div class="two-column">
+            <div><strong>Single instance per resource:</strong> Use <strong>Resource-Allocation Graph with claim edges</strong> (dashed line = future request). Grant only if conversion to assignment edge does <strong>not</strong> create cycle.</div>
+            <div><strong>Multiple instances:</strong> Use <strong>Banker's Algorithm</strong> (Dijkstra).</div>
+        </div>
+    </div>
+
+    <!-- Banker's Algorithm detailed + safety algorithm -->
+    <div class="card">
+        <div class="section-title">🏦 Banker's Algorithm – Avoidance for Multiple Instances</div>
+        <p><strong>Data structures:</strong> Available (vector length m), Max (n×m), Allocation (n×m), Need = Max – Allocation.<br>
+        Safety algorithm: find process with Need ≤ Available, then simulate release (Available += Allocation), repeat. If all Finish[i]=true → safe state.</p>
+        <div class="note">
+            <strong>Resource-request algorithm (Request<sub>i</sub>):</strong><br>
+            1. If Request ≤ Need<sub>i</sub> → proceed else error.<br>
+            2. If Request ≤ Available → step 3, else wait.<br>
+            3. Pretend allocation: Available -= Request; Allocation += Request; Need -= Request.<br>
+            4. Run safety algorithm. If safe → allocate, else restore state and process waits.
+        </div>
+        <div class="model-diagram">
+            📌 <strong>Classic example (10 A, 5 B, 7 C):</strong> Safe sequence &lt;P₁, P₃, P₄, P₂, P₀&gt; satisfies criteria. (Max – Allocation matrix yields feasible order).
+        </div>
+        <pre>
+System snapshot T₀:
+        Allocation   Max      Available
+P0:     0 1 0       7 5 3    3 3 2
+P1:     2 0 0       3 2 2
+P2:     3 0 2       9 0 2
+P3:     2 1 1       2 2 2
+P4:     0 0 2       4 3 3
+→ Need = Max-Alloc. Sequence verified.</pre>
+    </div>
+
+    <!-- Deadlock Detection (single + multiple instances) -->
+    <div class="card">
+        <div class="section-title">🔍 Deadlock Detection</div>
+        <p><strong>Single instance per resource:</strong> Maintain wait-for graph; cycle detection O(n²). Periodically search for cycle.</p>
+        <p><strong>Multiple instances:</strong> detection algorithm similar to safety but uses <strong>Request</strong> matrix (current pending requests).</p>
+        <div class="important">
+            <strong>Detection algorithm steps:</strong><br>
+            • Work = Available; Finish[i] = false if Allocation[i] ≠ 0, else true.<br>
+            • Find i: Finish[i]==false and Requestᵢ ≤ Work. If found: Work = Work + Allocationᵢ, Finish[i]=true.<br>
+            • If Finish[i]==false for any i → deadlock exists; Pᵢ deadlocked.<br>
+            Complexity: O(m × n²).
+        </div>
+        <div class="warning">
+            ⚠️ <strong>Example:</strong> At time T₀, detection may find no deadlock (sequence P₀, P₂, P₃, P₁, P₄). Later, P₂ requests extra C → deadlock among P₁, P₂, P₃, P₄.
+        </div>
+    </div>
+
+    <!-- Recovery from deadlock -->
+    <div class="card">
+        <div class="section-title">🔄 Recovery from Deadlock</div>
+        <div class="two-column">
+            <div class="box"><strong>Process Termination</strong><br>
+                • Abort all deadlocked processes.<br>
+                • Abort one at a time until cycle eliminated.<br>
+                Selection criteria: priority, computation time, resources used, interactive/batch.
+            </div>
+            <div class="box"><strong>Resource Preemption</strong><br>
+                • Select victim (minimize cost).<br>
+                • Rollback to safe state / restart process.<br>
+                • Starvation: include number of rollbacks in cost factor.
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise: banker's algorithm safe state sequences -->
+    <div class="card">
+        <div class="section-title">✍️ Exercise – Banker's Safe State Verification</div>
+        <p>System snapshot: processes P1..P6, resources R1,R2,R3. Resource vector (5,4,3). Current allocation & max demand given. Need to compute Need matrix, available, and evaluate sequences.</p>
+        <div class="grid">
+            <div class="box"><strong>Current Allocation</strong><br>P1: (0,1,0) ; P2: (0,1,1) ; P3: (3,1,1); P4: (2,0,0); P5: (0,0,0); P6: (0,1,0)</div>
+            <div class="box"><strong>Maximum Demand</strong><br>P1: (1,1,2); P2: (1,2,3); P3: (3,1,1); P4: (2,0,2); P5: (0,0,3); P6: (1,1,1)</div>
+            <div class="box"><strong>Resource Vector</strong><br>R1=5, R2=4, R3=3 → total instances.</div>
+        </div>
+        <p><strong>Need = Max – Allocation</strong> → P1(1,0,2), P2(1,1,2), P3(0,0,0), P4(0,0,2), P5(0,0,3), P6(1,0,1).<br>Available = Total – sum(Allocation) = (5-5, 4-4, 3-2) = (0,0,1) after vector calculation?</p>
+        <div class="note">
+            💡 <strong>Safe sequences check:</strong> Example sequences: &lt;P3,P4,P5,P6,P2,P1&gt;, &lt;P5,P2,P3,P4,P1,P6&gt; etc. Based on Need ≤ Available stepwise. Students verify safety using Banker's logic (some sequences unsafe).
+        </div>
+    </div>
+
+    <!-- Wait-for Graph and RAG conversion (exercise given) -->
+    <div class="card">
+        <div class="section-title">📈 Resource Allocation & Wait-for Graph Construction</div>
+        <p><strong>Exercise scenario:</strong> P1 holds R2, requests R1; P2 holds R1, requests R3,R4,R5; P3 holds R4, requests R5; P4 holds R5, requests R2; P5 holds R3. Draw RAG then Wait-for Graph.</p>
+        <div class="two-column">
+            <div class="model-diagram">
+                <strong>Wait-for edges:</strong> P1 → P2 (waiting R1 held by P2), P2 → P3 (needs R4? P2 requests R3,R4,R5; R5 held by P4). Wait-for graph shows cycles: P1→P2→P4→P1 and P2→P3→P5→P2? (circular dependencies).
+            </div>
+            <div class="model-diagram">
+                <strong>Cycle detection:</strong> loop includes P1,P2,P4 and P2,P3,P5, demonstrating potential deadlock.
+            </div>
+        </div>
+    </div>
+
+    <!-- Review: basic facts & summary -->
+    <div class="card">
+        <div class="section-title">📚 Core Summary & Facts</div>
+        <ul>
+            <li><strong>Deadlock characterization:</strong> Mutual exclusion, hold and wait, no preemption, circular wait — all needed.</li>
+            <li><strong>Resource-Allocation Graph:</strong> Cycle detection distinguishes single vs multiple instances.</li>
+            <li><strong>Prevention:</strong> Break any of the 4 conditions (resource ordering, preemption, etc.).</li>
+            <li><strong>Avoidance (Banker's):</strong> Safe sequence ensures no deadlock; pretends allocation and checks safety.</li>
+            <li><strong>Detection + Recovery:</strong> Algorithms O(m×n²), then victim selection / rollback.</li>
+            <li>Most modern OS (Unix/Linux) <em>ignore deadlocks</em> for simplicity, assuming rare occurrence.</li>
+        </ul>
+        <div class="highlight">
+            🌟 <strong>Exam ready:</strong> Safe state definition — there exists a process execution order where each process can obtain max resources without deadlock. Avoidance keeps system always in safe states.
+        </div>
+    </div>
+
+    <!-- Theory: claim edges and avoidance graphs -->
+    <div class="card">
+        <div class="section-title">🧩 Resource-Allocation Graph Scheme (Avoidance)</div>
+        <p>Introduce <strong>claim edge</strong> Pᵢ → Rⱼ (dashed line): future potential request. Convert to request edge when process actually requests, then assignment edge. When resource released, assignment edge reconverts to claim edge. <br>
+        <strong>Cycle detection in graph with claim edges:</strong> Grant request only if converting to assignment edge does NOT create a cycle. Works for single-instance resources.</p>
+        <div class="note">📘 Example: P1 and P2 claim R2. If P2 requests R2 but cycle appears after grant → unsafe → deny.</div>
+    </div>
+
+    <!-- Bridge crossing and practical viewpoint -->
+    <div class="card">
+        <div class="section-title">🚗 Bridge Crossing & Real-World View</div>
+        <p>Bridge sections as resources: deadlock resolved by one car backing up (preemption). Starvation may occur. OS perspective: prevention/avoidance costly → most systems (incl. UNIX) assume deadlocks are extremely rare.</p>
+        <p>Yet for critical systems (databases, some kernels), deadlock handling via timeout or wait-die schemes is used.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        🌱 Lecture 07 - Deadlocks: Theory, Prevention, Avoidance, Detection & Recovery • BY_#D1
+    </div>
+</div>
+</body>
+</html>

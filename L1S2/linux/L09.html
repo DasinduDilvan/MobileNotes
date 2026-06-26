@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POSIX Threads Lab – ICT1261</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li { margin: 8px 0; }
+
+ul ul {
+    margin-left: 25px;
+    list-style-type: circle;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .type    { color: #4ec9b0; }
+pre .num     { color: #b5cea8; }
+pre .punc    { color: #d4d4d4; }
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.activity-header {
+    background: linear-gradient(135deg, #2c6e6b 0%, #3d9a95 100%);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 10px 10px 0 0;
+    margin: -25px -25px 20px -25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.activity-header .act-num {
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1em;
+    flex-shrink: 0;
+}
+
+.activity-header h2 {
+    font-size: 1.15em;
+    font-weight: 600;
+}
+
+.activity-header .act-sub {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+.step-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 12px 0;
+}
+
+.step-num {
+    background: #2c6e6b;
+    color: white;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.step-content { flex: 1; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+}
+
+th {
+    background: #2c6e6b;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+}
+
+td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0efee;
+}
+
+tr:nth-child(even) td { background: #f3fbfa; }
+
+.cmd {
+    background: #1e1e1e;
+    color: #9cdcfe;
+    padding: 9px 14px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    margin: 8px 0;
+    display: block;
+}
+
+.cmd::before { content: "$ "; color: #6a9955; }
+
+.output-block {
+    background: #f0fff0;
+    border: 1px dashed #81c784;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88em;
+    margin: 10px 0;
+    color: #1b5e20;
+}
+
+.output-block strong {
+    display: block;
+    color: #388e3c;
+    margin-bottom: 6px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+    .activity-header { margin: -15px -15px 15px -15px; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/linux" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>🧵 POSIX Threads (Pthreads)</h1>
+    <p class="subtitle">System Programming Fundamentals &amp; Linux – ICT1261 &nbsp;|&nbsp; Lab Session</p>
+
+    <!-- ── LEARNING OUTCOMES ── -->
+    <div class="card">
+        <h2 class="section-title">🎯 Learning Outcomes</h2>
+        <p>At the end of this lab, you should be able to:</p>
+        <div class="two-column" style="margin-top:12px;">
+            <ul>
+                <li>Understand the concept of <strong>threads</strong></li>
+                <li>Explain the difference between <strong>processes</strong> and threads</li>
+                <li>Create threads using <code>pthread_create()</code></li>
+                <li>Wait for thread completion using <code>pthread_join()</code></li>
+            </ul>
+            <ul>
+                <li>Execute <strong>multiple threads concurrently</strong></li>
+                <li>Observe thread execution behavior</li>
+                <li>Understand <strong>shared memory</strong></li>
+                <li>Identify and explain <strong>race conditions</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ── INTRODUCTION ── -->
+    <div class="card">
+        <h2 class="section-title">📖 Introduction</h2>
+        <p>A <strong>thread</strong> is a lightweight unit of execution inside a process. A process can contain multiple threads that execute concurrently, sharing the same memory space while running independently — improving performance and responsiveness.</p>
+
+        <div class="note" style="margin-top:15px;">
+            <strong>🔵 In this lab, we create four arithmetic threads:</strong>
+            <div class="grid" style="margin-top:10px;">
+                <div class="box"><strong>➕ Addition</strong>Adds two values</div>
+                <div class="box"><strong>➖ Subtraction</strong>Subtracts two values</div>
+                <div class="box"><strong>✖️ Multiplication</strong>Multiplies two values</div>
+                <div class="box"><strong>➗ Division</strong>Divides two values</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── KEY FUNCTIONS ── -->
+    <div class="card">
+        <h2 class="section-title">⚙️ Important Pthread Functions</h2>
+        <table>
+            <thead>
+                <tr><th>Function / Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>pthread_create()</code></td><td>Creates a new thread</td></tr>
+                <tr><td><code>pthread_join()</code></td><td>Waits for a thread to finish (blocks caller until thread exits)</td></tr>
+                <tr><td><code>pthread_exit()</code></td><td>Terminates a thread from within itself</td></tr>
+                <tr><td><code>pthread_t</code></td><td>Data type used to store a thread ID</td></tr>
+            </tbody>
+        </table>
+
+        <div class="highlight">
+            <strong>⚠️ Compilation flag required:</strong> Always compile with <code>-pthread</code> to link the pthread library.<br>
+            <span style="font-family:'Courier New'; color:#555;">gcc filename.c -o output_name <strong>-pthread</strong></span>
+        </div>
+
+        <div class="important">
+            <strong>✅ Before Starting — Check GCC:</strong><br>
+            Run <code>gcc --version</code> in terminal. If not installed:<br>
+            <code>sudo apt update</code> &nbsp;→&nbsp; <code>sudo apt install gcc</code>
+        </div>
+    </div>
+
+    <!-- ── ACTIVITY 1 ── -->
+    <div class="card">
+        <div class="activity-header">
+            <div class="act-num">1</div>
+            <div>
+                <div class="act-sub">Activity 1</div>
+                <h2>Creating a Simple Thread</h2>
+            </div>
+        </div>
+
+        <p><strong>Objective:</strong> Create one thread that performs an addition operation.</p>
+
+        <div class="step-row"><div class="step-num">1</div><div class="step-content">Create &amp; open the file: <code class="cmd" style="display:inline">gedit thread1.c</code></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Type the program:</strong></div></div>
+
+<pre><span class="comment">// thread1.c — Single addition thread</span>
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+
+<span class="type">void</span>* <span class="fn">addition</span>(<span class="type">void</span>* arg)
+{
+    <span class="type">int</span> a = <span class="num">10</span>;
+    <span class="type">int</span> b = <span class="num">20</span>;
+    <span class="fn">printf</span>(<span class="string">"Addition Result = %d\n"</span>, a + b);
+    <span class="fn">pthread_exit</span>(NULL);
+}
+
+<span class="type">int</span> <span class="fn">main</span>()
+{
+    <span class="type">pthread_t</span> t1;
+    <span class="fn">pthread_create</span>(&amp;t1, NULL, addition, NULL);
+    <span class="fn">pthread_join</span>(t1, NULL);
+    <span class="fn">printf</span>(<span class="string">"Main Thread Finished\n"</span>);
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+        <div class="step-row"><div class="step-num">3</div><div class="step-content">Compile: <span class="cmd">gcc thread1.c -o thread1 -pthread</span></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-content">Run: <span class="cmd">./thread1</span></div></div>
+
+        <div class="output-block">
+            <strong>Expected Output</strong>
+            Addition Result = 30<br>
+            Main Thread Finished
+        </div>
+
+        <div class="note">
+            <strong>🔵 What happened?</strong>
+            <ul>
+                <li><code>pthread_create()</code> launched a new thread that ran the <code>addition</code> function.</li>
+                <li><code>pthread_join()</code> paused the main thread until the child thread finished.</li>
+                <li>The main thread printed its message <em>only after</em> the child completed.</li>
+            </ul>
+        </div>
+
+        <div style="margin-top:12px;">
+            <strong>Compilation flags explained:</strong>
+            <table>
+                <thead><tr><th>Part</th><th>Meaning</th></tr></thead>
+                <tbody>
+                    <tr><td><code>gcc</code></td><td>The C compiler</td></tr>
+                    <tr><td><code>thread1.c</code></td><td>Source file name</td></tr>
+                    <tr><td><code>-o thread1</code></td><td>Output executable name</td></tr>
+                    <tr><td><code>-pthread</code></td><td>Enables / links the pthread library</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── ACTIVITY 2 ── -->
+    <div class="card">
+        <div class="activity-header">
+            <div class="act-num">2</div>
+            <div>
+                <div class="act-sub">Activity 2</div>
+                <h2>Two Threads Running Concurrently</h2>
+            </div>
+        </div>
+
+        <p><strong>Objective:</strong> Create two threads running at the same time — one for addition and one for subtraction.</p>
+
+        <div class="step-row"><div class="step-num">1</div><div class="step-content"><span class="cmd">gedit thread2.c</span></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Type the program:</strong></div></div>
+
+<pre><span class="comment">// thread2.c — Two concurrent threads</span>
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+
+<span class="type">void</span>* <span class="fn">addition</span>(<span class="type">void</span>* arg)
+{
+    <span class="type">int</span> a = <span class="num">50</span>, b = <span class="num">20</span>;
+    <span class="fn">printf</span>(<span class="string">"Addition = %d\n"</span>, a + b);
+    <span class="fn">pthread_exit</span>(NULL);
+}
+
+<span class="type">void</span>* <span class="fn">subtraction</span>(<span class="type">void</span>* arg)
+{
+    <span class="type">int</span> a = <span class="num">50</span>, b = <span class="num">20</span>;
+    <span class="fn">printf</span>(<span class="string">"Subtraction = %d\n"</span>, a - b);
+    <span class="fn">pthread_exit</span>(NULL);
+}
+
+<span class="type">int</span> <span class="fn">main</span>()
+{
+    <span class="type">pthread_t</span> t1, t2;
+    <span class="fn">pthread_create</span>(&amp;t1, NULL, addition, NULL);
+    <span class="fn">pthread_create</span>(&amp;t2, NULL, subtraction, NULL);
+    <span class="fn">pthread_join</span>(t1, NULL);
+    <span class="fn">pthread_join</span>(t2, NULL);
+    <span class="fn">printf</span>(<span class="string">"Main Thread Finished\n"</span>);
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+        <div class="step-row"><div class="step-num">3</div><div class="step-content"><span class="cmd">gcc thread2.c -o thread2 -pthread</span></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-content"><span class="cmd">./thread2</span></div></div>
+
+        <div class="two-column">
+            <div class="output-block">
+                <strong>Possible Output A</strong>
+                Addition = 70<br>
+                Subtraction = 30<br>
+                Main Thread Finished
+            </div>
+            <div class="output-block">
+                <strong>Possible Output B</strong>
+                Subtraction = 30<br>
+                Addition = 70<br>
+                Main Thread Finished
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚡ Observation — Concurrent Execution</strong>
+            <ul>
+                <li>The output order <strong>changes between runs</strong> because threads execute concurrently.</li>
+                <li>The CPU scheduler decides which thread runs first.</li>
+                <li>This unpredictable ordering is called <strong>non-deterministic</strong> / <strong>concurrent execution</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ── ACTIVITY 3 ── -->
+    <div class="card">
+        <div class="activity-header">
+            <div class="act-num">3</div>
+            <div>
+                <div class="act-sub">Activity 3</div>
+                <h2>Four Arithmetic Threads</h2>
+            </div>
+        </div>
+
+        <p><strong>Objective:</strong> Create four separate threads — one each for addition, subtraction, multiplication, and division.</p>
+
+        <div class="step-row"><div class="step-num">1</div><div class="step-content"><span class="cmd">gedit thread3.c</span></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Type the program:</strong></div></div>
+
+<pre><span class="comment">// thread3.c — Four arithmetic threads</span>
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+
+<span class="type">void</span>* <span class="fn">addition</span>(<span class="type">void</span>* arg)      { <span class="fn">printf</span>(<span class="string">"Addition = %d\n"</span>,       <span class="num">40</span> + <span class="num">10</span>); <span class="fn">pthread_exit</span>(NULL); }
+<span class="type">void</span>* <span class="fn">subtraction</span>(<span class="type">void</span>* arg)   { <span class="fn">printf</span>(<span class="string">"Subtraction = %d\n"</span>,    <span class="num">40</span> - <span class="num">10</span>); <span class="fn">pthread_exit</span>(NULL); }
+<span class="type">void</span>* <span class="fn">multiplication</span>(<span class="type">void</span>* arg){ <span class="fn">printf</span>(<span class="string">"Multiplication = %d\n"</span>, <span class="num">40</span> * <span class="num">10</span>); <span class="fn">pthread_exit</span>(NULL); }
+<span class="type">void</span>* <span class="fn">division</span>(<span class="type">void</span>* arg)       { <span class="fn">printf</span>(<span class="string">"Division = %d\n"</span>,       <span class="num">40</span> / <span class="num">10</span>); <span class="fn">pthread_exit</span>(NULL); }
+
+<span class="type">int</span> <span class="fn">main</span>()
+{
+    <span class="type">pthread_t</span> t1, t2, t3, t4;
+    <span class="fn">pthread_create</span>(&amp;t1, NULL, addition, NULL);
+    <span class="fn">pthread_create</span>(&amp;t2, NULL, subtraction, NULL);
+    <span class="fn">pthread_create</span>(&amp;t3, NULL, multiplication, NULL);
+    <span class="fn">pthread_create</span>(&amp;t4, NULL, division, NULL);
+
+    <span class="fn">pthread_join</span>(t1, NULL);
+    <span class="fn">pthread_join</span>(t2, NULL);
+    <span class="fn">pthread_join</span>(t3, NULL);
+    <span class="fn">pthread_join</span>(t4, NULL);
+
+    <span class="fn">printf</span>(<span class="string">"All Threads Finished\n"</span>);
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+        <div class="step-row"><div class="step-num">3</div><div class="step-content"><span class="cmd">gcc thread3.c -o thread3 -pthread</span></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-content"><span class="cmd">./thread3</span></div></div>
+
+        <div class="output-block">
+            <strong>Expected Output (order may vary)</strong>
+            Addition = 50<br>
+            Subtraction = 30<br>
+            Multiplication = 400<br>
+            Division = 4<br>
+            All Threads Finished
+        </div>
+    </div>
+
+    <!-- ── ACTIVITY 4 ── -->
+    <div class="card">
+        <div class="activity-header">
+            <div class="act-num">4</div>
+            <div>
+                <div class="act-sub">Activity 4</div>
+                <h2>Looping Threads</h2>
+            </div>
+        </div>
+
+        <p><strong>Objective:</strong> Observe concurrent execution more clearly by using loops inside each thread.</p>
+
+        <div class="step-row"><div class="step-num">1</div><div class="step-content"><span class="cmd">gedit thread4.c</span></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Type the program:</strong></div></div>
+
+<pre><span class="comment">// thread4.c — Looping threads to observe concurrency</span>
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+
+<span class="type">void</span>* <span class="fn">thread1</span>(<span class="type">void</span>* arg)
+{
+    <span class="type">int</span> i;
+    <span class="keyword">for</span>(i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++)
+        <span class="fn">printf</span>(<span class="string">"Addition Thread Running %d\n"</span>, i);
+    <span class="fn">pthread_exit</span>(NULL);
+}
+
+<span class="type">void</span>* <span class="fn">thread2</span>(<span class="type">void</span>* arg)
+{
+    <span class="type">int</span> i;
+    <span class="keyword">for</span>(i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++)
+        <span class="fn">printf</span>(<span class="string">"Subtraction Thread Running %d\n"</span>, i);
+    <span class="fn">pthread_exit</span>(NULL);
+}
+
+<span class="type">int</span> <span class="fn">main</span>()
+{
+    <span class="type">pthread_t</span> t1, t2;
+    <span class="fn">pthread_create</span>(&amp;t1, NULL, thread1, NULL);
+    <span class="fn">pthread_create</span>(&amp;t2, NULL, thread2, NULL);
+    <span class="fn">pthread_join</span>(t1, NULL);
+    <span class="fn">pthread_join</span>(t2, NULL);
+    <span class="fn">printf</span>(<span class="string">"Threads Completed\n"</span>);
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+        <div class="step-row"><div class="step-num">3</div><div class="step-content"><span class="cmd">gcc thread4.c -o thread4 -pthread</span></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-content"><span class="cmd">./thread4</span></div></div>
+
+        <div class="note">
+            <strong>🔵 Observation</strong>
+            <ul>
+                <li>Thread outputs are <strong>mixed / interleaved</strong> — they execute simultaneously.</li>
+                <li>The exact interleaving <strong>changes every run</strong>.</li>
+                <li>This clearly demonstrates <strong>true concurrent execution</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ── ACTIVITY 5 ── -->
+    <div class="card">
+        <div class="activity-header">
+            <div class="act-num">5</div>
+            <div>
+                <div class="act-sub">Activity 5</div>
+                <h2>Shared Variable &amp; Race Condition</h2>
+            </div>
+        </div>
+
+        <p><strong>Objective:</strong> Understand how multiple threads share the same memory, and what can go wrong.</p>
+
+        <div class="step-row"><div class="step-num">1</div><div class="step-content"><span class="cmd">gedit thread5.c</span></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Type the program:</strong></div></div>
+
+<pre><span class="comment">// thread5.c — Shared variable / race condition demo</span>
+<span class="keyword">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+
+<span class="type">int</span> counter = <span class="num">0</span>; <span class="comment">// shared variable</span>
+
+<span class="type">void</span>* <span class="fn">increment</span>(<span class="type">void</span>* arg)
+{
+    <span class="type">int</span> i;
+    <span class="keyword">for</span>(i = <span class="num">0</span>; i &lt; <span class="num">100000</span>; i++)
+    {
+        counter++; <span class="comment">// ⚠ race condition here!</span>
+    }
+    <span class="fn">pthread_exit</span>(NULL);
+}
+
+<span class="type">int</span> <span class="fn">main</span>()
+{
+    <span class="type">pthread_t</span> t1, t2;
+    <span class="fn">pthread_create</span>(&amp;t1, NULL, increment, NULL);
+    <span class="fn">pthread_create</span>(&amp;t2, NULL, increment, NULL);
+    <span class="fn">pthread_join</span>(t1, NULL);
+    <span class="fn">pthread_join</span>(t2, NULL);
+    <span class="fn">printf</span>(<span class="string">"Final Counter Value = %d\n"</span>, counter);
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+        <div class="step-row"><div class="step-num">3</div><div class="step-content"><span class="cmd">gcc thread5.c -o thread5 -pthread</span></div></div>
+        <div class="step-row"><div class="step-num">4</div>
+            <div class="step-content">
+                <strong>Run 3–5 times and observe:</strong>
+                <span class="cmd">./thread5</span>
+            </div>
+        </div>
+
+        <div class="output-block">
+            <strong>Sample Outputs (inconsistent!)</strong>
+            Final Counter Value = 200000 &nbsp;&nbsp;<span style="color:#388e3c;">← lucky run</span><br>
+            Final Counter Value = 147382 &nbsp;&nbsp;<span style="color:#c62828;">← race condition loss</span><br>
+            Final Counter Value = 163910 &nbsp;&nbsp;<span style="color:#c62828;">← different each time</span>
+        </div>
+
+        <div class="warning">
+            <strong>🚨 Race Condition Detected!</strong>
+            <ul>
+                <li>Two threads each increment <code>counter</code> 100,000 times → expected result: <strong>200,000</strong>.</li>
+                <li>Actual result is sometimes <strong>lower</strong> because both threads access the same memory simultaneously.</li>
+                <li>When Thread A reads <code>counter</code> <em>before</em> Thread B has written its update, an increment is <strong>lost</strong>.</li>
+                <li>This is a <strong>race condition</strong> — a classic concurrency bug.</li>
+                <li>Fix requires <strong>synchronization mechanisms</strong> (e.g., mutexes — covered in future labs).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ── KEY CONCEPTS ── -->
+    <div class="card">
+        <h2 class="section-title">📚 Key Concepts Summary</h2>
+        <table>
+            <thead><tr><th>Concept</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Process</strong></td><td>A running program with its own memory space</td></tr>
+                <tr><td><strong>Thread</strong></td><td>A lightweight execution unit within a process</td></tr>
+                <tr><td><strong>Concurrent Execution</strong></td><td>Multiple threads executing at the same time</td></tr>
+                <tr><td><strong>Shared Memory</strong></td><td>All threads within a process share the same memory</td></tr>
+                <tr><td><strong>Race Condition</strong></td><td>Unpredictable result when multiple threads modify shared data without synchronization</td></tr>
+                <tr><td><strong>Non-deterministic</strong></td><td>Execution order cannot be predicted in advance</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── USEFUL COMMANDS ── -->
+    <div class="card">
+        <h2 class="section-title">🖥️ Useful Linux Commands</h2>
+        <div class="two-column">
+            <div class="box">
+                <strong>View running processes:</strong>
+                <span class="cmd" style="display:block;margin-top:8px;">top</span>
+            </div>
+            <div class="box">
+                <strong>View threads:</strong>
+                <span class="cmd" style="display:block;margin-top:8px;">ps -eLf</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LAB QUESTIONS ── -->
+    <div class="card">
+        <h2 class="section-title">❓ Lab Questions</h2>
+        <div class="in-class">
+            <h3>Answer all of the following:</h3>
+            <ol style="line-height:2.2; margin-left:18px; margin-top:10px;">
+                <li>What is a <strong>thread</strong>?</li>
+                <li>What is the difference between a <strong>process</strong> and a <strong>thread</strong>?</li>
+                <li>Why does the <strong>output order change</strong> in multithreaded programs?</li>
+                <li>What is <strong>concurrent execution</strong>?</li>
+                <li>Why do threads <strong>share memory</strong>?</li>
+                <li>What is a <strong>race condition</strong>?</li>
+                <li>What is the purpose of <code>pthread_join()</code>?</li>
+                <li>Why do we use <code>-pthread</code> during compilation?</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- ── REMEMBER ── -->
+    <div class="card">
+        <h2 class="section-title">🔖 Remember</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>🔗 Shared Memory</strong>
+                Threads share memory — this is powerful but requires careful programming.
+            </div>
+            <div class="box">
+                <strong>🔒 Always Join</strong>
+                Always use <code>pthread_join()</code> to avoid zombie threads.
+            </div>
+            <div class="box">
+                <strong>⚠️ Race Conditions</strong>
+                Must be resolved with synchronization mechanisms (e.g., mutexes, semaphores).
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        🧵 POSIX Threads Lab – System Programming &amp; Linux (ICT1261) &bull; BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

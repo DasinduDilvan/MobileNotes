@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 2 – Crontab Scheduling | ICT1261</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+.subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+.three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .type    { color: #4ec9b0; }
+pre .num     { color: #b5cea8; }
+pre .cmd     { color: #9cdcfe; }
+pre .flag    { color: #c586c0; }
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+/* cron table */
+.cron-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.92em;
+}
+.cron-table th {
+    background: #2c6e6b;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+}
+.cron-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0f0ef;
+}
+.cron-table tr:nth-child(even) td { background: #f3fbfa; }
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: #2c6e6b;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.85em;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+.step-row {
+    display: flex;
+    align-items: flex-start;
+    margin: 12px 0;
+    gap: 6px;
+}
+.step-content { flex: 1; }
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/linux" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>🕐 Cron Job Scheduling</h1>
+    <p class="subtitle">ICT1261 – Operating System Concepts &amp; Applications &nbsp;|&nbsp; Lab 2 – Crontab Exercise</p>
+
+    <!-- Objective -->
+    <div class="card">
+        <h2 class="section-title">🎯 Objective</h2>
+        <p>The purpose of this lab session is to <strong>familiarise with cron scheduling</strong>. A <strong>cron job</strong> is a task that is scheduled to run periodically on Unix-like systems. This is useful if you have a script that needs to run every so often — for example, a script to clean up a directory at the end of each day.</p>
+    </div>
+
+    <!-- Crontab Syntax -->
+    <div class="card">
+        <h2 class="section-title">📋 Crontab Syntax</h2>
+        <p>A crontab entry has <strong>5 time fields</strong> followed by the <strong>command</strong> to run:</p>
+        <pre><span class="comment"># &lt;minute&gt;  &lt;hour&gt;  &lt;day_of_month&gt;  &lt;month&gt;  &lt;day_of_week&gt;  &lt;command&gt;</span>
+
+<span class="comment"># Field     Meaning          Allowed Values</span>
+<span class="comment"># -------   ------------     -----------------------------------</span>
+<span class="comment"># 1         minute           0–59</span>
+<span class="comment"># 2         hour             0–23</span>
+<span class="comment"># 3         day of month     1–31</span>
+<span class="comment"># 4         month            1–12  (or names: jan, feb, …)</span>
+<span class="comment"># 5         day of week      0–7   (0 or 7 = Sun, or use names)</span></pre>
+
+        <table class="cron-table">
+            <thead>
+                <tr><th>Field #</th><th>Field Name</th><th>Allowed Values</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>minute</td><td>0 – 59</td><td></td></tr>
+                <tr><td>2</td><td>hour</td><td>0 – 23</td><td></td></tr>
+                <tr><td>3</td><td>day of month</td><td>1 – 31</td><td></td></tr>
+                <tr><td>4</td><td>month</td><td>1 – 12</td><td>or names (jan, feb, …)</td></tr>
+                <tr><td>5</td><td>day of week</td><td>0 – 7</td><td>0 or 7 = Sunday; or use names (mon, tue, …)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="note" style="margin-top:18px;">
+            <strong>🔑 Special Symbols</strong><br>
+            <code>*</code> = any/every &nbsp;|&nbsp; <code>,</code> = list (e.g. 4,10,16) &nbsp;|&nbsp; <code>/</code> = step (e.g. */2 = every 2)
+        </div>
+    </div>
+
+    <!-- Examples -->
+    <div class="card">
+        <h2 class="section-title">💡 Crontab Examples</h2>
+
+        <div class="box" style="margin-bottom:14px;">
+            <strong>Ex 1 — Run every day at 8:30 AM</strong>
+            <pre><span class="num">30 8</span> * * * /home/ict_lab/cron1.sh</pre>
+            <p>Minute 30, Hour 8, every day of month, every month, every day of week.</p>
+        </div>
+
+        <div class="box" style="margin-bottom:14px;">
+            <strong>Ex 2 — Execute 3 times (4 AM, 10 AM, 4 PM) every Wednesday and Saturday</strong>
+            <pre><span class="num">0</span> <span class="num">4,10,16</span> * * <span class="string">wed,sat</span> /home/ict_lab/cron2.sh</pre>
+            <p>Minute 0, Hours 4, 10, and 16 (comma-separated), every Wednesday and Saturday.</p>
+        </div>
+
+        <div class="box">
+            <strong>Ex 3 — Every 2nd minute</strong>
+            <pre><span class="flag">*/2</span> * * * * cron3.sh</pre>
+            <p><code>*/2</code> means "every 2 minutes" using the step operator.</p>
+        </div>
+
+        <div class="highlight" style="margin-top:15px;">
+            💡 Use <strong><a href="https://crontab.guru/every-day-at-1am" target="_blank">https://crontab.guru</a></strong> to easily convert schedule times into valid crontab expressions.
+        </div>
+    </div>
+
+    <!-- Lab Steps -->
+    <div class="card">
+        <h2 class="section-title">🛠️ Lab Steps — Setting Up Cron</h2>
+
+        <div class="step-row">
+            <span class="step-num">1</span>
+            <div class="step-content">
+                <strong>Check if the cron package is installed</strong>
+                <pre><span class="cmd">dpkg</span> -l cron</pre>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">2</span>
+            <div class="step-content">
+                <strong>If not installed, install cron on Ubuntu</strong>
+                <pre><span class="cmd">apt-get install</span> cron</pre>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">3</span>
+            <div class="step-content">
+                <strong>Verify if the cron service is running</strong>
+                <pre><span class="cmd">systemctl status</span> cron</pre>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">4</span>
+            <div class="step-content">
+                <strong>Edit your own user's crontab file</strong>
+                <pre><span class="cmd">crontab</span> <span class="flag">-e</span></pre>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">5</span>
+            <div class="step-content">
+                <strong>Select editor</strong>
+                <p>When prompted, select <strong>option 2</strong> to open with the <strong>nano</strong> editor.</p>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">6</span>
+            <div class="step-content">
+                <strong>Create a directory every 2 minutes</strong>
+                <p><em>Option A — Direct command in crontab:</em></p>
+                <pre><span class="flag">*/2</span> * * * * mkdir /home/ict_lab/test1</pre>
+                <p><em>Option B — Using a script file:</em></p>
+                <pre><span class="flag">*/2</span> * * * * /home/ict_lab/cronscript1.sh</pre>
+                <div class="note">
+                    Place the command <code>mkdir test2</code> inside <strong>cronscript1.sh</strong>, then set the execution permission:<br>
+                    <pre style="margin-top:8px;"><span class="cmd">chmod</span> +x /home/ict_lab/cronscript1.sh</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">7</span>
+            <div class="step-content">
+                <strong>Restart cron service after saving the crontab</strong>
+                <pre><span class="cmd">systemctl restart</span> cron</pre>
+            </div>
+        </div>
+
+        <div class="step-row">
+            <span class="step-num">8</span>
+            <div class="step-content">
+                <strong>Check your home directory after 1 minute</strong>
+                <p>Wait approximately 1–2 minutes, then verify the directory was created.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Task -->
+    <div class="card">
+        <h2 class="section-title">✅ Your Task (In-Class)</h2>
+        <div class="in-class">
+            <h3>📌 Main Task</h3>
+            <p>Create a cron job that <strong>displays and saves the current system date every minute</strong> into a text file called <code>date.txt</code> inside your <code>ict_lab</code> directory.</p>
+            <pre><span class="comment"># Hint: use the date command and redirect output</span>
+<span class="num">*</span> * * * * <span class="fn">date</span> >> /home/ict_lab/date.txt</pre>
+        </div>
+    </div>
+
+    <!-- Exercise Tasks -->
+    <div class="card">
+        <h2 class="section-title">📝 Lab 2 Exercise Tasks</h2>
+
+        <div class="box" style="margin-bottom:18px;">
+            <strong>Task 1 — Display your name every 5 minutes</strong>
+            <p style="margin-top:6px;">Create a cron job that displays your name in a new terminal every 5 minutes.</p>
+            <pre><span class="flag">*/5</span> * * * * <span class="fn">echo</span> <span class="string">"Your Name"</span></pre>
+        </div>
+
+        <div class="box" style="margin-bottom:18px;">
+            <strong>Task 2 — Script file with multiple commands (ex3.sh)</strong>
+            <p style="margin-top:6px;">Create a script file called <code>ex3.sh</code> and add the following tasks to it, then schedule it to run at a specific time:</p>
+            <ul style="margin-top:8px;">
+                <li>Display your current path to the terminal — <code>pwd</code></li>
+                <li>List the contents of the current directory — <code>ls</code></li>
+            </ul>
+            <pre><span class="comment">#!/bin/bash</span>
+<span class="fn">pwd</span>
+<span class="fn">ls</span></pre>
+            <pre><span class="comment"># Schedule ex3.sh at a specific time, e.g., every day at 9:00 AM</span>
+<span class="num">0 9</span> * * * /home/ict_lab/ex3.sh</pre>
+            <div class="note">Remember to set execute permission: <code>chmod +x /home/ict_lab/ex3.sh</code></div>
+        </div>
+
+        <div class="box">
+            <strong>Task 3 — Save running process details at minute 1 past every hour</strong>
+            <p style="margin-top:6px;">Create a crontab task to find and save details of currently running processes with their users using <code>ps -au</code>, appended into a file called <code>proDetails.txt</code>. Update at <strong>minute 1 past every hour</strong>.</p>
+            <pre><span class="num">1</span> * * * * <span class="fn">ps</span> <span class="flag">-au</span> >> /home/ict_lab/proDetails.txt</pre>
+            <div class="highlight">
+                <strong>⚠️ Use <code>&gt;&gt;</code> (append)</strong> not <code>&gt;</code> (overwrite) — this adds new process snapshots to the file each hour without losing previous data.
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Reference -->
+    <div class="card">
+        <h2 class="section-title">📖 Quick Reference Summary</h2>
+        <div class="three-column">
+            <div class="box">
+                <strong>Check cron status</strong>
+                <code>systemctl status cron</code>
+            </div>
+            <div class="box">
+                <strong>Edit crontab</strong>
+                <code>crontab -e</code>
+            </div>
+            <div class="box">
+                <strong>View current crontab</strong>
+                <code>crontab -l</code>
+            </div>
+            <div class="box">
+                <strong>Restart cron</strong>
+                <code>systemctl restart cron</code>
+            </div>
+            <div class="box">
+                <strong>Install cron</strong>
+                <code>apt-get install cron</code>
+            </div>
+            <div class="box">
+                <strong>Make script executable</strong>
+                <code>chmod +x script.sh</code>
+            </div>
+        </div>
+
+        <table class="cron-table" style="margin-top:20px;">
+            <thead>
+                <tr><th>Pattern</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>* * * * *</code></td><td>Every minute</td></tr>
+                <tr><td><code>*/2 * * * *</code></td><td>Every 2 minutes</td></tr>
+                <tr><td><code>*/5 * * * *</code></td><td>Every 5 minutes</td></tr>
+                <tr><td><code>1 * * * *</code></td><td>Minute 1 of every hour</td></tr>
+                <tr><td><code>0 9 * * *</code></td><td>Every day at 9:00 AM</td></tr>
+                <tr><td><code>30 8 * * *</code></td><td>Every day at 8:30 AM</td></tr>
+                <tr><td><code>0 4,10,16 * * wed,sat</code></td><td>Three times a day, Wed &amp; Sat only</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        🌱 Lab 2 – Crontab Scheduling &nbsp;|&nbsp; • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lecture 3 – PHP Loops</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+ul li { margin: 8px 0; }
+ul ul { margin-left: 25px; list-style-type: circle; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .var     { color: #9cdcfe; }
+pre .num     { color: #b5cea8; }
+pre .op      { color: #d4d4d4; }
+
+.output-box {
+    background: #f0f0f0;
+    border: 1px dashed #aaa;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #333;
+    margin: 8px 0 14px 0;
+}
+.output-box span.label {
+    display: block;
+    font-weight: bold;
+    color: #2c6e6b;
+    margin-bottom: 4px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.85em;
+}
+
+.syntax-box {
+    background: #f8f4ff;
+    border: 1px solid #d4b8f5;
+    border-left: 4px solid #8e44ad;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.92em;
+    color: #4a235a;
+    line-height: 1.8;
+}
+
+.in-class {
+    background: #f3e5f5;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid #9c27b0;
+    margin: 15px 0;
+}
+.in-class h3 { color: #7b1fa2; margin-bottom: 10px; }
+
+/* Loop anatomy diagram */
+.anatomy {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.88em;
+    line-height: 2;
+}
+.anatomy .ann {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.75em;
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+.anatomy .ann.orange { background: #e67e22; }
+.anatomy .ann.blue   { background: #2980b9; }
+.anatomy .ann.red    { background: #c0392b; }
+.anatomy .ann.purple { background: #8e44ad; }
+
+/* Comparison table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.93em;
+}
+thead tr { background: #2c6e6b; color: white; }
+thead th { padding: 10px 14px; text-align: left; }
+tbody tr:nth-child(even) { background: #f3fbfa; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0f0ee;
+    vertical-align: top;
+}
+tbody td code { background: #e8f5f4; color: #1a5c59; }
+
+.fizz   { color: #2980b9; font-weight: bold; }
+.buzz   { color: #e67e22; font-weight: bold; }
+.fizzbuzz { color: #8e44ad; font-weight: bold; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+    pre { background: #1e1e1e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    thead tr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/web-development" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+  <!-- HEADER -->
+  <h1>🔁 PHP Loops</h1>
+  <p class="subtitle">Lecture 3 · ICT1232</p>
+
+  <!-- OBJECTIVES -->
+  <div class="card">
+    <h2 class="section-title">🎯 Learning Objectives</h2>
+    <p>After completing this lecture, you should be able to:</p>
+    <ul>
+      <li>Identify and use <strong>loops</strong> in server-side programming</li>
+      <li>Identify the use of <strong>arrays</strong> in web development</li>
+      <li>Use arrays in server-side programming</li>
+    </ul>
+    <div class="note" style="margin-top:14px;">
+      <strong>📚 Reference:</strong> Programming PHP by Kevin Tatroe, Peter MacIntyre and Rasmus Lerdorf
+    </div>
+  </div>
+
+  <!-- WHAT ARE LOOPS -->
+  <div class="card">
+    <h2 class="section-title">💡 What Are Loops?</h2>
+    <div class="important">
+      <strong>Definition:</strong> Loops execute a block of code a <strong>specified number of times</strong>, or <strong>while a condition is true</strong>. Instead of writing the same code repeatedly, a loop does it automatically.
+    </div>
+    <p style="margin-top:14px;"><strong>PHP supports four types of loops:</strong></p>
+    <div class="grid" style="margin-top:12px;">
+      <div class="box"><strong>while</strong>Repeats while a condition is true. Checks condition <em>before</em> each run.</div>
+      <div class="box"><strong>do...while</strong>Runs the block <em>at least once</em>, then checks the condition.</div>
+      <div class="box"><strong>for</strong>Used when you know exactly how many times to loop.</div>
+      <div class="box"><strong>foreach</strong>Used to loop through every element in an <em>array</em>.</div>
+    </div>
+
+    <!-- Comparison table -->
+    <h3 style="margin-top:20px; color:#2c6e6b;">Quick Comparison</h3>
+    <table>
+      <thead>
+        <tr><th>Loop</th><th>When to Use</th><th>Condition Checked</th><th>Minimum Runs</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>while</code></td><td>Unknown number of iterations</td><td>Before each iteration</td><td>0 (may never run)</td></tr>
+        <tr><td><code>do...while</code></td><td>Must run at least once</td><td>After each iteration</td><td>1 (always runs once)</td></tr>
+        <tr><td><code>for</code></td><td>Known number of iterations</td><td>Before each iteration</td><td>0 (may never run)</td></tr>
+        <tr><td><code>foreach</code></td><td>Iterating arrays</td><td>Next element exists</td><td>0 (empty array = 0 runs)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WHILE LOOP -->
+  <div class="card">
+    <h2 class="section-title">🔄 The while Loop</h2>
+    <p>Executes a block of code <strong>repeatedly as long as the condition remains true</strong>. The condition is checked <em>before</em> each iteration — if false from the start, the block never runs.</p>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">while</span> ( <span style="color:#9cdcfe;">condition</span> ) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#808080;">// code to execute</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#808080;">// update variable to eventually make condition false!</span><br>
+      }
+    </div>
+
+    <div class="anatomy">
+<span style="color:#569cd6;">$num</span> = <span style="color:#b5cea8;">1</span>; <span class="ann orange">initialise</span>
+<span style="color:#569cd6;">while</span>(<span style="color:#9cdcfe;">$num</span> &lt;= <span style="color:#b5cea8;">5</span>) <span class="ann blue">condition checked here</span>
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#dcdcaa;">echo</span> <span style="color:#ce9178;">"The number is "</span> . <span style="color:#9cdcfe;">$num</span> . <span style="color:#ce9178;">"&lt;br&gt;"</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">$num</span>++; <span class="ann red">update — prevent infinite loop!</span>
+}
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$num</span> <span class="op">=</span> <span class="num">1</span>;
+
+<span class="keyword">while</span> (<span class="var">$num</span> <span class="op">&lt;=</span> <span class="num">5</span>) {
+    <span class="fn">echo</span> <span class="string">"The number is "</span> . <span class="var">$num</span> . <span class="string">"&lt;br&gt;"</span>;
+    <span class="var">$num</span><span class="op">++</span>;   <span class="comment">// Increment: 1 → 2 → 3 → 4 → 5 → 6 (stops, 6 &gt; 5)</span>
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">Output:</span>
+      The number is 1<br>
+      The number is 2<br>
+      The number is 3<br>
+      The number is 4<br>
+      The number is 5
+    </div>
+    <div class="warning">
+      <strong>⚠️ Infinite Loop Risk:</strong> Always make sure the condition will eventually become <strong>false</strong>. Forgetting <code>$num++</code> above would cause the loop to run forever and crash the server.
+    </div>
+  </div>
+
+  <!-- DO WHILE LOOP -->
+  <div class="card">
+    <h2 class="section-title">🔃 The do...while Loop</h2>
+    <p>Executes the block of code <strong>once first</strong>, then checks the condition. If the condition is true, it repeats. This guarantees the block runs <strong>at least one time</strong> regardless of the condition.</p>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">do</span> {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#808080;">// code executes FIRST, then condition is checked</span><br>
+      } <span style="color:#569cd6;">while</span> ( <span style="color:#9cdcfe;">condition</span> );
+    </div>
+
+    <div class="note">
+      <strong>Key difference from while:</strong> In a <code>while</code> loop, if the condition is false at the start, the code never runs. In <code>do...while</code>, the code <strong>always runs at least once</strong> because the check happens at the end.
+    </div>
+
+    <h3 style="margin-top:16px; color:#2c6e6b;">📝 Example</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$num</span> <span class="op">=</span> <span class="num">1</span>;
+
+<span class="keyword">do</span> {
+    <span class="var">$num</span><span class="op">++</span>;                                             <span class="comment">// Increment first</span>
+    <span class="fn">echo</span> <span class="string">"The number is "</span> . <span class="var">$num</span> . <span class="string">"&lt;br&gt;"</span>;  <span class="comment">// Then display</span>
+} <span class="keyword">while</span> (<span class="var">$num</span> <span class="op">&lt;=</span> <span class="num">5</span>);                                  <span class="comment">// Check at end</span>
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">Output:</span>
+      The number is 2<br>
+      The number is 3<br>
+      The number is 4<br>
+      The number is 5<br>
+      The number is 6
+    </div>
+    <div class="highlight">
+      <strong>Why does output start at 2 and end at 6?</strong> Because <code>$num++</code> runs <em>before</em> echo. So 1 becomes 2 before printing. When $num reaches 6 (after printing), the condition <code>6 &lt;= 5</code> is false — the loop ends. But 6 was already printed!
+    </div>
+  </div>
+
+  <!-- FOR LOOP -->
+  <div class="card">
+    <h2 class="section-title">🔢 The for Loop</h2>
+    <p>Use the <code>for</code> loop when you <strong>know in advance exactly how many times</strong> the loop should run. It combines initialisation, condition, and increment all in one line.</p>
+
+    <div class="syntax-box">
+      <span style="color:#569cd6;">for</span> ( <span style="color:#9cdcfe;">initialise</span> ; <span style="color:#9cdcfe;">condition</span> ; <span style="color:#9cdcfe;">increment/decrement</span> ) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#808080;">// code to execute</span><br>
+      }
+    </div>
+
+    <div class="anatomy">
+<span style="color:#569cd6;">for</span>( <span style="color:#9cdcfe;">$start</span> = <span style="color:#b5cea8;">0</span> <span class="ann orange">① init</span> ; <span style="color:#9cdcfe;">$start</span> &lt; <span style="color:#b5cea8;">11</span> <span class="ann blue">② condition</span> ; <span style="color:#9cdcfe;">$start</span>++ <span class="ann red">③ increment</span> ) {
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">$counter</span> = <span style="color:#9cdcfe;">$counter</span> + <span style="color:#b5cea8;">1</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#dcdcaa;">print</span> <span style="color:#9cdcfe;">$counter</span> . <span style="color:#ce9178;">"&lt;BR&gt;"</span>;
+}
+    </div>
+    <p style="font-size:0.88em; color:#555; margin-bottom:12px;">① Runs once at start &nbsp;|&nbsp; ② Checked before every iteration &nbsp;|&nbsp; ③ Runs after every iteration</p>
+
+    <h3 style="color:#2c6e6b;">📝 Example</h3>
+    <pre><span class="keyword">&lt;?php</span>
+<span class="var">$counter</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="keyword">for</span> (<span class="var">$start</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">$start</span> <span class="op">&lt;</span> <span class="num">5</span>; <span class="var">$start</span><span class="op">++</span>) {
+    <span class="var">$counter</span> <span class="op">=</span> <span class="var">$counter</span> <span class="op">+</span> <span class="num">1</span>;
+    <span class="fn">print</span> <span class="var">$counter</span> . <span class="string">"&lt;BR&gt;"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+    <div class="output-box">
+      <span class="label">Output:</span>
+      1<br>2<br>3<br>4<br>5
+    </div>
+  </div>
+
+  <!-- FOREACH LOOP -->
+  <div class="card">
+    <h2 class="section-title">📋 The foreach Loop</h2>
+    <p>The <code>foreach</code> loop is designed specifically to <strong>iterate over arrays</strong>. It loops through each element automatically — no need to manage a counter or index.</p>
+
+    <div class="syntax-box">
+      <span style="color:#808080;">// With key and value:</span><br>
+      <span style="color:#569cd6;">foreach</span> (<span style="color:#9cdcfe;">$array</span> <span style="color:#569cd6;">as</span> <span style="color:#9cdcfe;">$key</span> =&gt; <span style="color:#9cdcfe;">$value</span>) { ... }<br><br>
+      <span style="color:#808080;">// Value only (key ignored):</span><br>
+      <span style="color:#569cd6;">foreach</span> (<span style="color:#9cdcfe;">$array</span> <span style="color:#569cd6;">as</span> <span style="color:#9cdcfe;">$value</span>) { ... }
+    </div>
+
+    <div class="two-column">
+      <!-- with key -->
+      <div>
+        <p style="font-weight:600; margin-bottom:6px; color:#2c6e6b;">With <code>$key =&gt; $value</code></p>
+        <pre><span class="keyword">&lt;?php</span>
+<span class="var">$x</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Cat"</span>, <span class="string">"Dog"</span>, <span class="string">"Hen"</span>);
+
+<span class="keyword">foreach</span> (<span class="var">$x</span> <span class="keyword">as</span> <span class="var">$key</span> <span class="op">=&gt;</span> <span class="var">$value</span>) {
+    <span class="fn">echo</span> <span class="var">$key</span> . <span class="string">"-"</span> . <span class="var">$value</span> . <span class="string">"&lt;br&gt;"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+        <div class="output-box"><span class="label">Output:</span>0-Cat<br>1-Dog<br>2-Hen</div>
+      </div>
+      <!-- value only -->
+      <div>
+        <p style="font-weight:600; margin-bottom:6px; color:#2c6e6b;">Value only (no key)</p>
+        <pre><span class="keyword">&lt;?php</span>
+<span class="var">$x</span> <span class="op">=</span> <span class="fn">array</span>(<span class="string">"Cat"</span>, <span class="string">"Dog"</span>, <span class="string">"Hen"</span>);
+
+<span class="keyword">foreach</span> (<span class="var">$x</span> <span class="keyword">as</span> <span class="var">$value</span>) {
+    <span class="fn">echo</span> <span class="var">$value</span> . <span class="string">"&lt;br&gt;"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+        <div class="output-box"><span class="label">Output:</span>Cat<br>Dog<br>Hen</div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:10px;">
+      <strong>$key</strong> holds the index (0, 1, 2…) of each element. <strong>$value</strong> holds the actual data. Use <code>$key =&gt; $value</code> when you need both; use just <code>$value</code> when you only care about the data.
+    </div>
+  </div>
+
+  <!-- EXERCISES -->
+  <div class="card">
+    <h2 class="section-title">🧪 Exercises</h2>
+
+    <!-- Ex 1 -->
+    <div class="in-class">
+      <h3>✏️ Exercise 1 — Print 1-2-3-...-10 on one line</h3>
+      <p style="margin-bottom:10px;">Display numbers 1 to 10 separated by hyphens. <strong>No hyphen</strong> at the start or end.</p>
+      <p style="margin-bottom:4px; font-size:0.9em; color:#555;"><strong>Strategy:</strong> If the number is less than 10, print it with a hyphen. If it's 10 (the last), print without a hyphen.</p>
+      <pre><span class="keyword">&lt;?php</span>
+<span class="keyword">for</span> (<span class="var">$x</span> <span class="op">=</span> <span class="num">1</span>; <span class="var">$x</span> <span class="op">&lt;=</span> <span class="num">10</span>; <span class="var">$x</span><span class="op">++</span>) {
+    <span class="keyword">if</span> (<span class="var">$x</span> <span class="op">&lt;</span> <span class="num">10</span>) {
+        <span class="fn">echo</span> <span class="string">"$x-"</span>;    <span class="comment">// Print with hyphen</span>
+    } <span class="keyword">else</span> {
+        <span class="fn">echo</span> <span class="string">"$x"</span>;     <span class="comment">// Last number — no hyphen</span>
+    }
+}
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>1-2-3-4-5-6-7-8-9-10</div>
+    </div>
+
+    <!-- Ex 2 -->
+    <div class="in-class" style="margin-top:20px;">
+      <h3>✏️ Exercise 2 — Sum of integers 0 to 30</h3>
+      <p style="margin-bottom:10px;">Use a <code>for</code> loop to add all integers from 0 to 30 and display the total.</p>
+      <p style="margin-bottom:4px; font-size:0.9em; color:#555;"><strong>Strategy:</strong> Start <code>$sum</code> at 0, then add each number <code>$x</code> to it on every iteration.</p>
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$sum</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="keyword">for</span> (<span class="var">$x</span> <span class="op">=</span> <span class="num">1</span>; <span class="var">$x</span> <span class="op">&lt;=</span> <span class="num">30</span>; <span class="var">$x</span><span class="op">++</span>) {
+    <span class="var">$sum</span> <span class="op">+=</span> <span class="var">$x</span>;   <span class="comment">// Same as: $sum = $sum + $x</span>
+}
+
+<span class="fn">echo</span> <span class="string">"The sum of the numbers 0 to 30 is $sum"</span>;
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>The sum of the numbers 0 to 30 is 465</div>
+      <div class="note" style="margin-top:10px;">
+        <strong>Verification:</strong> Sum of 1 to n = n×(n+1)/2 → 30×31/2 = <strong>465</strong> ✅
+      </div>
+    </div>
+
+    <!-- Ex 3 -->
+    <div class="in-class" style="margin-top:20px;">
+      <h3>✏️ Exercise 3 — Factorial using for loop</h3>
+      <p style="margin-bottom:10px;">Calculate and print the factorial of a number. Factorial of 4 = 4×3×2×1 = <strong>24</strong>.</p>
+      <p style="margin-bottom:4px; font-size:0.9em; color:#555;"><strong>Strategy:</strong> Start with <code>$x = 1</code> and multiply it by each number from 2 up to <code>$n</code>.</p>
+      <pre><span class="keyword">&lt;?php</span>
+<span class="var">$n</span> <span class="op">=</span> <span class="num">6</span>;    <span class="comment">// Find factorial of 6</span>
+<span class="var">$x</span> <span class="op">=</span> <span class="num">1</span>;    <span class="comment">// Start with 1 (identity for multiplication)</span>
+
+<span class="keyword">for</span> (<span class="var">$i</span> <span class="op">=</span> <span class="num">1</span>; <span class="var">$i</span> <span class="op">&lt;=</span> <span class="var">$n</span> <span class="op">-</span> <span class="num">1</span>; <span class="var">$i</span><span class="op">++</span>) {
+    <span class="var">$x</span> <span class="op">*=</span> (<span class="var">$i</span> <span class="op">+</span> <span class="num">1</span>);   <span class="comment">// Multiply: 2 × 3 × 4 × 5 × 6</span>
+}
+
+<span class="fn">echo</span> <span class="string">"The factorial of $n = $x"</span>;
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>The factorial of 6 = 720</div>
+      <div class="note" style="margin-top:10px;">
+        <strong>Trace (n=6):</strong> 1 × 2 = 2 → × 3 = 6 → × 4 = 24 → × 5 = 120 → × 6 = <strong>720</strong> ✅
+      </div>
+    </div>
+
+    <!-- Ex 4 -->
+    <div class="in-class" style="margin-top:20px;">
+      <h3>✏️ Exercise 4 — Two-digit decimal combinations (00–99)</h3>
+      <p style="margin-bottom:10px;">Print all two-digit combinations from 00 to 99 in comma-delimited format using a <strong>nested for loop</strong>.</p>
+      <p style="margin-bottom:4px; font-size:0.9em; color:#555;"><strong>Strategy:</strong> Outer loop controls the tens digit (0–9), inner loop controls the units digit (0–9). Concatenate them.</p>
+      <pre><span class="keyword">&lt;?php</span>
+<span class="keyword">for</span> (<span class="var">$a</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">$a</span> <span class="op">&lt;</span> <span class="num">10</span>; <span class="var">$a</span><span class="op">++</span>) {        <span class="comment">// Tens digit: 0–9</span>
+    <span class="keyword">for</span> (<span class="var">$b</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">$b</span> <span class="op">&lt;</span> <span class="num">10</span>; <span class="var">$b</span><span class="op">++</span>) {    <span class="comment">// Units digit: 0–9</span>
+        <span class="fn">echo</span> <span class="var">$a</span> . <span class="var">$b</span> . <span class="string">", "</span>;           <span class="comment">// Concatenate and print</span>
+    }
+}
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box"><span class="label">Output:</span>00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12 ... 97, 98, 99,</div>
+      <div class="note" style="margin-top:10px;">
+        <strong>Nested loops explained:</strong> For every single value of <code>$a</code> (outer), the inner loop runs all 10 values of <code>$b</code>. Total iterations = 10 × 10 = <strong>100 combinations</strong>.
+      </div>
+    </div>
+
+    <!-- Ex 5 -->
+    <div class="in-class" style="margin-top:20px;">
+      <h3>✏️ Exercise 5 — FizzBuzz (1 to 50)</h3>
+      <p style="margin-bottom:10px;">Iterate 1 to 50. Print <strong>Fizz</strong> for multiples of 3, <strong>Buzz</strong> for multiples of 5, and <strong>FizzBuzz</strong> for multiples of both.</p>
+      <p style="margin-bottom:4px; font-size:0.9em; color:#555;"><strong>Key concept:</strong> Use the <strong>modulo operator</strong> <code>%</code> — it gives the remainder of division. If <code>$i % 3 == 0</code>, the number divides evenly by 3.</p>
+
+      <div class="highlight" style="margin-bottom:12px;">
+        <strong>⚠️ Order matters!</strong> Check for <code>FizzBuzz</code> (divisible by both 3 AND 5) <em>first</em>, before checking individually. If you check Fizz first, you'll print "Fizz" for 15 and never reach the FizzBuzz case.
+      </div>
+
+      <pre><span class="keyword">&lt;?php</span>
+<span class="keyword">for</span> (<span class="var">$i</span> <span class="op">=</span> <span class="num">1</span>; <span class="var">$i</span> <span class="op">&lt;=</span> <span class="num">50</span>; <span class="var">$i</span><span class="op">++</span>) {
+
+    <span class="keyword">if</span> (<span class="var">$i</span> <span class="op">%</span> <span class="num">3</span> <span class="op">==</span> <span class="num">0</span> <span class="op">&amp;&amp;</span> <span class="var">$i</span> <span class="op">%</span> <span class="num">5</span> <span class="op">==</span> <span class="num">0</span>) {
+        <span class="fn">echo</span> <span class="var">$i</span> . <span class="string">" FizzBuzz\n"</span>;   <span class="comment">// Divisible by BOTH 3 and 5 → check FIRST</span>
+
+    } <span class="keyword">elseif</span> (<span class="var">$i</span> <span class="op">%</span> <span class="num">3</span> <span class="op">==</span> <span class="num">0</span>) {
+        <span class="fn">echo</span> <span class="var">$i</span> . <span class="string">" Fizz\n"</span>;       <span class="comment">// Divisible by 3 only</span>
+
+    } <span class="keyword">elseif</span> (<span class="var">$i</span> <span class="op">%</span> <span class="num">5</span> <span class="op">==</span> <span class="num">0</span>) {
+        <span class="fn">echo</span> <span class="var">$i</span> . <span class="string">" Buzz\n"</span>;       <span class="comment">// Divisible by 5 only</span>
+
+    } <span class="keyword">else</span> {
+        <span class="fn">echo</span> <span class="var">$i</span> . <span class="string">"\n"</span>;           <span class="comment">// Not divisible by 3 or 5</span>
+    }
+}
+<span class="keyword">?&gt;</span></pre>
+      <div class="output-box">
+        <span class="label">Sample Output (first 16 numbers shown):</span>
+        1 &nbsp; 2 &nbsp; <span class="fizz">3 Fizz</span> &nbsp; 4 &nbsp; <span class="buzz">5 Buzz</span> &nbsp; <span class="fizz">6 Fizz</span> &nbsp; 7 &nbsp; 8 &nbsp;
+        <span class="fizz">9 Fizz</span> &nbsp; <span class="buzz">10 Buzz</span> &nbsp; 11 &nbsp; <span class="fizz">12 Fizz</span> &nbsp; 13 &nbsp; 14 &nbsp;
+        <span class="fizzbuzz">15 FizzBuzz</span> &nbsp; 16 ...
+      </div>
+      <div class="note" style="margin-top:10px;">
+        <strong>Modulo recap:</strong> <code>15 % 3 = 0</code> ✅ &nbsp; <code>15 % 5 = 0</code> ✅ → FizzBuzz &nbsp;|&nbsp;
+        <code>9 % 3 = 0</code> ✅ <code>9 % 5 = 4</code> ❌ → Fizz &nbsp;|&nbsp;
+        <code>10 % 3 = 1</code> ❌ <code>10 % 5 = 0</code> ✅ → Buzz
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div class="card">
+    <h2 class="section-title">📌 Quick Reference Summary</h2>
+    <table>
+      <thead>
+        <tr><th>Loop Type</th><th>Syntax Skeleton</th><th>Best Used For</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>while</strong></td>
+          <td><code>while (cond) { ... }</code></td>
+          <td>Unknown iterations — repeat while condition holds</td>
+        </tr>
+        <tr>
+          <td><strong>do...while</strong></td>
+          <td><code>do { ... } while (cond);</code></td>
+          <td>Must run at least once (e.g., menu prompts)</td>
+        </tr>
+        <tr>
+          <td><strong>for</strong></td>
+          <td><code>for (init; cond; incr) { ... }</code></td>
+          <td>Known number of iterations (counting loops)</td>
+        </tr>
+        <tr>
+          <td><strong>foreach</strong></td>
+          <td><code>foreach ($arr as $k =&gt; $v) { ... }</code></td>
+          <td>Iterating over every element in an array</td>
+        </tr>
+        <tr>
+          <td><strong>Nested for</strong></td>
+          <td><code>for (...) { for (...) { } }</code></td>
+          <td>Multi-dimensional combinations (rows × columns)</td>
+        </tr>
+        <tr>
+          <td><strong>Modulo %</strong></td>
+          <td><code>$x % $n == 0</code></td>
+          <td>Check if a number is divisible by another</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    🌱 Lecture 03 - PHP Loops • BY_#D1
+  </div>
+
+</div>
+</body>
+</html>

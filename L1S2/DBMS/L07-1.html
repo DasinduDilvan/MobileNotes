@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 07 (Part 1) - The Relational Algebra</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c6e6b; margin-bottom: 10px; font-size: 2.2em; }
+        .subtitle { text-align: center; color: #5a9d99; margin-bottom: 30px; font-size: 1.1em; }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .sub-title {
+            color: #2c6e6b;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin: 18px 0 8px 0;
+        }
+        ul { list-style-position: inside; line-height: 1.8; margin-left: 10px; }
+        ul li { margin: 8px 0; }
+        ul ul { margin-left: 25px; list-style-type: circle; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+        .box strong { color: #2c6e6b; display: block; margin-bottom: 5px; }
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .op-badge {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 3px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .symbol {
+            display: inline-block;
+            background: #e0f2f1;
+            color: #2c6e6b;
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin: 0 4px;
+            border: 1px solid #b2dfdb;
+        }
+        .formula {
+            background: #f3fbfa;
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.97em;
+            color: #1a5c59;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        table.def-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.95em;
+        }
+        table.def-table th {
+            background: #2c6e6b;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        table.def-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #d8f0ee;
+        }
+        table.def-table tr:nth-child(even) td { background: #f3fbfa; }
+        table.def-table tr:hover td { background: #e0f2f1; }
+        .prop-list {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 12px 0;
+            border-left: 3px solid #5a9d99;
+        }
+        .prop-list p { margin: 6px 0; }
+        .footer { text-align: center; color: #666; margin-top: 50px; padding: 20px; font-size: 0.95em; }
+        @media print {
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .footer { page-break-before: avoid; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/dbms" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>The Relational Algebra</h1>
+    <p class="subtitle">ICT1212 – Database Management Systems &nbsp;|&nbsp; Lecture 07 — Part 1</p>
+
+    <!-- Topics -->
+    <div class="card">
+        <h2 class="section-title">📋 Topics Covered (Part 1)</h2>
+        <div class="grid">
+            <div class="box"><strong>Background</strong>Relational Model Concepts, DML types, Algebra overview</div>
+            <div class="box"><strong>Unary Operations</strong>SELECT (σ), PROJECT (π), RENAME (ρ)</div>
+            <div class="box"><strong>Set Theory Ops</strong>UNION (∪), INTERSECTION (∩), DIFFERENCE (–), CARTESIAN PRODUCT (×)</div>
+        </div>
+    </div>
+
+    <!-- Relational Model Background -->
+    <div class="card">
+        <h2 class="section-title">📖 Background: Relational Model Concepts</h2>
+        <ul>
+            <li>A <strong>Relation</strong> is a mathematical concept based on the ideas of <em>sets</em>.</li>
+            <li>The model was first proposed by <strong>Dr. E.F. Codd</strong> of IBM Research in 1970 in the paper: <em>"A Relational Model for Large Shared Data Banks"</em>, Communications of the ACM, June 1970.</li>
+            <li>This paper caused a major revolution in database management and earned Dr. Codd the <strong>ACM Turing Award</strong>.</li>
+        </ul>
+
+        <p class="sub-title">Informal vs. Formal Terminology</p>
+        <table class="def-table">
+            <thead><tr><th>Informal Term</th><th>Formal Term</th></tr></thead>
+            <tbody>
+                <tr><td>Table</td><td>Relation</td></tr>
+                <tr><td>Column Header</td><td>Attribute</td></tr>
+                <tr><td>All Possible Column Values</td><td>Domain</td></tr>
+                <tr><td>Row</td><td>Tuple</td></tr>
+                <tr><td>Table Definition</td><td>Schema of a Relation</td></tr>
+                <tr><td>Populated Table</td><td>State of the Relation</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- DML -->
+    <div class="card">
+        <h2 class="section-title">🗄️ Data Manipulation Languages (DML)</h2>
+        <p>DML deals with how to <strong>store and retrieve</strong> information from a database. Two types exist:</p>
+        <div class="two-column" style="margin-top:12px;">
+            <div class="box">
+                <strong>Procedural DML</strong>
+                The query specifies the <em>high-level strategy</em> the DBMS should use to find the desired result. <em>Relational Algebra</em> is procedural.
+            </div>
+            <div class="box">
+                <strong>Non-Procedural DML</strong>
+                The query specifies <em>only what data is wanted</em>, not how to find it. <em>Relational Calculus / SQL</em> is non-procedural.
+            </div>
+        </div>
+    </div>
+
+    <!-- Relational Algebra Overview -->
+    <div class="card">
+        <h2 class="section-title">⚙️ Relational Algebra — Overview</h2>
+        <ul>
+            <li>Relational algebra is the <strong>basic set of operations</strong> for the relational model.</li>
+            <li>These operations enable a user to specify <strong>basic retrieval requests (queries)</strong>.</li>
+            <li>The result of an operation is a <strong>new relation</strong>, formed from one or more input relations.</li>
+            <li>This property makes the algebra <strong>"closed"</strong> — all objects in relational algebra are relations.</li>
+            <li>A sequence of relational algebra operations forms a <strong>relational algebra expression</strong>, whose result is also a relation representing the query result.</li>
+        </ul>
+
+        <p class="sub-title">Groups of Operations</p>
+        <div class="grid">
+            <div class="box">
+                <strong>Unary Operations</strong>
+                SELECT <span class="symbol">σ</span> sigma<br>
+                PROJECT <span class="symbol">π</span> pi<br>
+                RENAME <span class="symbol">ρ</span> rho
+            </div>
+            <div class="box">
+                <strong>Set Theory Operations</strong>
+                UNION <span class="symbol">∪</span><br>
+                INTERSECTION <span class="symbol">∩</span><br>
+                DIFFERENCE <span class="symbol">–</span><br>
+                CARTESIAN PRODUCT <span class="symbol">×</span>
+            </div>
+            <div class="box">
+                <strong>Binary Operations</strong>
+                JOIN (multiple variations)<br>
+                DIVISION
+            </div>
+            <div class="box">
+                <strong>Additional Operations</strong>
+                OUTER JOINS, OUTER UNION<br>
+                AGGREGATE FUNCTIONS<br>
+                (SUM, COUNT, AVG, MIN, MAX)
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECT -->
+    <div class="card">
+        <h2 class="section-title">🔍 Unary Operation: SELECT (σ)</h2>
+        <div class="op-badge">σ — sigma</div>
+
+        <ul>
+            <li>Used to <strong>select a subset of tuples</strong> from a relation based on a <em>selection condition</em>.</li>
+            <li>The selection condition acts as a <strong>filter</strong>.</li>
+            <li>Tuples satisfying the condition are <strong>kept</strong>; tuples that don't are <strong>discarded</strong>.</li>
+            <li>The selection condition is a <strong>Boolean expression</strong> on the attributes of relation R.</li>
+        </ul>
+
+        <p class="sub-title">General Form</p>
+        <div class="formula">σ &lt;selection condition&gt;(R)</div>
+
+        <p class="sub-title">Examples</p>
+        <div class="highlight">
+            Select employees in department 4:<br>
+            <div class="formula">σ <sub>DNO = 4</sub> (EMPLOYEE)</div>
+            Select employees with salary &gt; $30,000:<br>
+            <div class="formula">σ <sub>SALARY &gt; 30000</sub> (EMPLOYEE)</div>
+        </div>
+
+        <p class="sub-title">SELECT Properties</p>
+        <div class="prop-list">
+            <p>✦ The result has the <strong>same schema</strong> (same attributes) as R.</p>
+            <p>✦ SELECT is <strong>commutative</strong>: σ<sub>c1</sub>(σ<sub>c2</sub>(R)) = σ<sub>c2</sub>(σ<sub>c1</sub>(R))</p>
+            <p>✦ A <strong>cascade of SELECTs</strong> can be applied in any order (due to commutativity).</p>
+            <p>✦ A cascade can be <strong>replaced by a single SELECT</strong> with a conjunction (AND) of all conditions: σ<sub>c1</sub>(σ<sub>c2</sub>(σ<sub>c3</sub>(R))) = σ<sub>c1 AND c2 AND c3</sub>(R)</p>
+            <p>✦ The number of result tuples is <strong>≤</strong> the number of tuples in R.</p>
+        </div>
+    </div>
+
+    <!-- PROJECT -->
+    <div class="card">
+        <h2 class="section-title">📐 Unary Operation: PROJECT (π)</h2>
+        <div class="op-badge">π — pi</div>
+
+        <ul>
+            <li>Keeps certain <strong>columns (attributes)</strong> from a relation and <strong>discards the others</strong>.</li>
+            <li>PROJECT creates a <strong>vertical partitioning</strong> — specified attributes are kept, others are removed from each tuple.</li>
+            <li>PROJECT <strong>removes duplicate tuples</strong> from the result (since the result must be a set — mathematical sets don't allow duplicates).</li>
+        </ul>
+
+        <p class="sub-title">General Form</p>
+        <div class="formula">π &lt;attribute list&gt;(R)</div>
+
+        <p class="sub-title">Example</p>
+        <div class="highlight">
+            List each employee's first name, last name, and salary:<br>
+            <div class="formula">π <sub>LNAME, FNAME, SALARY</sub> (EMPLOYEE)</div>
+        </div>
+
+        <p class="sub-title">PROJECT Properties</p>
+        <div class="prop-list">
+            <p>✦ Number of result tuples is <strong>≤</strong> tuples in R.</p>
+            <p>✦ If the attribute list <strong>includes a key</strong> of R, result tuple count <strong>equals</strong> R's tuple count.</p>
+            <p>✦ PROJECT is <strong>NOT commutative</strong>.</p>
+            <p>✦ π<sub>list1</sub>(π<sub>list2</sub>(R)) = π<sub>list1</sub>(R) — as long as list2 contains all attributes in list1.</p>
+        </div>
+    </div>
+
+    <!-- Combining SELECT + PROJECT -->
+    <div class="card">
+        <h2 class="section-title">🔗 Relational Algebra Expressions</h2>
+        <p>Multiple operations can be combined by <strong>nesting</strong> them into a single expression, or by using <strong>intermediate result relations</strong> with names.</p>
+
+        <div class="highlight">
+            <strong>Example:</strong> Retrieve first name, last name, and salary of all employees in department 5.
+            <p style="margin-top:10px;"><strong>Method 1 — Single nested expression:</strong></p>
+            <div class="formula">π <sub>FNAME, LNAME, SALARY</sub> (σ <sub>DNO=5</sub> (EMPLOYEE))</div>
+            <p style="margin-top:10px;"><strong>Method 2 — Sequence with intermediate relations:</strong></p>
+            <div class="formula">DEP5_EMPS ← σ <sub>DNO=5</sub> (EMPLOYEE)<br>RESULT ← π <sub>FNAME, LNAME, SALARY</sub> (DEP5_EMPS)</div>
+            <p style="margin-top:6px; font-size:0.9em;"><em>Note: ← is the assignment operator.</em></p>
+        </div>
+    </div>
+
+    <!-- RENAME -->
+    <div class="card">
+        <h2 class="section-title">✏️ Unary Operation: RENAME (ρ)</h2>
+        <div class="op-badge">ρ — rho</div>
+
+        <ul>
+            <li>Used to <strong>rename attributes</strong> of a relation, the <strong>relation name</strong>, or both.</li>
+            <li>Useful when a query requires multiple operations or when the same relation is used multiple times (e.g., in JOIN).</li>
+        </ul>
+
+        <p class="sub-title">Three Forms of RENAME</p>
+        <div class="three-column">
+            <div class="box">
+                <strong>ρ<sub>S(B1,B2,...,Bn)</sub>(R)</strong>
+                Changes <em>both</em> the relation name to S and all attribute names to B1, B2, ..., Bn
+            </div>
+            <div class="box">
+                <strong>ρ<sub>S</sub>(R)</strong>
+                Changes the <em>relation name only</em> to S
+            </div>
+            <div class="box">
+                <strong>ρ<sub>(B1,B2,...,Bn)</sub>(R)</strong>
+                Changes the <em>attribute names only</em> to B1, B2, ..., Bn
+            </div>
+        </div>
+
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Example — Renaming a result:</strong>
+            <div class="formula">RESULT (F, M, L, S, B, A, SX, SAL, SU, DNO) ← ρ <sub>RESULT(F,M,L,S,B,A,SX,SAL,SU,DNO)</sub>(DEP5_EMPS)</div>
+            The 10 attributes of DEP5_EMPS are renamed to F, M, L, S, B, A, SX, SAL, SU, DNO respectively.
+        </div>
+    </div>
+
+    <!-- SET THEORY OPERATIONS -->
+    <div class="card">
+        <h2 class="section-title">🔢 Set Theory Operations</h2>
+        <p style="margin-bottom:12px;"><strong>Type Compatibility</strong> is required for UNION, INTERSECTION, and SET DIFFERENCE. Two relations R1(A1,...,An) and R2(B1,...,Bn) are <em>type compatible</em> if they have the same number of attributes AND the domains of corresponding attributes are compatible: dom(Ai) = dom(Bi).</p>
+        <div class="note">The result relation for R1 ∪ R2, R1 ∩ R2, or R1 – R2 always takes the <strong>attribute names of the first operand R1</strong> (by convention).</div>
+
+        <!-- UNION -->
+        <div class="op-badge" style="margin-top:20px;">UNION — ∪</div>
+        <ul>
+            <li>Binary operation denoted by <span class="symbol">∪</span>.</li>
+            <li>R ∪ S returns a relation that includes all tuples <strong>in R, in S, or in both</strong>.</li>
+            <li><strong>Duplicate tuples are eliminated</strong>.</li>
+            <li>R and S must be type compatible (UNION compatible).</li>
+        </ul>
+        <div class="highlight">
+            <strong>Example:</strong> Retrieve SSNs of employees who work in department 5 OR directly supervise someone in department 5.
+            <div class="formula">DEP5_EMPS ← σ <sub>DNO=5</sub> (EMPLOYEE)<br>RESULT1 ← π <sub>SSN</sub> (DEP5_EMPS)<br>RESULT2(SSN) ← π <sub>SUPERSSN</sub> (DEP5_EMPS)<br>RESULT ← RESULT1 ∪ RESULT2</div>
+        </div>
+
+        <!-- INTERSECTION -->
+        <div class="op-badge" style="margin-top:20px;">INTERSECTION — ∩</div>
+        <ul>
+            <li>Denoted by <span class="symbol">∩</span>.</li>
+            <li>R ∩ S returns a relation that includes all tuples <strong>in both R and S</strong>.</li>
+            <li>R and S must be type compatible.</li>
+            <li>Attribute names in result = attribute names in R.</li>
+        </ul>
+
+        <!-- SET DIFFERENCE -->
+        <div class="op-badge" style="margin-top:20px;">SET DIFFERENCE — –</div>
+        <ul>
+            <li>Also called MINUS or EXCEPT. Denoted by <span class="symbol">–</span>.</li>
+            <li>R – S returns a relation that includes all tuples <strong>in R but NOT in S</strong>.</li>
+            <li>R and S must be type compatible.</li>
+            <li>Attribute names in result = attribute names in R.</li>
+        </ul>
+
+        <!-- Properties Summary -->
+        <p class="sub-title">Properties of UNION, INTERSECTION, DIFFERENCE</p>
+        <div class="prop-list">
+            <p>✦ UNION and INTERSECTION are <strong>commutative</strong>: R ∪ S = S ∪ R &nbsp;|&nbsp; R ∩ S = S ∩ R</p>
+            <p>✦ UNION and INTERSECTION are <strong>associative</strong>: R ∪ (S ∪ T) = (R ∪ S) ∪ T &nbsp;|&nbsp; (R ∩ S) ∩ T = R ∩ (S ∩ T)</p>
+            <p>✦ SET DIFFERENCE is <strong>NOT commutative</strong>: R – S ≠ S – R (in general)</p>
+        </div>
+
+        <!-- Visual Example -->
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Example (STUDENT ∪ INSTRUCTOR, STUDENT ∩ INSTRUCTOR, STUDENT – INSTRUCTOR):</strong>
+            <div class="three-column" style="margin-top:12px; font-size:0.88em;">
+                <div class="box">
+                    <strong>STUDENT ∪ INSTRUCTOR</strong>
+                    All unique names from both tables combined (no duplicates)
+                </div>
+                <div class="box">
+                    <strong>STUDENT ∩ INSTRUCTOR</strong>
+                    Only names that appear in <em>both</em> (e.g., Susan Yao, Ramesh Shah)
+                </div>
+                <div class="box">
+                    <strong>STUDENT – INSTRUCTOR</strong>
+                    Names in STUDENT but <em>not</em> in INSTRUCTOR (Johnny, Barbara, Amy, Jimmy, Ernest)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARTESIAN PRODUCT -->
+    <div class="card">
+        <h2 class="section-title">✖️ CARTESIAN PRODUCT (×)</h2>
+        <div class="op-badge">CROSS PRODUCT — ×</div>
+
+        <ul>
+            <li>Combines tuples from two relations in a <strong>combinatorial fashion</strong>.</li>
+            <li>Denoted by R(A1,...,An) × S(B1,...,Bm).</li>
+            <li>Result is a relation Q with degree <strong>n + m attributes</strong>: Q(A1,...,An, B1,...,Bm).</li>
+            <li>If R has n<sub>R</sub> tuples and S has n<sub>S</sub> tuples, then R × S will have <strong>n<sub>R</sub> × n<sub>S</sub> tuples</strong>.</li>
+            <li>The two operands do <strong>NOT</strong> need to be type compatible.</li>
+        </ul>
+
+        <div class="warning">
+            <strong>CROSS PRODUCT alone is generally NOT meaningful</strong> — it produces every possible combination of tuples regardless of whether they are actually related. It becomes meaningful when followed by a SELECT operation that filters only the relevant combinations.
+        </div>
+
+        <p class="sub-title">Example — Making CROSS PRODUCT Meaningful</p>
+        <div class="highlight">
+            <strong>Step 1 — Not meaningful (all combinations):</strong>
+            <div class="formula">FEMALE_EMPS ← σ <sub>SEX='F'</sub> (EMPLOYEE)<br>EMPNAMES ← π <sub>FNAME, LNAME, SSN</sub> (FEMALE_EMPS)<br>EMP_DEPENDENTS ← EMPNAMES × DEPENDENT<br><em>// Contains every combination of female employee + dependent — even unrelated ones</em></div>
+
+            <strong>Step 2 — Meaningful (add SELECT to filter related tuples):</strong>
+            <div class="formula">FEMALE_EMPS ← σ <sub>SEX='F'</sub> (EMPLOYEE)<br>EMPNAMES ← π <sub>FNAME, LNAME, SSN</sub> (FEMALE_EMPS)<br>EMP_DEPENDENTS ← EMPNAMES × DEPENDENT<br>ACTUAL_DEPS ← σ <sub>SSN=ESSN</sub> (EMP_DEPENDENTS)<br>RESULT ← π <sub>FNAME, LNAME, DEPENDENT_NAME</sub> (ACTUAL_DEPS)</div>
+            RESULT now contains the names of <strong>female employees and their actual dependents</strong>.
+        </div>
+    </div>
+
+    <!-- Quick Reference Summary -->
+    <div class="card">
+        <h2 class="section-title">📊 Quick Reference — Operations Summary (Part 1)</h2>
+        <table class="def-table">
+            <thead>
+                <tr><th>Operation</th><th>Symbol</th><th>What It Does</th><th>Key Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>SELECT</strong></td><td>σ (sigma)</td><td>Filters rows based on a condition</td><td>Commutative; result ≤ input tuples; same schema</td></tr>
+                <tr><td><strong>PROJECT</strong></td><td>π (pi)</td><td>Keeps specified columns; removes others</td><td>NOT commutative; removes duplicates; result ≤ input tuples</td></tr>
+                <tr><td><strong>RENAME</strong></td><td>ρ (rho)</td><td>Renames relation name and/or attributes</td><td>Three forms: both, name only, attrs only</td></tr>
+                <tr><td><strong>UNION</strong></td><td>∪</td><td>All tuples from R or S (no duplicates)</td><td>Type compatible required; commutative &amp; associative</td></tr>
+                <tr><td><strong>INTERSECTION</strong></td><td>∩</td><td>Only tuples in both R and S</td><td>Type compatible required; commutative &amp; associative</td></tr>
+                <tr><td><strong>DIFFERENCE</strong></td><td>–</td><td>Tuples in R but not in S</td><td>Type compatible required; NOT commutative</td></tr>
+                <tr><td><strong>CARTESIAN PRODUCT</strong></td><td>×</td><td>All combinations of tuples from R and S</td><td>Not type-compatible required; nR × nS tuples; rarely used alone</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 07 - The Relational Algebra (Part 1) • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

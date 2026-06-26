@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Laravel — Lecture 01 &amp; 02 Study Notes</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.lecture-badge {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.badge {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin: 3px;
+}
+
+.badge.orange { background: #e67e22; }
+
+/* Divider between lectures */
+.lecture-divider {
+    text-align: center;
+    margin: 40px 0 20px;
+    position: relative;
+}
+.lecture-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 2px;
+    background: #cfe9e7;
+}
+.lecture-divider span {
+    background: #eef6f5;
+    padding: 0 20px;
+    position: relative;
+    color: #2c6e6b;
+    font-weight: 700;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+ul li { margin: 8px 0; }
+ul ul {
+    margin-left: 25px;
+    list-style-type: circle;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #c0392b;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+pre .comment { color: #6a9955; }
+pre .keyword { color: #569cd6; }
+pre .string  { color: #ce9178; }
+pre .fn      { color: #dcdcaa; }
+pre .type    { color: #4ec9b0; }
+pre .num     { color: #b5cea8; }
+
+.model-diagram {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-size: 0.95em;
+}
+
+.mvc-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+.mvc-box {
+    background: #2c6e6b;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1em;
+    text-align: center;
+    min-width: 110px;
+}
+.mvc-box .sub {
+    display: block;
+    font-weight: 400;
+    font-size: 0.78em;
+    color: #cfe9e7;
+    margin-top: 4px;
+}
+.mvc-arrow {
+    font-size: 1.4em;
+    color: #5a9d99;
+    font-weight: 700;
+}
+
+/* Step boxes */
+.step-list { counter-reset: step-counter; list-style: none; margin-left: 0; }
+.step-list li {
+    counter-increment: step-counter;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 12px 0;
+    padding: 14px;
+    background: #f3fbfa;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+.step-list li::before {
+    content: counter(step-counter);
+    background: #2c6e6b;
+    color: white;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85em;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Compare table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+}
+thead tr {
+    background: #2c6e6b;
+    color: white;
+}
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #d9efed;
+}
+tbody tr:nth-child(even) { background: #f3fbfa; }
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.crud-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+.crud-card {
+    background: #f3fbfa;
+    border-radius: 10px;
+    padding: 14px;
+    border-top: 4px solid #2c6e6b;
+    text-align: center;
+}
+.crud-card.store  { border-top-color: #4caf50; }
+.crud-card.edit   { border-top-color: #f0ad4e; }
+.crud-card.update { border-top-color: #2196f3; }
+.crud-card.delete { border-top-color: #e91e63; }
+.crud-card .fn-name {
+    font-weight: 700;
+    color: #2c6e6b;
+    font-size: 1em;
+    margin-bottom: 4px;
+}
+.crud-card.store  .fn-name { color: #388e3c; }
+.crud-card.edit   .fn-name { color: #e67e22; }
+.crud-card.update .fn-name { color: #1565c0; }
+.crud-card.delete .fn-name { color: #c62828; }
+.crud-card p { font-size: 0.82em; color: #666; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column { grid-template-columns: 1fr; }
+    .mvc-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/web-development" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <!-- Header -->
+    <h1>🌿 Laravel — Introduction &amp; Routing</h1>
+    <p class="subtitle">PHP Framework for Modern Web Development</p>
+    <div class="lecture-badge">
+        <span class="badge">Lecture 12 — Introduction to Laravel</span>
+        <span class="badge orange">Lecture 13 — Routing in Laravel</span>
+    </div>
+
+    <!-- ══════════════════════════════════════ -->
+    <!--         LECTURE 01 — INTRODUCTION      -->
+    <!-- ══════════════════════════════════════ -->
+
+    <div class="lecture-divider"><span>📘 Lecture 13 — Introduction to Laravel</span></div>
+
+    <!-- What is Laravel -->
+    <div class="card">
+        <h2 class="section-title">What is Laravel?</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>Definition</strong>
+                Laravel is an <em>open-source PHP framework</em> designed for building modern, elegant web applications with clean, readable syntax.
+            </div>
+            <div class="box">
+                <strong>Creator</strong>
+                Created by <em>Taylor Otwell</em>. It follows the <em>MVC (Model-View-Controller)</em> architectural pattern.
+            </div>
+            <div class="box">
+                <strong>Core Goal</strong>
+                Make PHP development faster, easier, and more secure — without sacrificing developer experience.
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Laravel -->
+    <div class="card">
+        <h2 class="section-title">Why Laravel?</h2>
+        <ul>
+            <li><strong>Clean and simple syntax</strong> — Readable PHP code that is easy to write and maintain.</li>
+            <li><strong>Built-in authentication</strong> — User login and registration systems are ready out of the box.</li>
+            <li><strong>Powerful routing system</strong> — Define how URLs map to your application's logic easily.</li>
+            <li><strong>Blade templating engine</strong> — A lightweight yet powerful engine for writing HTML views with dynamic data.</li>
+            <li><strong>Strong security features</strong> — Built-in protection against common web vulnerabilities (e.g., CSRF, SQL injection).</li>
+        </ul>
+    </div>
+
+    <!-- MVC Architecture -->
+    <div class="card">
+        <h2 class="section-title">MVC Architecture</h2>
+        <p style="margin-bottom:15px;">Laravel follows the <strong>MVC</strong> pattern, which separates an application into three interconnected parts:</p>
+
+        <div class="model-diagram">
+            <div class="mvc-row">
+                <div class="mvc-box">
+                    Model
+                    <span class="sub">Handles Data</span>
+                </div>
+                <div class="mvc-arrow">→</div>
+                <div class="mvc-box">
+                    View
+                    <span class="sub">User Interface</span>
+                </div>
+                <div class="mvc-arrow">→</div>
+                <div class="mvc-box">
+                    Controller
+                    <span class="sub">Application Logic</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid" style="margin-top:15px;">
+            <div class="box">
+                <strong>🗄️ Model</strong>
+                Responsible for interacting with the database. It retrieves, stores, updates, and deletes data.
+            </div>
+            <div class="box">
+                <strong>🖥️ View</strong>
+                The HTML/Blade templates the user sees. It only handles presentation — no business logic.
+            </div>
+            <div class="box">
+                <strong>⚙️ Controller</strong>
+                The brain. It receives user requests, uses Models to get data, and passes that data to Views.
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Features -->
+    <div class="card">
+        <h2 class="section-title">Key Features of Laravel</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>Eloquent ORM</strong>
+                A simple, expressive way to interact with your database using PHP objects instead of raw SQL queries.
+            </div>
+            <div class="box">
+                <strong>Artisan CLI</strong>
+                A built-in command-line tool. Used to generate code, run migrations, and manage the application from your terminal.
+            </div>
+            <div class="box">
+                <strong>Middleware</strong>
+                Filters that run between a request and your application. Example: checking if a user is logged in before allowing access.
+            </div>
+            <div class="box">
+                <strong>Routing System</strong>
+                Defines how HTTP requests (URLs) are directed to the correct controller or function.
+            </div>
+            <div class="box">
+                <strong>RESTful Support</strong>
+                Laravel makes it easy to build REST APIs, which follow standard HTTP verbs (GET, POST, PUT, DELETE).
+            </div>
+        </div>
+    </div>
+
+    <!-- Where Laravel is used -->
+    <div class="card">
+        <h2 class="section-title">Where is Laravel Used?</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>🛒 E-commerce Websites</strong>
+                Online shops with product listings, carts, and payment systems.
+            </div>
+            <div class="box">
+                <strong>🏫 School Management Systems</strong>
+                Student records, attendance, grades, and portals.
+            </div>
+            <div class="box">
+                <strong>🏢 Company Portals</strong>
+                Internal tools, HR systems, dashboards.
+            </div>
+            <div class="box">
+                <strong>🔌 APIs &amp; Web Services</strong>
+                Backend services that power mobile apps or third-party integrations.
+            </div>
+        </div>
+        <div class="important" style="margin-top:15px;">
+            <strong>✅ Summary:</strong> Laravel makes PHP development <em>faster, easier, and more secure</em> — making it one of the most popular PHP frameworks in the world.
+        </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════ -->
+    <!--         LECTURE 02 — ROUTING           -->
+    <!-- ══════════════════════════════════════ -->
+
+    <div class="lecture-divider"><span>📗 Lecture 13 — Routing in Laravel</span></div>
+
+    <!-- What is a Route -->
+    <div class="card">
+        <h2 class="section-title">What is Routing?</h2>
+        <div class="highlight">
+            <strong>Core Concept:</strong> Routing is the process of accepting a request (a URL + HTTP Method) and directing it to the appropriate code — either a Controller or a Closure (an inline function).
+        </div>
+        <p style="margin-top:12px; margin-bottom:12px;"><strong>Think of it like this:</strong></p>
+        <div class="model-diagram">
+            👤 User types a URL in the browser
+            <div class="mvc-row" style="margin-top:10px;">
+                <div class="mvc-box" style="background:#5a9d99;">URL Request</div>
+                <div class="mvc-arrow">→</div>
+                <div class="mvc-box">Router<span class="sub">web.php</span></div>
+                <div class="mvc-arrow">→</div>
+                <div class="mvc-box">Controller<br>or Closure<span class="sub">Your logic runs</span></div>
+                <div class="mvc-arrow">→</div>
+                <div class="mvc-box" style="background:#5a9d99;">Response<span class="sub">Page / Data</span></div>
+            </div>
+        </div>
+        <p style="margin-top:10px;">🚦 <em>The router is the "traffic controller" of your Laravel application.</em></p>
+
+        <div class="grid" style="margin-top:15px;">
+            <div class="box">
+                <strong>Maps URLs to logic</strong>
+                Decides which function or controller handles each URL.
+            </div>
+            <div class="box">
+                <strong>Filters via Middleware</strong>
+                Can block or allow requests (e.g., only logged-in users).
+            </div>
+            <div class="box">
+                <strong>Clean URL structure</strong>
+                Provides SEO-friendly, readable URLs for your app.
+            </div>
+        </div>
+
+        <div class="note" style="margin-top:15px;">
+            <strong>📁 Where do routes live?</strong> All web routes are defined in <code>routes/web.php</code> inside your Laravel project.
+        </div>
+    </div>
+
+    <!-- GET vs POST -->
+    <div class="card">
+        <h2 class="section-title">GET vs. POST — The Two Most Common HTTP Methods</h2>
+        <p style="margin-bottom:15px;">These are the two most important HTTP methods you'll use when building web apps:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>GET</th>
+                    <th>POST</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Purpose</strong></td>
+                    <td>Requesting / viewing data</td>
+                    <td>Sending / submitting data</td>
+                </tr>
+                <tr>
+                    <td><strong>Where is data?</strong></td>
+                    <td>Visible in the URL (e.g., <code>?name=John</code>)</td>
+                    <td>Hidden — sent in the request body</td>
+                </tr>
+                <tr>
+                    <td><strong>Changes Database?</strong></td>
+                    <td>❌ Should NOT change data</td>
+                    <td>✅ Yes — creates / updates records</td>
+                </tr>
+                <tr>
+                    <td><strong>CSRF Required?</strong></td>
+                    <td>No</td>
+                    <td>✅ Yes — always add <code>@csrf</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Example use</strong></td>
+                    <td>Viewing a page, searching</td>
+                    <td>Submitting a form, logging in</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- GET Route -->
+    <div class="card">
+        <h2 class="section-title">Setting Up a Basic GET Route</h2>
+        <p style="margin-bottom:12px;">A GET route displays a page when the user visits a URL. Here's how to set one up:</p>
+
+        <ol class="step-list">
+            <li>Create a Blade view file named <code>contact.blade.php</code> inside the <code>resources/views/</code> folder.</li>
+            <li>Open <code>routes/web.php</code> and add the following route:</li>
+        </ol>
+
+        <pre><span class="comment">// routes/web.php</span>
+<span class="type">Route</span>::<span class="fn">get</span>(<span class="string">'/contact'</span>, <span class="keyword">function</span> () {
+    <span class="keyword">return</span> <span class="fn">view</span>(<span class="string">'contact'</span>); <span class="comment">// returns the contact.blade.php view</span>
+});</pre>
+
+        <ol class="step-list" start="3">
+            <li>Open your browser and visit <code>yoursite.test/contact</code> — the contact page will appear.</li>
+        </ol>
+
+        <div class="note">
+            <strong>How it works:</strong> When a user visits <code>/contact</code>, Laravel matches the URL to this route and returns the <code>contact.blade.php</code> view file.
+        </div>
+    </div>
+
+    <!-- Route Parameters -->
+    <div class="card">
+        <h2 class="section-title">Route Parameters — Dynamic URLs</h2>
+        <p style="margin-bottom:12px;">Sometimes you need to capture a value from the URL itself (like a user ID, or a name). These are called <strong>route parameters</strong>.</p>
+
+        <div class="highlight">
+            <strong>Syntax:</strong> Wrap the parameter name in curly braces: <code>{parameterName}</code>
+        </div>
+
+        <h3 style="margin: 15px 0 8px; color:#2c6e6b;">Required Parameters</h3>
+        <p>These must be present in the URL. If missing, Laravel shows a 404 error.</p>
+        <pre><span class="comment">// Captures the {id} from the URL</span>
+<span class="type">Route</span>::<span class="fn">get</span>(<span class="string">'/user/{id}'</span>, <span class="keyword">function</span> ($id) {
+    <span class="keyword">return</span> <span class="string">'User ID is: '</span> . $id;
+});</pre>
+        <p style="margin-top:8px;">Example: Visiting <code>/user/42</code> will display <em>"User ID is: 42"</em></p>
+
+        <h3 style="margin: 20px 0 8px; color:#2c6e6b;">Multiple Parameters</h3>
+        <p>You can capture more than one value from the URL:</p>
+        <pre><span class="comment">// Captures two values from the URL</span>
+<span class="type">Route</span>::<span class="fn">get</span>(<span class="string">'/contact/{firstname}/{lastname}'</span>, <span class="keyword">function</span> ($firstname, $lastname) {
+    <span class="keyword">return</span> $firstname . <span class="string">' '</span> . $lastname;
+});</pre>
+        <p style="margin-top:8px;">Example: Visiting <code>/contact/John/Doe</code> displays <em>"John Doe"</em></p>
+    </div>
+
+    <!-- Named Routes -->
+    <div class="card">
+        <h2 class="section-title">Named Routes</h2>
+        <p style="margin-bottom:12px;">A <strong>named route</strong> gives a route a unique nickname. Instead of hardcoding URLs in your views, you use the route's name — so if the URL ever changes, you only update it in one place.</p>
+
+        <div class="two-column">
+            <div>
+                <h3 style="color:#2c6e6b; margin-bottom:10px;">Step 1 — Define the named route in web.php</h3>
+                <pre><span class="type">Route</span>::<span class="fn">get</span>(<span class="string">'/test'</span>, <span class="keyword">function</span> () {
+    <span class="keyword">return</span> <span class="string">'This is the test page'</span>;
+})-><span class="fn">name</span>(<span class="string">'testpage'</span>);</pre>
+            </div>
+            <div>
+                <h3 style="color:#2c6e6b; margin-bottom:10px;">Step 2 — Use the name in your Blade view</h3>
+                <pre><span class="comment">&lt;!-- home.blade.php --&gt;</span>
+&lt;a href="{{ <span class="fn">route</span>(<span class="string">'testpage'</span>) }}"&gt;
+    Go to Test Page
+&lt;/a&gt;</pre>
+            </div>
+        </div>
+
+        <div class="important">
+            <strong>✅ Why use named routes?</strong> If you change <code>/test</code> to <code>/testing</code>, you only update <code>web.php</code>. Your Blade views with <code>route('testpage')</code> continue to work automatically — no need to find and update every link.
+        </div>
+    </div>
+
+    <!-- Route Groups -->
+    <div class="card">
+        <h2 class="section-title">Route Groups &amp; Organization</h2>
+        <p style="margin-bottom:12px;">When you have many routes that share something in common (like all needing a logged-in user), you can group them together instead of repeating the same settings on each route.</p>
+
+        <div class="grid">
+            <div class="box">
+                <strong>Prefix</strong>
+                Group routes under a shared URL segment, e.g., all admin routes starting with <code>/admin</code>.
+            </div>
+            <div class="box">
+                <strong>Middleware</strong>
+                Apply a filter to a whole group of routes at once, e.g., only allow logged-in users.
+            </div>
+        </div>
+
+        <h3 style="margin: 18px 0 10px; color:#2c6e6b;">Example — Protecting routes with <code>auth</code> middleware:</h3>
+        <pre><span class="comment">// Only logged-in users can access /dashboard and /account</span>
+<span class="type">Route</span>::<span class="fn">middleware</span>([<span class="string">'auth'</span>])-><span class="fn">group</span>(<span class="keyword">function</span> () {
+    <span class="type">Route</span>::<span class="fn">get</span>(<span class="string">'/dashboard'</span>, ...);
+    <span class="type">Route</span>::<span class="fn">get</span>(<span class="string">'/account'</span>, ...);
+});</pre>
+
+        <div class="note">
+            <strong>Think of it this way:</strong> The <code>auth</code> middleware is like a security guard at the door. Only users who are logged in get past. Any route inside the group automatically gets checked.
+        </div>
+    </div>
+
+    <!-- POST Route -->
+    <div class="card">
+        <h2 class="section-title">Setting Up a POST Route (Forms)</h2>
+        <p style="margin-bottom:12px;">A POST route is used when a user <strong>submits a form</strong>. Data travels securely in the request body (not in the URL).</p>
+
+        <h3 style="color:#2c6e6b; margin-bottom:10px;">Step 1 — Create the HTML form (home.blade.php)</h3>
+        <pre>&lt;form action="{{ <span class="fn">route</span>(<span class="string">'formsubmitted'</span>) }}" method="<span class="string">POST</span>"&gt;
+    @csrf  <span class="comment">&lt;!-- CSRF token — required for all POST forms --&gt;</span>
+
+    &lt;label&gt;Name:&lt;/label&gt;
+    &lt;input type="<span class="string">text</span>" name="<span class="string">user_name</span>" required&gt;
+
+    &lt;label&gt;Email:&lt;/label&gt;
+    &lt;input type="<span class="string">email</span>" name="<span class="string">user_email</span>" required&gt;
+
+    &lt;button type="<span class="string">submit</span>"&gt;Send Message&lt;/button&gt;
+&lt;/form&gt;</pre>
+
+        <h3 style="color:#2c6e6b; margin: 18px 0 10px;">Step 2 — Handle the form data in web.php</h3>
+        <pre><span class="type">Route</span>::<span class="fn">post</span>(<span class="string">'/formsubmitted'</span>, <span class="keyword">function</span> (<span class="type">Request</span> $request) {
+    $fname = $request-><span class="fn">input</span>(<span class="string">'user_name'</span>);
+    $email = $request-><span class="fn">input</span>(<span class="string">'user_email'</span>);
+
+    <span class="keyword">return</span> <span class="string">"Your name is {$fname} and your email is {$email}"</span>;
+})-><span class="fn">name</span>(<span class="string">'formsubmitted'</span>);</pre>
+
+        <div class="note">
+            <strong>How <code>$request-&gt;input()</strong> works:</strong> It reads a value from the form by its <code>name</code> attribute. <code>input('user_name')</code> reads the value of the field with <code>name="user_name"</code>.
+        </div>
+    </div>
+
+    <!-- CSRF Protection -->
+    <div class="card">
+        <h2 class="section-title">CSRF Protection</h2>
+        <div class="warning">
+            <strong>⚠️ What is CSRF?</strong> Cross-Site Request Forgery — a type of attack where a malicious website tricks a user's browser into submitting a form to your site without their knowledge.
+        </div>
+
+        <div class="grid" style="margin-top:15px;">
+            <div class="box">
+                <strong>The Problem</strong>
+                A hacker's website could secretly submit a form to your app using a logged-in user's browser session.
+            </div>
+            <div class="box">
+                <strong>Laravel's Solution</strong>
+                Laravel automatically generates a secret <em>CSRF token</em> for each session and verifies it on every POST, PUT, PATCH, and DELETE request.
+            </div>
+            <div class="box">
+                <strong>Your Job</strong>
+                Always include <code>@csrf</code> inside every HTML form. This inserts a hidden token field Laravel can verify.
+            </div>
+        </div>
+
+        <pre><span class="comment">&lt;!-- Always add @csrf inside your form tags --&gt;</span>
+&lt;form method="<span class="string">POST</span>" action="/submit"&gt;
+    @csrf
+    ...
+&lt;/form&gt;</pre>
+
+        <div class="important">
+            <strong>✅ Rule:</strong> Every form with <code>method="POST"</code> in Laravel <strong>must</strong> include <code>@csrf</code> — otherwise Laravel will reject the request with a 419 error.
+        </div>
+    </div>
+
+    <!-- Inserting Images -->
+    <div class="card">
+        <h2 class="section-title">Inserting Images in Laravel (using <code>asset()</code>)</h2>
+        <p style="margin-bottom:12px;">In Laravel, public files like images are stored in the <code>public/</code> folder. To reference them in Blade views, use the <code>asset()</code> helper — it generates the correct full URL automatically.</p>
+
+        <ol class="step-list">
+            <li>Inside the <code>public/</code> folder of your Laravel project, create a folder called <code>images/</code>.</li>
+            <li>Place your image file inside that folder (e.g., <code>hi.avif</code>).</li>
+            <li>In your Blade view, use the <code>asset()</code> helper to reference the image:</li>
+        </ol>
+
+        <pre><span class="comment">&lt;!-- Blade view --&gt;</span>
+&lt;img src="{{ <span class="fn">asset</span>(<span class="string">'images/hi.avif'</span>) }}" alt="My Image"&gt;</pre>
+
+        <div class="note">
+            <strong>Why use <code>asset()</code>?</strong> It always generates the correct full URL regardless of your server setup — e.g., <code>http://yoursite.test/images/hi.avif</code>. Hardcoding paths like <code>/images/hi.avif</code> can break in some environments.
+        </div>
+    </div>
+
+    <!-- CRUD -->
+    <div class="card">
+        <h2 class="section-title">Building CRUD Operations in Laravel</h2>
+        <p style="margin-bottom:8px;"><strong>CRUD</strong> stands for <strong>Create, Read, Update, Delete</strong> — the four basic operations of any data-driven web app.</p>
+
+        <div class="highlight" style="margin-bottom:18px;">
+            <strong>🔧 Laravel makes CRUD easy</strong> using a <em>Model</em>, <em>Migration</em>, <em>Controller</em>, and a <em>Resource Route</em>. You generate most of the scaffolding with a single Artisan command.
+        </div>
+
+        <!-- Step 1 -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">Step 1 — Generate Model, Migration &amp; Controller</h3>
+        <pre><span class="comment"># Creates Model + Migration + Controller (with resource methods)</span>
+php artisan make:model Post --mcr</pre>
+        <p>This creates three files for you: <code>app/Models/Post.php</code>, a migration file in <code>database/migrations/</code>, and <code>app/Http/Controllers/PostController.php</code>.</p>
+
+        <!-- Step 2 -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">Step 2 — Update the Migration File</h3>
+        <p>Open the generated migration file and define your table columns inside the <code>up()</code> method:</p>
+        <pre><span class="keyword">public function</span> <span class="fn">up</span>(): <span class="type">void</span>
+{
+    <span class="type">Schema</span>::<span class="fn">create</span>(<span class="string">'posts'</span>, <span class="keyword">function</span> (<span class="type">Blueprint</span> $table) {
+        $table-><span class="fn">id</span>();                  <span class="comment">// auto-increment primary key</span>
+        $table-><span class="fn">string</span>(<span class="string">'title'</span>);      <span class="comment">// VARCHAR column</span>
+        $table-><span class="fn">text</span>(<span class="string">'body'</span>);         <span class="comment">// TEXT column</span>
+        $table-><span class="fn">timestamps</span>();         <span class="comment">// created_at and updated_at</span>
+    });
+}</pre>
+
+        <!-- Step 3 -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">Step 3 — Run the Migration</h3>
+        <pre><span class="comment"># Creates the 'posts' table in your database</span>
+php artisan migrate</pre>
+
+        <div class="grid" style="margin-top:10px;">
+            <div class="box">
+                <strong>Rollback last migration</strong>
+                <code>php artisan migrate:rollback</code>
+            </div>
+            <div class="box">
+                <strong>Rollback specific file</strong>
+                <code>php artisan migrate:rollback --path=database/migrations/filename</code>
+            </div>
+            <div class="box">
+                <strong>Re-run all migrations</strong>
+                <code>php artisan migrate:refresh</code>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">Step 4 — Update the Model (Mass Assignment)</h3>
+        <p>Open <code>app/Models/Post.php</code> and tell Laravel which fields are allowed to be filled:</p>
+        <pre><span class="keyword">protected</span> $fillable = [<span class="string">'title'</span>, <span class="string">'body'</span>];</pre>
+        <div class="note">
+            <strong>Why?</strong> The <code>$fillable</code> property protects you from accidentally saving unwanted data. Only fields listed here can be mass-assigned (e.g., via <code>Post::create($data)</code>).
+        </div>
+
+        <!-- Step 5 -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">Step 5 — Create a Resource Route</h3>
+        <p>In <code>routes/web.php</code>, one line creates all 7 CRUD routes automatically:</p>
+        <pre><span class="type">Route</span>::<span class="fn">resource</span>(<span class="string">'posts'</span>, <span class="type">PostController</span>::<span class="keyword">class</span>);</pre>
+        <div class="important">
+            <strong>✅ This single line</strong> generates all the routes you need: <code>GET /posts</code>, <code>GET /posts/create</code>, <code>POST /posts</code>, <code>GET /posts/{id}</code>, <code>GET /posts/{id}/edit</code>, <code>PUT /posts/{id}</code>, <code>DELETE /posts/{id}</code>.
+        </div>
+    </div>
+
+    <!-- Controller Functions -->
+    <div class="card">
+        <h2 class="section-title">The 7 Controller Functions (Resource Controller)</h2>
+        <p style="margin-bottom:15px;">When you open <code>PostController.php</code>, you'll find these 7 methods already scaffolded. Each one handles a specific CRUD action:</p>
+
+        <div class="crud-grid">
+            <div class="crud-card">
+                <div class="fn-name">index()</div>
+                <p>Shows a list of all posts.</p>
+            </div>
+            <div class="crud-card">
+                <div class="fn-name">create()</div>
+                <p>Shows the form to create a new post.</p>
+            </div>
+            <div class="crud-card store">
+                <div class="fn-name">store()</div>
+                <p>Saves the new post to the database.</p>
+            </div>
+            <div class="crud-card">
+                <div class="fn-name">show()</div>
+                <p>Displays a single post by ID.</p>
+            </div>
+            <div class="crud-card edit">
+                <div class="fn-name">edit()</div>
+                <p>Shows the form to edit an existing post.</p>
+            </div>
+            <div class="crud-card update">
+                <div class="fn-name">update()</div>
+                <p>Saves the edited post to the database.</p>
+            </div>
+            <div class="crud-card delete">
+                <div class="fn-name">destroy()</div>
+                <p>Deletes a post from the database.</p>
+            </div>
+        </div>
+
+        <!-- Index -->
+        <h3 style="color:#2c6e6b; margin: 22px 0 8px;">index() — List all posts</h3>
+        <pre><span class="keyword">public function</span> <span class="fn">index</span>()
+{
+    $posts = <span class="type">Post</span>::<span class="fn">all</span>();  <span class="comment">// Get all records from 'posts' table</span>
+    <span class="keyword">return</span> <span class="fn">view</span>(<span class="string">'posts.index'</span>, <span class="fn">compact</span>(<span class="string">'posts'</span>)); <span class="comment">// Pass to view</span>
+}</pre>
+        <p style="margin-bottom:8px;">→ Create folder <code>resources/views/posts/</code> and file <code>index.blade.php</code></p>
+
+        <!-- Create -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">create() — Show the create form</h3>
+        <pre><span class="keyword">public function</span> <span class="fn">create</span>()
+{
+    <span class="keyword">return</span> <span class="fn">view</span>(<span class="string">'posts.create'</span>);
+}</pre>
+        <p style="margin-bottom:8px;">→ Create file <code>resources/views/posts/create.blade.php</code></p>
+
+        <!-- Store -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">store() — Save new post to database</h3>
+        <pre><span class="keyword">public function</span> <span class="fn">store</span>(<span class="type">Request</span> $request)
+{
+    $validated = $request-><span class="fn">validate</span>([
+        <span class="string">'title'</span> => <span class="string">'required'</span>,  <span class="comment">// title must not be empty</span>
+        <span class="string">'body'</span>  => <span class="string">'required'</span>,
+    ]);
+    <span class="type">Post</span>::<span class="fn">create</span>($validated);  <span class="comment">// Insert into database</span>
+    <span class="keyword">return</span> <span class="fn">redirect</span>()-><span class="fn">route</span>(<span class="string">'posts.index'</span>)
+        -><span class="fn">with</span>(<span class="string">'success'</span>, <span class="string">'Post created successfully'</span>);
+}</pre>
+
+        <!-- Edit -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">edit() — Show the edit form</h3>
+        <pre><span class="keyword">public function</span> <span class="fn">edit</span>($id)
+{
+    $post = <span class="type">Post</span>::<span class="fn">findOrFail</span>($id);  <span class="comment">// Find post or show 404</span>
+    <span class="keyword">return</span> <span class="fn">view</span>(<span class="string">'posts.edit'</span>, <span class="fn">compact</span>(<span class="string">'post'</span>));
+}</pre>
+        <p style="margin-bottom:8px;">→ Create file <code>resources/views/posts/edit.blade.php</code></p>
+
+        <!-- Update -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">update() — Save edited post</h3>
+        <pre><span class="keyword">public function</span> <span class="fn">update</span>(<span class="type">Request</span> $request, $id)
+{
+    $validated = $request-><span class="fn">validate</span>([
+        <span class="string">'title'</span> => <span class="string">'required'</span>,
+        <span class="string">'body'</span>  => <span class="string">'required'</span>,
+    ]);
+    $post = <span class="type">Post</span>::<span class="fn">findOrFail</span>($id);    <span class="comment">// Find the post</span>
+    $post-><span class="fn">update</span>($validated);          <span class="comment">// Update with new data</span>
+    <span class="keyword">return</span> <span class="fn">redirect</span>()-><span class="fn">route</span>(<span class="string">'posts.index'</span>)
+        -><span class="fn">with</span>(<span class="string">'success'</span>, <span class="string">'Post updated successfully'</span>);
+}</pre>
+
+        <!-- Destroy -->
+        <h3 style="color:#2c6e6b; margin: 18px 0 8px;">destroy() — Delete a post</h3>
+        <pre><span class="keyword">public function</span> <span class="fn">destroy</span>($id)
+{
+    $post = <span class="type">Post</span>::<span class="fn">findOrFail</span>($id);  <span class="comment">// Find the post</span>
+    $post-><span class="fn">delete</span>();                  <span class="comment">// Delete it</span>
+    <span class="keyword">return</span> <span class="fn">redirect</span>()-><span class="fn">route</span>(<span class="string">'posts.index'</span>)
+        -><span class="fn">with</span>(<span class="string">'success'</span>, <span class="string">'Post deleted successfully'</span>);
+}</pre>
+    </div>
+
+    <!-- Quick Reference -->
+    <div class="card">
+        <h2 class="section-title">📋 Quick Reference — CRUD Flow Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>HTTP Method</th>
+                    <th>URL</th>
+                    <th>Controller Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>List all posts</td>
+                    <td><code>GET</code></td>
+                    <td><code>/posts</code></td>
+                    <td><code>index()</code></td>
+                </tr>
+                <tr>
+                    <td>Show create form</td>
+                    <td><code>GET</code></td>
+                    <td><code>/posts/create</code></td>
+                    <td><code>create()</code></td>
+                </tr>
+                <tr>
+                    <td>Save new post</td>
+                    <td><code>POST</code></td>
+                    <td><code>/posts</code></td>
+                    <td><code>store()</code></td>
+                </tr>
+                <tr>
+                    <td>Show one post</td>
+                    <td><code>GET</code></td>
+                    <td><code>/posts/{id}</code></td>
+                    <td><code>show()</code></td>
+                </tr>
+                <tr>
+                    <td>Show edit form</td>
+                    <td><code>GET</code></td>
+                    <td><code>/posts/{id}/edit</code></td>
+                    <td><code>edit()</code></td>
+                </tr>
+                <tr>
+                    <td>Save edited post</td>
+                    <td><code>PUT/PATCH</code></td>
+                    <td><code>/posts/{id}</code></td>
+                    <td><code>update()</code></td>
+                </tr>
+                <tr>
+                    <td>Delete a post</td>
+                    <td><code>DELETE</code></td>
+                    <td><code>/posts/{id}</code></td>
+                    <td><code>destroy()</code></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="important" style="margin-top:12px;">
+            <strong>✅ Key Artisan Commands Recap:</strong><br>
+            <code>php artisan make:model Post --mcr</code> — Generate model + migration + resource controller<br>
+            <code>php artisan migrate</code> — Run all pending migrations<br>
+            <code>php artisan migrate:rollback</code> — Undo the last migration<br>
+            <code>php artisan migrate:refresh</code> — Drop and re-run all migrations
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        🌱 Lecture 12 &amp; 13 — Introduction to Laravel &amp; Routing in Laravel • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

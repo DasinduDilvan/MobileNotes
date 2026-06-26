@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 11 – Contemporary Management Challenges</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef6f5;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    color: #2c6e6b;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #5a9d99;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    color: #2c6e6b;
+    border-bottom: 2px solid #cfe9e7;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+ul {
+    list-style-position: inside;
+    line-height: 1.8;
+    margin-left: 10px;
+}
+
+ul li { margin: 8px 0; }
+
+ul ul {
+    margin-left: 25px;
+    list-style-type: circle;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box {
+    background: #f3fbfa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 3px solid #2c6e6b;
+}
+
+.box strong {
+    color: #2c6e6b;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background: #fff9e6;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f0ad4e;
+    margin: 15px 0;
+}
+
+.important {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4caf50;
+    margin: 15px 0;
+}
+
+.note {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+    margin: 15px 0;
+}
+
+.warning {
+    background: #fce4ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e91e63;
+    margin: 15px 0;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.tag {
+    display: inline-block;
+    background: #2c6e6b;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tag.orange { background: #e67e22; }
+.tag.blue   { background: #2980b9; }
+.tag.red    { background: #c0392b; }
+
+.footer {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    padding: 20px;
+    font-size: 0.95em;
+}
+
+/* Challenge overview pill badges */
+.challenge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.challenge-pill {
+    background: #f3fbfa;
+    border: 1.5px solid #cfe9e7;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-weight: 600;
+    color: #2c6e6b;
+    font-size: 0.95em;
+    text-align: center;
+}
+
+/* numbered steps */
+.steps { margin-top: 10px; }
+.step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin: 10px 0;
+}
+.step-num {
+    background: #2c6e6b;
+    color: white;
+    border-radius: 50%;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85em;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+@media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+    .footer { page-break-before: avoid; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 15px; }
+    h1 { font-size: 1.6em; }
+    .two-column, .three-column { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="back-link" href="/management" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+<div class="container">
+
+    <h1>Contemporary Management Challenges</h1>
+    <p class="subtitle">Lecture 11 &nbsp;|&nbsp; Management Studies &nbsp;|&nbsp; Chathuranga Adhikari</p>
+
+    <!-- Learning Outcomes -->
+    <div class="card">
+        <h2 class="section-title">📌 Learning Outcomes</h2>
+        <ul>
+            <li>Identify and define the meaning of contemporary management challenges</li>
+            <li>Describe the contemporary management challenges in detail</li>
+            <li>Identify the importance of each challenge and its solutions</li>
+        </ul>
+    </div>
+
+    <!-- Introduction -->
+    <div class="card">
+        <h2 class="section-title">📖 Introduction</h2>
+        <p>The changing social and business environment gives rise to emerging issues and challenges in management. Managers must continuously acquire knowledge about these new challenges in order to:</p>
+        <ul>
+            <li>Modify and adjust themselves to work efficiently</li>
+            <li>Ensure effective and efficient management in dynamic conditions</li>
+        </ul>
+        <div class="note" style="margin-top:15px;">
+            The changing economic world constantly throws new challenges to managers. Management concepts and practices are actively shaping tomorrow's history.
+        </div>
+    </div>
+
+    <!-- Overview of All Challenges -->
+    <div class="card">
+        <h2 class="section-title">🗂️ Overview: Contemporary Management Challenges</h2>
+        <div class="challenge-grid">
+            <div class="challenge-pill">🌍 Globalization of Business</div>
+            <div class="challenge-pill">🌱 Development of Environmentalism</div>
+            <div class="challenge-pill">✅ Quality & Productivity</div>
+            <div class="challenge-pill">⚖️ Ethics & Social Responsibility</div>
+            <div class="challenge-pill">👥 Workforce Diversity</div>
+            <div class="challenge-pill">🔄 Change</div>
+            <div class="challenge-pill">💪 Empowerment & Team</div>
+            <div class="challenge-pill">🏪 Shift to Service Economy</div>
+        </div>
+    </div>
+
+    <!-- 1. Globalization -->
+    <div class="card">
+        <h2 class="section-title">🌍 1. Globalization of Business</h2>
+        <p>Managers must understand the global context within which their organizations function. Key competencies required:</p>
+        <ul>
+            <li>Understanding foreign cultures</li>
+            <li>Ability to penetrate new markets with existing products and services</li>
+            <li>Designing new products and services for new customers</li>
+            <li>Recognizing global competitors</li>
+            <li>Understanding government intervention in major economies of the world</li>
+        </ul>
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Key Trends in Globalization:</strong>
+            <ul>
+                <li>Most countries are opening their borders to foreign products as well as foreign producers.</li>
+                <li>Companies from developed countries are entering foreign countries by opening manufacturing facilities there.</li>
+                <li>Management can <strong>license or franchise</strong> to another firm the right to use its brand name, technology, or product specifications.</li>
+                <li>Global companies are adjusting their organizational structures as per the requirements of each situation.</li>
+                <li>Managers are being trained to think and act globally in approach.</li>
+                <li>Executives from the concerned countries are generally given responsibility for running subsidiaries.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 2. Environmentalism -->
+    <div class="card">
+        <h2 class="section-title">🌱 2. Development of Environmentalism</h2>
+        <ul>
+            <li>Environmental issues are among the major issues in contemporary management.</li>
+            <li>These issues may not always be a primary concern for enterprises, especially in developing countries.</li>
+            <li>Green movements have spread into different parts of the world.</li>
+            <li>Present managers face the challenge of developing their enterprise creatively, <strong>but without harming the environment</strong>.</li>
+        </ul>
+    </div>
+
+    <!-- 3. Quality & Productivity -->
+    <div class="card">
+        <h2 class="section-title">✅ 3. Quality and Productivity</h2>
+        <p>Quality has become one of the most competitive points in business today.</p>
+
+        <div class="two-column" style="margin-top:15px;">
+            <div class="box">
+                <strong>Why Quality is Important</strong>
+                <ul>
+                    <li>High-quality products result in less waste and rework</li>
+                    <li>Enhancing quality lowers overall cost</li>
+                    <li>Improves productivity across the organization</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>3 Positive Results of Quality Focus</strong>
+                <ul>
+                    <li>Low return of defects from customers</li>
+                    <li>Minimized wastage of resources</li>
+                    <li>Reduces the need for an inspector</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TQM -->
+        <div class="important" style="margin-top:20px;">
+            <strong>📋 Total Quality Management (TQM) — Definition</strong>
+            <p style="margin-top:8px;">Total Quality Management is the <strong>mobilization of the whole organization</strong> to achieve quality continuously, economically, and in entirety.</p>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Key Principles of TQM</h3>
+        <div class="three-column">
+            <div class="box">
+                <strong>Beyond Production</strong>
+                Quality cannot be improved through the production process alone — it requires improvement in purchasing, marketing, after-sales service, and many other functions.
+            </div>
+            <div class="box">
+                <strong>Coordinated Effort</strong>
+                Total quality can be achieved with the co-ordination of various aspects related to purchase, production, sales, etc.
+            </div>
+            <div class="box">
+                <strong>Organization-Wide Participation</strong>
+                Total quality control is an effort in which <strong>everyone and every function</strong> of the organization participates.
+            </div>
+        </div>
+        <div class="warning" style="margin-top:15px;">
+            Every management has to take care of Total Quality Management — otherwise its products will not find a place in today's competitive world.
+        </div>
+    </div>
+
+    <!-- 4. Ethics & Social Responsibility -->
+    <div class="card">
+        <h2 class="section-title">⚖️ 4. Ethics and Social Responsibility</h2>
+
+        <div class="two-column">
+            <div class="box">
+                <strong>Code of Ethics</strong>
+                <p>A <strong>formal, written statement</strong> of the values and ethical standards that guide a firm's actions.</p>
+                <ul style="margin-top:8px;">
+                    <li>Ethical behavior must start from <strong>top management</strong></li>
+                    <li>Covers how employees treat suppliers, customers, competitors, etc.</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Social Responsibility</strong>
+                <p>The set of obligations an organization has to <strong>protect and enhance the societal context</strong> in which it functions.</p>
+            </div>
+        </div>
+
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Government's Role in Shaping Social Responsibility:</strong>
+            <ul>
+                <li><strong>Direct influence:</strong> Through regulations</li>
+                <li><strong>Indirect influence:</strong> Through taxation policies</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 5. Workforce Diversity -->
+    <div class="card">
+        <h2 class="section-title">👥 5. Workforce Diversity</h2>
+
+        <div class="note">
+            <strong>Definition:</strong> Diversity exists in a group or organization when its members differ from one another along one or more important dimensions — e.g., age, gender, ethnicity.
+        </div>
+
+        <div class="two-column" style="margin-top:15px;">
+            <div class="box">
+                <strong>Causes of Increased Diversity</strong>
+                <ul>
+                    <li>Globalization movements</li>
+                    <li>Increased awareness</li>
+                    <li>Legislation and legal action</li>
+                    <li>Changing demographics in the workforce</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>Diversity as an Asset</strong>
+                <ul>
+                    <li>Brings a broad range of viewpoints</li>
+                    <li>Improves problem-solving skills</li>
+                    <li>Provides a powerful competitive advantage</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Management Shift Required:</strong> Managers must shift their philosophy from <em>treating everyone alike</em> to <strong>recognizing differences and responding to those differences</strong> in ways that ensure employee retention and greater productivity. Organizations must become more accommodating to diverse groups, addressing different lifestyles, family needs, and work styles.
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Contingent Workers</h3>
+        <div class="note">
+            <strong>Definition:</strong> Contingent workers are <strong>part-time, temporary, or freelance employees</strong>.
+            <ul style="margin-top:8px;">
+                <li>Some labor experts estimate they make up <strong>13%</strong> of the workforce; others suggest as high as <strong>30%</strong>.</li>
+                <li>The percentage of contingent workers is increasing every day.</li>
+                <li>Companies have started downsizing their permanent workforce; some displaced employees seek part-time work.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 6. Change -->
+    <div class="card">
+        <h2 class="section-title">🔄 6. Change</h2>
+
+        <ul>
+            <li>Organizational change is a <strong>complex phenomenon</strong>.</li>
+            <li>Change must be <strong>systematic and logical</strong>.</li>
+            <li>Managers need to understand the steps of effective change.</li>
+            <li>Managers must know how to counter <strong>employee resistance to change</strong>.</li>
+            <li>Managements of multinational and transnational companies must study the political and cultural environment of the host country and devise appropriate managerial practices and policies.</li>
+        </ul>
+
+        <div class="important" style="margin-top:15px;">
+            <strong>Managing Resistance to Change — Key Methods:</strong>
+            <div class="grid" style="margin-top:10px;">
+                <div class="box"><strong>Participation</strong><br>Involve employees in the change process</div>
+                <div class="box"><strong>Education</strong><br>Train employees about the reason and nature of change</div>
+                <div class="box"><strong>Communication</strong><br>Keep open, transparent channels throughout</div>
+                <div class="box"><strong>Facilitation</strong><br>Provide support resources and guidance</div>
+            </div>
+        </div>
+
+        <h3 style="color:#2c6e6b; margin-top:20px; margin-bottom:10px;">Downsizing</h3>
+        <div class="warning">
+            <ul>
+                <li>Downsizing (reduction in force) has been a major trend in recent years.</li>
+                <li>Companies are restructuring organizations and laying off employees who are no longer required.</li>
+                <li><strong>Important:</strong> Downsizing does <em>not</em> mean that work has been reduced — in fact, the workload often increases and a smaller workforce must complete it.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 7. Empowerment & Team -->
+    <div class="card">
+        <h2 class="section-title">💪 7. Empowerment and Team</h2>
+
+        <div class="note">
+            <strong>Definition — Employee Empowerment:</strong> Redesigning jobs and letting individual workers and work teams <strong>make job-related decisions</strong> to improve quality, productivity, and employee commitment.
+        </div>
+
+        <ul style="margin-top:15px;">
+            <li>Workers at present are considered more knowledgeable and are expected to complete their work in a better way.</li>
+            <li>Sometimes, workers are considered to perform better than even their managers.</li>
+            <li>Many organizations have achieved better results by empowering employees and allowing them to plan and execute their work.</li>
+            <li>Human resource theorists have criticized over-specialization of employees as it stifles their capabilities.</li>
+        </ul>
+
+        <div class="highlight" style="margin-top:15px;">
+            <strong>Benefits of Empowerment:</strong> Improved quality, higher productivity, and stronger employee commitment — achieved by redesigning jobs and granting teams decision-making authority.
+        </div>
+    </div>
+
+    <!-- 8. Shift towards Service Economy -->
+    <div class="card">
+        <h2 class="section-title">🏪 8. Shift Towards a Service Economy</h2>
+        <ul>
+            <li>The service sector of the economy has become increasingly important.</li>
+            <li>There is a significant difference between managing <strong>manufacturing organizations</strong> and <strong>service organizations</strong> — managers must adapt their approach accordingly.</li>
+        </ul>
+    </div>
+
+    <!-- Potential Solutions -->
+    <div class="card">
+        <h2 class="section-title">💡 Potential Solutions to Management Challenges</h2>
+        <div class="grid">
+            <div class="box">
+                <strong>📅 Planning</strong>
+                Proactive and strategic planning to anticipate and respond to challenges
+            </div>
+            <div class="box">
+                <strong>⏱️ Time Management</strong>
+                Effective allocation and prioritization of managerial time
+            </div>
+            <div class="box">
+                <strong>🤝 A Good Team</strong>
+                Building a skilled, collaborative, and diverse team
+            </div>
+            <div class="box">
+                <strong>💰 Cash Flow Management</strong>
+                Maintaining healthy financial operations under pressure
+            </div>
+            <div class="box">
+                <strong>🔍 Analysis of Competition</strong>
+                Continuous study of the competitive environment to stay ahead
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="card">
+        <h2 class="section-title">📊 Quick Summary: Challenges at a Glance</h2>
+        <table style="width:100%; border-collapse:collapse; font-size:0.93em; margin-top:10px;">
+            <thead>
+                <tr style="background:#2c6e6b; color:white;">
+                    <th style="padding:10px; text-align:left; border-radius:6px 0 0 0;">Challenge</th>
+                    <th style="padding:10px; text-align:left;">Core Issue</th>
+                    <th style="padding:10px; text-align:left; border-radius:0 6px 0 0;">Key Concept</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background:#f3fbfa;">
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Globalization</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Operating across borders</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Licensing, franchising, cultural awareness</td>
+                </tr>
+                <tr>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Environmentalism</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Eco-friendly operations</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Green movement, creative development</td>
+                </tr>
+                <tr style="background:#f3fbfa;">
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Quality & Productivity</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Competitive quality standards</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">TQM — whole-org participation</td>
+                </tr>
+                <tr>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Ethics & Social Resp.</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Ethical business conduct</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Code of Ethics, CSR, government role</td>
+                </tr>
+                <tr style="background:#f3fbfa;">
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Workforce Diversity</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Managing diverse employees</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Contingent workers, inclusive practices</td>
+                </tr>
+                <tr>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Change</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Adapting to new realities</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Downsizing, overcoming resistance</td>
+                </tr>
+                <tr style="background:#f3fbfa;">
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Empowerment & Team</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Enabling employee autonomy</td>
+                    <td style="padding:9px 10px; border-bottom:1px solid #cfe9e7;">Decision-making delegation, team design</td>
+                </tr>
+                <tr>
+                    <td style="padding:9px 10px;">Service Economy</td>
+                    <td style="padding:9px 10px;">Managing service sectors</td>
+                    <td style="padding:9px 10px;">Different from manufacturing management</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 11 - Contemporary Management Challenges • BY_#D1
+    </div>
+
+</div>
+</body>
+</html>

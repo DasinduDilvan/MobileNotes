@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions of Management: Leading - Study Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef6f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c6e6b;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #5a9d99;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            color: #2c6e6b;
+            border-bottom: 2px solid #cfe9e7;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        ul {
+            list-style-position: inside;
+            line-height: 1.8;
+            margin-left: 10px;
+        }
+
+        ul li {
+            margin: 8px 0;
+        }
+
+        ul ul {
+            margin-left: 25px;
+            list-style-type: circle;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .box {
+            background: #f3fbfa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #2c6e6b;
+        }
+
+        .box strong {
+            color: #2c6e6b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f0ad4e;
+            margin: 15px 0;
+        }
+
+        .important {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+        }
+
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fce4ec;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+            margin: 15px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c0392b;
+        }
+
+        pre {
+            background: #000;
+            color: #d4d4d4;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        pre .comment { color: #6a9955; }
+        pre .keyword { color: #569cd6; }
+        pre .string  { color: #ce9178; }
+        pre .fn      { color: #dcdcaa; }
+        pre .type    { color: #4ec9b0; }
+        pre .num     { color: #b5cea8; }
+
+        .model-diagram {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2c6e6b;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            vertical-align: middle;
+        }
+
+        .tag.orange { background: #e67e22; }
+        .tag.blue   { background: #2980b9; }
+        .tag.red    { background: #c0392b; }
+
+        .in-class {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+
+        .in-class h3 {
+            color: #7b1fa2;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+            .footer {
+                page-break-before: avoid;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.6em; }
+            .two-column, .three-column { grid-template-columns: 1fr; }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #2c6e6b;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: opacity 0.15s;
+        }
+        .back-link:hover { opacity: 0.7; }
+
+        h2 {
+            color: #2c6e6b;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.5em;
+        }
+
+        h3 {
+            color: #5a9d99;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<a class="back-link" href="/management" style="display:inline-flex; align-items:center; gap:6px; color:#2c6e6b; text-decoration:none; font-weight:600; margin:16px 0 20px; font-size:0.95em;">← Back to Notes</a>
+    <div class="container">
+        
+        <h1>Functions of Management</h1>
+        <div class="subtitle">Lecture 06 - Leading</div>
+    
+
+        <!-- Learning Outcomes -->
+        <div class="card">
+            <h2 class="section-title">Learning Outcomes</h2>
+            <ul>
+                <li>Define the Leading and Leadership</li>
+                <li>Define the Leader and Leadership styles</li>
+                <li>Compare and contrast early theories of Leadership</li>
+                <li>Discuss the importance of Leadership</li>
+            </ul>
+        </div>
+
+        <!-- What is Leading -->
+        <div class="card">
+            <h2 class="section-title">What is Leading?</h2>
+            <ul>
+                <li>Leading is a management function that involves <strong>influencing others to engage in the work behaviors necessary to reach organizational goals</strong>.</li>
+                <li>Leading is the process of <strong>influencing, motivating, and guiding people</strong> to achieve organizational goals.</li>
+                <li>Leading refers to the <span class="tag">Function</span>, and Leadership refers to the <span class="tag">Process</span>.</li>
+            </ul>
+        </div>
+
+        <!-- Leading as a Process -->
+        <div class="card">
+            <h2 class="section-title">Leading as a Process</h2>
+            <ul>
+                <li>Developing vision and goals</li>
+                <li>Communicating the visions</li>
+                <li>Motivating and inspiring people</li>
+                <li>Building teams and relationships</li>
+                <li>Guiding and directing</li>
+                <li>Monitoring and feedback</li>
+                <li>Recognizing and rewarding</li>
+            </ul>
+        </div>
+
+        <!-- How Leaders Influence Others -->
+        <div class="card">
+            <h2 class="section-title">How Leaders Influence Others</h2>
+            <ul>
+                <li>Managers are expected to maintain effective workforces.</li>
+                <li>To be able to do so, they are required to perform leadership roles.</li>
+                <li>Leaders are said to be able to influence others because of the <strong class="tag red">power</strong> they possess.</li>
+                <li><strong>Power</strong> refers to the ability of a leader to <strong>exert force on another</strong>.</li>
+            </ul>
+        </div>
+
+        <!-- Bases of Power -->
+        <div class="card">
+            <h2 class="section-title">Bases of Power</h2>
+            
+            <h3>1. Legitimate Power</h3>
+            <div class="box">
+                <ul>
+                    <li>A person who occupies a higher position has legitimate power over persons in lower positions within the organization.</li>
+                    <li>Legitimate power comes from a person's <strong>official position or authority</strong> in the organizational hierarchy.</li>
+                </ul>
+            </div>
+
+            <h3>2. Reward Power</h3>
+            <div class="box">
+                <ul>
+                    <li>When a person has the ability to give <b>rewards</b> to anybody who follows orders or requests.</li>
+                    <li>The ability to give <b>benefits, incentives, or recognition</b> to others in return for compliance with requests or orders.</li>
+                    <li><b>Two forms of rewards:</b>
+                        <ul>
+                            <li><b>Material reward</b> – refers to money or other tangible benefits</li>
+                            <li><b>Psychic reward</b> – consists of recognition, praise</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>3. Coercive Power</h3>
+            <div class="box">
+                <ul>
+                    <li>When a person compels another to comply with orders through <b>threats or punishments</b>.</li>
+                    <li>The leader forces compliance by using <b>threats, punishments, or penalties</b> if people do not follow instructions.</li>
+                    <li><b>Example:</b> A lecturer tells students that if they miss too many classes, they will lose exam eligibility.</li>
+                </ul>
+            </div>
+
+            <h3>4. Referent Power</h3>
+            <div class="box">
+                <ul>
+                    <li>When a person can get compliance from another because people see you as a reference for something else, bigger than yourself.</li>
+                    <li>Based on <b>admiration, respect, or identification</b> with a leader.</li>
+                    <li>It comes from the leader's <b>charisma, personality, or reputation</b>.</li>
+                </ul>
+            </div>
+
+            <h3>5. Expert Power</h3>
+            <div class="box">
+                <ul>
+                    <li>Provides <b>specialized information</b> regarding their specific lines of expertise. People with great technology skills possess it.</li>
+                    <li>Expert power comes from a person's <b>knowledge, skills, or expertise</b>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- The Nature of Leadership -->
+        <div class="card">
+            <h2 class="section-title">The Nature of Leadership</h2>
+            <ul>
+                <li>One cannot expect a unit or division to achieve objectives in the <strong>absence of effective leadership</strong>.</li>
+                <li>Even if a leader is present, if he is <strong>not functioning properly</strong>, no unit or division objectives can be expected to be achieved.</li>
+            </ul>
+        </div>
+
+        <!-- Leadership Definition -->
+        <div class="card">
+            <h2 class="section-title">Leadership</h2>
+            <ul>
+                <li>Leadership is the <strong>art of motivating the actions of others</strong></li>
+                <li>Leadership is <strong>doing the right things</strong></li>
+                <li>Leadership is <strong>setting a clear direction in the face of uncertainty</strong></li>
+                <li>Leadership is the <strong>ability to exude confidence and attract followers</strong></li>
+                <li>Leadership is the <strong>demonstrated ability to innovate, make decisions, influence, and motivate to achieve results</strong></li>
+            </ul>
+        </div>
+
+        <!-- Leader Definition -->
+        <div class="card">
+            <h2 class="section-title">Leader</h2>
+            <ul>
+                <li>A person or thing that <strong>leads; a guiding or directing head</strong>.</li>
+                <li>A person who <strong>rules, guides, or inspires others</strong>.</li>
+                <li><strong>One whom others follow</strong>.</li>
+            </ul>
+        </div>
+
+        <!-- Traits of Effective Leaders -->
+        <div class="card">
+            <h2 class="section-title">Traits of Effective Leaders</h2>
+            <ul>
+                <li>A high level of <strong>personal drive</strong></li>
+                <li>The <strong>desire to lead</strong></li>
+                <li><strong>Personal integrity</strong></li>
+                <li><strong>Self-confidence</strong></li>
+                <li><strong>Analytical ability</strong> or judgment</li>
+                <li><strong>Knowledge</strong> of the company, industry, or technology</li>
+                <li><strong>Charisma</strong></li>
+                <li><strong>Creativity</strong></li>
+                <li><strong>Flexibility</strong></li>
+            </ul>
+        </div>
+
+        <!-- Leadership Behaviors -->
+        <div class="card">
+            <h2 class="section-title">Leadership Behaviors</h2>
+            
+            <h3>Job-Centered Leader Behavior</h3>
+            <div class="box">
+                <ul>
+                    <li>The behavior of leaders who <b>pay close attention to the job and work procedures</b> involved with that job.</li>
+                </ul>
+            </div>
+
+            <h3>Employee-Centered Leader Behavior</h3>
+            <div class="box">
+                <ul>
+                    <li>The behavior of leaders who <b>develop cohesive work groups</b> and <b>ensure employee satisfaction</b>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Ways Leaders Approach People -->
+        <div class="card">
+            <h2 class="section-title">Ways Leaders Approach People</h2>
+            
+            <h3>Positive Leadership</h3>
+            <div class="box">
+                <ul>
+                    <li>When the leader's approach <b>emphasizes rewards</b>.</li>
+                </ul>
+            </div>
+
+            <h3>Negative Leadership</h3>
+            <div class="box">
+                <ul>
+                    <li>When <b>punishment is emphasized</b> by the leader.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Leadership Skills -->
+        <div class="card">
+            <h2 class="section-title">Leadership Skills</h2>
+            <p style="margin-bottom: 15px;"><strong>Leaders need to have various skills to be effective.</strong></p>
+            
+            <h3>1. Technical Skills</h3>
+            <div class="box">
+                <ul>
+                    <li>These are skills a leader must possess to enable them to <b>understand and make decisions about work processes, activities, and technology</b>.</li>
+                    <li>Technical skill is <b>specialized knowledge needed to perform a job</b>.</li>
+                </ul>
+            </div>
+
+            <h3>2. Human Skills</h3>
+            <div class="box">
+                <ul>
+                    <li>These skills refer to the ability of a leader to <b>deal with people</b>, both inside and outside the organization.</li>
+                    <li>Good Leaders must know how to <b>get along with people, motivate them, and inspire them</b>.</li>
+                </ul>
+            </div>
+
+            <h3>3. Conceptual Skills</h3>
+            <div class="box">
+                <ul>
+                    <li>These skills refer to <b>"the ability to think in abstract terms, to see how parts fit together to form the whole"</b>.</li>
+                    <li>A leader without sufficient conceptual skills will fail to achieve this.</li>
+                </ul>
+            </div>
+
+            <h3>Additional Leadership Skills</h3>
+            <ul>
+                <li><strong>Decisiveness</strong> – Effective leaders are those who can make decisions quickly with the information they have.</li>
+                <li><strong>Integrity</strong> – Truthfulness or honesty</li>
+                <li><strong>Relationship building (or team building)</strong> – The ability to build and maintain a strong, collaborative team of individuals working toward the same goal.</li>
+                <li><strong>Problem-solving</strong> – Good leaders are skilled at solving issues that arise on the job.</li>
+                <li><strong>Dependability</strong> – People can trust and rely on you.</li>
+                <li><strong>Ability to teach and mentor</strong> – Leaders think less about themselves and more about how to make their team as a whole successful.</li>
+            </ul>
+        </div>
+
+        <!-- How to Be a Leader -->
+        <div class="card">
+            <h2 class="section-title">How to Be a Leader</h2>
+            <ul>
+                <li>Be an <strong>empathetic leader</strong></li>
+                <li>Be a <strong>good listener</strong></li>
+                <li>Be a <strong>model for embracing change</strong></li>
+                <li><strong>Incorporate a shared vision</strong></li>
+                <li><strong>Develop your followers</strong></li>
+                <li><strong>Communicate realistic and clear expectations</strong></li>
+                <li><strong>Learn how to handle failure</strong></li>
+                <li><strong>Continue the education</strong></li>
+            </ul>
+        </div>
+
+        <!-- Leadership Styles -->
+        <div class="card">
+            <h2 class="section-title">Leadership Styles</h2>
+            
+            <h3>1. Autocratic or Authoritarian Leadership</h3>
+            <div class="box">
+                <ul>
+                    <li>An autocratic leader <b>centralizes power and decision-making</b> in himself.</li>
+                    <li>He <b>gives orders, assigns tasks, and duties without consulting</b> the employees.</li>
+                    <li>The leader <b>takes full authority and assumes full responsibility</b>.</li>
+                </ul>
+            </div>
+
+            <h3>2. Democratic or Participative Leadership</h3>
+            <div class="box">
+                <ul>
+                    <li>Participative or democratic leaders <b>decentralize authority</b>.</li>
+                    <li>It is characterised by <b>consultation with the subordinates</b> and their participation in the formulation of plans and policies.</li>
+                    <li>He <b>encourages participation in decision-making</b>.</li>
+                </ul>
+            </div>
+
+            <h3>3. The Laissez-Faire or Free Rein Leadership</h3>
+            <div class="box">
+                <ul>
+                    <li>Free-rein leaders <b>avoid power and responsibility</b>.</li>
+                    <li>The laissez-faire or non-interfering type of leader <strong>passes on the responsibility for decision-making</strong> to his subordinates and takes a minimum of initiative in administration.</li>
+                    <li>He <b>gives no direction</b> and <b>allows the group to establish its own goals</b> and work out its own problems.</li>
+                </ul>
+            </div>
+
+            <h3>4. Paternalistic Leadership</h3>
+            <div class="box">
+                <ul>
+                    <li>The leader assumes that his function is <b>fatherly or paternal</b>. Paternalism means <b>"Papa knows best"</b>.</li>
+                    <li>The relationship between the leader and his group is the same as the relationship between the <b>head of the family and the members of the family</b>.</li>
+                    <li>The leader <b>guides and protects his subordinates as members of his family</b>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Leadership Theories -->
+        <div class="card">
+            <h2 class="section-title">Leadership Theories</h2>
+            
+            <h3>1. The Great Man Theory</h3>
+            <div class="box">
+                <ul>
+                    <li><b>The excellent leaders are born, not developed</b>.</li>
+                    <li><b>Characteristics:</b> Intelligence, courage, confidence, intuition, and charm, among others.</li>
+                </ul>
+            </div>
+
+            <h3>2. The Trait Theory</h3>
+            <div class="box">
+                <ul>
+                    <li><b>Certain natural qualities tend to create good leaders</b>.</li>
+                    <li><b>Characteristics:</b> Some leaders may be excellent listeners or communicators, but not every listener or communicator makes an excellent leader.</li>
+                </ul>
+            </div>
+
+            <h3>3. The Behavioural Theory</h3>
+            <div class="box">
+                <ul>
+                    <li><b>How a person's environment, not natural abilities, forms him or her into a leader</b>.</li>
+                    <li><b>Characteristics:</b> A person will be more likely to act or lead in a certain style as a result of environmental responses to behaviour.</li>
+                </ul>
+            </div>
+
+            <h3>4. The Situational Theory</h3>
+            <div class="box">
+                <ul>
+                    <li><b>A leader is one who is able to adapt their style based on the situation</b>.</li>
+                </ul>
+            </div>
+
+            <h3>5. The Transactional Theory (or Management Theory)</h3>
+            <div class="box">
+                <ul>
+                    <li><b>Leadership is a system of rewards and penalties</b>.</li>
+                </ul>
+            </div>
+
+            <h3>6. The Transformational Theory (or Relationship Theory)</h3>
+            <div class="box">
+                <ul>
+                    <li><b>Leadership is the result of a positive relationship between leaders and team members</b>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Importance of Leadership -->
+        <div class="card">
+            <h2 class="section-title">Importance of Leadership</h2>
+            
+            <h3>1. Initiates Action</h3>
+            <div class="box">
+                <ul>
+                    <li>Leader is a person who <b>starts the work by communicating the policies and plans</b> to the subordinates from where the work actually starts.</li>
+                </ul>
+            </div>
+
+            <h3>2. Motivation</h3>
+            <div class="box">
+                <ul>
+                    <li>A leader proves to be <b>playing an incentive role</b> in the concern's working.</li>
+                    <li>He <b>motivates the employees</b> with economic and non-economic rewards.</li>
+                </ul>
+            </div>
+
+            <h3>3. Providing Guidance</h3>
+            <div class="box">
+                <ul>
+                    <li>A leader has to <b>not only supervise but also play a guiding role</b> for the subordinates.</li>
+                </ul>
+            </div>
+
+            <h3>4. Creating Confidence</h3>
+            <div class="box">
+                <ul>
+                    <li>Confidence is an important factor that can be achieved through <b>expressing the work efforts to the subordinates, explaining to them clearly their role</b>, and <b>giving them guidelines to achieve the goals effectively</b>.</li>
+                </ul>
+            </div>
+
+            <h3>5. Building Morale</h3>
+            <div class="box">
+                <ul>
+                    <li>Morale denotes the <b>willing co-operation of the employees</b> towards their work, getting them into confidence, and winning their trust.</li>
+                </ul>
+            </div>
+
+            <h3>6. Builds Work Environment</h3>
+            <div class="box">
+                <ul>
+                    <li>Management is <b>getting things done from people</b>.</li>
+                    <li>An <b>efficient work environment</b> helps in sound and stable growth.</li>
+                    <li>He should have <b>personal contacts with employees</b> and should listen to their problems and solve them.</li>
+                    <li>He should <b>treat employees on humanitarian terms</b>.</li>
+                </ul>
+            </div>
+
+            <h3>7. Co-ordination</h3>
+            <div class="box">
+                <ul>
+                    <li>Co-ordination can be achieved through <b>reconciling personal interests with organizational goals</b>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Key Distinction -->
+        <div class="card">
+            <h2 class="section-title">Key Distinction: Boss vs. Leader</h2>
+            <div class="important">
+                <h3 style="color: #c0392b; margin-top: 0;">Boss:</h3>
+                <ul style="margin-bottom: 15px;">
+                    <li>Drives employee</li>
+                    <li>Depends on authority</li>
+                    <li>Inspires fear</li>
+                    <li>Says, "I"</li>
+                    <li>Places blame for the breakdown</li>
+                    <li>Knows how it is done</li>
+                    <li>Uses people</li>
+                    <li>Takes credit</li>
+                    <li>Commands</li>
+                    <li>Says, "Go"</li>
+                </ul>
+
+                <h3 style="color: #2980b9;">Leader:</h3>
+                <ul>
+                    <li>Coaches them</li>
+                    <li>On goodwill</li>
+                    <li>Generates enthusiasm</li>
+                    <li>Says, "We"</li>
+                    <li>Fixes the breakdowns</li>
+                    <li>Shows how it is done</li>
+                    <li>Develops people</li>
+                    <li>Gives credit</li>
+                    <li>Asks</li>
+                    <li>Says, "Let's go"</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Closing Quote -->
+        <div class="card">
+            <div style="text-align: center; padding: 30px 0; color: #2c6e6b;">
+                <h2 style="margin-bottom: 20px; border: none; padding: 0;">Key Takeaway</h2>
+                <p style="font-size: 1.1em; font-style: italic;">"You don't have to be great to start, but you have to start to be great."</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        🌱 Lecture 06 - Functions of Management: Leading • BY_#D1
+    </div>
+
+</body>
+</html>

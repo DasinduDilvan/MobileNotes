@@ -1,0 +1,15 @@
+{
+  "name": "mobile-notes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple Express server for the mobile notes project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "serverless-http": "^3.0.2"
+  }
+}
